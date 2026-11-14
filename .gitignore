@@ -25,6 +25,9 @@ Thumbs.db
 *.pem
 *.key
 *.p12
+# Exceção: os certificados públicos das autoridades de carimbo de tempo (SPEC E8) são versionados de
+# propósito. Sem eles a aplicação não sobe, porque confere o SHA-256 de cada um ao iniciar.
+!src/main/resources/timestamp/**/*.pem
 
 # Dados de participantes e mídia NUNCA vão para o repositório (P6)
 data/
