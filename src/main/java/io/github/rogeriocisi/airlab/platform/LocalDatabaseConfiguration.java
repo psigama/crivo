@@ -2,6 +2,10 @@ package io.github.rogeriocisi.airlab.platform;
 
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -67,17 +71,55 @@ class LocalDatabaseConfiguration {
             log.info("Subindo PostgreSQL embarcado na porta {} (dados em {})",
                     properties.port(), dataDirectory);
 
-            EmbeddedPostgres instance = EmbeddedPostgres.builder()
-                    .setPort(properties.port())
-                    .setDataDirectory(dataDirectory.toFile())
-                    .setCleanDataDirectory(false)
-                    .start();
+            // Checked before starting: "could not lock" alone does not tell anyone what to do.
+            requirePortFree(properties.port(), dataDirectory);
+            EmbeddedPostgres instance;
+            try {
+                instance = EmbeddedPostgres.builder()
+                        .setPort(properties.port())
+                        .setDataDirectory(dataDirectory.toFile())
+                        .setCleanDataDirectory(false)
+                        .start();
+            } catch (IllegalStateException e) {
+                // The data directory is locked by another process — and the JDK reports a lock
+                // held inside this same JVM as an OverlappingFileLockException, without a message.
+                if (e instanceof OverlappingFileLockException
+                        || (e.getMessage() != null && e.getMessage().contains("could not lock"))) {
+                    throw new IllegalStateException(alreadyInUse(dataDirectory, properties.port()), e);
+                }
+                throw e;
+            }
 
             shared = instance;
             sharedKey = key;
             Runtime.getRuntime().addShutdownHook(new Thread(() -> close(instance), "airlab-pg-stop"));
             return instance;
         }
+    }
+
+    /**
+     * Refuses to start when something already listens on the database port, with a message that
+     * says what is most likely going on and what to do. Almost always it is another instance of
+     * the Crivo, or the PostgreSQL left behind by one that was killed instead of stopped.
+     */
+    static void requirePortFree(int port, Path dataDirectory) {
+        // The JDK's default address reuse is the right one on each system: on Linux it lets a port
+        // in TIME_WAIT after a restart be bound, and on Windows it never binds over a live listener.
+        try (ServerSocket probe = new ServerSocket()) {
+            probe.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), port));
+        } catch (IOException e) {
+            throw new IllegalStateException(alreadyInUse(dataDirectory, port), e);
+        }
+    }
+
+    /** What to tell the person starting the application. ASCII only, like the rest of the log. */
+    static String alreadyInUse(Path dataDirectory, int port) {
+        return "O banco local ja esta em uso (porta " + port + ", dados em " + dataDirectory + "). "
+                + "Quase sempre e outra instancia do Crivo rodando: veja se http://localhost:8080 responde, "
+                + "ou encerre a outra janela com Ctrl+C. Se nenhuma estiver aberta, sobrou um processo "
+                + "'postgres' de uma execucao interrompida: encerre-o (Gerenciador de Tarefas no Windows, "
+                + "pkill -f pgdata no Linux) e tente de novo. Para rodar duas instancias de proposito, de a "
+                + "cada uma AIRLAB_LOCAL_DB_DIR e AIRLAB_LOCAL_DB_PORT proprios.";
     }
 
     @Bean
