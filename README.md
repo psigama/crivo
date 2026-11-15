@@ -197,3 +197,7 @@ Só o P4 (leitura estruturada automatizada). Ver `docs/SPEC.md`, seção 10.
 ## Autor
 
 Rogerio Cisi
+
+## Licença
+
+Código aberto sob a [licença MIT](LICENSE), como pede a Constitution (P7). Arquivos de terceiros, como o Maven Wrapper e os certificados do FreeTSA, mantêm as licenças e condições próprias.
