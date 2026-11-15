@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/** What a P4 study froze and the cycle reads (V19). Immutable: the database refuses any change. */
+/** What a P1 study froze and the cycle reads (V19). Immutable: the database refuses any change. */
 @Entity
 @Table(name = "structured_study", schema = "research")
 class StructuredStudyEntity {

@@ -20,7 +20,7 @@ final class PreregistrationDocument {
     }
 
     /**
-     * @param protocolAnnex canonical JSON that the protocol adds to the plan, or null. The P1
+     * @param protocolAnnex canonical JSON that the protocol adds to the plan, or null. The P2
      *                      has none, so its documents are byte for byte what they were before
      *                      the annex existed.
      */

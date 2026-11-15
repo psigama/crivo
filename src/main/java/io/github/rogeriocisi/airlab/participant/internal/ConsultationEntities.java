@@ -16,7 +16,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * A P4 consultation request, research side (V18): pseudonymous, with the pairing attributes and
+ * A P1 consultation request, research side (V18): pseudonymous, with the pairing attributes and
  * the commitment. Everything but the state is fixed at creation, and the database refuses any
  * other change.
  */
@@ -122,7 +122,7 @@ class ConsultationRequestEntity {
 }
 
 /**
- * The sensitive part of a P4 request (V18): first name, answers and salt, encrypted. The only
+ * The sensitive part of a P1 request (V18): first name, answers and salt, encrypted. The only
  * change the database admits is erasing them, once, on withdrawal.
  */
 @Entity

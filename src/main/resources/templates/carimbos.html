@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Carimbos de tempo — Crivo</title>
   <th:block th:replace="~{fragments/site :: social('Carimbos de tempo — Crivo', 'Os carimbos de tempo RFC 3161 que uma autoridade independente emitiu sobre a trilha de auditoria do Crivo, com o token de cada um para conferência por fora.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
@@ -70,8 +71,8 @@
         instalação usa:
       </p>
       <dl class="leituras">
-        <dt>tsa.crt</dt><dd><code class="hash" th:text="${situacao.tsaCertificateSha256}">hash</code></dd>
-        <dt>cacert.pem</dt><dd><code class="hash" th:text="${situacao.caCertificateSha256}">hash</code></dd>
+        <div class="largo"><dt>tsa.crt</dt><dd><code class="hash" th:text="${situacao.tsaCertificateSha256}">hash</code></dd></div>
+        <div class="largo"><dt>cacert.pem</dt><dd><code class="hash" th:text="${situacao.caCertificateSha256}">hash</code></dd></div>
       </dl>
       <pre class="documento">curl -O https://freetsa.org/files/tsa.crt
 curl -O https://freetsa.org/files/cacert.pem

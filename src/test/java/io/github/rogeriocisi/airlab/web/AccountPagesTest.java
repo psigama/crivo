@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 /**
- * The P4 account pages from the outside (SPEC E13, phase A), with the real security
+ * The P1 account pages from the outside (SPEC E13, phase A), with the real security
  * configuration and the real database: sign up, confirm by the link that went to the outbox,
  * sign in, and land on the panel of one's own profile — and only on that one.
  */
@@ -75,9 +75,9 @@ class AccountPagesTest {
         mvc.perform(get("/conta/criar")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Consulente")))
                 .andExpect(content().string(containsString("Médium")));
-        mvc.perform(get("/testes")).andExpect(status().isOk())
+        mvc.perform(get("/protocolos")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Protocolos AIR")));
-        mvc.perform(get("/testes/leitura-estruturada")).andExpect(status().isOk())
+        mvc.perform(get("/protocolo/P1")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Como participar, passo a passo")))
                 .andExpect(content().string(containsString("O que cada perfil vê")));
         mvc.perform(get("/")).andExpect(status().isOk())
@@ -91,12 +91,12 @@ class AccountPagesTest {
     }
 
     @Test
-    @DisplayName("a leitura pareada (P1) fica so como referencia: fora da lista de protocolos, pagina sem inscricao")
+    @DisplayName("a leitura pareada (P2-supervisionado) fica so como referencia: listada assim, pagina sem inscricao")
     void the_paired_reading_is_reference_only() throws Exception {
-        mvc.perform(get("/testes")).andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("<span>P1</span> ·"))))
-                .andExpect(content().string(containsString("href=\"/testes/leitura-pareada\">como referência")));
-        mvc.perform(get("/testes/leitura-pareada")).andExpect(status().isOk())
+        mvc.perform(get("/protocolos")).andExpect(status().isOk())
+                .andExpect(content().string(containsString("P2-supervisionado")))
+                .andExpect(content().string(containsString("Só como referência")));
+        mvc.perform(get("/protocolo/P2")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Só como referência")))
                 .andExpect(content().string(containsString("Só referência, não implementado")))
                 .andExpect(content().string(org.hamcrest.Matchers.not(containsString(">Criar uma conta</a>"))));
@@ -105,7 +105,7 @@ class AccountPagesTest {
     @Test
     @DisplayName("o AIR automatizado nao vira teste anonimo: nao ha rota de rodar sem conta")
     void the_automated_air_protocol_is_not_an_anonymous_test() throws Exception {
-        mvc.perform(get("/testes/leitura-estruturada/rodar")).andExpect(status().isNotFound());
+        mvc.perform(get("/protocolo/P1/rodar")).andExpect(status().isNotFound());
     }
 
     @Test

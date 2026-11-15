@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The report of a P4 study (SPEC E13, phase D). It exists only after the unblinding — the database
+ * The report of a P1 study (SPEC E13, phase D). It exists only after the unblinding — the database
  * refuses it before — so everything in it, the pair-to-medium link included, is already revealed.
  *
  * <p>Neutral by construction (P3): the same record and the same page serve a null result and a

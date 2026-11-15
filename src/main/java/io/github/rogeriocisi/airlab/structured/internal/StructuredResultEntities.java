@@ -13,7 +13,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The score of one P4 pair (V20). Written once, at the unblinding; the database refuses it for a
+ * The score of one P1 pair (V20). Written once, at the unblinding; the database refuses it for a
  * study that is not unblinded and refuses any change afterwards.
  */
 @Entity
@@ -120,7 +120,7 @@ class StructuredScoreEntity {
     }
 }
 
-/** The report of a P4 study (V20). Written once, at the unblinding. */
+/** The report of a P1 study (V20). Written once, at the unblinding. */
 @Entity
 @Table(name = "structured_report", schema = "research")
 class StructuredReportEntity {

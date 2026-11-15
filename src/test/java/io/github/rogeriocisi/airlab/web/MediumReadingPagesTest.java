@@ -15,7 +15,7 @@ import io.github.rogeriocisi.airlab.catalog.Questionnaires;
 import io.github.rogeriocisi.airlab.participant.AccountProfile;
 import io.github.rogeriocisi.airlab.participant.AccountService;
 import io.github.rogeriocisi.airlab.participant.ConsultationService;
-import io.github.rogeriocisi.airlab.structured.P4Fixture;
+import io.github.rogeriocisi.airlab.structured.P1Fixture;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 /**
- * The medium's P4 pages (SPEC E13, phase C) with the real security configuration and database:
+ * The medium's P1 pages (SPEC E13, phase C) with the real security configuration and database:
  * see the request, answer, review, lock — and check that nobody else sees the names.
  */
 @SpringBootTest
@@ -54,11 +54,11 @@ class MediumReadingPagesTest {
     @Autowired
     JdbcTemplate jdbc;
 
-    P4Fixture fixture;
+    P1Fixture fixture;
 
     @BeforeEach
     void setUp() {
-        fixture = new P4Fixture(accounts, consultations, studies, jdbc);
+        fixture = new P1Fixture(accounts, consultations, studies, jdbc);
     }
 
     private static RequestPostProcessor medium(String code) {
@@ -80,7 +80,7 @@ class MediumReadingPagesTest {
     @Test
     @DisplayName("do painel a leitura travada: ver os nomes, responder, rever e travar")
     void from_panel_to_locked_reading() throws Exception {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("feminino", "40-59", "5-15-anos"),
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("feminino", "40-59", "5-15-anos"),
                 "Benedita", "Conceicao");
         MockHttpSession session = new MockHttpSession();
 
@@ -116,7 +116,7 @@ class MediumReadingPagesTest {
     @Test
     @DisplayName("uma leitura incompleta volta com a mensagem e nada e travado")
     void an_incomplete_reading_returns_with_the_message() throws Exception {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("feminino", "60-79", "5-15-anos"),
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("feminino", "60-79", "5-15-anos"),
                 "Iracema", "Jandira");
         mvc.perform(post("/painel/medium/pedido/{a}/leitura/2/revisar", pair.assignment())
                         .with(medium(pair.medium())).with(csrf())
@@ -130,7 +130,7 @@ class MediumReadingPagesTest {
     @Test
     @DisplayName("os nomes nao aparecem para outro medium, para o consulente nem para o administrador")
     void nobody_else_sees_the_names() throws Exception {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("feminino", "18-39", "5-15-anos"),
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("feminino", "18-39", "5-15-anos"),
                 "Florisbela", "Genoveva");
         String other = fixture.account(AccountProfile.MEDIUM);
 
@@ -157,7 +157,7 @@ class MediumReadingPagesTest {
                 .andExpect(content().string(not(containsString("Florisbela"))))
                 .andReturn().getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
         assertMediumOnlyInOwnAccountNotice(panel, pair.medium());
-        mvc.perform(get("/painel/adm/estudo-p4").with(admin))
+        mvc.perform(get("/painel/adm/estudo-p1").with(admin))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("O que foi congelado")))
                 .andExpect(content().string(containsString("Compromisso da semente")))
@@ -178,7 +178,7 @@ class MediumReadingPagesTest {
     /**
      * The admin panel lists notices with type, code and time, and "account confirmed" carries the
      * medium's own code by design (SPEC E13: a notice has only type, pseudonymous code and time). What
-     * the P4 matrix forbids is the pair-to-medium link. So the medium's code may appear only in its own
+     * the P1 matrix forbids is the pair-to-medium link. So the medium's code may appear only in its own
      * account notice, never next to a pair code, and nowhere else on the page.
      *
      * <p>A plain "the code is absent" check depended on how many notices the shared test database

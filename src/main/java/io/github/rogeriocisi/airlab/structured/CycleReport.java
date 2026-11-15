@@ -1,7 +1,7 @@
 package io.github.rogeriocisi.airlab.structured;
 
 /**
- * What one run of the P4 cycle did, in counts. Logged and returned to tests; nothing in it
+ * What one run of the P1 cycle did, in counts. Logged and returned to tests; nothing in it
  * links a pair to a medium.
  */
 public record CycleReport(int dissolvedPairs,

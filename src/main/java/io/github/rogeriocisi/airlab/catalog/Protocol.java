@@ -11,9 +11,11 @@ import java.util.List;
  * what its result does <em>not</em> support, and a record that cannot be built without it
  * keeps that from becoming a footnote someone forgets.
  *
- * @param code              short public code, such as P1
- * @param slug              URL segment, in Portuguese
+ * @param code              short public code, such as P1, in the URL of its page ({@code /protocolo/P1})
+ * @param slug              former URL segment, in Portuguese, kept for the permanent redirects from
+ *                          {@code /testes/...} (SPEC 0.17) and for naming the test page templates
  * @param name              public name, in Portuguese
+ * @param shortName         short name, in Portuguese, that follows the code in the label
  * @param branch            which branch of anomalous cognition it belongs to
  * @param chanceNumerator   numerator of the declared chance level
  * @param chanceDenominator denominator of the declared chance level
@@ -26,6 +28,7 @@ import java.util.List;
 public record Protocol(String code,
                        String slug,
                        String name,
+                       String shortName,
                        Branch branch,
                        int chanceNumerator,
                        int chanceDenominator,
@@ -44,6 +47,11 @@ public record Protocol(String code,
             throw new IllegalArgumentException("the declared chance level must be between 0 and 1");
         }
         limits = List.copyOf(limits);
+    }
+
+    /** Code and short name, as the site shows them: {@code P1-automático}, {@code P4-visão-remota}. */
+    public String label() {
+        return code + "-" + shortName.replace(' ', '-');
     }
 
     /** Chance level as a percentage, for display. */
@@ -69,14 +77,6 @@ public record Protocol(String code,
         return branch == Branch.ESP && automation == Automation.FULL;
     }
 
-    /**
-     * Whether PsiGama, not the Crivo site, presents it (SPEC 0.16, catalog rule 7). The ESP
-     * tests still run on this server, at the same addresses and with the same guarantees; the
-     * Crivo pages just do not list them, and their own pages lead back to PsiGama.
-     */
-    public boolean presentedByPsiGama() {
-        return branch == Branch.ESP;
-    }
 
     /**
      * Branch of anomalous cognition. The distinction is kept because AIR means something
@@ -124,8 +124,8 @@ public record Protocol(String code,
         PLANNED("Planejado"),
         /**
          * Will not be implemented, and stays on the site as reference only: its page describes the
-         * design, takes no participants and is not listed among the protocols on offer. The code is
-         * kept because codes are never renumbered.
+         * design, takes no participants and is not offered for participation. The code is kept:
+         * codes are never reused (SPEC 0.17 renumbered them once, before any real data).
          */
         DISCONTINUED("Só referência, não implementado");
 

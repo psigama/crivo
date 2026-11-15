@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**
- * Runs the P4 cycle on the server (SPEC E13, phase C): every minute by default
+ * Runs the P1 cycle on the server (SPEC E13, phase C): every minute by default
  * ({@code airlab.p4.cycle-ms}). Only in the web application — the {@code airlab} CLI runs the same
  * artifact and must not start pairing — and only when {@code airlab.p4.cycle-enabled} is on; the
  * tests turn it off and call the cycle themselves, with the clock they need.
@@ -38,12 +38,12 @@ class StructuredCycleScheduling {
         try {
             CycleReport report = service.runCycle(clock.instant());
             if (!report.idle()) {
-                // Counts only: nothing here links a pair to a medium (P4 matrix).
-                log.info("Ciclo do P4: {}", report);
+                // Counts only: nothing here links a pair to a medium (P1 matrix).
+                log.info("Ciclo do P1: {}", report);
             }
         } catch (RuntimeException e) {
             // The next cycle tries again; the message carries codes at most, never personal data.
-            log.warn("Ciclo do P4 falhou e sera repetido: {}", e.getMessage());
+            log.warn("Ciclo do P1 falhou e sera repetido: {}", e.getMessage());
         }
     }
 }

@@ -2,18 +2,18 @@ package io.github.rogeriocisi.airlab.trials;
 
 /**
  * The self-service protocols of the catalog: the ones that run end to end with nobody in the
- * loop (SPEC, section 1.1, codes P2 and P3).
+ * loop (SPEC, section 1.1, codes P3 and P4).
  *
- * <p>The paired reading (P1) is not here, and that is the point: it needs a synchronous
+ * <p>The paired reading (P2) is not here, and that is the point: it needs a synchronous
  * session with a proxy experimenter, so it is not a trial protocol.
  */
 public enum TrialProtocol {
 
     /** Four abstract alternatives, target derived after the answer is locked. */
-    PRECOGNITIVE_FORCED_CHOICE("P2", "escolha-forcada", 4, 24, false),
+    PRECOGNITIVE_FORCED_CHOICE("P3", "escolha-forcada", 4, 24, false),
 
     /** Four figures from the versioned pool, ranked after the impression is locked. */
-    REMOTE_VIEWING_RANKED("P3", "visao-remota", 4, 6, true);
+    REMOTE_VIEWING_RANKED("P4", "visao-remota", 4, 6, true);
 
     private final String catalogCode;
     private final String slug;

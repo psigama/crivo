@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** The P4 scoring rule (SPEC E13, "Conferência automática"), field by field. */
+/** The P1 scoring rule (SPEC E13, "Conferência automática"), field by field. */
 class StructuredScoringTest {
 
     private final Questionnaire questionnaire = Questionnaires.current();
@@ -18,8 +18,8 @@ class StructuredScoringTest {
     @Test
     @DisplayName("leituras iguais ao proprio alvo e diferentes do chamariz dao d igual ao dobro dos campos")
     void perfect_readings_give_twice_the_comparable_fields() {
-        Map<String, String> a = P4Fixture.mediumAnswers(1);
-        Map<String, String> b = P4Fixture.mediumAnswers(2);
+        Map<String, String> a = P1Fixture.mediumAnswers(1);
+        Map<String, String> b = P1Fixture.mediumAnswers(2);
 
         StructuredScoring.PairScore score = StructuredScoring.score(questionnaire, a, b, a, b);
 
@@ -35,8 +35,8 @@ class StructuredScoringTest {
     @DisplayName("nao sei de qualquer dos dois tira o campo da comparacao, para alvo e chamariz")
     void unknown_takes_the_field_out_for_both() {
         String field = questionnaire.scoredFields().get(0).key();
-        Map<String, String> a = new HashMap<>(P4Fixture.mediumAnswers(1));
-        Map<String, String> b = new HashMap<>(P4Fixture.mediumAnswers(2));
+        Map<String, String> a = new HashMap<>(P1Fixture.mediumAnswers(1));
+        Map<String, String> b = new HashMap<>(P1Fixture.mediumAnswers(2));
         b.put(field, Questionnaire.UNKNOWN);
 
         StructuredScoring.PairScore score = StructuredScoring.score(questionnaire, a, b, a, b);
@@ -48,7 +48,7 @@ class StructuredScoringTest {
     @Test
     @DisplayName("nao recebi nunca acerta, e respostas frequentes se cancelam entre alvo e chamariz")
     void not_received_never_matches_and_common_answers_cancel_out() {
-        Map<String, String> a = P4Fixture.mediumAnswers(1);
+        Map<String, String> a = P1Fixture.mediumAnswers(1);
         Map<String, String> nothing = new HashMap<>(a);
         nothing.replaceAll((key, value) -> Questionnaire.NOT_RECEIVED);
         assertThat(StructuredScoring.score(questionnaire, a, a, nothing, nothing).d()).isZero();

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The feedback of the P4 (SPEC E13, phase D), after the unblinding and only then: it is built from
+ * The feedback of the P1 (SPEC E13, phase D), after the unblinding and only then: it is built from
  * the scores, and the scores do not exist before (the database refuses them).
  */
 public interface FeedbackService {

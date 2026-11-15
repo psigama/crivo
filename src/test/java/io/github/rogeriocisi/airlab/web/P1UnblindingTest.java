@@ -23,7 +23,7 @@ import io.github.rogeriocisi.airlab.participant.ConsultationService;
 import io.github.rogeriocisi.airlab.participant.ConsultationState;
 import io.github.rogeriocisi.airlab.structured.FeedbackService;
 import io.github.rogeriocisi.airlab.structured.MediumReadingService;
-import io.github.rogeriocisi.airlab.structured.P4Fixture;
+import io.github.rogeriocisi.airlab.structured.P1Fixture;
 import io.github.rogeriocisi.airlab.structured.StructuredReport;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyTerms;
@@ -49,12 +49,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 /**
- * P4, phase D (SPEC E13) from end to end: a study with N = 2 collects, unblinds itself, scores,
+ * P1, phase D (SPEC E13) from end to end: a study with N = 2 collects, unblinds itself, scores,
  * analyses, reports, and hands each person their feedback — and nothing of that exists a moment
  * before the last reading locks.
  *
- * <p>On a database of its own, recreated on every run: the shared test database keeps an open P4
- * study with a large N, which never completes, and only one P4 study may be open at a time.
+ * <p>On a database of its own, recreated on every run: the shared test database keeps an open P1
+ * study with a large N, which never completes, and only one P1 study may be open at a time.
  *
  * <p>The readings here are made to fit: each one repeats the answers of the sitter it was made
  * for, and the two sitters of a pair differ on every field. So every number is known in advance —
@@ -66,7 +66,7 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 @TestPropertySource(properties = {
         "airlab.local-database.database-name=airlab_test_desmascaramento",
         "airlab.local-database.recreate-database=true"})
-class P4UnblindingTest {
+class P1UnblindingTest {
 
     private static final String FIRST_FIELD = Questionnaires.current().scoredFields().get(0).key();
     private static final int SCORED = Questionnaires.current().scoredFields().size();
@@ -98,33 +98,33 @@ class P4UnblindingTest {
     @Autowired
     JdbcTemplate jdbc;
 
-    P4Fixture fixture;
+    P1Fixture fixture;
 
     @BeforeEach
     void setUp() {
-        fixture = new P4Fixture(accounts, consultations, studies, jdbc);
+        fixture = new P1Fixture(accounts, consultations, studies, jdbc);
     }
 
     private record Lock(String medium, String assignment, int position, Map<String, String> answers) {
     }
 
     /** A study with its four requests paired and sent, every reading locked but the last one. */
-    private record Scenario(StructuredStudyView study, P4Fixture.Request a1, P4Fixture.Request b1,
-                            P4Fixture.Request a2, P4Fixture.Request b2, String medium, Lock last) {
+    private record Scenario(StructuredStudyView study, P1Fixture.Request a1, P1Fixture.Request b1,
+                            P1Fixture.Request a2, P1Fixture.Request b2, String medium, Lock last) {
 
         List<String> requests() {
             return List.of(a1.code(), b1.code(), a2.code(), b2.code());
         }
     }
 
-    private P4Fixture.Request file(P4Fixture.Stratum stratum, String firstName, int variant, boolean unknownFirst) {
+    private P1Fixture.Request file(P1Fixture.Stratum stratum, String firstName, int variant, boolean unknownFirst) {
         String sitter = fixture.account(AccountProfile.SITTER);
-        Map<String, String> answers = new HashMap<>(P4Fixture.answers(stratum, variant));
+        Map<String, String> answers = new HashMap<>(P1Fixture.answers(stratum, variant));
         if (unknownFirst) {
             answers.put(FIRST_FIELD, Questionnaire.UNKNOWN);
         }
         String code = consultations.submit(sitter, new ConsultationDraft(firstName, answers)).code();
-        return new P4Fixture.Request(code, sitter, firstName);
+        return new P1Fixture.Request(code, sitter, firstName);
     }
 
     private Scenario scenario(String nameA1, String nameB1, String nameA2, String nameB2) {
@@ -134,12 +134,12 @@ class P4UnblindingTest {
         StructuredStudyView study = studies.open(new StructuredStudyTerms("Estudo de desmascaramento", 2, 14, 0.5,
                 "As leituras coincidem mais com o alvo.", "Qualquer medium confirmado.", 2), "pesquisador");
 
-        P4Fixture.Stratum first = new P4Fixture.Stratum("feminino", "60-79", "1-5-anos");
-        P4Fixture.Stratum second = new P4Fixture.Stratum("masculino", "40-59", "mais-15-anos");
-        P4Fixture.Request a1 = file(first, nameA1, 1, true);
-        P4Fixture.Request b1 = file(first, nameB1, 2, false);
-        P4Fixture.Request a2 = file(second, nameA2, 1, false);
-        P4Fixture.Request b2 = file(second, nameB2, 2, false);
+        P1Fixture.Stratum first = new P1Fixture.Stratum("feminino", "60-79", "1-5-anos");
+        P1Fixture.Stratum second = new P1Fixture.Stratum("masculino", "40-59", "mais-15-anos");
+        P1Fixture.Request a1 = file(first, nameA1, 1, true);
+        P1Fixture.Request b1 = file(first, nameB1, 2, false);
+        P1Fixture.Request a2 = file(second, nameA2, 1, false);
+        P1Fixture.Request b2 = file(second, nameB2, 2, false);
         Map<String, Integer> variant = Map.of(a1.code(), 1, b1.code(), 2, a2.code(), 1, b2.code(), 2);
         studies.runCycle(Instant.now());
 
@@ -150,7 +150,7 @@ class P4UnblindingTest {
             for (int position = 1; position <= 2; position++) {
                 String request = (String) sent.get(position == 1 ? "first_request" : "second_request");
                 locks.add(new Lock((String) sent.get("medium_code"), (String) sent.get("code"), position,
-                        P4Fixture.mediumAnswers(variant.get(request))));
+                        P1Fixture.mediumAnswers(variant.get(request))));
             }
         }
         assertThat(locks).hasSize(4);
@@ -225,7 +225,7 @@ class P4UnblindingTest {
         assertThat(own.comparableFields()).hasSize(SCORED - 1).doesNotContain(FIRST_FIELD);
         assertThat(own.targetMatches()).isEqualTo(SCORED - 1);
         assertThat(own.decoyMatches()).isZero();
-        assertThat(own.readingAnswers()).isEqualTo(P4Fixture.mediumAnswers(1));
+        assertThat(own.readingAnswers()).isEqualTo(P1Fixture.mediumAnswers(1));
         assertThat(feedback.forMedium(scenario.medium()))
                 .anyMatch(reading -> reading.studyCode().equals(code) && reading.comparableFields() > 0);
 
@@ -246,8 +246,8 @@ class P4UnblindingTest {
         String first = fixture.account(AccountProfile.MEDIUM);
         StructuredStudyView study = studies.open(new StructuredStudyTerms("Estudo com teto", 2, 14, 0.5,
                 "As leituras coincidem mais com o alvo.", "Qualquer medium confirmado.", 1), "pesquisador");
-        P4Fixture.Stratum one = new P4Fixture.Stratum("feminino", "18-39", "menos-1-ano");
-        P4Fixture.Stratum two = new P4Fixture.Stratum("masculino", "60-79", "5-15-anos");
+        P1Fixture.Stratum one = new P1Fixture.Stratum("feminino", "18-39", "menos-1-ano");
+        P1Fixture.Stratum two = new P1Fixture.Stratum("masculino", "60-79", "5-15-anos");
         Map<String, Integer> variant = new HashMap<>();
         variant.put(file(one, "Iolanda", 1, false).code(), 1);
         variant.put(file(one, "Jurema", 2, false).code(), 2);
@@ -271,7 +271,7 @@ class P4UnblindingTest {
             for (int position = 1; position <= 2; position++) {
                 String request = (String) sent.get(position == 1 ? "first_request" : "second_request");
                 mediumReadings.lock((String) sent.get("medium_code"), (String) sent.get("code"), position,
-                        P4Fixture.mediumAnswers(variant.get(request)));
+                        P1Fixture.mediumAnswers(variant.get(request)));
             }
         }
         // Completing it leaves the database ready for the next scenario, and shows the cap held.
@@ -321,10 +321,10 @@ class P4UnblindingTest {
                 .andExpect(content().string(containsString(scenario.study().studyCode())));
 
         RequestPostProcessor admin = user("pesquisador").roles("ADMIN", "RESEARCHER");
-        mvc.perform(get("/painel/adm/estudo-p4").with(admin))
+        mvc.perform(get("/painel/adm/estudo-p1").with(admin))
                 .andExpect(content().string(containsString("Estudos concluídos")))
                 .andExpect(content().string(containsString(scenario.study().studyCode())));
-        mvc.perform(get("/painel/adm/estudo-p4/{code}", scenario.study().studyCode()).with(admin))
+        mvc.perform(get("/painel/adm/estudo-p1/{code}", scenario.study().studyCode()).with(admin))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Relatório")))
                 .andExpect(content().string(containsString("Por médium")))

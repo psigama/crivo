@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * The closed questionnaire of the automated AIR protocol, P4 (SPEC E13). The sitter and the
+ * The closed questionnaire of the automated AIR protocol, P1 (SPEC E13). The sitter and the
  * medium answer the same fields; the system compares the answers field by field.
  *
  * <p>Versioned and immutable: an answer is meaningful only together with the version of the
@@ -49,6 +49,14 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
 
     public List<Field> scoredFields() {
         return fields.stream().filter(field -> field.use() == Use.SCORED).toList();
+    }
+
+    /**
+     * A draft awaiting the researcher's review (tag ending in {@code -rascunho}). In production a
+     * study cannot freeze it (SPEC E13).
+     */
+    public boolean draft() {
+        return version.endsWith("-rascunho");
     }
 
     /**

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Escolha forçada precognitiva — Crivo</title>
   <th:block th:replace="~{fragments/site :: social('Escolha forçada precognitiva — Crivo', 'Protocolos cegos para pesquisa de cognição anômala, com sorteio verificável e trilha de auditoria encadeada por hash.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
@@ -18,7 +19,7 @@
 
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo aparece">P2 · antes de começar</p>
+      <p class="rotulo aparece">P3 · antes de começar</p>
       <h1 class="aparece">Escolha forçada precognitiva</h1>
       <p class="chamada aparece">
         Em cada tentativa você escolhe uma entre quatro portas. O alvo daquela tentativa
@@ -50,7 +51,7 @@
         existe para demonstrar o método de verificação, não para prometer um efeito.
       </p>
 
-      <form method="post" th:action="'/testes/' + ${protocolo.slug()} + '/comecar'">
+      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/comecar'">
         <p>
           <label for="tentativas">Quantas tentativas nesta sessão</label>
           <select id="tentativas" name="tentativas">
@@ -61,7 +62,7 @@
         </p>
         <p class="acoes">
           <button class="botao botao-cheio" type="submit">Começar a sessão</button>
-          <a class="botao botao-vazio" href="/testes/escolha-forcada">Como funciona</a>
+          <a class="botao botao-vazio" href="/protocolo/P3">Como funciona</a>
         </p>
       </form>
     </div>

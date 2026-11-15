@@ -30,7 +30,7 @@ public enum PrimaryMeasure {
     PAIRED_GLOBAL_SCORE,
 
     /**
-     * The automated structured reading, P4 (SPEC E13): per pair,
+     * The automated structured reading, P1 (SPEC E13): per pair,
      * {@code d = [s(R_A, A) - s(R_A, B)] + [s(R_B, B) - s(R_B, A)]}, where {@code s} counts the
      * comparable fields on which a reading matches a sitter's answers, tested with the exact
      * Wilcoxon signed-rank test over the pairs. Same power calculation as the other paired

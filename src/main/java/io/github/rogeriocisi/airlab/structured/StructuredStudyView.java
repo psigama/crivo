@@ -4,7 +4,7 @@ import io.github.rogeriocisi.airlab.study.StudyStatus;
 import java.time.Instant;
 
 /**
- * The P4 study as the administrator sees it: what was frozen, with the hashes to check it. The
+ * The P1 study as the administrator sees it: what was frozen, with the hashes to check it. The
  * preregistration document is public by design (P2, P7), so it can be shown whole.
  *
  * @param maxPairsPerMedium null for a study frozen before the cap existed

@@ -125,7 +125,7 @@ class DefaultMediumReadingService implements MediumReadingService {
         return pairs.findByCode(assignment.pairCode())
                 .flatMap(pair -> studies.findById(pair.studyId()))
                 .map(StructuredStudyEntity::questionnaireVersion)
-                .orElseThrow(() -> new IllegalStateException("request " + assignment.code() + " has no P4 study"));
+                .orElseThrow(() -> new IllegalStateException("request " + assignment.code() + " has no P1 study"));
     }
 
     @Override
@@ -170,7 +170,7 @@ class DefaultMediumReadingService implements MediumReadingService {
         readings.save(new StructuredReadingEntity(code, assignmentCode, position, request, version,
                 cipher.encrypt(encodeAnswers(sorted)), cipher.encrypt(salt), commitment, now));
 
-        // No actor code: which medium reads which pair stays blind until the unblinding (P4 matrix).
+        // No actor code: which medium reads which pair stays blind until the unblinding (P1 matrix).
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("reading", code);
         payload.put("assignment", assignmentCode);

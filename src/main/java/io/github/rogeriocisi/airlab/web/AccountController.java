@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
- * Account pages of the automated AIR protocol, P4 (SPEC E13, phase A): create an account with a
+ * Account pages of the automated AIR protocol, P1 (SPEC E13, phase A): create an account with a
  * fixed profile, confirm the e-mail, see and close one's own account.
  *
  * <p>The sign-up answer is the same page whether or not the e-mail already had an account, so

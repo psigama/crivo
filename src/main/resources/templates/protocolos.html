@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Protocolos — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'O protocolo da plataforma Crivo: a leitura estruturada automatizada, um protocolo de recepção anômala de informação (AIR) que roda inteiro pelo site, com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
+  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os quatro protocolos da plataforma Crivo: P1-automático e P2-supervisionado, de recepção anômala de informação (AIR), e P3-precognição e P4-visão-remota, testes de percepção extrassensorial, todos com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
@@ -19,12 +20,12 @@
   <section class="abertura">
     <div class="faixa">
       <p class="rotulo aparece">Protocolos</p>
-      <h1 class="aparece">Um protocolo AIR, inteiro pelo site</h1>
+      <h1 class="aparece">Quatro protocolos, as mesmas garantias</h1>
       <p class="chamada aparece">
         O Crivo é uma plataforma de protocolos cegos para pesquisa de <strong>cognição
         anômala</strong>. A mediunidade é um ramo dela — na literatura, <em>recepção anômala de
-        informação</em>, ou AIR. O protocolo AIR daqui roda inteiro pelo site, sem ninguém da
-        equipe no circuito.
+        informação</em>, ou AIR. O outro ramo são os testes de <em>percepção extrassensorial</em>,
+        em que o alvo é sorteado pelo próprio sistema e não há pessoa falecida envolvida.
       </p>
       <p class="tese aparece">
         O que todo protocolo daqui tem em comum: <strong>pré-registro congelado, sorteio com
@@ -43,62 +44,57 @@
       <ul class="protocolos">
         <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
           <p class="selo">
-            <span th:text="${p.code}">P4</span> ·
+            <span th:text="${p.label()}">P1-automático</span> ·
             <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
             <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span> ·
             <span th:text="${#strings.toLowerCase(p.status.label())}">situação</span>
           </p>
-          <h3><a th:href="'/testes/' + ${p.slug}" th:text="${p.name}">Nome</a></h3>
+          <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
           <p th:text="${p.summary}">Resumo</p>
           <p class="acoes">
-            <a class="botao botao-vazio" th:href="'/testes/' + ${p.slug}">Como funciona</a>
+            <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
             <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}"
                href="/conta/criar">Criar uma conta</a>
-            <span class="nota" th:if="${p.automation.name() != 'FULL'}">
-              Este protocolo precisa de uma equipe — experimentador e redator — e não roda sozinho
-              pelo site.
+            <span class="nota" th:if="${p.discontinued()}">
+              Só como referência: este protocolo precisa de uma equipe — experimentador e redator —
+              e não roda sozinho pelo site.
             </span>
           </p>
         </li>
       </ul>
-    </div>
-  </section>
-
-  <section>
-    <div class="faixa">
-      <h2>Por que um protocolo AIR só, e automatizado</h2>
-      <div class="caminhos">
-        <article class="caminho">
-          <h3>Leitura estruturada automatizada</h3>
-          <p>
-            Consulente e médium respondem ao mesmo questionário fechado, e o sistema confere as
-            respostas contra o alvo verdadeiro e contra um chamariz. Ninguém julga se uma afirmação
-            "encaixa", e ninguém da equipe fica no circuito. O preço: não há experimentador
-            intermediário, e só conta o que cabe nos campos.
-          </p>
-        </article>
-        <article class="caminho">
-          <h3>Leitura pareada (P1) — só como referência</h3>
-          <p>
-            O projeto especificou também uma leitura pareada, com sessão síncrona, experimentador
-            intermediário e redator — o desenho mais próximo da literatura. Ela não será implementada
-            e não recebe participantes: o Crivo roda só o que funciona inteiro pelo site. O desenho
-            fica publicado <a href="/testes/leitura-pareada">como referência</a>, porque é contra
-            ele que se mede o preço de não ter intermediário.
-          </p>
-        </article>
-      </div>
 
       <p class="nota nota-espacada">
         Um nulo na leitura automatizada não refuta os estudos com intermediário da literatura: cada
-        desenho paga um preço diferente, e a página do protocolo diz qual é o deste.
+        desenho paga um preço diferente, e a página de cada protocolo diz qual é o dele.
       </p>
-      <p class="nota" id="pes">
-        Procura os testes de percepção extrassensorial — a escolha forçada e a visão remota? Eles
-        não dizem nada sobre mediunidade e ficam fora do catálogo do Crivo: estão na
-        <a th:href="${paginaPes}" href="https://psigama.com/pes/">página de testes de PES da
-        PsiGama</a>.
+    </div>
+  </section>
+
+  <section id="pes">
+    <div class="faixa">
+      <p class="rotulo">Percepção extrassensorial</p>
+      <h2>Testes de PES</h2>
+      <p>
+        Testes rápidos e anônimos, sem conta. Eles <strong>não dizem nada sobre mediunidade</strong>:
+        servem para mostrar o método funcionando, e qualquer pessoa pode conferir depois a lisura do
+        próprio teste.
       </p>
+
+      <ul class="protocolos">
+        <li th:each="p : ${esp}">
+          <p class="selo">
+            <span th:text="${p.label()}">P3-precognição</span> ·
+            <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
+            <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
+          </p>
+          <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
+          <p th:text="${p.summary}">Resumo</p>
+          <p class="acoes">
+            <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
+            <a class="botao botao-cheio" th:href="'/protocolo/' + ${p.code} + '/rodar'">Fazer o teste</a>
+          </p>
+        </li>
+      </ul>
     </div>
   </section>
 

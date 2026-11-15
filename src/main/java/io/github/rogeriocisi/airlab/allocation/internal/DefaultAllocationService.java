@@ -85,19 +85,19 @@ class DefaultAllocationService implements AllocationService {
         }
         String seedHex = AllocationEngine.newSeedHex();
         Map<String, Object> input = new LinkedHashMap<>();
-        input.put("mode", "P4_INCREMENTAL");
+        input.put("mode", "P1_INCREMENTAL");
         input.put("studyCode", studyCode);
         String canonicalInput = CanonicalJson.write(input);
         String commitment = AllocationEngine.seedCommitment(seedHex, canonicalInput);
 
-        // No plan yet: the P4 draws happen during collection and are recorded where they happen,
+        // No plan yet: the P1 draws happen during collection and are recorded where they happen,
         // with their inputs. This row holds the seed and its commitment.
         sets.save(new AllocationSet(studyId, commitment, canonicalInput, "[]",
                 cipher.encrypt(seedHex), clock.instant()));
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("commitment", commitment);
-        payload.put("mode", "P4_INCREMENTAL");
+        payload.put("mode", "P1_INCREMENTAL");
         payload.put("drawInputSha256", Hashes.sha256Hex(canonicalInput));
         auditTrail.append(AuditEventType.ALLOCATION_SEED_COMMITTED, ActorRole.SYSTEM, null,
                 "study:" + studyId, payload);

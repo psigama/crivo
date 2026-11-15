@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The canonical P4 report (SPEC E13, phase D): the exact text whose SHA-256 goes into the trail.
+ * The canonical P1 report (SPEC E13, phase D): the exact text whose SHA-256 goes into the trail.
  *
  * <p>Like the preregistration document: no timestamp, no locale-dependent formatting, always LF,
  * so the same data gives the same bytes on any machine. Neutral wording (P3): the primary result

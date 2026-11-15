@@ -47,7 +47,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The P4 study and its automatic cycle (SPEC E13, phase C).
+ * The P1 study and its automatic cycle (SPEC E13, phase C).
  *
  * <p>Every cycle operation is audited as {@code SYSTEM}, with no actor code, and none of them
  * writes a medium's code to the trail: the link between a pair and its medium stays in the
@@ -149,7 +149,7 @@ class DefaultStructuredStudyService implements StructuredStudyService {
     public StructuredStudyView open(StructuredStudyTerms terms, String actorCode) {
         check(terms);
         if (openStudy().isPresent()) {
-            throw new IllegalStateException("Já existe um estudo P4 aberto. Um estudo por vez.");
+            throw new IllegalStateException("Já existe um estudo P1 aberto. Um estudo por vez.");
         }
         Questionnaire questionnaire = Questionnaires.current();
         if (questionnaire.version().endsWith(DRAFT_SUFFIX) && !draftQuestionnaireAllowed) {

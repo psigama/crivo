@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The commitment of a P4 consultation request (SPEC E13, phase B), public so that anyone can
+ * The commitment of a P1 consultation request (SPEC E13, phase B), public so that anyone can
  * recompute it from the revealed request.
  *
  * <pre>
  * commitment = SHA-256( canonical || "|" || saltHex )
  * canonical  = CanonicalJson{ "answers": {field: option, ...}, "firstName": ...,
- *                             "protocol": "P4", "questionnaire": version }
+ *                             "protocol": "P1", "questionnaire": version }
  * </pre>
  *
  * <p>The salt is what makes the commitment safe to publish: closed answers have little
@@ -27,7 +27,7 @@ public final class ConsultationCommitment {
 
     public static String canonical(String questionnaireVersion, String firstName, Map<String, String> answers) {
         Map<String, Object> document = new LinkedHashMap<>();
-        document.put("protocol", "P4");
+        document.put("protocol", "P1");
         document.put("questionnaire", questionnaireVersion);
         document.put("firstName", firstName);
         document.put("answers", new TreeMap<>(answers));

@@ -1,6 +1,7 @@
 package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.anchor.AnchorService;
+import io.github.rogeriocisi.airlab.catalog.Questionnaires;
 import io.github.rogeriocisi.airlab.notification.AdminNotices;
 import io.github.rogeriocisi.airlab.notification.Mailer;
 import io.github.rogeriocisi.airlab.participant.AccountService;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * One panel per profile (SPEC E13, "Telas por perfil"). Who reaches which panel is decided in
  * the security configuration; here each panel gets a model built for that profile alone.
  *
- * <p>The administrator panel shows counts and notices, never a score — and in the P4 there is no
+ * <p>The administrator panel shows counts and notices, never a score — and in the P1 there is no
  * score to show before the unblinding, because none is computed (E10, lock 1). Nor does it show
  * which medium has which pair: the progress it gets is counts only.
  */
@@ -119,6 +120,7 @@ class PanelController {
         model.addAttribute("contas", accounts.counts());
         model.addAttribute("pedidos", consultations.counts());
         model.addAttribute("estudo", structuredStudies.current().orElse(null));
+        model.addAttribute("questionarioVigente", Questionnaires.current());
         model.addAttribute("progresso", structuredStudies.progress());
         model.addAttribute("sinalizacoesPendentes", accounts.pendingFlags());
         model.addAttribute("carimbo", anchors.status());

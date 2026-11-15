@@ -3,7 +3,7 @@ package io.github.rogeriocisi.airlab.structured;
 import java.io.Serializable;
 
 /**
- * What the administrator writes into a P4 preregistration (SPEC E13, phase C). Everything else —
+ * What the administrator writes into a P1 preregistration (SPEC E13, phase C). Everything else —
  * the questionnaire, the pairing rule, the scoring rule, the analysis, the exclusion rules — is
  * fixed by the protocol and goes into the frozen document as it is.
  *

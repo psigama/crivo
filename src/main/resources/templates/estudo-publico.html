@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Estudo P4 — Crivo</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Estudo P1 — Crivo</title>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
 <main id="conteudo">
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo">Estudo P4 · <code th:text="${estudo.studyCode}">STD-0000</code></p>
+      <p class="rotulo">Estudo P1 · <code th:text="${estudo.studyCode}">STD-0000</code></p>
       <h1 th:text="${estudo.title}">Título</h1>
       <p class="chamada" th:unless="${relatorio}">
         Em andamento. Abaixo, o que foi declarado antes do primeiro par e quanto da coleta já foi feito
@@ -55,8 +56,8 @@
         <p><strong>Atenção:</strong> algum compromisso não conferiu no desmascaramento. O relatório diz quantos.</p>
       </div>
       <dl class="leituras">
-        <dt>Semente revelada</dt><dd><code class="hash" th:text="${relatorio.seedHex}">semente</code></dd>
-        <dt>Hash do relatório (SHA-256)</dt><dd><code class="hash" th:text="${relatorio.documentSha256}">hash</code></dd>
+        <div class="largo"><dt>Semente revelada</dt><dd><code class="hash" th:text="${relatorio.seedHex}">semente</code></dd></div>
+        <div class="largo"><dt>Hash do relatório (SHA-256)</dt><dd><code class="hash" th:text="${relatorio.documentSha256}">hash</code></dd></div>
       </dl>
       <h3>Relatório</h3>
       <pre class="documento" th:text="${relatorio.document}">relatório</pre>
@@ -67,13 +68,12 @@
     <div class="faixa">
       <h2>O que foi declarado antes</h2>
       <dl class="leituras">
-        <dt>Congelado em</dt>
-        <dd><time th:if="${estudo.frozenAt}" th:text="${@datas.utc(estudo.frozenAt)}">2026-11-13</time> (UTC)</dd>
-        <dt>Questionário</dt><dd><code th:text="${estudo.questionnaireVersion}">v1</code></dd>
-        <dt>Número de pares (N)</dt><dd th:text="${estudo.targetPairs}">30</dd>
-        <dt>Teto de pares por médium</dt><dd th:text="${estudo.maxPairsPerMedium} ?: 'sem teto'">10</dd>
-        <dt>Hash do pré-registro (SHA-256)</dt><dd><code class="hash" th:text="${estudo.documentSha256}">hash</code></dd>
-        <dt>Compromisso da semente</dt><dd><code class="hash" th:text="${estudo.seedCommitment}">hash</code></dd>
+        <div><dt>Congelado em</dt><dd><time th:if="${estudo.frozenAt}" th:text="${@datas.utc(estudo.frozenAt)}">2026-11-13</time> (UTC)</dd></div>
+        <div><dt>Questionário</dt><dd><code th:text="${estudo.questionnaireVersion}">v1</code></dd></div>
+        <div><dt>Número de pares (N)</dt><dd th:text="${estudo.targetPairs}">30</dd></div>
+        <div><dt>Teto de pares por médium</dt><dd th:text="${estudo.maxPairsPerMedium} ?: 'sem teto'">10</dd></div>
+        <div class="largo"><dt>Hash do pré-registro (SHA-256)</dt><dd><code class="hash" th:text="${estudo.documentSha256}">hash</code></dd></div>
+        <div class="largo"><dt>Compromisso da semente</dt><dd><code class="hash" th:text="${estudo.seedCommitment}">hash</code></dd></div>
       </dl>
       <p class="nota">
         O congelamento está na trilha de auditoria, e a trilha é carimbada por uma autoridade de carimbo do

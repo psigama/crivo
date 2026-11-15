@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Accounts of the automated AIR protocol, P4 (SPEC E13, phase A).
+ * Accounts of the automated AIR protocol, P1 (SPEC E13, phase A).
  *
  * <p>Lives in {@code participant} because an account is identifiable data, and this is the only
  * module allowed to read the {@code identity} schema (architectural rule 2). Everything that
@@ -46,7 +46,7 @@ public interface AccountService {
     AccountCounts counts();
 
     /**
-     * Codes of the confirmed, active medium accounts, in code order: the pool the P4 draw picks
+     * Codes of the confirmed, active medium accounts, in code order: the pool the P1 draw picks
      * from (SPEC E13, phase C). Codes only.
      */
     List<String> activeMediumCodes();

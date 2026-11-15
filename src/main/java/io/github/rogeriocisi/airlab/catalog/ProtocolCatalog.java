@@ -16,9 +16,10 @@ import java.util.Optional;
 public final class ProtocolCatalog {
 
     private static final Protocol PAIRED_READING = new Protocol(
-            "P1",
+            "P2",
             "leitura-pareada",
             "Leitura pareada cega",
+            "supervisionado",
             Protocol.Branch.AIR,
             1, 2,
             Protocol.Automation.PARTIAL,
@@ -39,9 +40,10 @@ public final class ProtocolCatalog {
             "E1 a E9");
 
     private static final Protocol PRECOGNITIVE_FORCED_CHOICE = new Protocol(
-            "P2",
+            "P3",
             "escolha-forcada",
             "Escolha forçada precognitiva",
+            "precognição",
             Protocol.Branch.ESP,
             1, 4,
             Protocol.Automation.FULL,
@@ -61,9 +63,10 @@ public final class ProtocolCatalog {
             "E11");
 
     private static final Protocol REMOTE_VIEWING = new Protocol(
-            "P3",
+            "P4",
             "visao-remota",
             "Visão remota com quatro alvos",
+            "visão remota",
             Protocol.Branch.ESP,
             1, 4,
             Protocol.Automation.FULL,
@@ -77,13 +80,14 @@ public final class ProtocolCatalog {
                     "Quem julga a correspondência é a própria pessoa, o que reintroduz a crítica de "
                             + "\"como se pontua\" que a escolha forçada não tem. É o preço do formato de "
                             + "resposta livre.",
-                    "O conjunto público é exploratório, pelas mesmas razões do P2."),
+                    "O conjunto público é exploratório, pelas mesmas razões do P3."),
             "E12");
 
     private static final Protocol STRUCTURED_READING = new Protocol(
-            "P4",
+            "P1",
             "leitura-estruturada",
             "Leitura estruturada automatizada",
+            "automático",
             Protocol.Branch.AIR,
             1, 2,
             Protocol.Automation.FULL,
@@ -109,47 +113,41 @@ public final class ProtocolCatalog {
                             + "e-mails diferentes não é detectável com certeza."),
             "E13");
 
+    /** In code order, which since SPEC 0.17 is also the order of importance. */
     private static final List<Protocol> ALL =
-            List.of(PAIRED_READING, PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING, STRUCTURED_READING);
+            List.of(STRUCTURED_READING, PAIRED_READING, PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING);
 
     /**
-     * The AIR section of the catalog, the only one the Crivo site lists. Only the fully
-     * automated protocol is offered: the paired reading (P1), which needs a team, was
-     * discontinued in SPEC 0.14 and is not listed.
+     * The AIR protocols: the automated one, featured, and the supervised paired reading, which
+     * needs a team, was discontinued in SPEC 0.14 and stays as a reference only.
      */
-    private static final List<Protocol> AIR = List.of(STRUCTURED_READING);
+    private static final List<Protocol> AIR = List.of(STRUCTURED_READING, PAIRED_READING);
 
     /**
-     * The ESP tests, which say nothing about mediumship. Until SPEC 0.15 they were the "extra
-     * experiments" section of the Crivo site; since 0.16 PsiGama presents them and the Crivo
-     * pages do not list them. The engine stays here, at the same addresses (catalog rule 7).
+     * The ESP tests, which say nothing about mediumship. Listed on the Crivo site again since
+     * SPEC 0.17, apart from the AIR protocols, with their branch declared (catalog rule 4).
      */
     private static final List<Protocol> ESP = List.of(PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING);
-
-    /** Where the ESP tests are presented: the ESP tests page of PsiGama (SPEC 0.16). */
-    private static final String ESP_PAGE = "https://psigama.com/pes/";
 
     private ProtocolCatalog() {
     }
 
-    /** Every protocol, in code order, discontinued ones included: codes are never reused. */
+    /**
+     * Every protocol, in code order, discontinued ones included. Codes were renumbered once, in
+     * SPEC 0.17, before any real data; they are never renumbered or reused again.
+     */
     public static List<Protocol> all() {
         return ALL;
     }
 
-    /** AIR protocols, in the order the site presents them: the only protocols it lists. */
+    /** AIR protocols, in the order the site presents them: the automated one first. */
     public static List<Protocol> air() {
         return AIR;
     }
 
-    /** The ESP tests, which run here and which PsiGama presents, not the Crivo site. */
+    /** The ESP tests, quick and anonymous, listed apart from the AIR protocols. */
     public static List<Protocol> esp() {
         return ESP;
-    }
-
-    /** The PsiGama page that presents the ESP tests; their pages here link back to it. */
-    public static String espPage() {
-        return ESP_PAGE;
     }
 
     public static Protocol structuredReading() {
@@ -160,8 +158,9 @@ public final class ProtocolCatalog {
         return ALL.stream().filter(protocol -> protocol.slug().equals(slug)).findFirst();
     }
 
+    /** By code, as in {@code /protocolo/P1}; case is ignored, so {@code p1} finds it too. */
     public static Optional<Protocol> byCode(String code) {
-        return ALL.stream().filter(protocol -> protocol.code().equals(code)).findFirst();
+        return ALL.stream().filter(protocol -> protocol.code().equalsIgnoreCase(code)).findFirst();
     }
 
     public static Protocol pairedReading() {

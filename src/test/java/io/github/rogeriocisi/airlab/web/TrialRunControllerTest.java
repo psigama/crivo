@@ -60,90 +60,101 @@ class TrialRunControllerTest {
     TrialSessionService trialSessions;
 
     @Test
-    @DisplayName("o catalogo e a pagina do protocolo sao publicos")
+    @DisplayName("o catalogo e as paginas dos quatro protocolos sao publicos")
     void the_catalog_is_public() throws Exception {
-        mvc.perform(get("/testes"))
+        mvc.perform(get("/protocolos"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("catálogo")));
-        mvc.perform(get("/testes/escolha-forcada")).andExpect(status().isOk());
-        mvc.perform(get("/testes/visao-remota")).andExpect(status().isOk());
+                .andExpect(content().string(containsString("catálogo")));
+        for (String code : List.of("P1", "P2", "P3", "P4")) {
+            mvc.perform(get("/protocolo/" + code)).andExpect(status().isOk());
+        }
     }
 
     @Test
     @DisplayName("protocolo que nao existe da 404, nao erro")
     void an_unknown_protocol_is_a_404() throws Exception {
+        mvc.perform(get("/protocolo/P9")).andExpect(status().isNotFound());
         mvc.perform(get("/testes/telepatia-por-telefone")).andExpect(status().isNotFound());
     }
 
     /**
-     * SPEC 0.16, catalog rule 7: the PsiGama site presents the ESP tests, so no Crivo page
-     * lists them or leads to them — catalog, home, navigation and footer included, since every
-     * page here carries the header and the footer.
+     * SPEC 0.17, catalog rule 7: the catalog lists the four protocols and links to their pages,
+     * the ESP tests included, apart from the AIR protocols.
      */
     @Test
-    @DisplayName("nenhuma pagina do Crivo lista os testes de PES nem leva a eles")
-    void no_crivo_page_lists_the_esp_tests() throws Exception {
-        for (String page : List.of("/", "/testes", "/testes/leitura-estruturada", "/testes/leitura-pareada",
-                "/historia", "/referencias", "/sobre", "/consulente", "/conta/criar", "/estudos",
-                "/carimbos", "/login")) {
-            mvc.perform(get(page))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(not(containsString("/testes/escolha-forcada"))))
-                    .andExpect(content().string(not(containsString("/testes/visao-remota"))))
-                    .andExpect(content().string(not(containsString("/testes#extras"))))
-                    .andExpect(content().string(not(containsString("Experimentos extras"))));
-        }
-        mvc.perform(get("/testes"))
-                .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")));
+    @DisplayName("a pagina de protocolos lista os quatro, com links para /protocolo/P1 a P4")
+    void the_catalog_lists_the_four_protocols() throws Exception {
+        mvc.perform(get("/protocolos"))
+                .andExpect(content().string(containsString("href=\"/protocolo/P1\"")))
+                .andExpect(content().string(containsString("href=\"/protocolo/P2\"")))
+                .andExpect(content().string(containsString("href=\"/protocolo/P3\"")))
+                .andExpect(content().string(containsString("href=\"/protocolo/P4\"")))
+                .andExpect(content().string(containsString("href=\"/protocolo/P3/rodar\"")))
+                .andExpect(content().string(containsString("href=\"/protocolo/P4/rodar\"")))
+                .andExpect(content().string(containsString("P1-automático")))
+                .andExpect(content().string(containsString("P2-supervisionado")))
+                .andExpect(content().string(containsString("P3-precognição")))
+                .andExpect(content().string(containsString("P4-visão-remota")));
     }
 
     /**
-     * The other half of rule 7: the PsiGama page links to these addresses, so they keep
-     * answering, and the way back from them is PsiGama, not the Crivo catalog.
+     * The other half of rule 7: the addresses used until SPEC 0.16, which the PsiGama page and
+     * shared links pointed at, answer with a permanent redirect to the new ones.
      */
     @Test
-    @DisplayName("as rotas dos testes de PES continuam respondendo e levam de volta a PsiGama")
-    void the_esp_routes_still_answer_and_lead_back_to_psigama() throws Exception {
-        for (String slug : List.of("escolha-forcada", "visao-remota")) {
-            mvc.perform(get("/testes/" + slug))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("href=\"/testes/" + slug + "/rodar\"")))
-                    .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")))
-                    .andExpect(content().string(not(containsString("Voltar ao catálogo"))))
-                    // The Crivo navigation does not mark these pages as part of "Protocolos".
-                    .andExpect(content().string(not(containsString("aria-current=\"page\""))));
-            mvc.perform(get("/testes/" + slug + "/rodar"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("Começar a sessão")));
-        }
-        mvc.perform(get("/testes/leitura-estruturada"))
-                .andExpect(content().string(containsString("href=\"/testes\" aria-current=\"page\"")))
-                .andExpect(content().string(containsString("Voltar ao catálogo")))
-                .andExpect(content().string(not(containsString("psigama.com/pes"))));
+    @DisplayName("as rotas antigas /testes redirecionam com 301 para /protocolos e /protocolo/P{X}")
+    void the_old_routes_redirect_permanently() throws Exception {
+        mvc.perform(get("/testes")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolos"));
+        mvc.perform(get("/testes/leitura-estruturada")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolo/P1"));
+        mvc.perform(get("/testes/leitura-pareada")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolo/P2"));
+        mvc.perform(get("/testes/escolha-forcada")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolo/P3"));
+        mvc.perform(get("/testes/visao-remota/rodar")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
+        mvc.perform(get("/testes/escolha-forcada/resultado")).andExpect(status().isMovedPermanently())
+                .andExpect(redirectedUrl("/protocolo/P3/resultado"));
+        mvc.perform(get("/protocolo/p3")).andExpect(redirectedUrl("/protocolo/P3"));
     }
 
     @Test
-    @DisplayName("o resultado de um teste de PES leva de volta a PsiGama, nao ao catalogo")
-    void the_result_page_leads_back_to_psigama() throws Exception {
+    @DisplayName("as paginas dos testes de PES levam ao teste e de volta aos protocolos, na secao Protocolos")
+    void the_esp_pages_belong_to_the_protocols_section() throws Exception {
+        for (String code : List.of("P3", "P4")) {
+            mvc.perform(get("/protocolo/" + code))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("href=\"/protocolo/" + code + "/rodar\"")))
+                    .andExpect(content().string(containsString("Todos os protocolos")))
+                    .andExpect(content().string(containsString("href=\"/protocolos\" aria-current=\"page\"")));
+            mvc.perform(get("/protocolo/" + code + "/rodar"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("Começar a sessão")));
+        }
+    }
+
+    @Test
+    @DisplayName("o resultado de um teste de PES leva aos outros testes de PES do catalogo")
+    void the_result_page_leads_back_to_the_catalog() throws Exception {
         given(trialSessions.outcome(anyString()))
                 .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
         given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
         var session = mvc.perform(
-                post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
+                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/testes/escolha-forcada/resultado")
+        mvc.perform(get("/protocolo/P3/resultado")
                         .session((org.springframework.mock.web.MockHttpSession) session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")))
-                .andExpect(content().string(not(containsString("Voltar ao catálogo"))));
+                .andExpect(content().string(containsString("href=\"/protocolos#pes\"")));
     }
 
     @Test
     @DisplayName("sem sessao aberta, a pagina de rodar mostra o convite")
     void without_a_session_the_run_page_invites() throws Exception {
-        mvc.perform(get("/testes/escolha-forcada/rodar"))
+        mvc.perform(get("/protocolo/P3/rodar"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Começar a sessão")));
     }
@@ -153,8 +164,8 @@ class TrialRunControllerTest {
     void starting_redirects_to_the_trial() throws Exception {
         given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
-        mvc.perform(post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
-                .andExpect(redirectedUrl("/testes/escolha-forcada/rodar"));
+        mvc.perform(post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
     }
 
     @Test
@@ -165,14 +176,14 @@ class TrialRunControllerTest {
                 .given(trialSessions).submitChoice(anyString(), anyInt());
 
         var session = mvc.perform(
-                post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
+                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(post("/testes/escolha-forcada/escolha").param("posicao", "1")
+        mvc.perform(post("/protocolo/P3/escolha").param("posicao", "1")
                         .session((org.springframework.mock.web.MockHttpSession) session)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/testes/escolha-forcada/rodar"));
+                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
     }
 
     @Test
@@ -184,13 +195,13 @@ class TrialRunControllerTest {
                 .given(trialSessions).lockImpression(anyString(), anyString());
 
         var session = mvc.perform(
-                post("/testes/visao-remota/comecar").param("tentativas", "3").with(csrf()))
+                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(post("/testes/visao-remota/impressao").param("impressao", "outra coisa")
+        mvc.perform(post("/protocolo/P4/impressao").param("impressao", "outra coisa")
                         .session((org.springframework.mock.web.MockHttpSession) session)
                         .with(csrf()))
-                .andExpect(redirectedUrl("/testes/visao-remota/rodar"));
+                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
     }
 
     @Test
@@ -201,10 +212,10 @@ class TrialRunControllerTest {
         given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
         var session = mvc.perform(
-                post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
+                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/testes/escolha-forcada/resultado")
+        mvc.perform(get("/protocolo/P3/resultado")
                         .session((org.springframework.mock.web.MockHttpSession) session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
@@ -221,10 +232,10 @@ class TrialRunControllerTest {
                 .willReturn(progress(TrialProtocol.REMOTE_VIEWING_RANKED));
 
         var session = mvc.perform(
-                post("/testes/visao-remota/comecar").param("tentativas", "3").with(csrf()))
+                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/testes/visao-remota/resultado")
+        mvc.perform(get("/protocolo/P4/resultado")
                         .session((org.springframework.mock.web.MockHttpSession) session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Figuras mostradas")))
@@ -239,10 +250,10 @@ class TrialRunControllerTest {
         given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
         var session = mvc.perform(
-                post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
+                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
                 .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/testes/escolha-forcada/resultado")
+        mvc.perform(get("/protocolo/P3/resultado")
                         .session((org.springframework.mock.web.MockHttpSession) session))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("data-verificador")))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("data-alvos=\"2,3\"")))
@@ -280,9 +291,9 @@ class TrialRunControllerTest {
     @Test
     @DisplayName("a navegacao marca a secao atual com aria-current")
     void the_navigation_marks_the_current_section() throws Exception {
-        mvc.perform(get("/testes"))
+        mvc.perform(get("/protocolos"))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString(
-                        "href=\"/testes\" aria-current=\"page\"")))
+                        "href=\"/protocolos\" aria-current=\"page\"")))
                 .andExpect(content().string(org.hamcrest.Matchers.not(
                         org.hamcrest.Matchers.containsString(
                                 "href=\"/historia\" aria-current=\"page\""))))

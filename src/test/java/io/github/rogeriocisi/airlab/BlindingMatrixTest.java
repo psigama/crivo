@@ -99,30 +99,30 @@ class BlindingMatrixTest {
                 "hit", "score", "target", "correct", "acerto", "seedhex", "result");
     }
 
-    // --- P4, leitura estruturada automatizada (SPEC E13, matriz de visibilidade do P4) ---------
+    // --- P1, leitura estruturada automatizada (SPEC E13, matriz de visibilidade do P1) ---------
 
-    private static final String[] P4_CONTENT_AND_OUTCOME = {
+    private static final String[] P1_CONTENT_AND_OUTCOME = {
             "name", "firstname", "answer", "resposta", "salt", "score", "nota", "hit", "acerto",
             "difference", "diferenca", "result", "email"};
 
     @Test
-    @DisplayName("P4: o que o administrador ve tem contagens, codigos e horas, nunca conteudo ou nota")
+    @DisplayName("P1: o que o administrador ve tem contagens, codigos e horas, nunca conteudo ou nota")
     void p4_administrator_projections_carry_no_content_or_outcome() {
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.AccountCounts.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationCounts.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.notification.AdminNotice.class, P4_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.AccountCounts.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationCounts.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.notification.AdminNotice.class, P1_CONTENT_AND_OUTCOME);
     }
 
     @Test
-    @DisplayName("P4: a situacao do pedido diz onde ele esta, sem primeiro nome, respostas ou nota")
+    @DisplayName("P1: a situacao do pedido diz onde ele esta, sem primeiro nome, respostas ou nota")
     void p4_request_status_carries_no_content_or_outcome() {
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationStatus.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationLocked.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.AccountConfirmed.class, P4_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationStatus.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationLocked.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.AccountConfirmed.class, P1_CONTENT_AND_OUTCOME);
     }
 
     @Test
-    @DisplayName("P4: nenhum estado do pedido carrega desempenho")
+    @DisplayName("P1: nenhum estado do pedido carrega desempenho")
     void p4_request_states_carry_no_outcome() {
         for (io.github.rogeriocisi.airlab.participant.ConsultationState state
                 : io.github.rogeriocisi.airlab.participant.ConsultationState.values()) {
@@ -132,7 +132,7 @@ class BlindingMatrixTest {
     }
 
     @Test
-    @DisplayName("P4: o pedido, a conta e o rascunho nao vazam por toString")
+    @DisplayName("P1: o pedido, a conta e o rascunho nao vazam por toString")
     void p4_content_does_not_leak_through_to_string() {
         java.util.Map<String, String> answers = java.util.Map.of("causa", "cancer");
         assertThat(new io.github.rogeriocisi.airlab.participant.ConsultationDraft("Sebastiao", answers).toString())
@@ -146,22 +146,22 @@ class BlindingMatrixTest {
                 .doesNotContain("Maria").doesNotContain("maria@exemplo").doesNotContain("segredo");
     }
 
-    // --- P4, fase C: o medium e o envio (SPEC E13, matriz de visibilidade do P4) ----------------
+    // --- P1, fase C: o medium e o envio (SPEC E13, matriz de visibilidade do P1) ----------------
 
     /** What the medium must not get: the sitter, the request, anyone's answers, any score. */
-    private static final String[] P4_MEDIUM_FORBIDDEN = {
+    private static final String[] P1_MEDIUM_FORBIDDEN = {
             "sitter", "consulente", "request", "pedido", "answer", "resposta", "salt", "score", "nota",
             "hit", "acerto", "difference", "diferenca", "result", "email", "commitment"};
 
     @Test
-    @DisplayName("P4: o que o medium ve do pedido tem nomes, posicao e prazo; nunca consulente, respostas ou nota")
+    @DisplayName("P1: o que o medium ve do pedido tem nomes, posicao e prazo; nunca consulente, respostas ou nota")
     void p4_medium_projection_carries_no_sitter_link_answers_or_outcome() {
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.MediumAssignment.class, P4_MEDIUM_FORBIDDEN);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.MediumAssignment.Slot.class, P4_MEDIUM_FORBIDDEN);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.MediumAssignment.class, P1_MEDIUM_FORBIDDEN);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.MediumAssignment.Slot.class, P1_MEDIUM_FORBIDDEN);
     }
 
     @Test
-    @DisplayName("P4: o progresso do estudo e so contagem, sem medium, par ou conteudo")
+    @DisplayName("P1: o progresso do estudo e so contagem, sem medium, par ou conteudo")
     void p4_study_progress_is_counts_only() {
         for (Class<?> type : new Class<?>[]{io.github.rogeriocisi.airlab.structured.StructuredProgress.class,
                 io.github.rogeriocisi.airlab.structured.CycleReport.class}) {
@@ -169,7 +169,7 @@ class BlindingMatrixTest {
                     .describedAs("%s.%s", type.getSimpleName(), component.getName())
                     .isIn(int.class, long.class));
         }
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.StructuredStudyView.class, P4_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.StructuredStudyView.class, P1_CONTENT_AND_OUTCOME);
         // N and the cap per medium are declared numbers; what must be absent is any code of a
         // pair, a send, a medium or a reading.
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.StructuredStudyView.class,
@@ -177,7 +177,7 @@ class BlindingMatrixTest {
     }
 
     @Test
-    @DisplayName("P4: a API do estudo nao devolve a ligacao par -> medium, nem leitura, a quem a usa")
+    @DisplayName("P1: a API do estudo nao devolve a ligacao par -> medium, nem leitura, a quem a usa")
     void p4_study_service_returns_no_pair_medium_link_or_reading() {
         for (Method method : io.github.rogeriocisi.airlab.structured.StructuredStudyService.class.getMethods()) {
             assertThat(method.getReturnType())
@@ -194,32 +194,32 @@ class BlindingMatrixTest {
                 .map(Method::getReturnType)).containsOnly(java.util.Optional.class);
     }
 
-    // --- P4, fase D: a devolutiva (SPEC E13, matriz do P4 depois do desmascaramento) -----------
+    // --- P1, fase D: a devolutiva (SPEC E13, matriz do P1 depois do desmascaramento) -----------
 
     @Test
-    @DisplayName("P4: a devolutiva do consulente traz a leitura do proprio alvo, nunca as respostas do outro nem o medium")
+    @DisplayName("P1: a devolutiva do consulente traz a leitura do proprio alvo, nunca as respostas do outro nem o medium")
     void p4_sitter_feedback_has_no_partner_answers_or_medium() {
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.TargetFeedback.class,
                 "medium", "partner", "other", "sitter", "decoyanswer", "salt", "email", "name");
     }
 
     @Test
-    @DisplayName("P4: a devolutiva do medium e contagem, nunca as respostas dos consulentes")
+    @DisplayName("P1: a devolutiva do medium e contagem, nunca as respostas dos consulentes")
     void p4_medium_feedback_has_counts_only() {
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.ReadingFeedback.class,
                 "answer", "resposta", "sitter", "consulente", "request", "pedido", "salt", "email");
     }
 
     @Test
-    @DisplayName("P4: as respostas reveladas nao levam o primeiro nome nem o sal, e o aviso do fim nao leva nota")
+    @DisplayName("P1: as respostas reveladas nao levam o primeiro nome nem o sal, e o aviso do fim nao leva nota")
     void p4_revealed_answers_and_report_event_carry_no_name_salt_or_score() {
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.RevealedAnswers.class, "name", "salt", "email");
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.StructuredStudyReported.class,
-                P4_CONTENT_AND_OUTCOME);
+                P1_CONTENT_AND_OUTCOME);
     }
 
     @Test
-    @DisplayName("P4: devolutivas e respostas reveladas nao vazam por toString")
+    @DisplayName("P1: devolutivas e respostas reveladas nao vazam por toString")
     void p4_feedback_does_not_leak_through_to_string() {
         java.util.Map<String, String> answers = java.util.Map.of("causa", "cancer");
         assertThat(new io.github.rogeriocisi.airlab.structured.TargetFeedback("STD-1", "v1", answers,
@@ -231,16 +231,16 @@ class BlindingMatrixTest {
     }
 
     @Test
-    @DisplayName("P4: o pedido visto pelo pareamento e os eventos do envio nao carregam nome, resposta ou nota")
+    @DisplayName("P1: o pedido visto pelo pareamento e os eventos do envio nao carregam nome, resposta ou nota")
     void p4_pairing_view_and_events_carry_no_content() {
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationRef.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.ReadingRequestSent.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.PairReadingsReceived.class, P4_CONTENT_AND_OUTCOME);
-        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.ReadingRequestExpired.class, P4_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.ConsultationRef.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.ReadingRequestSent.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.PairReadingsReceived.class, P1_CONTENT_AND_OUTCOME);
+        assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.structured.ReadingRequestExpired.class, P1_CONTENT_AND_OUTCOME);
     }
 
     @Test
-    @DisplayName("P4: o consulente nao recebe a leitura nem o medium antes do desmascaramento")
+    @DisplayName("P1: o consulente nao recebe a leitura nem o medium antes do desmascaramento")
     void p4_sitter_projections_carry_no_reading_or_medium() {
         for (Class<?> type : new Class<?>[]{io.github.rogeriocisi.airlab.participant.ConsultationStatus.class,
                 io.github.rogeriocisi.airlab.participant.OwnConsultation.class}) {
@@ -249,7 +249,7 @@ class BlindingMatrixTest {
     }
 
     @Test
-    @DisplayName("P4: nenhum estado de envio ao medium carrega desempenho")
+    @DisplayName("P1: nenhum estado de envio ao medium carrega desempenho")
     void p4_assignment_states_carry_no_outcome() {
         for (io.github.rogeriocisi.airlab.structured.AssignmentState state
                 : io.github.rogeriocisi.airlab.structured.AssignmentState.values()) {
@@ -259,7 +259,7 @@ class BlindingMatrixTest {
     }
 
     @Test
-    @DisplayName("P4: o envio e a leitura do medium nao vazam por toString")
+    @DisplayName("P1: o envio e a leitura do medium nao vazam por toString")
     void p4_medium_content_does_not_leak_through_to_string() {
         var slot = new io.github.rogeriocisi.airlab.structured.MediumAssignment.Slot(1, "Sebastiao", false, null);
         var assignment = new io.github.rogeriocisi.airlab.structured.MediumAssignment("ENV-1",
@@ -271,10 +271,10 @@ class BlindingMatrixTest {
                 java.util.Map.of("causa", "cancer")).toString()).doesNotContain("cancer");
     }
 
-    // --- P4, fase E: sinalizacoes e pagina publica ----------------------------------------------
+    // --- P1, fase E: sinalizacoes e pagina publica ----------------------------------------------
 
     @Test
-    @DisplayName("P4: a sinalizacao traz codigos, perfis e o tipo de sinal, nunca nome, e-mail ou impressao")
+    @DisplayName("P1: a sinalizacao traz codigos, perfis e o tipo de sinal, nunca nome, e-mail ou impressao")
     void p4_flags_carry_no_name_email_or_fingerprint() {
         assertNoFieldsNamedLike(io.github.rogeriocisi.airlab.participant.AccountFlag.class,
                 "name", "email", "fingerprint", "address");

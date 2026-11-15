@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * P4 consultation requests (SPEC E13, phase B).
+ * P1 consultation requests (SPEC E13, phase B).
  *
  * <p>A request is stored once, already locked: the draft lives in the browser session, so there
  * is no window in which a stored request could change before its commitment is published.
@@ -151,7 +151,7 @@ class DefaultConsultationService implements ConsultationService {
                     .filter(detail -> !detail.erased())
                     .ifPresent(detail -> detail.erase(now));
             // A medium who had the name stops seeing it at once; the pair is undone by the next
-            // P4 cycle (SPEC E13, phase C).
+            // P1 cycle (SPEC E13, phase C).
             releases.findByRequestCodeAndRevokedAtIsNull(request.code()).forEach(release -> release.revoke(now));
             request.withdraw(now);
 
@@ -190,7 +190,7 @@ class DefaultConsultationService implements ConsultationService {
                 requests.countByState(ConsultationState.WITHDRAWN));
     }
 
-    /** The steps of the P4 flow; anything else is refused (SPEC E13, phase C). */
+    /** The steps of the P1 flow; anything else is refused (SPEC E13, phase C). */
     private static final Map<ConsultationState, Set<ConsultationState>> STEPS = Map.of(
             ConsultationState.LOCKED, EnumSet.of(ConsultationState.PAIRED),
             ConsultationState.PAIRED, EnumSet.of(ConsultationState.SENT_TO_MEDIUM, ConsultationState.LOCKED),
@@ -228,7 +228,7 @@ class DefaultConsultationService implements ConsultationService {
             throw new IllegalStateException("request " + requestCode + " is " + request.state() + ", not " + from);
         }
         if (!STEPS.getOrDefault(from, Set.of()).contains(to)) {
-            throw new IllegalStateException("the P4 flow has no step " + from + " -> " + to);
+            throw new IllegalStateException("the P1 flow has no step " + from + " -> " + to);
         }
         request.advance(to);
     }
@@ -251,7 +251,7 @@ class DefaultConsultationService implements ConsultationService {
         }
 
         // No medium code: the trail is public, and which medium has which pair stays blind until
-        // the unblinding (P4 matrix). The link is in the database and goes into the package later.
+        // the unblinding (P1 matrix). The link is in the database and goes into the package later.
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("assignment", assignmentCode);
         payload.put("requests", released);

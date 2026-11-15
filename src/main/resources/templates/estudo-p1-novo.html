@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Novo estudo P4 — Crivo</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Novo estudo P1 — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
@@ -17,7 +18,7 @@
 <main id="conteudo">
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo">Administrador · estudo P4</p>
+      <p class="rotulo">Administrador · estudo P1</p>
       <h1>Pré-registro do estudo</h1>
       <p class="chamada">
         Antes de qualquer pareamento, o estudo é declarado e congelado. Você escreve o que está
@@ -41,7 +42,7 @@
         </p>
       </div>
 
-      <form class="formulario formulario-largo" method="post" th:action="@{/painel/adm/estudo-p4/revisar}">
+      <form class="formulario formulario-largo" method="post" th:action="@{/painel/adm/estudo-p1/revisar}">
         <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Erro</p>
 
         <label for="titulo">Título</label>
@@ -81,7 +82,7 @@
         <h2>Estudos concluídos</h2>
         <ul>
           <li th:each="concluido : ${concluidos}">
-            <a th:href="@{/painel/adm/estudo-p4/{c}(c=${concluido.studyCode})}">
+            <a th:href="@{/painel/adm/estudo-p1/{c}(c=${concluido.studyCode})}">
               <code th:text="${concluido.studyCode}">STD-0000</code></a> ·
             <span th:text="${concluido.title}">Título</span> · relatório pronto
           </li>

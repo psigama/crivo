@@ -29,12 +29,12 @@ import org.springframework.security.web.authentication.ExceptionMappingAuthentic
  *   <li><strong>administrator</strong> — the researcher, whose credential comes from the server
  *       configuration. Roles {@code ADMIN} and {@code RESEARCHER}. No path of the site creates
  *       one;</li>
- *   <li><strong>consulente</strong> and <strong>médium</strong> — P4 accounts with a fixed
+ *   <li><strong>consulente</strong> and <strong>médium</strong> — P1 accounts with a fixed
  *       profile, signed in by e-mail. Roles {@code SITTER} and {@code MEDIUM}, never both.</li>
  * </ul>
  * Each profile reaches only its own panel; the rule is here, on the server, and not in a menu.
  *
- * <p>Single use, expiring links for the P1 raters belong to Epic E6 and are not here yet.
+ * <p>Single use, expiring links for the P2 raters belong to Epic E6 and are not here yet.
  *
  * <p>Only applies to the web application. The {@code airlab} CLI runs the same artifact with
  * no web server, where there is no HTTP surface to protect and no {@code HttpSecurity} to
@@ -58,8 +58,8 @@ class SecurityConfiguration {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/", "/sobre", "/historia", "/referencias",
-                                "/consulente", "/login", "/css/**", "/js/**", "/targets/**",
-                                "/testes", "/testes/**", "/error", "/actuator/health",
+                                "/consulente", "/login", "/css/**", "/js/**", "/targets/**", "/favicon.svg", "/favicon.ico",
+                                "/protocolos", "/protocolo/**", "/testes", "/testes/**", "/error", "/actuator/health",
                                 "/conta/criar", "/conta/verifique-seu-email", "/conta/confirmar",
                                 "/estudos", "/estudos/**", "/carimbos", "/carimbos/**")
                         .permitAll()
@@ -83,7 +83,7 @@ class SecurityConfiguration {
     }
 
     /**
-     * The researcher first, by user name; otherwise a P4 account, by e-mail.
+     * The researcher first, by user name; otherwise a P1 account, by e-mail.
      *
      * <p>For an account the principal is named after the pseudonymous code, not the e-mail, so
      * the address never sits in the session or in anything that logs the principal (P6).

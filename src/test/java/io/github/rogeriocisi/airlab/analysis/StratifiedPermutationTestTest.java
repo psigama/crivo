@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** The P4 permutation test, readings permuted only within the pairing strata (SPEC E13, phase D). */
+/** The P1 permutation test, readings permuted only within the pairing strata (SPEC E13, phase D). */
 class StratifiedPermutationTestTest {
 
     private static final String SEED = "6f1c3a9d2b4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8";

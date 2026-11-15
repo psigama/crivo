@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 /**
- * The sitter's P4 request pages (SPEC E13, phase B), with the real security configuration and
+ * The sitter's P1 request pages (SPEC E13, phase B), with the real security configuration and
  * database: fill in, review, lock, see it — and check that nobody else sees it.
  */
 @SpringBootTest

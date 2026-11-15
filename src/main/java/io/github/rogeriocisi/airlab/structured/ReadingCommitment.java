@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The commitment of a medium's P4 reading (SPEC E13, phase C), public so that anyone can
+ * The commitment of a medium's P1 reading (SPEC E13, phase C), public so that anyone can
  * recompute it once the reading and its salt are revealed.
  *
  * <pre>
  * commitment = SHA-256( canonical || "|" || saltHex )
- * canonical  = CanonicalJson{ "answers": {field: option, ...}, "protocol": "P4",
+ * canonical  = CanonicalJson{ "answers": {field: option, ...}, "protocol": "P1",
  *                             "questionnaire": version, "reading": code, "request": code }
  * </pre>
  *
@@ -28,7 +28,7 @@ public final class ReadingCommitment {
     public static String canonical(String questionnaireVersion, String readingCode, String requestCode,
                                    Map<String, String> answers) {
         Map<String, Object> document = new LinkedHashMap<>();
-        document.put("protocol", "P4");
+        document.put("protocol", "P1");
         document.put("questionnaire", questionnaireVersion);
         document.put("reading", readingCode);
         document.put("request", requestCode);

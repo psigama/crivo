@@ -1,7 +1,7 @@
 package io.github.rogeriocisi.airlab.participant;
 
 /**
- * Where a P4 consultation request stands (SPEC E13, sitter panel). Phase B creates requests as
+ * Where a P1 consultation request stands (SPEC E13, sitter panel). Phase B creates requests as
  * {@link #LOCKED}; phase C pairs them, sends them to a medium and records the readings; phase D
  * brings {@link #UNBLINDED}.
  *

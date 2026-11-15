@@ -31,8 +31,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * P4 consultation requests (SPEC E13, phase B) against the real PostgreSQL. The lock, the
- * salted commitment and the P4 visibility matrix rows that phase B touches, each as a test that
+ * P1 consultation requests (SPEC E13, phase B) against the real PostgreSQL. The lock, the
+ * salted commitment and the P1 visibility matrix rows that phase B touches, each as a test that
  * tries to break them.
  *
  * <p>In the {@code internal} package because recomputing the commitment needs the salt, which

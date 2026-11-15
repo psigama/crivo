@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The medium's side of the P4 (SPEC E13, phase C): the requests drawn for them, and the locking
+ * The medium's side of the P1 (SPEC E13, phase C): the requests drawn for them, and the locking
  * of each reading. Every method takes the medium's own code, and nothing here answers for anyone
  * else's request.
  */

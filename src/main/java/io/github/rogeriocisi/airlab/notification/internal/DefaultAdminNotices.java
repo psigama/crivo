@@ -94,7 +94,7 @@ class DefaultAdminNotices implements AdminNotices {
         record(NoticeKind.ACCOUNTS_FLAGGED, event.flagCode());
     }
 
-    // Phase C: the notice carries the pair code, never the medium's (P4 matrix).
+    // Phase C: the notice carries the pair code, never the medium's (P1 matrix).
 
     @EventListener
     void on(ReadingRequestSent event) {

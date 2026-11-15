@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
- * Whether P4 sign-up is open on this installation (SPEC E13).
+ * Whether P1 sign-up is open on this installation (SPEC E13).
  *
  * <p>Open only when an account can actually be confirmed and a person can be reached: e-mail
  * working (E10, lock 3) and, outside the local profile, a human contact configured (E10,
@@ -32,7 +32,7 @@ class SignUpGate {
     }
 
     /**
-     * Whether sitters may file P4 requests: the request collects sensitive data about a deceased
+     * Whether sitters may file P1 requests: the request collects sensitive data about a deceased
      * person, so outside the local profile it needs the ethics committee approval reference
      * (E10, lock 4) on top of an open sign-up.
      */

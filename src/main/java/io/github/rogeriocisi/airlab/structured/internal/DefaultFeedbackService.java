@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The P4 feedback (SPEC E13, phase D). Everything here starts from a score row, and score rows exist
+ * The P1 feedback (SPEC E13, phase D). Everything here starts from a score row, and score rows exist
  * only after the unblinding — the database refuses them before — so there is no "too early" branch
  * to get wrong: before the unblinding, there is simply nothing to build from.
  */

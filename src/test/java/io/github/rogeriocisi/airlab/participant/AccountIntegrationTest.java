@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * P4 accounts (SPEC E13, phase A), against the real PostgreSQL: the fixed profile and the
+ * P1 accounts (SPEC E13, phase A), against the real PostgreSQL: the fixed profile and the
  * "no account is ever deleted" rule live in a trigger, and a trigger is only tested by a
  * database that runs it.
  */

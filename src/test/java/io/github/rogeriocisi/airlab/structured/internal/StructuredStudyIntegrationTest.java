@@ -15,7 +15,7 @@ import io.github.rogeriocisi.airlab.participant.ConsultationState;
 import io.github.rogeriocisi.airlab.structured.AssignmentState;
 import io.github.rogeriocisi.airlab.structured.MediumAssignment;
 import io.github.rogeriocisi.airlab.structured.MediumReadingService;
-import io.github.rogeriocisi.airlab.structured.P4Fixture;
+import io.github.rogeriocisi.airlab.structured.P1Fixture;
 import io.github.rogeriocisi.airlab.structured.ReadingCommitment;
 import io.github.rogeriocisi.airlab.structured.StructuredProgress;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
@@ -34,8 +34,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * P4, phase C (SPEC E13) against the real PostgreSQL: the study, the pairing, the medium draw,
- * the release of the names, the locked readings, the deadline and the withdrawal — each P4 matrix
+ * P1, phase C (SPEC E13) against the real PostgreSQL: the study, the pairing, the medium draw,
+ * the release of the names, the locked readings, the deadline and the withdrawal — each P1 matrix
  * row about the medium as a test that tries to break it.
  *
  * <p>In the {@code internal} package because recomputing a reading's commitment needs its salt,
@@ -72,11 +72,11 @@ class StructuredStudyIntegrationTest {
     @Autowired
     JdbcTemplate jdbc;
 
-    P4Fixture fixture;
+    P1Fixture fixture;
 
     @BeforeEach
     void setUp() {
-        fixture = new P4Fixture(accounts, consultations, studies, jdbc);
+        fixture = new P1Fixture(accounts, consultations, studies, jdbc);
     }
 
     private ConsultationState stateOf(String requestCode) {
@@ -113,13 +113,13 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("pedidos do mesmo estrato formam par e vao a um medium sorteado, que recebe so os dois nomes")
     void a_pair_goes_to_one_drawn_medium_who_alone_gets_the_names() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "18-39", "1-5-anos"), "Raimundo", "Joaquim");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "18-39", "1-5-anos"), "Raimundo", "Joaquim");
 
         assertThat(stateOf(pair.a().code())).isEqualTo(ConsultationState.SENT_TO_MEDIUM);
         assertThat(stateOf(pair.b().code())).isEqualTo(ConsultationState.SENT_TO_MEDIUM);
         assertThat(accounts.activeMediumCodes()).contains(pair.medium());
 
-        // P4 matrix: the first name goes to the drawn medium, and only for the requests received.
+        // P1 matrix: the first name goes to the drawn medium, and only for the requests received.
         assertThat(consultations.releasedFirstNames(pair.medium(), pair.assignment()))
                 .containsOnly(Map.entry(pair.a().code(), "Raimundo"), Map.entry(pair.b().code(), "Joaquim"));
         String other = fixture.account(AccountProfile.MEDIUM);
@@ -145,7 +145,7 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("com a semente, o medium e a ordem dos nomes se refazem a partir do que foi registrado")
     void the_draw_is_reproducible_from_the_recorded_inputs() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "18-39", "5-15-anos"), "Benedito", "Sebastiao");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "18-39", "5-15-anos"), "Benedito", "Sebastiao");
         StructuredStudyView study = fixture.ensureStudy();
 
         // As an auditor will after the unblinding: the escrowed seed, the recorded pool and order.
@@ -164,9 +164,9 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("a leitura trava com compromisso salgado, sem o codigo do medium na trilha, e o banco a protege")
     void readings_lock_with_a_salted_commitment_and_no_medium_on_the_trail() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "60-79", "menos-1-ano"), "Severino", "Expedito");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "60-79", "menos-1-ano"), "Severino", "Expedito");
         String other = fixture.account(AccountProfile.MEDIUM);
-        Map<String, String> answers = P4Fixture.mediumAnswers(1);
+        Map<String, String> answers = P1Fixture.mediumAnswers(1);
 
         assertThatThrownBy(() -> mediumReadings.lock(other, pair.assignment(), 1, answers))
                 .isInstanceOf(IllegalStateException.class);
@@ -192,7 +192,7 @@ class StructuredStudyIntegrationTest {
         assertThatThrownBy(() -> jdbc.update("DELETE FROM research.structured_reading WHERE code = ?", reading.code()))
                 .isInstanceOf(Exception.class);
 
-        mediumReadings.lock(pair.medium(), pair.assignment(), 2, P4Fixture.mediumAnswers(2));
+        mediumReadings.lock(pair.medium(), pair.assignment(), 2, P1Fixture.mediumAnswers(2));
         assertThat(assignments.findByCode(pair.assignment()).orElseThrow().state()).isEqualTo(AssignmentState.COMPLETED);
         assertThat(stateOf(pair.a().code())).isEqualTo(ConsultationState.READING_RECEIVED);
         assertThat(stateOf(pair.b().code())).isEqualTo(ConsultationState.READING_RECEIVED);
@@ -204,9 +204,9 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("prazo vencido: o pedido vai a outro medium, e o anterior deixa de ver os nomes")
     void an_expired_request_goes_to_another_medium() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "40-59", "1-5-anos"), "Hermes", "Virgilio");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "40-59", "1-5-anos"), "Hermes", "Virgilio");
         fixture.account(AccountProfile.MEDIUM);
-        mediumReadings.lock(pair.medium(), pair.assignment(), 1, P4Fixture.mediumAnswers(0));
+        mediumReadings.lock(pair.medium(), pair.assignment(), 1, P1Fixture.mediumAnswers(0));
 
         studies.runCycle(Instant.now().plus(Duration.ofDays(15)));
 
@@ -223,15 +223,15 @@ class StructuredStudyIntegrationTest {
         assertThat(readings.findByAssignmentCodeOrderBySlotAsc(pair.assignment())).hasSize(1);
         assertThat(notices.recent(100)).anyMatch(notice -> notice.kind() == NoticeKind.READING_OVERDUE
                 && notice.subjectCode().equals(pair.code()));
-        assertThatThrownBy(() -> mediumReadings.lock(pair.medium(), pair.assignment(), 2, P4Fixture.mediumAnswers(0)))
+        assertThatThrownBy(() -> mediumReadings.lock(pair.medium(), pair.assignment(), 2, P1Fixture.mediumAnswers(0)))
                 .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("retirada do consulente: o par se desfaz, o envio e cancelado e o outro pedido volta a esperar")
     void a_withdrawal_dissolves_the_pair() {
-        P4Fixture.Stratum stratum = new P4Fixture.Stratum("masculino", "60-79", "1-5-anos");
-        P4Fixture.Pair pair = fixture.pairOf(stratum, "Anselmo", "Teodoro");
+        P1Fixture.Stratum stratum = new P1Fixture.Stratum("masculino", "60-79", "1-5-anos");
+        P1Fixture.Pair pair = fixture.pairOf(stratum, "Anselmo", "Teodoro");
 
         accounts.close(pair.a().sitter());
         // The medium stops seeing the withdrawn name at once, before any cycle.
@@ -252,7 +252,7 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("o banco recusa par sobre pedido inexistente e qualquer reescrita de par, envio ou liberacao")
     void the_database_refuses_pairs_without_locked_requests_and_rewrites() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "80-mais", "5-15-anos"), "Abilio", "Onofre");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "80-mais", "5-15-anos"), "Abilio", "Onofre");
         long study = fixture.ensureStudy().studyId();
 
         assertThatThrownBy(() -> jdbc.update("INSERT INTO research.structured_pair (code, study_id, request_a, request_b, "
@@ -273,7 +273,7 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("o medium sinalizado com um consulente nunca e sorteado para o par dele")
     void a_flagged_medium_is_never_drawn_for_that_sitter() {
-        P4Fixture.Stratum stratum = new P4Fixture.Stratum("outro", "40-59", "1-5-anos");
+        P1Fixture.Stratum stratum = new P1Fixture.Stratum("outro", "40-59", "1-5-anos");
         String shared = io.github.rogeriocisi.airlab.TestNames.unique("Cosme");
         String sitter = fixture.account(AccountProfile.SITTER, shared);
         String flagged = fixture.account(AccountProfile.MEDIUM, shared);
@@ -285,7 +285,7 @@ class StructuredStudyIntegrationTest {
             fixture.request(stratum, "Sobrante", 0);
             studies.runCycle(Instant.now());
         }
-        P4Fixture.Request a = fixture.request(stratum, "Damiao", 1, sitter);
+        P1Fixture.Request a = fixture.request(stratum, "Damiao", 1, sitter);
         fixture.request(stratum, "Bento", 2);
         studies.runCycle(Instant.now());
 
@@ -300,7 +300,7 @@ class StructuredStudyIntegrationTest {
     @Test
     @DisplayName("o progresso e contagem e o fluxo do pedido so anda pelos passos previstos")
     void progress_is_counts_and_the_flow_has_only_its_steps() {
-        P4Fixture.Pair pair = fixture.pairOf(new P4Fixture.Stratum("masculino", "ate-17", "1-5-anos"), "Caetano", "Romeu");
+        P1Fixture.Pair pair = fixture.pairOf(new P1Fixture.Stratum("masculino", "ate-17", "1-5-anos"), "Caetano", "Romeu");
 
         StructuredProgress progress = studies.progress();
         assertThat(progress.targetPairs()).isEqualTo(fixture.ensureStudy().targetPairs());

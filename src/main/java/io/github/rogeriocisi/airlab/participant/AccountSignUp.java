@@ -1,7 +1,7 @@
 package io.github.rogeriocisi.airlab.participant;
 
 /**
- * What a person fills in to create a P4 account (SPEC E13).
+ * What a person fills in to create a P1 account (SPEC E13).
  *
  * <p>The password arrives in clear only to be hashed; it is never stored, logged or returned.
  *

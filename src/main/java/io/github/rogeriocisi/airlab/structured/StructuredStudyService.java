@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 /**
- * The P4 study and its automatic cycle (SPEC E13, phase C), for the administrator and for the
+ * The P1 study and its automatic cycle (SPEC E13, phase C), for the administrator and for the
  * server's scheduler.
  *
  * <p>Note what this interface does not offer: no method returns which medium has which pair,
@@ -30,27 +30,27 @@ public interface StructuredStudyService {
     boolean draftQuestionnaireAllowed();
 
     /**
-     * Creates the P4 study, commits to its seed and freezes the preregistration — one step, with
+     * Creates the P1 study, commits to its seed and freezes the preregistration — one step, with
      * no unfrozen version in the database — and then runs the first cycle, so the requests already
      * waiting are paired at once.
      *
      * @throws IllegalArgumentException when the terms are invalid
-     * @throws IllegalStateException    when a P4 study is already open, or the questionnaire is a
+     * @throws IllegalStateException    when a P1 study is already open, or the questionnaire is a
      *                                  draft where drafts are not allowed
      */
     StructuredStudyView open(StructuredStudyTerms terms, String actorCode);
 
-    /** The open P4 study, if there is one. */
+    /** The open P1 study, if there is one. */
     Optional<StructuredStudyView> current();
 
-    /** P4 studies already unblinded, newest first (SPEC E13, phase D). */
+    /** P1 studies already unblinded, newest first (SPEC E13, phase D). */
     java.util.List<StructuredStudyView> concluded();
 
-    /** A P4 study by its code, open or concluded. */
+    /** A P1 study by its code, open or concluded. */
     Optional<StructuredStudyView> byCode(String studyCode);
 
     /**
-     * The report of a P4 study. Empty for a study still collecting: the report is written at the
+     * The report of a P1 study. Empty for a study still collecting: the report is written at the
      * unblinding and the database refuses it before (E10, lock 1).
      */
     Optional<StructuredReport> report(String studyCode);

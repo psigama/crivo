@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * The public page of the P4 studies (SPEC E13, phase E): what was frozen, with its hash; counts
+ * The public page of the P1 studies (SPEC E13, phase E): what was frozen, with its hash; counts
  * while a study collects; the whole report once it is unblinded. Only what is public by
  * construction (P2, P7) — the report does not exist before the unblinding, so there is nothing to
  * hide early.

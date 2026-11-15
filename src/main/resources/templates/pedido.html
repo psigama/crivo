@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Meu pedido — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
@@ -24,14 +25,10 @@
       </p>
 
       <dl class="leituras">
-        <dt>Situação</dt>
-        <dd th:text="${situacao.state.label()}">Travado</dd>
-        <dt>Travado em</dt>
-        <dd th:text="${@datas.utc(pedido.lockedAt)} + ' UTC'">2026-11-13 10:00 UTC</dd>
-        <dt>Questionário</dt>
-        <dd th:text="${pedido.questionnaireVersion}">v1</dd>
-        <dt>Compromisso publicado</dt>
-        <dd><code th:text="${pedido.commitment}">hash</code></dd>
+        <div><dt>Situação</dt><dd th:text="${situacao.state.label()}">Travado</dd></div>
+        <div><dt>Travado em</dt><dd th:text="${@datas.utc(pedido.lockedAt)} + ' UTC'">2026-11-13 10:00 UTC</dd></div>
+        <div><dt>Questionário</dt><dd th:text="${pedido.questionnaireVersion}">v1</dd></div>
+        <div class="largo"><dt>Compromisso publicado</dt><dd><code class="hash" th:text="${pedido.commitment}">hash</code></dd></div>
       </dl>
       <p class="nota">
         O compromisso está na trilha pública de auditoria desde o momento em que o pedido travou. No
@@ -45,13 +42,9 @@
     <div class="faixa">
       <h2>O que você respondeu</h2>
       <p class="nota">Só você vê esta página. Nem o médium nem quem administra a plataforma têm acesso a ela.</p>
-      <dl class="leituras">
-        <dt>Primeiro nome</dt>
-        <dd th:text="${pedido.firstName}">Nome</dd>
-        <th:block th:each="item : ${respostas}">
-          <dt th:text="${item.key}">Pergunta</dt>
-          <dd th:text="${item.value}">Resposta</dd>
-        </th:block>
+      <dl class="leituras lista">
+        <div><dt>Primeiro nome</dt><dd th:text="${pedido.firstName}">Nome</dd></div>
+        <div th:each="item : ${respostas}"><dt th:text="${item.key}">Pergunta</dt><dd th:text="${item.value}">Resposta</dd></div>
       </dl>
       <p class="acoes nota-espacada"><a class="botao botao-vazio" href="/painel/consulente">Voltar ao painel</a></p>
     </div>

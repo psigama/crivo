@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Resultado da sessão — Crivo</title>
   <th:block th:replace="~{fragments/site :: social('Resultado da sessão — Crivo', 'Protocolos cegos para pesquisa de cognição anômala, com sorteio verificável e trilha de auditoria encadeada por hash.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
@@ -22,19 +23,15 @@
       <h1>Resultado</h1>
 
       <dl class="leituras">
-        <dt>Acertos</dt>
-        <dd>
+        <div><dt>Acertos</dt><dd>
           <strong th:text="${desfecho.hits()}">0</strong>
           em <span th:text="${desfecho.lockedTrials()}">24</span> tentativa(s)
-        </dd>
-        <dt>Esperado pelo acaso</dt>
-        <dd th:text="${#numbers.formatDecimal(desfecho.expectedByChance(), 1, 2)} + ' (acaso de '
-                     + ${desfecho.chanceNumerator()} + '/' + ${desfecho.chanceDenominator()} + ')'">6</dd>
-        <dt>Valor p exato, unilateral</dt>
-        <dd><code th:text="${#numbers.formatDecimal(desfecho.pValue(), 1, 4)}">0,5000</code></dd>
-        <dt>Situação da sessão</dt>
-        <dd th:text="${desfecho.state().name() == 'FINISHED'}
-                     ? 'completa' : 'abandonada antes do fim'">completa</dd>
+        </dd></div>
+        <div><dt>Esperado pelo acaso</dt><dd th:text="${#numbers.formatDecimal(desfecho.expectedByChance(), 1, 2)} + ' (acaso de '
+                     + ${desfecho.chanceNumerator()} + '/' + ${desfecho.chanceDenominator()} + ')'">6</dd></div>
+        <div><dt>Valor p exato, unilateral</dt><dd><code th:text="${#numbers.formatDecimal(desfecho.pValue(), 1, 4)}">0,5000</code></dd></div>
+        <div><dt>Situação da sessão</dt><dd th:text="${desfecho.state().name() == 'FINISHED'}
+                     ? 'completa' : 'abandonada antes do fim'">completa</dd></div>
       </dl>
 
       <p class="nota" th:text="${desfecho.exploratoryReason()}">Exploratório</p>
@@ -227,9 +224,9 @@ alvo(n) = SHA-256(semente || "trial:" || n || contador) mod 4</pre>
       </table>
 
       <p class="acoes">
-        <a class="botao botao-cheio" th:href="'/testes/' + ${protocolo.slug()} + '/rodar'">
+        <a class="botao botao-cheio" th:href="'/protocolo/' + ${protocolo.catalogCode()} + '/rodar'">
           Fazer outra sessão</a>
-        <a class="botao botao-vazio" th:href="${paginaPes}">Outros testes de PES</a>
+        <a class="botao botao-vazio" href="/protocolos#pes">Outros testes de PES</a>
       </p>
       <p class="nota">
         Uma sessão nova sorteia outra semente. Repetir o teste é livre, e é justamente por isso

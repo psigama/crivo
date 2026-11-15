@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Minha conta — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
@@ -21,16 +22,11 @@
       <h1 th:text="${conta.firstName}">Nome</h1>
 
       <dl class="leituras">
-        <dt>Perfil</dt>
-        <dd th:text="${conta.profile.label()} + ' (fixo)'">Consulente</dd>
-        <dt>Código na pesquisa</dt>
-        <dd><code th:text="${conta.code}">CON-0000</code></dd>
-        <dt>Termo aceito</dt>
-        <dd th:text="${conta.termVersion}">conta-v1</dd>
-        <dt>Conta criada em</dt>
-        <dd th:text="${@datas.dia(conta.createdAt)}">13/11/2026</dd>
-        <dt>E-mail confirmado em</dt>
-        <dd th:text="${@datas.dia(conta.emailConfirmedAt)}">13/11/2026</dd>
+        <div><dt>Perfil</dt><dd th:text="${conta.profile.label()} + ' (fixo)'">Consulente</dd></div>
+        <div><dt>Código na pesquisa</dt><dd><code th:text="${conta.code}">CON-0000</code></dd></div>
+        <div><dt>Termo aceito</dt><dd th:text="${conta.termVersion}">conta-v1</dd></div>
+        <div><dt>Conta criada em</dt><dd th:text="${@datas.dia(conta.createdAt)}">13/11/2026</dd></div>
+        <div><dt>E-mail confirmado em</dt><dd th:text="${@datas.dia(conta.emailConfirmedAt)}">13/11/2026</dd></div>
       </dl>
       <p class="nota">
         Os dados da pesquisa usam só o código acima. Seu nome e seu e-mail ficam cifrados, em um

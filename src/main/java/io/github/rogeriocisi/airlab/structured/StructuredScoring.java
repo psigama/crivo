@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The P4 scoring rule (SPEC E13, "Conferência automática"), as a public pure function so that the
+ * The P1 scoring rule (SPEC E13, "Conferência automática"), as a public pure function so that the
  * verification package can run exactly this code — or reimplement it — and get the same {@code d}.
  *
  * <ul>

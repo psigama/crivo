@@ -15,7 +15,7 @@ public interface StudyService {
 
     /**
      * Creates a study of another protocol of the catalog. The annex, canonical JSON written by
-     * the protocol's own module, goes into the hashed document as it is: for the P4 it carries
+     * the protocol's own module, goes into the hashed document as it is: for the P1 it carries
      * the whole questionnaire, the pairing rule, the deadline and the number of pairs (SPEC E13,
      * phase C), so that freezing the document freezes them too.
      *
@@ -43,7 +43,7 @@ public interface StudyService {
     void advanceStatus(long studyId, StudyStatus target, String actorCode);
 
     /**
-     * Same, recording who acted: the P4 unblinding is the system's, not the researcher's, and the
+     * Same, recording who acted: the P1 unblinding is the system's, not the researcher's, and the
      * trail says so (SPEC E13, phase D).
      */
     void advanceStatus(long studyId, StudyStatus target, io.github.rogeriocisi.airlab.audit.ActorRole role,

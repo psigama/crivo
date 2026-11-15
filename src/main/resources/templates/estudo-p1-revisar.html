@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rever o estudo P4 — Crivo</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Rever o estudo P1 — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
@@ -17,32 +18,29 @@
 <main id="conteudo">
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo">Administrador · estudo P4 · rever antes de congelar</p>
+      <p class="rotulo">Administrador · estudo P1 · rever antes de congelar</p>
       <h1 th:text="${termos.title}">Título</h1>
       <p class="chamada">
         Confira. <strong>Depois de congelado, o pré-registro não muda mais</strong>, e os pedidos que já
         estão travados são pareados na mesma hora.
       </p>
 
-      <dl class="leituras">
-        <dt>Número de pares (N)</dt><dd th:text="${termos.targetPairs}">30</dd>
-        <dt>Teto de pares por médium</dt><dd th:text="${termos.maxPairsPerMedium}">10</dd>
-        <dt>Prazo do médium</dt><dd th:text="${termos.deadlineDays} + ' dias'">14 dias</dd>
-        <dt>Efeito esperado (d)</dt><dd th:text="${termos.expectedEffect}">0.5</dd>
-        <dt>Poder declarado</dt><dd th:text="${poder.detail}">Detalhe</dd>
-        <dt>Hipótese</dt><dd th:text="${termos.hypothesis}">Hipótese</dd>
-        <dt>Critérios de inclusão de médiuns</dt><dd th:text="${termos.mediumInclusionCriteria}">Critérios</dd>
-        <dt>Questionário</dt>
-        <dd>
+      <dl class="leituras lista">
+        <div><dt>Número de pares (N)</dt><dd th:text="${termos.targetPairs}">30</dd></div>
+        <div><dt>Teto de pares por médium</dt><dd th:text="${termos.maxPairsPerMedium}">10</dd></div>
+        <div><dt>Prazo do médium</dt><dd th:text="${termos.deadlineDays} + ' dias'">14 dias</dd></div>
+        <div><dt>Efeito esperado (d)</dt><dd th:text="${termos.expectedEffect}">0.5</dd></div>
+        <div><dt>Poder declarado</dt><dd th:text="${poder.detail}">Detalhe</dd></div>
+        <div><dt>Hipótese</dt><dd th:text="${termos.hypothesis}">Hipótese</dd></div>
+        <div><dt>Critérios de inclusão de médiuns</dt><dd th:text="${termos.mediumInclusionCriteria}">Critérios</dd></div>
+        <div><dt>Questionário</dt><dd>
           <code th:text="${questionario.version}">v1-rascunho</code>:
           <span th:text="${#lists.size(questionario.scoredFields())}">13</span> campos na nota e
           <span th:text="${#lists.size(questionario.fields) - #lists.size(questionario.scoredFields())}">3</span>
           de pareamento, todos no anexo do documento.
-        </dd>
-        <dt>Pareamento</dt>
-        <dd>Mesmo gênero, faixa etária no óbito e período do falecimento, por ordem de travamento.</dd>
-        <dt>Médium</dt>
-        <dd>Um por par, sorteado entre as contas de médium confirmadas, que faz as duas leituras.</dd>
+        </dd></div>
+        <div><dt>Pareamento</dt><dd>Mesmo gênero, faixa etária no óbito e período do falecimento, por ordem de travamento.</dd></div>
+        <div><dt>Médium</dt><dd>Um por par, sorteado entre as contas de médium confirmadas, que faz as duas leituras.</dd></div>
       </dl>
 
       <div class="ressalva" th:if="${rascunhoBloqueado}">
@@ -53,11 +51,11 @@
         </p>
       </div>
 
-      <form class="formulario" method="post" th:action="@{/painel/adm/estudo-p4/congelar}"
+      <form class="formulario" method="post" th:action="@{/painel/adm/estudo-p1/congelar}"
             th:unless="${rascunhoBloqueado}">
         <button class="botao botao-cheio" type="submit">Congelar o pré-registro</button>
       </form>
-      <p class="nota nota-espacada"><a href="/painel/adm/estudo-p4">Voltar e corrigir</a></p>
+      <p class="nota nota-espacada"><a href="/painel/adm/estudo-p1">Voltar e corrigir</a></p>
     </div>
   </section>
 </main>

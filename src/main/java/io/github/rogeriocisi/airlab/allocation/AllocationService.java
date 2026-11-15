@@ -22,20 +22,20 @@ public interface AllocationService {
     String draw(long studyId, DrawInput input);
 
     /**
-     * P4 (SPEC E13, phase C): commits to a fresh seed for a study whose draws happen during
+     * P1 (SPEC E13, phase C): commits to a fresh seed for a study whose draws happen during
      * collection, and returns the commitment that goes into the frozen preregistration. The seed
-     * stays in encrypted custody, exactly as for the P1 draw, and leaves only through
+     * stays in encrypted custody, exactly as for the P2 draw, and leaves only through
      * {@link #revealSeed}.
      */
     String commitSeed(long studyId, String studyCode);
 
     /**
-     * P4: the medium drawn for a pair on an attempt, derived from the escrowed seed without
+     * P1: the medium drawn for a pair on an attempt, derived from the escrowed seed without
      * exposing it. The caller records the pool, so the draw can be redone once the seed is out.
      */
     String drawStructuredMedium(long studyId, String pairCode, int attempt, List<String> eligibleMediums);
 
-    /** P4: the order in which the drawn medium sees the two requests of a pair. */
+    /** P1: the order in which the drawn medium sees the two requests of a pair. */
     List<String> structuredNameOrder(long studyId, String pairCode, int attempt, List<String> requestCodes);
 
     /** The published commitment of a study, if the draw already happened. */
@@ -49,7 +49,7 @@ public interface AllocationService {
      */
     String revealSeed(long studyId, String actorCode);
 
-    /** Same, recording who acted: the P4 unblinding reveals the seed as the system (SPEC E13, phase D). */
+    /** Same, recording who acted: the P1 unblinding reveals the seed as the system (SPEC E13, phase D). */
     String revealSeed(long studyId, io.github.rogeriocisi.airlab.audit.ActorRole role, String actorCode);
 
     /** Snapshot for the verification CLI and the verification package (P7, Epic E8/E9). */

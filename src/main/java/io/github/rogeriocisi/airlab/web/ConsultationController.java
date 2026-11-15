@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * The sitter's P4 request (SPEC E13, phase B): fill in, review, lock, and see it afterwards.
+ * The sitter's P1 request (SPEC E13, phase B): fill in, review, lock, and see it afterwards.
  *
  * <p>The draft lives in the HTTP session until the sitter confirms; the database receives the
  * request once, already locked. Only the sitter's own request is ever shown here — the

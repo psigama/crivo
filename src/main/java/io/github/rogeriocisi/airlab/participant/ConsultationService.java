@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * P4 consultation requests (SPEC E13, phase B).
+ * P1 consultation requests (SPEC E13, phase B).
  *
  * <p>In {@code participant} because the first name and the answers are sensitive data that live
  * in the {@code identity} schema. What leaves here for anyone but the sitter is pseudonymous:
@@ -44,7 +44,7 @@ public interface ConsultationService {
     /** Requests by situation, for the administrator. */
     ConsultationCounts counts();
 
-    // --- Phase C: what the P4 flow needs from the requests ------------------------------------
+    // --- Phase C: what the P1 flow needs from the requests ------------------------------------
 
     /** Requests in the given states, oldest lock first (code breaks ties), for the pairing. */
     List<ConsultationRef> requests(Set<ConsultationState> states);
@@ -53,7 +53,7 @@ public interface ConsultationService {
     List<ConsultationRef> requestsByCode(Collection<String> codes);
 
     /**
-     * Moves a request along the P4 flow. Refused unless the request is in {@code from} and the
+     * Moves a request along the P1 flow. Refused unless the request is in {@code from} and the
      * step is one the flow has: pairing ({@code LOCKED → PAIRED}), sending
      * ({@code PAIRED → SENT_TO_MEDIUM}), both readings in ({@code SENT_TO_MEDIUM → READING_RECEIVED}),
      * an expired or cancelled send ({@code SENT_TO_MEDIUM → PAIRED}), a dissolved pair (back to

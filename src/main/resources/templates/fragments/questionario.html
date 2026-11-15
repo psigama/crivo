@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Fragmento do questionário do P1</title>
+</head>
+<body>
+
+<!--/*
+    O questionário do P1-automático, campo a campo (SPEC, E13, anexo; seção 1.1, regra 7). Público
+    por desenho: entra congelado em todo pré-registro e faz parte de todo compromisso. Só o
+    questionário, nunca uma resposta nem contagem por opção.
+*/-->
+<div th:fragment="questionario(q)">
+  <p class="rotulo">P1-automático · questionário</p>
+  <h2>
+    O questionário, versão <code th:text="${q.version()}">v1-rascunho</code>
+  </h2>
+  <p>
+    Consulente e médium respondem aos mesmos campos, e a comparação é campo a campo, entre
+    opções fechadas, sem ninguém julgando texto livre. São
+    <span th:text="${#lists.size(q.fields())}">16</span> campos:
+    <span th:text="${#lists.size(q.scoredFields())}">13</span> entram na nota e
+    <span th:text="${#lists.size(q.fields()) - #lists.size(q.scoredFields())}">3</span>
+    servem só para formar os pares.
+  </p>
+  <div class="ressalva" th:if="${q.draft()}">
+    <p>
+      <strong>Esta versão é um rascunho</strong>, à espera da revisão do pesquisador. Nenhum
+      estudo é congelado com ela em produção, e ela pode mudar antes do primeiro estudo.
+    </p>
+  </div>
+  <div class="tabela">
+    <table class="tentativas">
+      <thead>
+        <tr><th scope="col">Campo</th><th scope="col">Opções</th><th scope="col">Na nota?</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="campo : ${q.fields()}">
+          <td>
+            <span th:text="${campo.label()}">Gênero</span><br>
+            <code th:text="${campo.key()}">genero</code>
+          </td>
+          <td>
+            <ul>
+              <li th:each="opcao : ${campo.options()}" th:text="${opcao.label()}">Feminino</li>
+            </ul>
+          </td>
+          <td>
+            <th:block th:if="${campo.scored()}">Sim</th:block>
+            <th:block th:unless="${campo.scored()}">
+              Não, é de pareamento. <span th:text="${campo.outOfScoreReason()}">Por quê.</span>
+            </th:block>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="nota">
+    Nos campos que entram na nota, o consulente pode responder "Não sei" e o médium, "Não
+    recebi". Essas respostas nunca coincidem com nada. Os campos de pareamento são obrigatórios
+    para o consulente e não são perguntados ao médium.
+  </p>
+  <p class="nota">
+    O questionário só muda com uma versão nova, publicada aqui e no anexo da
+    <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>. A versão
+    antiga continua valendo para os pedidos respondidos nela, que precisam continuar
+    verificáveis.
+  </p>
+</div>
+
+</body>
+</html>

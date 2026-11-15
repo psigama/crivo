@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * What the sitter fills in before locking a P4 request: the deceased person's first name and
+ * What the sitter fills in before locking a P1 request: the deceased person's first name and
  * the answers to the questionnaire, by field key. Kept only in the browser session until the
  * sitter confirms; nothing is stored before the lock.
  */

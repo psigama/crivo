@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>A sua parte da semente — Crivo</title>
   <th:block th:replace="~{fragments/site :: social('A sua parte da semente — Crivo', 'Protocolos cegos para pesquisa de cognição anômala, com sorteio verificável e trilha de auditoria encadeada por hash.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
@@ -19,7 +20,7 @@
   <section class="abertura">
     <div class="faixa">
       <p class="rotulo" th:text="${protocolo.catalogCode()} + ' · antes da primeira tentativa'">
-        P2</p>
+        P3</p>
       <h1>Metade da semente é sua</h1>
       <p class="chamada">
         O sistema já se comprometeu com a metade dele — o hash abaixo foi gravado antes de esta
@@ -41,7 +42,7 @@
         desejado é um ataque de pré-imagem ao SHA-256. Ninguém sabe fazer isso.
       </p>
 
-      <form method="post" th:action="'/testes/' + ${protocolo.slug()} + '/entropia'"
+      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/entropia'"
             data-gerador-nonce>
         <p>
           <label for="campo-nonce">A sua metade, sorteada neste navegador</label>

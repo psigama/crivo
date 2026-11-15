@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * The P4 questionnaire (SPEC E13, annex): the shape the comparison depends on.
+ * The P1 questionnaire (SPEC E13, annex): the shape the comparison depends on.
  */
 class QuestionnaireTest {
 
@@ -26,7 +26,7 @@ class QuestionnaireTest {
     }
 
     @Test
-    @DisplayName("os campos de pareamento sao os tres do P1 e ficam fora da nota")
+    @DisplayName("os campos de pareamento sao os tres do P2 e ficam fora da nota")
     void pairing_fields_are_the_p1_ones_and_out_of_the_score() {
         List<String> pairing = current.fields().stream()
                 .filter(field -> !field.scored()).map(Questionnaire.Field::key).toList();
@@ -37,7 +37,7 @@ class QuestionnaireTest {
     }
 
     @Test
-    @DisplayName("as faixas de pareamento tem o mesmo numero de opcoes das do P1")
+    @DisplayName("as faixas de pareamento tem o mesmo numero de opcoes das do P2")
     void pairing_bands_match_p1() {
         assertThat(current.field(Questionnaires.AGE_BAND).orElseThrow().options()).hasSize(5);
         assertThat(current.field(Questionnaires.DEATH_PERIOD).orElseThrow().options()).hasSize(4);

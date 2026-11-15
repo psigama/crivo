@@ -21,6 +21,8 @@ class ProtocolCatalogTest {
 
         assertThat(all).hasSize(4);
         assertThat(all.stream().map(Protocol::code)).containsExactly("P1", "P2", "P3", "P4");
+        assertThat(all.stream().map(Protocol::label))
+                .containsExactly("P1-automático", "P2-supervisionado", "P3-precognição", "P4-visão-remota");
         assertThat(all.stream().map(Protocol::slug)).doesNotHaveDuplicates();
         assertThat(all.stream().map(Protocol::name)).doesNotHaveDuplicates();
     }
@@ -41,7 +43,7 @@ class ProtocolCatalogTest {
     @Test
     @DisplayName("um protocolo sem limites declarados nao pode ser construido")
     void a_protocol_without_limits_cannot_exist() {
-        assertThatThrownBy(() -> new Protocol("P9", "x", "X", Protocol.Branch.ESP, 1, 4,
+        assertThatThrownBy(() -> new Protocol("P9", "x", "X", "x", Protocol.Branch.ESP, 1, 4,
                 Protocol.Automation.FULL, Protocol.Status.PLANNED, "resumo", List.of(), "E9"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("does not support");
@@ -73,7 +75,7 @@ class ProtocolCatalogTest {
         assertThat(ProtocolCatalog.remoteViewing().chancePercent()).isEqualTo(25);
         assertThat(ProtocolCatalog.structuredReading().chancePercent()).isEqualTo(50);
 
-        assertThatThrownBy(() -> new Protocol("P9", "x", "X", Protocol.Branch.ESP, 4, 4,
+        assertThatThrownBy(() -> new Protocol("P9", "x", "X", "x", Protocol.Branch.ESP, 4, 4,
                 Protocol.Automation.FULL, Protocol.Status.PLANNED, "resumo",
                 List.of("um limite declarado com tamanho suficiente"), "E9"))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -81,21 +83,31 @@ class ProtocolCatalogTest {
     }
 
     @Test
-    @DisplayName("o site do Crivo lista so o ramo AIR; os testes de ESP sao apresentados pela PsiGama")
-    void the_crivo_site_lists_only_air_and_psigama_presents_esp() {
-        assertThat(ProtocolCatalog.air().stream().map(Protocol::code)).containsExactly("P4");
-        assertThat(ProtocolCatalog.esp().stream().map(Protocol::code)).containsExactly("P2", "P3");
-        assertThat(ProtocolCatalog.air()).allMatch(p -> p.branch() == Protocol.Branch.AIR)
-                .noneMatch(Protocol::presentedByPsiGama);
-        assertThat(ProtocolCatalog.esp()).allMatch(p -> p.branch() == Protocol.Branch.ESP)
-                .allMatch(Protocol::presentedByPsiGama);
+    @DisplayName("SPEC 0.17: P1 automatico e P2 supervisionado no ramo AIR; P3 e P4 no ramo ESP")
+    void the_renumbered_catalog() {
+        assertThat(ProtocolCatalog.structuredReading().code()).isEqualTo("P1");
+        assertThat(ProtocolCatalog.pairedReading().code()).isEqualTo("P2");
+        assertThat(ProtocolCatalog.precognitiveForcedChoice().code()).isEqualTo("P3");
+        assertThat(ProtocolCatalog.remoteViewing().code()).isEqualTo("P4");
+        assertThat(ProtocolCatalog.air().stream().map(Protocol::code)).containsExactly("P1", "P2");
+        assertThat(ProtocolCatalog.esp().stream().map(Protocol::code)).containsExactly("P3", "P4");
+        assertThat(ProtocolCatalog.air()).allMatch(p -> p.branch() == Protocol.Branch.AIR);
+        assertThat(ProtocolCatalog.esp()).allMatch(p -> p.branch() == Protocol.Branch.ESP);
         assertThat(ProtocolCatalog.air().size() + ProtocolCatalog.esp().size())
-                .isEqualTo((int) ProtocolCatalog.all().stream().filter(p -> !p.discontinued()).count());
-        assertThat(ProtocolCatalog.espPage()).isEqualTo("https://psigama.com/pes/");
+                .isEqualTo(ProtocolCatalog.all().size());
     }
 
     @Test
-    @DisplayName("os testes de ESP continuam no catalogo, com codigo, slug e limites: o motor segue no Crivo")
+    @DisplayName("os codigos das tentativas seguem o catalogo: P3 e P4")
+    void the_trial_codes_follow_the_catalog() {
+        assertThat(io.github.rogeriocisi.airlab.trials.TrialProtocol.PRECOGNITIVE_FORCED_CHOICE.catalogCode())
+                .isEqualTo(ProtocolCatalog.precognitiveForcedChoice().code());
+        assertThat(io.github.rogeriocisi.airlab.trials.TrialProtocol.REMOTE_VIEWING_RANKED.catalogCode())
+                .isEqualTo(ProtocolCatalog.remoteViewing().code());
+    }
+
+    @Test
+    @DisplayName("os testes de ESP estao no catalogo, com codigo, slug e limites")
     void the_esp_tests_stay_in_the_catalog() {
         assertThat(ProtocolCatalog.bySlug("escolha-forcada")).contains(ProtocolCatalog.precognitiveForcedChoice());
         assertThat(ProtocolCatalog.bySlug("visao-remota")).contains(ProtocolCatalog.remoteViewing());
@@ -103,13 +115,13 @@ class ProtocolCatalogTest {
     }
 
     @Test
-    @DisplayName("a leitura pareada (P1) esta descontinuada: mantem o codigo e sai das secoes do site")
+    @DisplayName("a leitura pareada (P2) esta descontinuada: listada so como referencia")
     void the_paired_reading_is_discontinued_and_not_offered() {
         Protocol paired = ProtocolCatalog.pairedReading();
         assertThat(paired.discontinued()).isTrue();
         assertThat(paired.status().label()).isEqualTo("Só referência, não implementado");
-        assertThat(ProtocolCatalog.byCode("P1")).contains(paired);
-        assertThat(ProtocolCatalog.air()).doesNotContain(paired);
+        assertThat(ProtocolCatalog.byCode("P2")).contains(paired);
+        assertThat(paired.quickTest()).isFalse();
         assertThat(ProtocolCatalog.esp()).doesNotContain(paired);
     }
 
@@ -123,10 +135,10 @@ class ProtocolCatalogTest {
     }
 
     @Test
-    @DisplayName("so os testes de ESP sao testes rapidos anonimos; o P4 exige conta")
+    @DisplayName("so os testes de ESP sao testes rapidos anonimos; o P1 exige conta")
     void only_esp_tests_are_quick_tests() {
         assertThat(ProtocolCatalog.all().stream().filter(Protocol::quickTest).map(Protocol::code))
-                .containsExactly("P2", "P3");
+                .containsExactly("P3", "P4");
     }
 
     @Test
@@ -134,7 +146,8 @@ class ProtocolCatalogTest {
     void lookup_works() {
         assertThat(ProtocolCatalog.bySlug("escolha-forcada")).contains(
                 ProtocolCatalog.precognitiveForcedChoice());
-        assertThat(ProtocolCatalog.byCode("P3")).contains(ProtocolCatalog.remoteViewing());
+        assertThat(ProtocolCatalog.byCode("P4")).contains(ProtocolCatalog.remoteViewing());
+        assertThat(ProtocolCatalog.byCode("p1")).contains(ProtocolCatalog.structuredReading());
         assertThat(ProtocolCatalog.bySlug("nao-existe")).isEmpty();
     }
 }

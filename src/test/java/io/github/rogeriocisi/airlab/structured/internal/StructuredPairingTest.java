@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * The P4 pairing rule (SPEC E13, phase C) as a pure function: same stratum, by lock time, two by
+ * The P1 pairing rule (SPEC E13, phase C) as a pure function: same stratum, by lock time, two by
  * two, never two requests of the same sitter, and the same answer whatever order the rows come in.
  */
 class StructuredPairingTest {

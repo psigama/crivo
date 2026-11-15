@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Painel do administrador — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
@@ -77,20 +78,26 @@
         nenhuma leitura, e nada aqui diz qual médium tem qual par.
       </p>
 
-      <h3>Estudo P4</h3>
+      <h3>Estudo P1</h3>
       <p th:if="${estudo}">
         <code th:text="${estudo.studyCode}">STD-0000</code> ·
         <span th:text="${estudo.title}">Título</span> · congelado, questionário
         <code th:text="${estudo.questionnaireVersion}">v1</code>.
-        <a href="/painel/adm/estudo-p4">Abrir o estudo</a>
+        <a href="/painel/adm/estudo-p1">Abrir o estudo</a>
       </p>
       <th:block th:unless="${estudo}">
         <p>
-          Nenhum estudo P4 aberto. Os pedidos travados esperam: o pareamento e o envio aos médiuns só
+          Nenhum estudo P1 aberto. Os pedidos travados esperam: o pareamento e o envio aos médiuns só
           começam depois do pré-registro congelado.
         </p>
-        <p class="acoes"><a class="botao botao-cheio" href="/painel/adm/estudo-p4">Criar o estudo P4</a></p>
+        <p class="acoes"><a class="botao botao-cheio" href="/painel/adm/estudo-p1">Criar o estudo P1</a></p>
       </th:block>
+      <p>
+        Questionário em vigor:
+        <code th:text="${questionarioVigente.version()}">v1-rascunho</code><span
+          th:if="${questionarioVigente.draft()}"> (rascunho, aguardando a sua revisão)</span>.
+        <a href="/protocolo/P1#questionario">Ver o questionário</a>
+      </p>
 
       <h3>Sinalizações</h3>
       <p>

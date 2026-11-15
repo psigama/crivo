@@ -202,6 +202,54 @@ code,
     margin-left: 0.6rem;
 }
 
+/* A marca do Crivo e, ao lado, quem o mantém: a PsiGama, com o logo ψγ. */
+.marcas {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+}
+
+.por-psigama {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--tinta-suave);
+    text-decoration: none;
+}
+
+.por-psigama:hover,
+.por-psigama:focus-visible {
+    color: var(--verdete);
+}
+
+.logo-psigama {
+    width: 1.2rem;
+    height: 1.2rem;
+    flex: none;
+}
+
+.logo-psigama .c {
+    stroke: #3b3f8f;
+}
+
+.logo-psigama .g {
+    stroke: #a07a2c;
+}
+
+@media (prefers-color-scheme: dark) {
+    .logo-psigama .c {
+        stroke: #9ea2ec;
+    }
+
+    .logo-psigama .g {
+        stroke: #d8b25e;
+    }
+}
+
 .navegacao {
     display: flex;
     flex-wrap: wrap;
@@ -513,11 +561,26 @@ code,
     background: color-mix(in srgb, var(--papel) 70%, transparent);
 }
 
+/* Fichas de dados: cada par rótulo e valor fica no próprio cartão, para que um rótulo nunca
+   apareça ao lado do valor de outro. Hashes e códigos longos ocupam a linha inteira (.largo). */
 .leituras {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 1rem;
     margin: 0;
+}
+
+.leituras > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 0.9rem 1rem 1rem;
+    border: 1px solid var(--fio);
+}
+
+.leituras > div.largo {
+    grid-column: 1 / -1;
 }
 
 .leituras dt {
@@ -529,10 +592,48 @@ code,
 }
 
 .leituras dd {
-    margin: 0.2rem 0 0;
-    font-size: 2rem;
+    margin: 0;
+    font-size: 1.3rem;
+    line-height: 1.3;
     font-variant-numeric: tabular-nums;
-    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.leituras dd .hash {
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Variante em linhas, para perguntas e respostas e para textos longos: o rótulo à esquerda e o
+   valor à direita, um par por linha; no celular, um embaixo do outro. */
+.leituras.lista {
+    display: block;
+    border-top: 1px solid var(--fio);
+}
+
+.leituras.lista > div {
+    display: grid;
+    grid-template-columns: minmax(9rem, 15rem) 1fr;
+    gap: 1.5rem;
+    padding: 0.8rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--fio);
+}
+
+.leituras.lista dt {
+    padding-top: 0.25rem;
+}
+
+.leituras.lista dd {
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 40rem) {
+    .leituras.lista > div {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+    }
 }
 
 .cadeia {
@@ -1013,7 +1114,7 @@ code,
     }
 }
 
-/* --- Secao de testes (protocolos P2 e P3) --------------------------------- */
+/* --- Secao de testes (protocolos P3 e P4) --------------------------------- */
 
 .protocolos {
     list-style: none;
@@ -1310,7 +1411,7 @@ form.enviando button {
     border-color: var(--verdete);
 }
 
-/* ---------- protocolo em destaque, contas e painéis (P4, SPEC E13) ---------- */
+/* ---------- protocolo em destaque, contas e painéis (P1, SPEC E13) ---------- */
 
 .protocolos > li.destaque {
     border: 2px solid var(--verdete);
@@ -1491,7 +1592,7 @@ form.enviando button {
     font-size: 0.95rem;
 }
 
-/* ---------- P4, fase D: devolutiva e relatório ---------- */
+/* ---------- P1, fase D: devolutiva e relatório ---------- */
 
 .tabela {
     overflow-x: auto;
@@ -1510,7 +1611,7 @@ form.enviando button {
     font-weight: 600;
 }
 
-/* ---------- P4: o que o experimento não é ---------- */
+/* ---------- P1: o que o experimento não é ---------- */
 
 .esclarecimento {
     margin: 1.75rem 0;
@@ -1520,7 +1621,7 @@ form.enviando button {
     margin-top: 0.75rem;
 }
 
-/* ---------- P4, fase C: pedidos ao médium e estudo ---------- */
+/* ---------- P1, fase C: pedidos ao médium e estudo ---------- */
 
 .pedidos {
     list-style: none;

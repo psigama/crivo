@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * The permutation test of the P4 (SPEC E13, phase D): the readings are reassigned to the targets
+ * The permutation test of the P1 (SPEC E13, phase D): the readings are reassigned to the targets
  * only <em>within</em> the pairing strata, because a reading made for a woman who died at 80 is
  * not exchangeable with one made for a man who died at 30 — the first name and the strata already
  * separate them, and permuting across strata would reward the leak the pairing exists to cancel.

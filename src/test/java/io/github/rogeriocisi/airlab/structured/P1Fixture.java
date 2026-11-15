@@ -19,15 +19,15 @@ import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * Builds P4 situations for the tests (SPEC E13, phase C) on the shared, persistent test database.
+ * Builds P1 situations for the tests (SPEC E13, phase C) on the shared, persistent test database.
  *
  * <p>The database outlives each run and is shared by every test class, so a test cannot assume it
- * is alone: there may be an open P4 study already, requests left waiting by an earlier run, and
+ * is alone: there may be an open P1 study already, requests left waiting by an earlier run, and
  * mediums from other tests in the pool. So each test uses a stratum of its own, and
  * {@link #pairOf} first sweeps that stratum — pairing whatever was left there — before it files
  * the two requests it will pair.
  */
-public final class P4Fixture {
+public final class P1Fixture {
 
     public static final String PASSWORD = "senha-de-teste-123";
 
@@ -51,7 +51,7 @@ public final class P4Fixture {
     private final StructuredStudyService studies;
     private final JdbcTemplate jdbc;
 
-    public P4Fixture(AccountService accounts, ConsultationService consultations, StructuredStudyService studies,
+    public P1Fixture(AccountService accounts, ConsultationService consultations, StructuredStudyService studies,
                      JdbcTemplate jdbc) {
         this.accounts = accounts;
         this.consultations = consultations;
@@ -59,9 +59,9 @@ public final class P4Fixture {
         this.jdbc = jdbc;
     }
 
-    /** The open P4 study, created with a large N when there is none. */
+    /** The open P1 study, created with a large N when there is none. */
     public StructuredStudyView ensureStudy() {
-        return studies.current().orElseGet(() -> studies.open(new StructuredStudyTerms("Estudo P4 de teste",
+        return studies.current().orElseGet(() -> studies.open(new StructuredStudyTerms("Estudo P1 de teste",
                 StructuredStudyTerms.MAXIMUM_TARGET_PAIRS, StructuredStudyTerms.DEFAULT_DEADLINE_DAYS, 0.5,
                 "Hipotese de teste.", "Qualquer medium confirmado.", StructuredStudyTerms.MAXIMUM_TARGET_PAIRS),
                 "pesquisador"));

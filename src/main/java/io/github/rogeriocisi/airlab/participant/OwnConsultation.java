@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * A P4 request with its content, built for its sitter alone: the P4 visibility matrix gives
+ * A P1 request with its content, built for its sitter alone: the P1 visibility matrix gives
  * the sitter their own answers and nobody else's (SPEC E13).
  */
 public record OwnConsultation(String code,

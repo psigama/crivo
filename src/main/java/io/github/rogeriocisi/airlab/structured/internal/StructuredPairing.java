@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The P4 pairing rule (SPEC E13, phase C), as a pure function so a test — and, later, the
+ * The P1 pairing rule (SPEC E13, phase C), as a pure function so a test — and, later, the
  * verification package — can rerun it.
  *
  * <p>Same stratum (gender, age band, period of death); within a stratum, by lock time and then

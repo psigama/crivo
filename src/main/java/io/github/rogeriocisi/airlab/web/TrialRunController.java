@@ -1,6 +1,5 @@
 package io.github.rogeriocisi.airlab.web;
 
-import io.github.rogeriocisi.airlab.catalog.ProtocolCatalog;
 import io.github.rogeriocisi.airlab.trials.SessionOutcome;
 import io.github.rogeriocisi.airlab.trials.SessionProgress;
 import io.github.rogeriocisi.airlab.trials.TrialProtocol;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,9 +51,9 @@ class TrialRunController {
         this.trialSessions = trialSessions;
     }
 
-    @GetMapping("/testes/{slug}/rodar")
-    String run(@PathVariable String slug, HttpSession http, Model model) {
-        TrialProtocol protocol = protocolOf(slug);
+    @GetMapping("/protocolo/{protocolo}/rodar")
+    String run(@PathVariable("protocolo") String protocolCode, HttpSession http, Model model) {
+        TrialProtocol protocol = protocolOf(protocolCode);
         String code = (String) http.getAttribute(key(protocol));
         if (code == null) {
             model.addAttribute("protocolo", protocol);
@@ -63,73 +63,73 @@ class TrialRunController {
 
         SessionProgress progress = trialSessions.progress(code);
         if (progress.finished() || progress.state().name().equals("ABANDONED")) {
-            return "redirect:/testes/" + slug + "/resultado";
+            return "redirect:" + path(protocol) + "/resultado";
         }
         return trialView(protocol, progress, model);
     }
 
-    @PostMapping("/testes/{slug}/comecar")
-    String start(@PathVariable String slug,
+    @PostMapping("/protocolo/{protocolo}/comecar")
+    String start(@PathVariable("protocolo") String protocolCode,
                  @RequestParam(defaultValue = "0") int tentativas,
                  HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+        TrialProtocol protocol = protocolOf(protocolCode);
         int declared = tentativas > 0 ? tentativas : protocol.defaultTrials();
         SessionProgress progress = trialSessions.start(protocol, declared);
         http.setAttribute(key(protocol), progress.sessionCode());
-        return "redirect:/testes/" + slug + "/rodar";
+        return "redirect:" + path(protocol) + "/rodar";
     }
 
-    @PostMapping("/testes/{slug}/entropia")
-    String entropy(@PathVariable String slug,
+    @PostMapping("/protocolo/{protocolo}/entropia")
+    String entropy(@PathVariable("protocolo") String protocolCode,
                    @RequestParam String nonce,
                    HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+        TrialProtocol protocol = protocolOf(protocolCode);
         trialSessions.contributeEntropy(requireCode(protocol, http), nonce);
-        return "redirect:/testes/" + slug + "/rodar";
+        return "redirect:" + path(protocol) + "/rodar";
     }
 
-    @PostMapping("/testes/{slug}/impressao")
-    String impression(@PathVariable String slug,
+    @PostMapping("/protocolo/{protocolo}/impressao")
+    String impression(@PathVariable("protocolo") String protocolCode,
                       @RequestParam String impressao,
                       HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+        TrialProtocol protocol = protocolOf(protocolCode);
         trialSessions.lockImpression(requireCode(protocol, http), impressao);
-        return "redirect:/testes/" + slug + "/rodar";
+        return "redirect:" + path(protocol) + "/rodar";
     }
 
-    @PostMapping("/testes/{slug}/escolha")
-    String choice(@PathVariable String slug,
+    @PostMapping("/protocolo/{protocolo}/escolha")
+    String choice(@PathVariable("protocolo") String protocolCode,
                   @RequestParam int posicao,
                   HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+        TrialProtocol protocol = protocolOf(protocolCode);
         String code = requireCode(protocol, http);
         SessionProgress progress = trialSessions.submitChoice(code, posicao);
-        return afterTrial(slug, code, progress);
+        return afterTrial(protocol, code, progress);
     }
 
-    @PostMapping("/testes/{slug}/ordenacao")
-    String ranking(@PathVariable String slug,
+    @PostMapping("/protocolo/{protocolo}/ordenacao")
+    String ranking(@PathVariable("protocolo") String protocolCode,
                    @RequestParam List<Integer> ordem,
                    HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+        TrialProtocol protocol = protocolOf(protocolCode);
         String code = requireCode(protocol, http);
         SessionProgress progress = trialSessions.submitRanking(code, new ArrayList<>(ordem));
-        return afterTrial(slug, code, progress);
+        return afterTrial(protocol, code, progress);
     }
 
-    @PostMapping("/testes/{slug}/desistir")
-    String abandon(@PathVariable String slug, HttpSession http) {
-        TrialProtocol protocol = protocolOf(slug);
+    @PostMapping("/protocolo/{protocolo}/desistir")
+    String abandon(@PathVariable("protocolo") String protocolCode, HttpSession http) {
+        TrialProtocol protocol = protocolOf(protocolCode);
         trialSessions.abandon(requireCode(protocol, http));
-        return "redirect:/testes/" + slug + "/resultado";
+        return "redirect:" + path(protocol) + "/resultado";
     }
 
-    @GetMapping("/testes/{slug}/resultado")
-    String result(@PathVariable String slug, HttpSession http, Model model) {
-        TrialProtocol protocol = protocolOf(slug);
+    @GetMapping("/protocolo/{protocolo}/resultado")
+    String result(@PathVariable("protocolo") String protocolCode, HttpSession http, Model model) {
+        TrialProtocol protocol = protocolOf(protocolCode);
         String code = (String) http.getAttribute(key(protocol));
         if (code == null) {
-            return "redirect:/testes/" + slug;
+            return "redirect:" + path(protocol);
         }
         SessionOutcome outcome = trialSessions.outcome(code)
                 .orElseThrow(() -> new IllegalStateException(
@@ -140,9 +140,6 @@ class TrialRunController {
         model.addAttribute("protocolo", protocol);
         model.addAttribute("desfecho", outcome);
         model.addAttribute("comprovante", receipt(outcome));
-        // The way back is the PsiGama page that presents these tests, not the Crivo catalog,
-        // which no longer lists them (SPEC 0.16, catalog rule 7).
-        model.addAttribute("paginaPes", ProtocolCatalog.espPage());
         return "teste-resultado";
     }
 
@@ -157,13 +154,13 @@ class TrialRunController {
      */
     @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class})
     String resumeAfterConflict(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = request.getRequestURI().toUpperCase(Locale.ROOT);
         for (TrialProtocol protocol : TrialProtocol.values()) {
-            if (path.contains("/testes/" + protocol.slug() + "/")) {
-                return "redirect:/testes/" + protocol.slug() + "/rodar";
+            if (path.contains("/PROTOCOLO/" + protocol.catalogCode() + "/")) {
+                return "redirect:" + path(protocol) + "/rodar";
             }
         }
-        return "redirect:/testes";
+        return "redirect:/protocolos";
     }
 
     /**
@@ -218,12 +215,12 @@ class TrialRunController {
         }
     }
 
-    private String afterTrial(String slug, String code, SessionProgress progress) {
+    private String afterTrial(TrialProtocol protocol, String code, SessionProgress progress) {
         if (progress.remainingTrials() == 0) {
             trialSessions.finish(code);
-            return "redirect:/testes/" + slug + "/resultado";
+            return "redirect:" + path(protocol) + "/resultado";
         }
-        return "redirect:/testes/" + slug + "/rodar";
+        return "redirect:" + path(protocol) + "/rodar";
     }
 
     private String trialView(TrialProtocol protocol, SessionProgress progress, Model model) {
@@ -261,9 +258,15 @@ class TrialRunController {
         return SESSION_KEY_PREFIX + protocol.name();
     }
 
-    private static TrialProtocol protocolOf(String slug) {
+    /** The protocol page, by catalog code: {@code /protocolo/P3} (SPEC 0.17, catalog rule 7). */
+    static String path(TrialProtocol protocol) {
+        return "/protocolo/" + protocol.catalogCode();
+    }
+
+    /** By catalog code, ignoring case; the old slugs live only in {@link LegacyRoutesController}. */
+    private static TrialProtocol protocolOf(String protocolCode) {
         for (TrialProtocol protocol : TrialProtocol.values()) {
-            if (protocol.slug().equals(slug)) {
+            if (protocol.catalogCode().equalsIgnoreCase(protocolCode)) {
                 return protocol;
             }
         }

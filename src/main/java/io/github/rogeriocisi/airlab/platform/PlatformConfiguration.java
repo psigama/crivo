@@ -19,7 +19,7 @@ class PlatformConfiguration {
     }
 
     /**
-     * Password hashing for the researcher and for the P4 accounts. Here and not in the web
+     * Password hashing for the researcher and for the P1 accounts. Here and not in the web
      * security configuration because the accounts service needs it in every context, including
      * the command line one, which has no web server.
      */

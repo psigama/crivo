@@ -33,10 +33,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 /**
- * The administrator's P4 preregistration pages (SPEC E13, phase C): fill in, review with the
+ * The administrator's P1 preregistration pages (SPEC E13, phase C): fill in, review with the
  * declared power, freeze.
  *
- * <p>The study service is a mock here on purpose. The shared test database keeps its one open P4
+ * <p>The study service is a mock here on purpose. The shared test database keeps its one open P1
  * study across runs, so with the real service the form would appear only on a fresh database;
  * the freezing itself is covered against the real database by {@code StructuredStudyIntegrationTest}.
  */
@@ -60,7 +60,7 @@ class StructuredStudyPagesTest {
     }
 
     private static MockHttpServletRequestBuilder filled(MockHttpSession session) {
-        return post("/painel/adm/estudo-p4/revisar").with(ADMIN).with(csrf()).session(session)
+        return post("/painel/adm/estudo-p1/revisar").with(ADMIN).with(csrf()).session(session)
                 .param("titulo", "Estudo de telas")
                 .param("pares", "40")
                 .param("prazo", "10")
@@ -75,7 +75,7 @@ class StructuredStudyPagesTest {
     void fill_review_and_freeze() throws Exception {
         MockHttpSession session = new MockHttpSession();
 
-        mvc.perform(get("/painel/adm/estudo-p4").with(ADMIN).session(session))
+        mvc.perform(get("/painel/adm/estudo-p1").with(ADMIN).session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Pré-registro do estudo")))
                 .andExpect(content().string(containsString("Rever antes de congelar")));
@@ -86,8 +86,8 @@ class StructuredStudyPagesTest {
                 .andExpect(content().string(containsString("Tamanho-alvo de 40")))
                 .andExpect(content().string(containsString("Estudo de telas")));
 
-        mvc.perform(post("/painel/adm/estudo-p4/congelar").with(ADMIN).with(csrf()).session(session))
-                .andExpect(redirectedUrl("/painel/adm/estudo-p4?congelado"));
+        mvc.perform(post("/painel/adm/estudo-p1/congelar").with(ADMIN).with(csrf()).session(session))
+                .andExpect(redirectedUrl("/painel/adm/estudo-p1?congelado"));
         verify(studies).open(argThat((StructuredStudyTerms terms) -> terms.targetPairs() == 40
                 && terms.deadlineDays() == 10 && terms.maxPairsPerMedium() == 5
                 && terms.title().equals("Estudo de telas")), eq("pesquisador"));
@@ -116,9 +116,9 @@ class StructuredStudyPagesTest {
     @Test
     @DisplayName("so o administrador alcanca o estudo")
     void only_the_administrator_reaches_the_study() throws Exception {
-        mvc.perform(get("/painel/adm/estudo-p4").with(user("MED-X").roles("MEDIUM")))
+        mvc.perform(get("/painel/adm/estudo-p1").with(user("MED-X").roles("MEDIUM")))
                 .andExpect(status().isForbidden());
-        mvc.perform(get("/painel/adm/estudo-p4").with(user("CON-X").roles("SITTER")))
+        mvc.perform(get("/painel/adm/estudo-p1").with(user("CON-X").roles("SITTER")))
                 .andExpect(status().isForbidden());
     }
 }

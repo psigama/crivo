@@ -1,7 +1,7 @@
 package io.github.rogeriocisi.airlab.structured;
 
 /**
- * Where the P4 study stands, for the administrator: counts of units, never performance (E10,
+ * Where the P1 study stands, for the administrator: counts of units, never performance (E10,
  * lock 1). No code, no medium, nothing that links a pair to whoever reads it.
  *
  * @param targetPairs          N declared in the preregistration (0 when there is no study)

@@ -33,7 +33,7 @@
 
   document.querySelectorAll("form[data-envio-unico]").forEach(travarEnvio);
 
-  /* P2: teclas 1 a N escolhem a porta correspondente. */
+  /* P3: teclas 1 a N escolhem a porta correspondente. */
   var portas = document.querySelector("[data-portas]");
   if (portas) {
     document.addEventListener("keydown", function (evento) {
@@ -53,7 +53,7 @@
     });
   }
 
-  /* P3: cada figura entra uma vez só. A figura já escolhida num lugar fica indisponível nos
+  /* P4: cada figura entra uma vez só. A figura já escolhida num lugar fica indisponível nos
    * demais, e quando sobra um lugar só, a figura que sobrou entra nele. */
   var ordenacao = document.querySelector("[data-ordenacao]");
   if (ordenacao) {

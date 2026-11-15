@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 /**
- * The P4 unblinding (SPEC E13, phase D): automatic, at N, irreversible, in one transaction.
+ * The P1 unblinding (SPEC E13, phase D): automatic, at N, irreversible, in one transaction.
  *
  * <p>The order matters and is the protocol's: close the collection, reveal the seed, mark the study
  * unblinded — and only then reveal the answers, check every commitment, score, analyse and write

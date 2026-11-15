@@ -1,7 +1,7 @@
 package io.github.rogeriocisi.airlab.participant;
 
 /**
- * Profile of a P4 account (SPEC E13). Chosen once, at sign-up, and never changed: the database
+ * Profile of a P1 account (SPEC E13). Chosen once, at sign-up, and never changed: the database
  * refuses the change too (V17).
  *
  * <p>There is no administrator here on purpose. The administrator comes from the server

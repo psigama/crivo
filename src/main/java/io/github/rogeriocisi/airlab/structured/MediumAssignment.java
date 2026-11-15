@@ -8,7 +8,7 @@ import java.util.List;
  * drawn order, the deadline, and which readings are already locked.
  *
  * <p>Built for its medium alone. By construction it has no sitter code, no request code, no
- * answer of any sitter and no score (P4 matrix); a slot is a position, not a link to a person.
+ * answer of any sitter and no score (P1 matrix); a slot is a position, not a link to a person.
  *
  * @param questionnaireVersion the version the study froze, which is the form the medium fills in
  */

@@ -14,7 +14,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * A P4 account, in the {@code identity} schema (V17). Fields ending in {@code Enc} hold
+ * A P1 account, in the {@code identity} schema (V17). Fields ending in {@code Enc} hold
  * ciphertext produced by the application; the database never sees the plain value.
  *
  * <p>The profile has no setter, and the database refuses to change it anyway.

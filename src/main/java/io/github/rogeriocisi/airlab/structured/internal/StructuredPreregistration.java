@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * What the P4 freezes besides the administrator's terms (SPEC E13, phase C): the protocol's fixed
+ * What the P1 freezes besides the administrator's terms (SPEC E13, phase C): the protocol's fixed
  * text for the plan, and the annex with the whole questionnaire, the pairing rule, the draw rule,
  * the deadline and N. Everything here enters the hashed document.
  */
@@ -88,7 +88,7 @@ final class StructuredPreregistration {
         questionnaireForm.put("mediumNotReceived", Questionnaire.NOT_RECEIVED);
 
         Map<String, Object> root = new LinkedHashMap<>();
-        root.put("protocol", "P4");
+        root.put("protocol", "P1");
         root.put("questionnaire", questionnaireForm);
         root.put("pairingFields", List.of(Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD));
         root.put("targetPairs", terms.targetPairs());

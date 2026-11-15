@@ -3,17 +3,19 @@ package io.github.rogeriocisi.airlab.catalog;
 import io.github.rogeriocisi.airlab.catalog.Questionnaire.Field;
 import io.github.rogeriocisi.airlab.catalog.Questionnaire.Option;
 import io.github.rogeriocisi.airlab.catalog.Questionnaire.Use;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * The questionnaires of P4, by version (SPEC E13, annex).
+ * The questionnaires of P1, by version (SPEC E13, annex).
  *
  * <p>A constant, like the catalog: a questionnaire changes only with a new version, and the old
  * one stays here, because requests answered under it must still be readable and verifiable.
  *
  * <p>Version {@code v1-rascunho} is the draft of the SPEC annex, awaiting the researcher's
- * review. The pairing bands are the same as the P1 ones ({@code TargetRegistration}), so that
+ * review. The pairing bands are the same as the P2 ones ({@code TargetRegistration}), so that
  * pairing is the same rule in both protocols.
  */
 public final class Questionnaires {
@@ -117,6 +119,20 @@ public final class Questionnaires {
 
     public static Optional<Questionnaire> byVersion(String version) {
         return ALL.stream().filter(questionnaire -> questionnaire.version().equals(version)).findFirst();
+    }
+
+    /**
+     * Every version, the current one first and then the older ones, newest first. Old versions
+     * stay because requests answered under them must remain readable (SPEC E13).
+     */
+    public static List<Questionnaire> all() {
+        List<Questionnaire> older = new ArrayList<>(ALL);
+        older.remove(current());
+        Collections.reverse(older);
+        List<Questionnaire> all = new ArrayList<>(older.size() + 1);
+        all.add(current());
+        all.addAll(older);
+        return List.copyOf(all);
     }
 
     private static Field scored(String key, String label, String... keysAndLabels) {

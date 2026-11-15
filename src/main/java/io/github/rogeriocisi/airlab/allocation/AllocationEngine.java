@@ -211,7 +211,7 @@ public final class AllocationEngine {
     }
 
     /**
-     * P4 (SPEC E13, phase C): the commitment published in the frozen preregistration of a study
+     * P1 (SPEC E13, phase C): the commitment published in the frozen preregistration of a study
      * whose pairs form during collection, so that there is no plan to commit to yet. It covers the
      * seed and the canonical description of the study; every later draw is a public function of
      * this seed and of inputs recorded at the time of the draw.
@@ -221,7 +221,7 @@ public final class AllocationEngine {
     }
 
     /**
-     * P4: the medium who reads both requests of a pair, on a given attempt, among the eligible
+     * P1: the medium who reads both requests of a pair, on a given attempt, among the eligible
      * mediums. The pool is sorted first, so the order in which accounts happened to be loaded
      * cannot change the result (P5); the attempt is part of the domain, so a resend after an
      * expired deadline is a new, independent draw.
@@ -241,7 +241,7 @@ public final class AllocationEngine {
     }
 
     /**
-     * P4: the order in which the medium sees the two requests of a pair, so that being shown
+     * P1: the order in which the medium sees the two requests of a pair, so that being shown
      * first is not a clue. Canonical order first, then a seed-drawn shuffle (P5).
      */
     public static List<String> structuredNameOrder(String seedHex, String pairCode, int attempt,

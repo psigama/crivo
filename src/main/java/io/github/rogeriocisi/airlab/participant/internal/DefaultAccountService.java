@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * P4 accounts (SPEC E13, phase A).
+ * P1 accounts (SPEC E13, phase A).
  *
  * <p>Every state change is in the audit trail with the pseudonymous code and the profile only:
  * the trail is public (P7), and a name or an e-mail there would be a leak no one could take back.

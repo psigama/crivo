@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title th:text="${protocolo.name} + ' — Crivo'">Protocolo — Crivo</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title th:text="${protocolo.label()} + ' · ' + ${protocolo.name} + ' — Crivo'">Protocolo — Crivo</title>
   <th:block th:replace="~{fragments/site :: social(${protocolo.name} + ' — Crivo', ${protocolo.summary})}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
@@ -19,7 +20,7 @@
   <section class="abertura">
     <div class="faixa">
       <p class="rotulo aparece">
-        <span th:text="${protocolo.code}">P1</span> ·
+        <span th:text="${protocolo.label()}">P1-automático</span> ·
         <span th:text="${protocolo.branch.label()}">Ramo</span>
       </p>
       <h1 class="aparece" th:text="${protocolo.name}">Nome</h1>
@@ -30,18 +31,14 @@
   <section>
     <div class="faixa">
       <dl class="leituras">
-        <dt>Acaso declarado</dt>
-        <dd th:text="${protocolo.chanceNumerator} + '/' + ${protocolo.chanceDenominator}
-                     + ' (' + ${protocolo.chancePercent()} + '%)'">1/2</dd>
-        <dt>Automação</dt>
-        <dd th:text="${protocolo.automation.label()}">Parcial</dd>
-        <dt>Situação</dt>
-        <dd th:text="${protocolo.status.label()}">Disponível</dd>
-        <dt>Especificação</dt>
-        <dd>
+        <div><dt>Acaso declarado</dt><dd th:text="${protocolo.chanceNumerator} + '/' + ${protocolo.chanceDenominator}
+                     + ' (' + ${protocolo.chancePercent()} + '%)'">1/2</dd></div>
+        <div><dt>Automação</dt><dd th:text="${protocolo.automation.label()}">Parcial</dd></div>
+        <div><dt>Situação</dt><dd th:text="${protocolo.status.label()}">Disponível</dd></div>
+        <div><dt>Especificação</dt><dd>
           Épicos <span th:text="${protocolo.epics}">E1</span> da
           <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>
-        </dd>
+        </dd></div>
       </dl>
 
       <p class="nota">
@@ -65,46 +62,44 @@
       <p class="acoes">
         <a class="botao botao-cheio"
            th:if="${protocolo.quickTest()}"
-           th:href="'/testes/' + ${protocolo.slug} + '/rodar'">Fazer o teste agora</a>
+           th:href="'/protocolo/' + ${protocolo.code} + '/rodar'">Fazer o teste agora</a>
         <a class="botao botao-cheio"
-           th:if="${protocolo.code == 'P4'}" href="/conta/criar">Criar uma conta</a>
-        <a class="botao botao-vazio" th:if="${protocolo.code == 'P4'}" href="/estudos">Estudos e relatórios</a>
-        <a class="botao botao-vazio" th:if="${protocolo.presentedByPsiGama()}"
-           th:href="${paginaPes}">Outros testes de PES</a>
-        <a class="botao botao-vazio" th:unless="${protocolo.presentedByPsiGama()}"
-           href="/testes">Voltar ao catálogo</a>
+           th:if="${protocolo.code == 'P1'}" href="/conta/criar">Criar uma conta</a>
+        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" href="#questionario">Ver o questionário</a>
+        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" href="/estudos">Estudos e relatórios</a>
+        <a class="botao botao-vazio" href="/protocolos">Todos os protocolos</a>
       </p>
 
-      <p class="nota" th:if="${protocolo.presentedByPsiGama()}">
-        Este teste é apresentado pela PsiGama, na
-        <a th:href="${paginaPes}">página de testes de percepção extrassensorial</a>, e não faz
-        parte do catálogo do Crivo, que é de protocolos de recepção anômala de informação. Ele
-        roda aqui, com as mesmas garantias: a semente é comprometida antes da primeira resposta,
-        o alvo de cada tentativa só é revelado depois que a resposta trava, e tudo vai para a
-        trilha de auditoria.
+      <p class="nota" th:if="${protocolo.quickTest()}">
+        Teste anônimo, sem conta: a semente é comprometida antes da primeira resposta, o alvo de
+        cada tentativa só é revelado depois que a resposta trava, e tudo vai para a trilha de
+        auditoria. Ele não diz nada sobre mediunidade.
       </p>
     </div>
   </section>
 
-  <th:block th:if="${protocolo.code == 'P4'}">
+  <th:block th:if="${protocolo.code == 'P1'}">
     <section>
       <div class="faixa">
-        <div th:replace="~{fragments/p4 :: o-que-nao-e}"></div>
+        <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
       </div>
     </section>
-    <section th:replace="~{fragments/p4 :: como-participar}"></section>
-    <section th:replace="~{fragments/p4 :: telas}"></section>
+    <section th:replace="~{fragments/p1 :: como-participar}"></section>
+    <section th:replace="~{fragments/p1 :: telas}"></section>
+    <section id="questionario" th:if="${questionario}">
+      <div class="faixa" th:insert="~{fragments/questionario :: questionario(${questionario})}"></div>
+    </section>
   </th:block>
 
-  <section th:if="${protocolo.code == 'P1'}">
+  <section th:if="${protocolo.code == 'P2'}">
     <div class="faixa">
       <h2>Só como referência</h2>
       <p>
         Esta página descreve um desenho que o Crivo <strong>não implementa</strong>: a leitura
         pareada depende de uma equipe — experimentador e redator — e não recebe participantes. Ela
         fica aqui como referência, porque é o protocolo mais próximo da literatura e é contra ele
-        que se mede o que a versão automatizada ganha e perde. Para participar, veja a
-        <a href="/testes/leitura-estruturada">leitura estruturada automatizada</a>.
+        que se mede o que a versão automatizada ganha e perde. Para participar, veja o
+        <a href="/protocolo/P1">P1-automático, a leitura estruturada automatizada</a>.
       </p>
     </div>
   </section>

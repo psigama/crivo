@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Rever a leitura — Crivo</title>
   <meta name="robots" content="noindex">
   <link rel="stylesheet" href="/css/crivo.css">
@@ -24,11 +25,8 @@
         nem por você, nem pela equipe, nem pela plataforma.
       </p>
 
-      <dl class="leituras">
-        <th:block th:each="item : ${respostas}">
-          <dt th:text="${item.key}">Pergunta</dt>
-          <dd th:text="${item.value}">Resposta</dd>
-        </th:block>
+      <dl class="leituras lista">
+        <div th:each="item : ${respostas}"><dt th:text="${item.key}">Pergunta</dt><dd th:text="${item.value}">Resposta</dd></div>
       </dl>
 
       <div class="ressalva">
