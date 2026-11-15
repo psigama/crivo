@@ -1,6 +1,6 @@
 # Integração contínua e implantação
 
-Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://crivo.psigama.tec.br`. As regras que valem acima deste roteiro estão na [Constitution](CONSTITUTION.md), em *Implantação por fase*.
+Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://crivo.psigama.com`. As regras que valem acima deste roteiro estão na [Constitution](CONSTITUTION.md), em *Implantação por fase*.
 
 ## Visão geral
 
@@ -8,34 +8,61 @@ Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://
 |---|---|---|
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | GitHub Actions | A cada push na `main` e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado |
 | [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) | GitHub Actions, acionado à mão | Constrói e testa o JAR, entra na rede Tailscale, envia o JAR para a VM, troca a versão e confere a saúde; se a aplicação não subir, volta para a versão anterior |
-| VM de produção | Oracle Cloud (Always Free), região `us-phoenix-1` (Phoenix, EUA), nas condições da regra de implantação 1 | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
+| VM de produção | VPS KVM da Hostinger no data center de São Paulo (Brasil): Ubuntu 26.04 LTS x86_64, 1 vCPU, 4 GB de RAM | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
 
 A implantação **nunca é automática**. A regra de implantação 8 só permite atualizar a aplicação entre sessões de coleta, e o formulário do workflow exige que quem o aciona confirme isso.
 
 ## 1. Preparar a VM
 
-Uma vez, na VM (Ubuntu 24.04; na Oracle Cloud, a forma Arm Ampere A1 do Always Free basta). A conta do projeto tem região inicial em Phoenix (EUA) e, no Always Free, só pode usar essa região. A Constitution 1.4.0 admite isso (regra de implantação 1) com uma condição: **nenhum dado pessoal real entra na VM antes de documentada a base legal da transferência internacional** (LGPD, art. 33), no termo de consentimento, na submissão ao CEP e no pré-registro. Até lá, não configure o envio de e-mail (`SPRING_MAIL_*`) no `airlab.env`: sem ele, a inscrição do P4 fica fechada em produção, e no ar ficam só os testes de PES, anônimos.
+Uma vez, na VM. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinger no data center de São Paulo, com Ubuntu 26.04 LTS (x86_64). Os dados ficam no Brasil, como prefere a regra de implantação 1.
 
-1. **Pacotes**: `openjdk-21-jre-headless`, `postgresql`, `curl`, o [Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian) e o [Tailscale](https://tailscale.com/download/linux). Registre as versões instaladas (regra de implantação 8).
-2. **Firewall**: abra só as portas 80 e 443 para a internet, na lista de segurança da Oracle e no firewall do sistema. O SSH fica acessível apenas pela rede Tailscale (regra de implantação 3).
-3. **Tailscale**: `sudo tailscale up --advertise-tags=tag:crivo`. O nome da VM na rede Tailscale (ou o IP `100.x.y.z`) é o `DEPLOY_HOST` do passo 3.
-4. **Aplicação**:
+1. **Acesso**: só por chave SSH. A do administrador (`crivo-admin`) é cadastrada no painel da Hostinger. Desligue o login por senha num arquivo lido antes dos outros em `/etc/ssh/sshd_config.d/` (no `sshd`, vale o primeiro valor lido, e a imagem traz um `50-cloud-init.conf` que liga a senha), por exemplo `00-psigama.conf`:
+
+   ```text
+   PasswordAuthentication no
+   KbdInteractiveAuthentication no
+   PermitRootLogin prohibit-password
+   ```
+
+2. **Firewall** (`ufw`): `default deny incoming`, `allow 22/tcp`, `allow 80/tcp`, `allow 443/tcp` e `enable`. Quando o Tailscale estiver no ar, tire a porta 22 da internet (`ufw allow in on tailscale0 to any port 22 proto tcp` e depois `ufw delete allow 22/tcp`), como pede a regra de implantação 3.
+3. **Pacotes**: `openjdk-21-jre-headless` e `postgresql` do Ubuntu; o Caddy e o Tailscale dos repositórios oficiais ([Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian), [Tailscale](https://tailscale.com/download/linux/ubuntu-2404)). Versões instaladas (regra de implantação 8):
+
+   | Pacote | Versão |
+   |---|---|
+   | OpenJDK | 21.0.13 (`openjdk-21-jre-headless` 21.0.13.0.3+1-1~26.04.1) |
+   | PostgreSQL | 18.6 (`postgresql-18` 18.6-0ubuntu0.26.04.1) |
+   | Caddy | 2.11.9 |
+   | Tailscale | 1.104.7 |
+
+   O PostgreSQL embarcado dos testes tem a mesma versão principal (`embedded-postgres-binaries.version` no `pom.xml`, regra de implantação 4). Ao atualizar um, atualize o outro.
+
+4. **Tailscale**: `sudo tailscale up --advertise-tags=tag:crivo`, depois de declarar o tag na política (passo 3, item 1). O nome da VM na rede Tailscale (ou o IP `100.x.y.z`) é o `DEPLOY_HOST` do passo 3.
+5. **Aplicação**:
    - usuário de serviço: `sudo useradd --system --home /opt/airlab --shell /usr/sbin/nologin airlab`;
-   - diretórios: `sudo install -d -o airlab -g airlab /opt/airlab /opt/airlab/data`;
-   - segredos: `/etc/airlab/airlab.env`, com dono `root` e permissão `600`, a partir do [`.env.example`](../.env.example), com `AIRLAB_BASE_URL=https://crivo.psigama.tec.br` (regra de implantação 7);
-   - banco: PostgreSQL escutando só em `127.0.0.1`, com o banco e o usuário do `AIRLAB_DB_URL` e do `AIRLAB_DB_USER` (regra de implantação 4);
+   - diretórios: `sudo install -d -o airlab -g airlab -m 0750 /opt/airlab` e `sudo install -d -o airlab -g airlab -m 0700 /opt/airlab/data`;
+   - banco: o PostgreSQL escuta só em `127.0.0.1`, com `listen_addresses = '127.0.0.1'` em `/etc/postgresql/18/main/conf.d/crivo.conf` (regra de implantação 4). São dois papéis: `airlab_owner`, dono do banco, com o qual o Flyway roda as migrações; e `airlab_app`, com o qual a aplicação conecta e que a migração `V10` reduz ao privilégio mínimo (na trilha, só `SELECT` e `INSERT`). A `V10` só cria o `airlab_app` se ele não existir, sem login; por isso ele é criado antes, já com login. Com `sudo -u postgres psql`, e senhas geradas por `openssl rand -hex 32`:
+
+     ```sql
+     CREATE ROLE airlab_owner LOGIN PASSWORD '...';
+     CREATE ROLE airlab_app LOGIN PASSWORD '...';
+     CREATE DATABASE airlab OWNER airlab_owner ENCODING 'UTF8' TEMPLATE template0;
+     REVOKE ALL ON DATABASE airlab FROM PUBLIC;
+     GRANT CONNECT ON DATABASE airlab TO airlab_app;
+     ```
+
+   - segredos: `/etc/airlab/airlab.env`, com dono `root` e permissão `600`, a partir do [`.env.example`](../.env.example) (regra de implantação 7). Nele vão `AIRLAB_BASE_URL=https://crivo.psigama.com`; `AIRLAB_DB_USER=airlab_app` com a senha desse papel; `SPRING_FLYWAY_USER=airlab_owner` e `SPRING_FLYWAY_PASSWORD` com a do dono, que o Spring Boot usa só nas migrações; e a `AIRLAB_IDENTITY_KEY`, gerada com `openssl rand -base64 32`. **Guarde uma cópia da chave fora da VM**: sem ela, os dados cifrados do esquema `identity` não se recuperam. O `AIRLAB_RESEARCHER_PASSWORD_HASH` tem de estar preenchido antes da primeira implantação;
    - serviço: copie [`scripts/airlab.service.example`](../scripts/airlab.service.example) para `/etc/systemd/system/airlab.service` e rode `sudo systemctl daemon-reload && sudo systemctl enable airlab`. O serviço só sobe quando houver um JAR em `/opt/airlab/airlab.jar`, o que a primeira implantação resolve.
-5. **Caddy** (`/etc/caddy/Caddyfile`), com HTTPS automático e só as rotas da aplicação expostas:
+6. **Caddy** (`/etc/caddy/Caddyfile`), com HTTPS automático e só as rotas da aplicação expostas:
 
    ```caddyfile
-   crivo.psigama.tec.br {
+   crivo.psigama.com {
    	@interno path /actuator /actuator/*
    	respond @interno 404
    	reverse_proxy 127.0.0.1:8080
    }
    ```
 
-6. **DNS**: um registro `A` de `crivo.psigama.tec.br` para o IP público da VM.
+7. **DNS**: um registro `A` de `crivo.psigama.com` para o IP público da VM. Enquanto ele não existir, o Caddy não obtém o certificado e tenta de novo sozinho.
 
 ## 2. Usuário de implantação
 
@@ -98,7 +125,6 @@ sudo systemctl restart airlab
 ## Fora destes workflows
 
 - **Backups** (regra de implantação 5): dump diário criptografado para fora da VM e teste mensal de restauração. Precisam de um roteiro próprio.
-- **Criação do banco em produção**: o repositório ainda não documenta como o banco e os papéis (`airlab_app`, migração `V10`) são criados na primeira instalação.
 
 ## Dependências do GitHub Actions
 
