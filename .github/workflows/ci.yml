@@ -1,0 +1,48 @@
+# Integração contínua: compila e roda a suíte completa a cada push e pull request.
+#
+# A suíte inclui a matriz de cegamento (SPEC, seção 4) e os testes de integridade da trilha de
+# auditoria; uma mudança que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o
+# embarcado pela própria aplicação (Constitution, regra de implantação 4): nada de Docker nem de
+# serviço externo. O FreeTsaLiveTest só roda com AIRLAB_LIVE_TSA=true, que este workflow não define.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Compilar e testar
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v7
+
+      - name: Instalar o JDK 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Compilar e rodar os testes
+        run: ./mvnw -B -ntp verify
+
+      - name: Guardar os relatórios de teste em caso de falha
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorios-de-teste
+          path: target/surefire-reports/
+          retention-days: 14
