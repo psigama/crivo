@@ -8,22 +8,22 @@ A mediunidade é um ramo da plataforma — na literatura, *recepção anômala d
 
 ## Catálogo de protocolos
 
-O site do Crivo lista só os **protocolos AIR**, com o automatizado em destaque. Os dois testes de percepção extrassensorial rodam no mesmo servidor, com as mesmas garantias, mas desde a [SPEC 0.16](docs/SPEC.md#11-catálogo-de-protocolos) são apresentados pela PsiGama, na [página de testes de PES](https://psigama.com/pes/), e não aparecem nas páginas do Crivo.
+O site do Crivo lista os quatro protocolos em [`/protocolos`](https://crivo.psigama.com/protocolos), cada um com a sua página em `/protocolo/P1` a `/protocolo/P4`. Desde a [SPEC 0.17](docs/SPEC.md#11-catálogo-de-protocolos), a numeração segue a ordem de importância: o protocolo ativo vem primeiro. A renumeração foi feita antes de qualquer dado real; a correspondência com a numeração anterior está na SPEC.
 
-| Onde se apresenta | Código | Protocolo | Acaso | Automação |
+| Código | Protocolo | Ramo | Acaso | Automação |
 |---|---|---|---|---|
-| Crivo · protocolos AIR | **P4** | [Leitura estruturada automatizada](docs/SPEC.md#e13-leitura-estruturada-automatizada-p4) | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe |
-| Crivo · só referência | ~~**P1**~~ | ~~Leitura pareada cega~~ | — | **Só referência** (SPEC 0.14): exigia equipe e não será implementado; a página fica no site como referência |
-| PsiGama · testes de PES | **P2** | Escolha forçada precognitiva (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/testes/escolha-forcada/rodar` |
-| PsiGama · testes de PES | **P3** | Visão remota com quatro alvos (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/testes/visao-remota/rodar` |
+| **P1-automático** | [Leitura estruturada automatizada](docs/SPEC.md#e13-leitura-estruturada-automatizada-p1) | AIR | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe; o questionário em vigor está publicado na página do protocolo |
+| ~~**P2-supervisionado**~~ | ~~Leitura pareada cega~~ | AIR | — | **Só referência** (SPEC 0.14): exigia equipe e não será implementado; a página fica no site como referência |
+| **P3-precognição** | Escolha forçada precognitiva | ESP | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/protocolo/P3/rodar` |
+| **P4-visão-remota** | Visão remota com quatro alvos | ESP | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/protocolo/P4/rodar` |
 
-Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles existem porque são integralmente verificáveis por quem os faz, e por isso quem os apresenta é a PsiGama, não o catálogo do Crivo. As rotas deles não mudam de endereço, porque a página da PsiGama aponta para elas. O catálogo do Crivo fica em `/testes`, no site.
+Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles existem porque são integralmente verificáveis por quem os faz, e aparecem separados dos protocolos AIR. A [PsiGama](https://psigama.com/), que mantém o Crivo, também os apresenta na [página de testes de PES](https://psigama.com/pes/). As rotas antigas, `/testes/...`, redirecionam para as novas.
 
-### O AIR automatizado (P4), em uma frase
+### O AIR automatizado (P1), em uma frase
 
-O consulente informa o primeiro nome da pessoa falecida e responde a um questionário fechado sobre ela; um médium sorteado recebe só o primeiro nome e responde ao mesmo questionário; o sistema confere campo a campo contra o alvo verdadeiro e contra um chamariz de perfil parecido — **ninguém julga se uma afirmação "encaixa"**. A especificação completa, com a matriz de visibilidade e os limites declarados, está no épico [E13 da SPEC](docs/SPEC.md#e13-leitura-estruturada-automatizada-p4).
+O consulente informa o primeiro nome da pessoa falecida e responde a um questionário fechado sobre ela; um médium sorteado recebe só o primeiro nome e responde ao mesmo questionário; o sistema confere campo a campo contra o alvo verdadeiro e contra um chamariz de perfil parecido — **ninguém julga se uma afirmação "encaixa"**. A especificação completa, com a matriz de visibilidade e os limites declarados, está no épico [E13 da SPEC](docs/SPEC.md#e13-leitura-estruturada-automatizada-p1).
 
-### Como participar do P4: conta, perfil e telas
+### Como participar do P1: conta, perfil e telas
 
 1. **Crie uma conta** em `/conta/criar`: nome, e-mail, senha e aceite do termo.
 2. **Escolha o perfil** — **consulente** (faz o pedido de consulta) ou **médium** (responde aos pedidos). O perfil é fixo: o banco recusa a troca.
@@ -34,14 +34,14 @@ O consulente informa o primeiro nome da pessoa falecida e responde a um question
 |---|---|
 | **Consulente** | Painel com a situação do pedido · Novo pedido (questionário) · Devolutiva depois do fim do estudo · Minha conta (dados, termo, excluir conta) |
 | **Médium** | Painel com pedidos recebidos e prazos · Leitura de cada nome do par, com revisão antes de travar · Minha conta |
-| **Administrador** | Painel com contagens — nunca notas — e situação da instalação · **Estudo P4**: pré-registro com teto de pares por médium, congelamento, progresso e relatório · **Sinalizações** de contas que parecem da mesma pessoa · Avisos de cada etapa concluída · Caixa de saída (perfil local) |
-| **Público** | **Estudos e relatórios** (`/estudos`): o pré-registro de cada estudo P4, contagens enquanto coleta e o relatório inteiro quando termina |
+| **Administrador** | Painel com contagens — nunca notas — e situação da instalação · **Estudo P1**: pré-registro com teto de pares por médium, congelamento, progresso e relatório · **Sinalizações** de contas que parecem da mesma pessoa · Avisos de cada etapa concluída · Caixa de saída (perfil local) |
+| **Público** | **Estudos e relatórios** (`/estudos`): o pré-registro de cada estudo P1, contagens enquanto coleta e o relatório inteiro quando termina |
 
 O administrador **não é um perfil escolhível**: é a conta do pesquisador, definida na configuração do servidor (ver *Entrar na aplicação*).
 
-**Estado:** as quatro fases do E13 estão implementadas. Contas com perfil fixo, confirmação por e-mail, painéis por perfil e avisos ao administrador; o **pedido de consulta**, com o questionário (versão `v1-rascunho`, ainda em revisão) travado e só o compromisso salgado na trilha; e o **fluxo até a leitura**: o administrador congela o estudo P4, e um ciclo do servidor, a cada minuto, forma os pares, sorteia o médium, libera os dois primeiros nomes, controla o prazo e reenvia o que vencer. O médium responde, revê e trava cada leitura. Quando os N pares têm as duas leituras, o próprio ciclo **desmascara o estudo**, confere os compromissos, pontua, roda a análise pré-registrada e escreve o relatório; o consulente vê a leitura do seu alvo ao lado das suas respostas, o médium vê as notas das próprias leituras, e o administrador, o relatório inteiro.
+**Estado:** as quatro fases do E13 estão implementadas. Contas com perfil fixo, confirmação por e-mail, painéis por perfil e avisos ao administrador; o **pedido de consulta**, com o questionário (versão `v1-rascunho`, ainda em revisão) travado e só o compromisso salgado na trilha; e o **fluxo até a leitura**: o administrador congela o estudo P1, e um ciclo do servidor, a cada minuto, forma os pares, sorteia o médium, libera os dois primeiros nomes, controla o prazo e reenvia o que vencer. O médium responde, revê e trava cada leitura. Quando os N pares têm as duas leituras, o próprio ciclo **desmascara o estudo**, confere os compromissos, pontua, roda a análise pré-registrada e escreve o relatório; o consulente vê a leitura do seu alvo ao lado das suas respostas, o médium vê as notas das próprias leituras, e o administrador, o relatório inteiro.
 
-**Para experimentar no perfil local:** crie uma conta de médium e duas de consulente e faça dois pedidos com o mesmo gênero, a mesma faixa etária e o mesmo período do falecimento. Depois entre como administrador, abra **Estudo P4** e congele o pré-registro. Em até um minuto, o médium vê o pedido no painel.
+**Para experimentar no perfil local:** crie uma conta de médium e duas de consulente e faça dois pedidos com o mesmo gênero, a mesma faixa etária e o mesmo período do falecimento. Depois entre como administrador, abra **Estudo P1** e congele o pré-registro. Em até um minuto, o médium vê o pedido no painel.
 
 O Crivo não existe para provar que a mediunidade é real, nem que não é. Ele existe para que **a resposta, qualquer que seja, seja defensável**.
 
@@ -49,7 +49,7 @@ O Crivo não existe para provar que a mediunidade é real, nem que não é. Ele 
 
 ## Status
 
-🧱 **Fase 0 → 1: fundamentos implementados.** O núcleo de confiança está de pé: trilha de auditoria encadeada por hash e **carimbada por uma autoridade de carimbo do tempo independente** (FreeTSA, RFC 3161, com os tokens públicos em `/carimbos`), sorteio reproduzível com compromisso → revelação, pré-registro congelável e CLI de verificação. No AIR automatizado (P4), o fluxo inteiro está no ar: contas com perfil fixo, pedido de consulta com compromisso salgado, estudo P4 congelado, pareamento e sorteio do médium automáticos, leitura travada, prazos com reenvio e, no N, desmascaramento, conferência, relatório e devolutiva automáticos. A leitura pareada conduzida por equipe (P1) foi **descontinuada** na SPEC 0.14 e não será implementada: o projeto segue só com o protocolo AIR totalmente automático. Ver a tabela de estado em [`docs/PLAN.md`](docs/PLAN.md).
+🧱 **Fase 0 → 1: fundamentos implementados.** O núcleo de confiança está de pé: trilha de auditoria encadeada por hash e **carimbada por uma autoridade de carimbo do tempo independente** (FreeTSA, RFC 3161, com os tokens públicos em `/carimbos`), sorteio reproduzível com compromisso → revelação, pré-registro congelável e CLI de verificação. No AIR automatizado (P1), o fluxo inteiro está no ar: contas com perfil fixo, pedido de consulta com compromisso salgado, estudo P1 congelado, pareamento e sorteio do médium automáticos, leitura travada, prazos com reenvio e, no N, desmascaramento, conferência, relatório e devolutiva automáticos. A leitura pareada conduzida por equipe (P2) foi **descontinuada** na SPEC 0.14 e não será implementada: o projeto segue só com o protocolo AIR totalmente automático. Ver a tabela de estado em [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Como rodar
 
@@ -97,7 +97,7 @@ O Codespaces encaminha a porta 8080 e abre a aplicação numa aba. Se a aba não
 
 ### Entrar na aplicação
 
-A entrada em `/login` serve a três perfis. **Consulentes e médiuns** do P4 entram com e-mail e senha da conta que criaram. **O administrador** entra com o usuário da configuração:
+A entrada em `/login` serve a três perfis. **Consulentes e médiuns** do P1 entram com e-mail e senha da conta que criaram. **O administrador** entra com o usuário da configuração:
 
 - **Usuário**: `pesquisador`.
 - **Senha, no perfil local**: gerada a cada execução e impressa uma vez no log, numa linha de aviso `Perfil local: usuario "pesquisador" com senha temporaria desta execucao: …`. Nada fica salvo entre execuções, e nenhuma credencial vai para o repositório.
@@ -142,7 +142,7 @@ Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, a
 
 **Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta em `https://crivo.psigama.com` por SSH, só com chave. O preparo da VM e os segredos estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
-**Inscrição do P4 em produção.** Fica fechada até que existam envio de e-mail e um contato humano (SPEC E10, travas 3 e 5):
+**Inscrição do P1 em produção.** Fica fechada até que existam envio de e-mail e um contato humano (SPEC E10, travas 3 e 5):
 
 | Variável | Para quê |
 |---|---|
@@ -154,7 +154,7 @@ Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, a
 | `AIRLAB_BASE_URL` | Endereço público do site (por exemplo `https://crivo.exemplo.org`), para o link do e-mail que avisa o médium de um pedido novo |
 | `AIRLAB_TIMESTAMP_ENABLED` | Carimbo de tempo externo da trilha (RFC 3161, FreeTSA). Ligado por padrão; exige saída HTTPS do servidor para `freetsa.org`. Só o hash da cabeça da trilha sai do servidor. Os tokens ficam em `/carimbos` e o `airlab verify` os reconfere |
 
-Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação do comitê de ética (CEP/Plataforma Brasil). O pedido de consulta, que coleta os dados sensíveis, só abre em produção com `AIRLAB_CEP_REFERENCE` definida. E o estudo P4 só congela, em produção, um questionário revisado: a versão `v1-rascunho` vale só no perfil local.
+Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação do comitê de ética (CEP/Plataforma Brasil). O pedido de consulta, que coleta os dados sensíveis, só abre em produção com `AIRLAB_CEP_REFERENCE` definida. E o estudo P1 só congela, em produção, um questionário revisado: a versão `v1-rascunho` vale só no perfil local.
 
 ## Contribuir
 
@@ -187,12 +187,12 @@ Sem Docker: todo passo do projeto — build, teste, execução, implantação e 
 
 ## Próximos passos
 
-Só o P4 (leitura estruturada automatizada). Ver `docs/SPEC.md`, seção 10.
+Só o P1 (leitura estruturada automatizada). Ver `docs/SPEC.md`, seção 10.
 
 1. ~~Ancoragem externa da trilha por carimbo de tempo RFC 3161~~ — fase 1, FreeTSA, feita; falta decidir se o primeiro envio ao médium espera o carimbo, e a fase 2 com OpenTimestamps (E8)
-2. Pacote de verificação do P4 (E9), depois da decisão de LGPD sobre publicar respostas sobre pessoas falecidas
+2. Pacote de verificação do P1 (E9), depois da decisão de LGPD sobre publicar respostas sobre pessoas falecidas
 3. Revisão do questionário `v1-rascunho` pelo pesquisador (questão em aberto 9)
-4. *Dry-run* completo do P4 com participantes fictícios
+4. *Dry-run* completo do P1 com participantes fictícios
 
 ## Autor
 
