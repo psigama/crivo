@@ -39,7 +39,7 @@ Uma vez, na VM. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinger
 
 4. **Aplicação**:
    - usuário de serviço: `sudo useradd --system --home /opt/airlab --shell /usr/sbin/nologin airlab`;
-   - diretórios: `sudo install -d -o airlab -g airlab -m 0750 /opt/airlab` e `sudo install -d -o airlab -g airlab -m 0700 /opt/airlab/data`;
+   - diretórios: `sudo install -d -o airlab -g airlab -m 0755 /opt/airlab` e `sudo install -d -o airlab -g airlab -m 0700 /opt/airlab/data`. O `/opt/airlab` precisa ser visível ao usuário `deploy` (seção 2): é por ele que o workflow vê o JAR atual e guarda a cópia `.previous` antes de trocar. Com a pasta fechada, essa cópia nunca é feita e não há versão para onde voltar. Os dados ficam em `data/`, que só o `airlab` lê;
    - banco: o PostgreSQL escuta só em `127.0.0.1`, com `listen_addresses = '127.0.0.1'` em `/etc/postgresql/18/main/conf.d/crivo.conf` (regra de implantação 4). São dois papéis: `airlab_owner`, dono do banco, com o qual o Flyway roda as migrações; e `airlab_app`, com o qual a aplicação conecta e que a migração `V10` reduz ao privilégio mínimo (na trilha, só `SELECT` e `INSERT`). A `V10` só cria o `airlab_app` se ele não existir, sem login; por isso ele é criado antes, já com login. Com `sudo -u postgres psql`, e senhas geradas por `openssl rand -hex 32`:
 
      ```sql
