@@ -3,53 +3,56 @@
 > Spec de alto nível. Cada épico abaixo vira uma spec detalhada própria antes da implementação.
 > Conformidade obrigatória com `CONSTITUTION.md`. Contexto e motivação em `VISION.md`. Fundamentação científica em `REFERENCES.md`.
 >
-> Versão 0.16 · novembro/2026 · 0.2: seção 2.1 "O que é uma leitura", regra "um item = uma afirmação" e referências · 0.3: critérios de inclusão de médiuns no pré-registro, regra de parada vinculante e unidade de análise por par (seções 5 e 9) · 0.4: medida primária pareada com Wilcoxon exato, teste de permutação de Pratt e Birge, controles de comprimento e de pistas temporais, escala de itens de cinco categorias e desvios de protocolo — derivados dos artigos em `references/` · 0.5: *sitter* passa a ser **consulente** em todo o texto em português, com a forma inglesa registrada no glossário e mantida nos identificadores do código · 0.6: épico E10, autoatendimento e automação, com as travas obrigatórias · 0.7: o Crivo passa a ser uma plataforma de protocolos de cognição anômala, com catálogo de protocolos (seção 1.1) e os épicos E11 e E12 — dois testes integralmente automatizáveis · 0.8: a semente dos testes de autoatendimento passa a ter duas metades, uma do servidor e uma do participante, o que remove a necessidade de confiar na plataforma quanto à ordem dos fatos · 0.9: protocolo **P4, leitura estruturada automatizada** (épico E13), o ramo AIR integralmente automatizado: contas com perfil fixo (consulente ou médium), questionário fechado preenchido pelo consulente e pelo médium e conferência automática contra o alvo e o chamariz; o catálogo passa a se dividir em **protocolos AIR** e **experimentos extras** · 0.10: fase B do P4 — questionário versionado `v1-rascunho`, pedido de consulta travado com compromisso salgado, rascunho só na sessão, campos de pareamento iguais aos do P1 e formulário fechado em produção sem referência do CEP; seção 10 atualizada · 0.11: fase C do P4 — estudo P4 congelado numa tela com o questionário no anexo, compromisso sobre a semente, ciclo automático de pareamento e envio, um médium sorteado por par, leitura travada com compromisso salgado, prazo com reenvio, e nenhum código de médium na trilha antes do desmascaramento · 0.12: fase D do P4 — desmascaramento automático no N, conferência com integridade verificada, análise primária e secundárias, relatório com hash, devolutiva do consulente e do médium; e o esclarecimento, na página inicial, de que o P4 não é mensagem do falecido nem resposta a perguntas · 0.13: fase E do P4 — sinalização de contas ligadas por índice cego, sem bloqueio e com revisão humana; teto de pares por médium no pré-registro; página pública dos estudos e relatórios · 0.14: **o P1, leitura pareada conduzida por equipe, é descontinuado** — não será implementado; o Crivo segue só com o protocolo AIR totalmente automático (P4). Os épicos E4 a E7, que eram do P1, ficam no texto como registro e sem implementação · 0.15: **ancoragem externa da trilha por carimbo de tempo RFC 3161, fase 1, com o FreeTSA** (E8) — a cabeça da trilha é carimbada logo depois de cada marco (congelamento, emenda, revelação da semente, relatório) e uma vez por dia se mudou; o token é conferido antes de ser guardado, fica público e a CLI o reconfere · 0.16: **os testes de ESP — P2 (E11) e P3 (E12) — saem do catálogo e da navegação do site do Crivo** e passam a ser apresentados pela PsiGama, na página de testes de percepção extrassensorial (`https://psigama.com/pes/`); o motor, as rotas e as garantias continuam no servidor do Crivo (seção 1.1, regra 7)
+> Versão 0.17 · novembro/2026 · 0.2: seção 2.1 "O que é uma leitura", regra "um item = uma afirmação" e referências · 0.3: critérios de inclusão de médiuns no pré-registro, regra de parada vinculante e unidade de análise por par (seções 5 e 9) · 0.4: medida primária pareada com Wilcoxon exato, teste de permutação de Pratt e Birge, controles de comprimento e de pistas temporais, escala de itens de cinco categorias e desvios de protocolo — derivados dos artigos em `references/` · 0.5: *sitter* passa a ser **consulente** em todo o texto em português, com a forma inglesa registrada no glossário e mantida nos identificadores do código · 0.6: épico E10, autoatendimento e automação, com as travas obrigatórias · 0.7: o Crivo passa a ser uma plataforma de protocolos de cognição anômala, com catálogo de protocolos (seção 1.1) e os épicos E11 e E12 — dois testes integralmente automatizáveis · 0.8: a semente dos testes de autoatendimento passa a ter duas metades, uma do servidor e uma do participante, o que remove a necessidade de confiar na plataforma quanto à ordem dos fatos · 0.9: protocolo **P4, leitura estruturada automatizada** (épico E13), o ramo AIR integralmente automatizado: contas com perfil fixo (consulente ou médium), questionário fechado preenchido pelo consulente e pelo médium e conferência automática contra o alvo e o chamariz; o catálogo passa a se dividir em **protocolos AIR** e **experimentos extras** · 0.10: fase B do P4 — questionário versionado `v1-rascunho`, pedido de consulta travado com compromisso salgado, rascunho só na sessão, campos de pareamento iguais aos do P1 e formulário fechado em produção sem referência do CEP; seção 10 atualizada · 0.11: fase C do P4 — estudo P4 congelado numa tela com o questionário no anexo, compromisso sobre a semente, ciclo automático de pareamento e envio, um médium sorteado por par, leitura travada com compromisso salgado, prazo com reenvio, e nenhum código de médium na trilha antes do desmascaramento · 0.12: fase D do P4 — desmascaramento automático no N, conferência com integridade verificada, análise primária e secundárias, relatório com hash, devolutiva do consulente e do médium; e o esclarecimento, na página inicial, de que o P4 não é mensagem do falecido nem resposta a perguntas · 0.13: fase E do P4 — sinalização de contas ligadas por índice cego, sem bloqueio e com revisão humana; teto de pares por médium no pré-registro; página pública dos estudos e relatórios · 0.14: **o P1, leitura pareada conduzida por equipe, é descontinuado** — não será implementado; o Crivo segue só com o protocolo AIR totalmente automático (P4). Os épicos E4 a E7, que eram do P1, ficam no texto como registro e sem implementação · 0.15: **ancoragem externa da trilha por carimbo de tempo RFC 3161, fase 1, com o FreeTSA** (E8) — a cabeça da trilha é carimbada logo depois de cada marco (congelamento, emenda, revelação da semente, relatório) e uma vez por dia se mudou; o token é conferido antes de ser guardado, fica público e a CLI o reconfere · 0.16: **os testes de ESP — P2 (E11) e P3 (E12) — saem do catálogo e da navegação do site do Crivo** e passam a ser apresentados pela PsiGama, na página de testes de percepção extrassensorial (`https://psigama.com/pes/`); o motor, as rotas e as garantias continuam no servidor do Crivo (seção 1.1, regra 7) · 0.17: **renumeração dos protocolos, antes de qualquer dado real** — P1-automático (era P4), P2-supervisionado (era P1, descontinuado), P3-precognição (era P2), P4-visão-remota (era P3) —; os testes de ESP voltam a ser listados no site do Crivo; uma página de protocolos (`/protocolos`) e uma por protocolo (`/protocolo/P1` a `/protocolo/P4`), com as rotas `/testes/...` redirecionadas; o questionário em vigor publicado, campo a campo, na página do P1
 
 ---
 
 ## 1. Escopo
 
-O Crivo é uma plataforma de **protocolos cegos para pesquisa de cognição anômala**. O primeiro ramo é a **recepção anômala de informação (AIR)**, isto é a mediunidade, e nele está o protocolo que motivou o projeto: a leitura pareada com cegamento múltiplo. O segundo ramo são os testes de **percepção extrassensorial (ESP)**, nos quais não há informação sobre pessoa falecida e o alvo é sorteado pelo próprio sistema; eles rodam no Crivo, mas desde a v0.16 são apresentados pela PsiGama, não pelo site do Crivo.
+O Crivo é uma plataforma de **protocolos cegos para pesquisa de cognição anômala**. O primeiro ramo é a **recepção anômala de informação (AIR)**, isto é a mediunidade, e nele está o protocolo que motivou o projeto: a leitura pareada com cegamento múltiplo. O segundo ramo são os testes de **percepção extrassensorial (ESP)**, nos quais não há informação sobre pessoa falecida e o alvo é sorteado pelo próprio sistema; eles rodam no Crivo e, desde a v0.17, voltam a ser listados no site dele, ao lado dos protocolos AIR e separados deles pelo ramo; a PsiGama também os apresenta.
 
 A distinção entre os dois ramos não é cosmética. Na literatura, *anomalous information reception* designa especificamente a obtenção de informação sobre um falecido sem via sensorial; um teste de precognição com alvo gerado depois da resposta não é AIR, e chamá-lo assim seria impreciso. O termo que cobre os dois é **cognição anômala**, e é o que a plataforma usa. O codinome técnico **AIR Lab** permanece nos pacotes Java, na CLI e nos artefatos Maven, como herança do primeiro protocolo.
 
-O ramo AIR tem **um protocolo ativo, o P4**, que roda inteiro pelo site, sem ninguém da equipe no circuito: o consulente responde a um questionário fechado sobre o falecido, o médium responde ao mesmo questionário conhecendo só o primeiro nome, e o sistema confere as respostas. O preço que ele paga — a ausência de experimentador *proxy* e de resposta livre — está declarado entre os seus limites (seção 1.1, regra 2).
+O ramo AIR tem **um protocolo ativo, o P1**, que roda inteiro pelo site, sem ninguém da equipe no circuito: o consulente responde a um questionário fechado sobre o falecido, o médium responde ao mesmo questionário conhecendo só o primeiro nome, e o sistema confere as respostas. O preço que ele paga — a ausência de experimentador *proxy* e de resposta livre — está declarado entre os seus limites (seção 1.1, regra 2).
 
-**Decisão da v0.14: o P1 está descontinuado.** A leitura pareada, conduzida por uma equipe (experimentador *proxy* e redator) e mais próxima da literatura, não será implementada. O projeto concentra o esforço no que pode rodar sem equipe e com pontuação objetiva. O P1 **fica no site apenas como referência**: a página dele descreve o desenho e os limites, não tem inscrição e diz que não é implementado; o catálogo não o oferece entre os protocolos para participar. O código P1 fica reservado. O que o P1 já tinha e é compartilhado com o P4 — estudo e pré-registro (E1), participantes (E2), sorteio (E3), trilha e CLI (E8) — continua valendo; os épicos exclusivos do P1 (E4 a E7) ficam nesta especificação só como registro.
+**Decisão da v0.14: o P2 está descontinuado.** A leitura pareada, conduzida por uma equipe (experimentador *proxy* e redator) e mais próxima da literatura, não será implementada. O projeto concentra o esforço no que pode rodar sem equipe e com pontuação objetiva. O P2 **fica no site apenas como referência**: a página dele descreve o desenho e os limites, não tem inscrição e diz que não é implementado; o catálogo não o oferece entre os protocolos para participar. O código P2 fica reservado. O que o P2 já tinha e é compartilhado com o P1 — estudo e pré-registro (E1), participantes (E2), sorteio (E3), trilha e CLI (E8) — continua valendo; os épicos exclusivos do P2 (E4 a E7) ficam nesta especificação só como registro.
 
-**Decisão da v0.16: os testes de ESP são apresentados pela PsiGama, não pelo site do Crivo.** O site do Crivo fica com o foco que o rótulo da página inicial declara — protocolo automatizado para pesquisa de recepção anômala de informação — e deixa de listar a escolha forçada (P2) e a visão remota (P3) no catálogo, na página inicial, na navegação e no rodapé. Quem os apresenta agora é a PsiGama, o site de pesquisa do autor, na página de testes de percepção extrassensorial (`https://psigama.com/pes/`). **O motor não muda de lugar**: os dois testes continuam rodando no servidor do Crivo, nas mesmas rotas e com as mesmas garantias — semente comprometida, alvo derivado no travamento, impressão travada antes das candidatas e trilha de auditoria —, porque a página da PsiGama aponta para essas rotas. Os códigos P2 e P3 continuam no catálogo: eles estão nas sessões e na trilha, e códigos não são renumerados.
+**Decisão da v0.17: renumeração e um catálogo só.** Antes de qualquer dado real — em produção não havia estudo, pedido, sessão nem evento de trilha —, os protocolos foram renumerados para que a numeração siga a ordem de importância: o protocolo ativo vem primeiro. Ao mesmo tempo, os testes de ESP, que a v0.16 tinha passado a apresentar só pela PsiGama, voltam a ser listados no site do Crivo, numa página de protocolos (`/protocolos`) com uma página por protocolo (`/protocolo/P1` a `/protocolo/P4`). A PsiGama continua apresentando os testes de PES e aponta para essas páginas. O motor, as garantias e os dados não mudam. A correspondência com a numeração anterior, que vale para o histórico de versões e para o que foi escrito até a v0.16:
 
-**Dentro do escopo**: um estudo por vez e por protocolo, um pesquisador (o **administrador** da instalação), exportação de dados e verificação; o P4 com inscrição aberta por conta; os dois testes de ESP em autoatendimento público, rodando no Crivo e apresentados pela PsiGama.
+| Até a v0.16 | Desde a v0.17 | Protocolo |
+|---|---|---|
+| P4 | **P1-automático** | Leitura estruturada automatizada |
+| P1 | **P2-supervisionado** | Leitura pareada cega (descontinuado na v0.14) |
+| P2 | **P3-precognição** | Escolha forçada precognitiva |
+| P3 | **P4-visão-remota** | Visão remota com quatro alvos |
+
+**Dentro do escopo**: um estudo por vez e por protocolo, um pesquisador (o **administrador** da instalação), exportação de dados e verificação; o P1 com inscrição aberta por conta; os dois testes de ESP, P3 e P4, em autoatendimento público no site do Crivo.
 **Fora do escopo**: multi-tenant, ganzfeld (exige emissor e cabine), presentimento e DMILS (exigem sensores), ESP em sonho (exige pernoite), juízes externos remunerados, aplicativo mobile, integração com IA na avaliação.
 
 ### 1.1 Catálogo de protocolos
 
-No site do Crivo, o catálogo se apresenta numa seção só: **protocolos AIR**, com o P4 em destaque e o P1 como referência. Os testes de ESP continuam no catálogo — código, garantias, limites declarados e motor são do Crivo —, mas desde a v0.16 **são apresentados pela PsiGama**, na página de testes de PES (`https://psigama.com/pes/`), e não aparecem nas páginas do Crivo (regra 7). Até a v0.15 eles formavam a seção de **experimentos extras** do catálogo.
+No site do Crivo, o catálogo é uma página só, **Protocolos** (`/protocolos`), com os quatro em ordem de código: o P1 em destaque, o P2 como referência e os testes de ESP, P3 e P4, que se fazem na hora e anônimos. Os protocolos AIR e os de ESP aparecem separados, com o ramo declarado (regra 4). Até a v0.15 os testes de ESP formavam a seção de **experimentos extras**; na v0.16 passaram a ser apresentados só pela PsiGama; desde a v0.17 voltam a ser listados aqui.
 
-| Onde se apresenta | Código | Nome público | Ramo | Acaso | Automação | Épico |
+| Código | Nome curto | Nome público | Ramo | Acaso | Automação | Épico |
 |---|---|---|---|---|---|---|
-| Crivo · protocolos AIR | **P4** | Leitura estruturada automatizada | AIR (mediunidade) | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe | E13 |
-| Crivo · só referência | **P1** | Leitura pareada cega — **descontinuado (0.14)** | AIR (mediunidade) | 50% | Parcial: exigia equipe — sessão síncrona com experimentador *proxy* e redator | E1–E9 (E4–E7 não serão implementados) |
-| PsiGama · testes de PES (desde 0.16) | **P2** | Escolha forçada precognitiva | ESP (precognição) | 25% | **Integral** | E11 |
-| PsiGama · testes de PES (desde 0.16) | **P3** | Visão remota com quatro alvos | ESP (resposta livre) | 25% | **Integral** | E12 |
+| **P1** | automático | Leitura estruturada automatizada | AIR (mediunidade) | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe | E13 |
+| **P2** | supervisionado | Leitura pareada cega — **descontinuado (0.14)**, só referência | AIR (mediunidade) | 50% | Parcial: exigia equipe — sessão síncrona com experimentador *proxy* e redator | E1–E9 (E4–E7 não serão implementados) |
+| **P3** | precognição | Escolha forçada precognitiva | ESP (precognição) | 25% | **Integral** | E11 |
+| **P4** | visão remota | Visão remota com quatro alvos | ESP (resposta livre) | 25% | **Integral** | E12 |
 
-Os códigos não são renumerados: eles já aparecem em trilhas, sessões e no repositório, e a ordem de apresentação é decisão de página, não de identidade do protocolo.
+O rótulo de cada protocolo é o código seguido do nome curto — **P1-automático**, **P2-supervisionado**, **P3-precognição**, **P4-visão-remota**. A numeração mudou uma vez, na v0.17, antes de qualquer dado real. Daqui em diante os códigos não são renumerados nem reaproveitados: eles entram nos compromissos publicados, nas sessões, na trilha e no repositório.
 
 Regras do catálogo:
 
 1. **Todo protocolo herda as mesmas garantias**: pré-registro congelado, sorteio com compromisso → revelação, trilha de auditoria encadeada por hash, rótulo confirmatório decidido pela política e pacote de verificação. Um protocolo que não possa oferecê-las não entra.
-2. **Cada protocolo declara o que o seu resultado não sustenta.** O P1 não distingue entre sobrevivência e telepatia com os vivos; o P2 e o P3 não dizem nada sobre falecidos. Isso é texto obrigatório na página do protocolo, não nota de rodapé.
+2. **Cada protocolo declara o que o seu resultado não sustenta.** O P2 não distingue entre sobrevivência e telepatia com os vivos; o P3 e o P4 não dizem nada sobre falecidos. Isso é texto obrigatório na página do protocolo, não nota de rodapé.
 3. **O acaso é declarado e verificável**, não estimado a partir dos dados.
-4. **P2 e P3 não substituem um protocolo AIR.** Eles existem porque são integralmente automatizáveis e porque qualquer pessoa pode conferir a lisura do próprio teste depois; servem de demonstração do método, não de prova sobre mediunidade — e é por isso que, desde a v0.16, ficam fora do site do Crivo (regra 7).
-5. **Um resultado do P4 não vale como replicação dos estudos com *proxy* da literatura.** O P4 ganha pontuação objetiva — ninguém julga se um item "encaixa" — e automação integral; perde o experimentador *proxy* e a resposta livre. Era esse o caminho inverso do P1, agora descontinuado.
-6. **Protocolo descontinuado fica só como referência**: mantém o código e a página, com o status "Só referência, não implementado", e sai da lista de protocolos para participar. Códigos nunca são reaproveitados.
-7. **Protocolo apresentado fora do Crivo não perde garantia nem endereço** (v0.16). O P2 e o P3 continuam rodando no servidor do Crivo, com tudo o que E11 e E12 exigem, e as rotas não mudam: `/testes/escolha-forcada` e `/testes/visao-remota` (página do protocolo) e `/testes/escolha-forcada/rodar` e `/testes/visao-remota/rodar` (o teste), com os passos e o resultado que seguem delas. A página de PES da PsiGama aponta para essas rotas — em produção, na raiz de `https://crivo.psigama.com`, sem prefixo de caminho —, e mudar um endereço quebraria a página dela. O que muda é só a apresentação:
-   - o site do Crivo **não os lista**: nem na página de protocolos (`/testes`), nem na página inicial, nem na navegação, nem no rodapé, nem em texto que os apresente como parte do Crivo;
-   - a página de protocolos diz, numa linha, que os testes de PES estão na PsiGama, com o link, para quem chega procurando por eles;
-   - as páginas dos dois testes — a do protocolo e a do resultado — levam de volta à página de PES da PsiGama, não ao catálogo do Crivo, e a navegação do Crivo não as marca como parte da seção de protocolos;
-   - os limites declarados (regra 2) continuam impressos na página de cada protocolo, servida pelo Crivo.
+4. **P3 e P4 não substituem um protocolo AIR.** Eles existem porque são integralmente automatizáveis e porque qualquer pessoa pode conferir a lisura do próprio teste depois; servem de demonstração do método, não de prova sobre mediunidade. Por isso a página de protocolos os mostra separados dos protocolos AIR, com o ramo (ESP) declarado.
+5. **Um resultado do P1 não vale como replicação dos estudos com *proxy* da literatura.** O P1 ganha pontuação objetiva — ninguém julga se um item "encaixa" — e automação integral; perde o experimentador *proxy* e a resposta livre. Era esse o caminho inverso do P2, agora descontinuado.
+6. **Protocolo descontinuado fica só como referência**: mantém o código e a página, com o status "Só referência, não implementado", e sai da lista de protocolos para participar. Códigos nunca são reaproveitados; a renumeração da v0.17, antes de qualquer dado real, foi a única exceção.
+7. **Endereços** (v0.17). `/protocolos` lista os quatro protocolos; `/protocolo/P1` a `/protocolo/P4` são as páginas de cada um, com os limites declarados (regra 2). Os testes de ESP rodam em `/protocolo/P3/rodar` e `/protocolo/P4/rodar`, com os passos e o resultado sob o mesmo caminho. As rotas antigas — `/testes`, `/testes/{nome}`, `/testes/{nome}/rodar` e `/testes/{nome}/resultado` — respondem com redirecionamento permanente (301) para as novas, porque a página de PES da PsiGama e links já publicados apontavam para elas. A página do P1 publica o questionário em vigor, campo a campo, com as opções e o que entra na nota (anexo do E13).
 
-   **Aceite da regra 7**: nenhuma página do Crivo fora das dos próprios testes lista o P2 ou o P3 nem leva a eles; as quatro rotas respondem; as páginas dos testes levam à PsiGama; e nenhum teste de E11 ou E12 é desativado.
+   **Aceite da regra 7**: a página de protocolos lista os quatro, com links para `/protocolo/P1` a `/protocolo/P4`; cada página imprime os limites; a do P1 mostra o questionário em vigor; as rotas antigas redirecionam com 301; e nenhum teste de E11 ou E12 é desativado.
 
 ## 2. Glossário
 
@@ -67,9 +70,9 @@ Regras do catálogo:
 | **Desmascaramento** | Revelação controlada de qual leitura era de qual alvo, depois que todas as avaliações forem fechadas |
 | **Pacote de verificação** | Conjunto exportado que permite a um terceiro auditar e reexecutar a análise |
 | **Administrador** | Quem opera a instalação e conduz o estudo: o pesquisador. Não é perfil que alguém escolha ao se inscrever; a conta vem da configuração do servidor |
-| **Pedido de consulta** (P4) | O que o consulente envia: o primeiro nome do falecido e as respostas dele ao questionário, travadas com hash antes de qualquer médium receber o pedido |
-| **Questionário** (P4) | Lista versionada de campos fechados sobre o falecido, a mesma para o consulente e para o médium, congelada no pré-registro |
-| **Leitura estruturada** (P4) | As respostas do médium ao questionário, conhecendo só o primeiro nome do alvo |
+| **Pedido de consulta** (P1) | O que o consulente envia: o primeiro nome do falecido e as respostas dele ao questionário, travadas com hash antes de qualquer médium receber o pedido |
+| **Questionário** (P1) | Lista versionada de campos fechados sobre o falecido, a mesma para o consulente e para o médium, congelada no pré-registro |
+| **Leitura estruturada** (P1) | As respostas do médium ao questionário, conhecendo só o primeiro nome do alvo |
 
 ### 2.1 O que é uma leitura
 
@@ -138,7 +141,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 ## 5. Épicos
 
-> **E4, E5, E6 e E7 eram do P1 e estão descontinuados desde a v0.14.** O texto deles fica como registro das decisões de desenho, e nada neles deve ser implementado. E1, E2, E3, E8 e E9 continuam valendo para o P4 naquilo em que se aplicam; o E10 e o E13 são o centro do projeto.
+> **E4, E5, E6 e E7 eram do P2 e estão descontinuados desde a v0.14.** O texto deles fica como registro das decisões de desenho, e nada neles deve ser implementado. E1, E2, E3, E8 e E9 continuam valendo para o P1 naquilo em que se aplicam; o E10 e o E13 são o centro do projeto.
 
 ### E1. Estudo e pré-registro
 **Objetivo**: criar um estudo e congelar o pré-registro de forma verificável.
@@ -168,7 +171,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 **Aceite**: com a semente revelada, uma CLI reproduz exatamente as mesmas alocações.
 
-### E4. Sessões — *descontinuado (P1)*
+### E4. Sessões — *descontinuado (P2)*
 **Objetivo**: conduzir as leituras sem vazamento.
 - Agenda de sessões **contrabalanceada**: o sorteio atribui índices de dia e de horário, de modo que nenhum par ocupe sistematicamente o primeiro ou o último horário do dia. É a defesa contra pistas temporais — uma referência ao tempo dentro da leitura ("aquele acidente de hoje") permite ao consulente deduzir qual leitura é a dele. O'Keeffe e Wiseman (2005) foram os primeiros a controlar isso.
 - O experimentador vê apenas o primeiro nome do alvo e um roteiro padronizado.
@@ -178,7 +181,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 **Aceite**: o arquivo armazenado não contém nome original, metadados de dispositivo nem dados de geolocalização.
 
-### E5. Redação — *descontinuado (P1)*
+### E5. Redação — *descontinuado (P2)*
 **Objetivo**: transformar a leitura em lista de itens avaliáveis, sem pistas espúrias.
 - O redator vê a transcrição sem saber a qual consulente ela pertence.
 - Divide em itens numerados, com **uma única afirmação verificável por item**. Itens com várias afirmações dificultam a pontuação, uma crítica feita ao formato de O'Keeffe & Wiseman, 2005 (ver `REFERENCES.md`).
@@ -187,9 +190,9 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 **Aceite**: as duas leituras de um par chegam ao consulente em formato idêntico e sem o primeiro nome.
 
-### E6. Avaliação cega — *descontinuado (P1)*
+### E6. Avaliação cega — *descontinuado (P2)*
 **Objetivo**: o consulente avalia as duas leituras do par sem saber qual é a dele.
-- Acesso por link de uso único e expirável (sem conta permanente). Vale para o P1; no P4 o consulente tem conta, mas não avalia leitura nenhuma (E13).
+- Acesso por link de uso único e expirável (sem conta permanente). Vale para o P2; no P1 o consulente tem conta, mas não avalia leitura nenhuma (E13).
 - Para cada item: escala pré-registrada de cinco categorias — *encaixe óbvio / encaixe parcial ou interpretado / sem encaixe / **encaixa em outra pessoa próxima** / não sei avaliar*. As duas categorias intermediárias exigem que o avaliador **escreva a interpretação**, e só o encaixe óbvio conta para a acurácia da medida primária. A categoria "encaixa em outra pessoa" existe porque, sem ela, o item que descreve um parente vivo é forçado a virar acerto ou erro, e em qualquer dos dois casos a explicação alternativa desaparece da conta.
 - Os itens são apresentados em **ordem sorteada**, derivada da semente, para que uma pista num item não contamine a leitura da lista inteira.
 - As duas leituras de um par chegam com **comprimento comparável**: se a diferença de itens passar da tolerância pré-registrada, a mais longa é cortada por subamostra sorteada da semente. Nos dados de O'Keeffe e Wiseman as leituras iam de 6 a 92 afirmações, e a mais longa e mais genérica recebeu as notas mais altas de todos os consulentes — comprimento, por si só, é pista e é confundidor.
@@ -198,7 +201,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 **Aceite**: a interface e a API do consulente não expõem nenhum identificador que permita inferir qual leitura é a dele, nem por ordem, ID sequencial ou data.
 
-### E7. Desmascaramento e análise — *descontinuado (P1); no P4, ver E13, fase D*
+### E7. Desmascaramento e análise — *descontinuado (P2); no P1, ver E13, fase D*
 **Objetivo**: revelar e analisar exatamente como foi pré-registrado.
 - Desmascaramento permitido só quando todas as avaliações estiverem fechadas (ou o prazo pré-registrado tiver expirado). É uma ação explícita e irreversível.
 - Revelação da semente.
@@ -224,7 +227,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 #### Ancoragem externa — fase 1: FreeTSA (v0.15)
 
-A trilha encadeada por hash detecta qualquer alteração de um evento isolado, mas não impede que quem opera a instalação **reescreva a cadeia inteira** e recalcule todos os hashes. No P4 isso importa: o compromisso da semente e o hash do pré-registro são publicados pela própria plataforma, e nenhum participante está no circuito no momento do congelamento (questão em aberto 8). A ancoragem externa fecha essa porta: um terceiro independente atesta que a cabeça da trilha já existia num instante, e a reescrita posterior passa a ser detectável.
+A trilha encadeada por hash detecta qualquer alteração de um evento isolado, mas não impede que quem opera a instalação **reescreva a cadeia inteira** e recalcule todos os hashes. No P1 isso importa: o compromisso da semente e o hash do pré-registro são publicados pela própria plataforma, e nenhum participante está no circuito no momento do congelamento (questão em aberto 8). A ancoragem externa fecha essa porta: um terceiro independente atesta que a cabeça da trilha já existia num instante, e a reescrita posterior passa a ser detectável.
 
 - **O que se carimba: a cabeça da trilha.** O valor enviado é o próprio hash do último evento — 32 bytes, já um SHA-256 —, como `messageImprint` com algoritmo SHA-256. Como cada evento contém o hash do anterior, um carimbo atesta a trilha inteira até aquele evento, inclusive o hash do pré-registro e o compromisso da semente (evento de congelamento) e o hash do relatório.
 - **Só sai o hash.** Nenhum dado pessoal, nenhum conteúdo: o carimbador recebe 32 bytes que não revelam nada (P6). O FreeTSA guarda só o IP de quem pede, para coibir abuso, e não guarda os hashes.
@@ -276,9 +279,9 @@ vazamento ou remove um grau de liberdade do pesquisador; não automatizar o que 
   Moreira-Almeida (2022): dos dois estudos em que o médium não interagiu com ninguém, ambos
   deram nulo. O agendamento, a liberação do nome, o upload do áudio e a transcrição são
   automatizados; a sessão permanece síncrona, com *proxy*. Um braço assíncrono só é admissível
-  como variante **declarada no pré-registro**, nunca como padrão. **O P4 (E13) é essa variante**,
+  como variante **declarada no pré-registro**, nunca como padrão. **O P1 (E13) é essa variante**,
   declarada como protocolo próprio, com a ausência do *proxy* escrita entre os limites dele; o
-  P1 continua síncrono.
+  P2 continua síncrono.
 - **Nenhuma avaliação automática de conteúdo**, em nenhuma etapa (P10).
 
 #### Travas obrigatórias
@@ -287,7 +290,7 @@ vazamento ou remove um grau de liberdade do pesquisador; não automatizar o que 
    quantas unidades independentes faltam para o alvo — e nunca taxa de acerto, diferença entre
    alvo e chamariz, ou qualquer função dos escores. A projeção de progresso não tem campo de
    desfecho, por construção, e há teste estrutural que verifica isso. Sem esta trava, a
-   automação reintroduz a parada opcional que o P2 existe para impedir.
+   automação reintroduz a parada opcional que o P3 existe para impedir.
 2. **Papel único por pessoa em cada estudo.** Ninguém é médium e consulente no mesmo estudo, e
    experimentador e redator são pessoas diferentes. A tentativa é recusada no domínio e
    registrada na trilha. Com cadastro aberto, o conluio é o risco de fraude mais sério, e é o
@@ -309,11 +312,11 @@ vazamento ou remove um grau de liberdade do pesquisador; não automatizar o que 
 sinalizações; em nenhum momento, antes do desmascaramento, qualquer tela ou API expõe função
 dos escores; e a tentativa de acumular papéis conflitantes é recusada e auditada.
 
-### E11. Escolha forçada precognitiva (P2)
+### E11. Escolha forçada precognitiva (P3)
 
 **Objetivo**: um teste que qualquer pessoa faz pelo navegador, sem intermediário, e cuja lisura ela pode conferir depois por conta própria.
 
-**Apresentação (v0.16)**: o teste é apresentado pela PsiGama, na página de testes de PES (`https://psigama.com/pes/`), e o site do Crivo não o lista. O motor, as rotas (`/testes/escolha-forcada` e `/testes/escolha-forcada/rodar`) e todas as garantias abaixo continuam no Crivo (seção 1.1, regra 7).
+**Apresentação (v0.17)**: listado na página de protocolos do Crivo, com página em `/protocolo/P3` e teste em `/protocolo/P3/rodar`; a PsiGama também o apresenta e aponta para cá (seção 1.1, regra 7).
 
 **Desenho**: a cada tentativa, a pessoa escolhe entre quatro alternativas. O alvo daquela tentativa é derivado de uma semente sorteada no início da sessão e **só é calculado e mostrado depois que a resposta está travada**. Acaso = 25%, declarado.
 
@@ -342,24 +345,24 @@ dos escores; e a tentativa de acumular papéis conflitantes é recusada e audita
 
 **Aceite**: nenhuma tentativa existe antes de o participante contribuir com a metade dele, recusado também pelo banco; as duas metades reveladas reproduzem a semente efetiva, e ela reproduz exatamente os alvos gravados; a metade do servidor confere com o compromisso publicado antes de a outra existir; o alvo não é obtível por nenhuma via antes da resposta travada; durante a sessão nenhuma tela expõe função dos escores; duas sessões com a mesma semente e as mesmas respostas dão o mesmo resultado; e o verificador do navegador acusa divergência quando a semente é alterada num único dígito.
 
-### E12. Visão remota com quatro alvos (P3)
+### E12. Visão remota com quatro alvos (P4)
 
 **Objetivo**: um teste de resposta livre, também integralmente automatizado, mais próximo do que a literatura chama de *free-response*.
 
-**Apresentação (v0.16)**: como o P2, apresentado pela PsiGama e não listado pelo site do Crivo; o motor, as rotas (`/testes/visao-remota` e `/testes/visao-remota/rodar`) e as garantias abaixo continuam no Crivo (seção 1.1, regra 7).
+**Apresentação (v0.17)**: como o P3, listado na página de protocolos do Crivo, com página em `/protocolo/P4` e teste em `/protocolo/P4/rodar` (seção 1.1, regra 7).
 
 **Desenho**: o sistema sorteia um alvo entre as imagens de um banco versionado. A pessoa escreve a impressão dela **antes** de ver qualquer candidata. Só então o sistema apresenta quatro imagens — o alvo e três chamarizes, sorteados da mesma forma — e a pessoa as ordena da mais parecida com a impressão à menos parecida. Acerto = alvo em primeiro lugar; acaso = 25%, declarado.
 
 - A impressão escrita é **travada antes** de as candidatas aparecerem, e a trilha registra o hash dela. Sem isso, a pessoa pode reescrever a impressão depois de ver as imagens, que é a objeção padrão ao autojulgamento.
-- O alvo e os três chamarizes saem da mesma semente comprometida, pelo mesmo mecanismo do P2.
+- O alvo e os três chamarizes saem da mesma semente comprometida, pelo mesmo mecanismo do P3.
 - O banco de imagens é **versionado**, e a versão usada fica gravada na sessão: trocar as imagens depois não muda o que foi analisado.
 - Vale a mesma regra de resultado parcial, de sessão abandonada e de pool exploratório do E11.
 
-**Limite declarado**: quem julga a correspondência é a própria pessoa, e isso reintroduz a crítica de "como se pontua" que o P2 não tem. É o preço do formato de resposta livre, e fica escrito na página do protocolo. A estatística é de ordenação, com acaso exato.
+**Limite declarado**: quem julga a correspondência é a própria pessoa, e isso reintroduz a crítica de "como se pontua" que o P3 não tem. É o preço do formato de resposta livre, e fica escrito na página do protocolo. A estatística é de ordenação, com acaso exato.
 
 **Aceite**: a impressão não pode ser alterada depois de as candidatas aparecerem; a semente revelada reproduz alvo e chamarizes; e a versão do banco de imagens usada na sessão é a que o pacote de verificação exporta.
 
-### E13. Leitura estruturada automatizada (P4)
+### E13. Leitura estruturada automatizada (P1)
 
 **Objetivo**: um protocolo AIR que roda inteiro pelo site, do cadastro ao relatório, sem ninguém da equipe no circuito — e sem que ninguém, nem o consulente, julgue se uma afirmação "encaixa".
 
@@ -423,7 +426,7 @@ Para cada par (A, B), com a leitura `R_A` (feita com o nome de A) e `R_B`:
 
 | Perfil | Tela | Conteúdo |
 |---|---|---|
-| Público | Página do protocolo | O que é o P4 e **o que ele não é** — não é carta nem mensagem da pessoa falecida, nem resposta a perguntas do consulente, só um experimento de confirmação (ou não) da recepção anômala de informação —, como participar, o que o resultado não sustenta. O mesmo esclarecimento está na página inicial |
+| Público | Página do protocolo | O que é o P1 e **o que ele não é** — não é carta nem mensagem da pessoa falecida, nem resposta a perguntas do consulente, só um experimento de confirmação (ou não) da recepção anômala de informação —, como participar, o que o resultado não sustenta. O mesmo esclarecimento está na página inicial; o questionário em vigor, campo a campo, com as opções e o que entra na nota (`/protocolo/P1`) |
 | Público | Criar conta | Nome, e-mail, senha, perfil (consulente ou médium), termo, contato humano |
 | Público | Confirmar e-mail | Resultado do link de confirmação |
 | Consulente | Painel | Situação do pedido: rascunho, travado, aguardando par, enviado ao médium, leitura recebida, aguardando o fechamento do estudo, devolutiva |
@@ -443,7 +446,7 @@ Um aviso por etapa concluída: conta confirmada, pedido travado, par formado e e
 
 O médium recebe e-mail quando chega um pedido; o consulente, quando a devolutiva está disponível.
 
-#### Matriz de visibilidade do P4
+#### Matriz de visibilidade do P1
 
 | Informação ↓ / Papel → | Administrador | Médium | Consulente |
 |---|---|---|---|
@@ -457,7 +460,7 @@ O médium recebe e-mail quando chega um pedido; o consulente, quando a devolutiv
 
 **As notas não existem antes do desmascaramento**: a conferência só roda depois dele. Isso é mais forte do que escondê-las (E10, trava 1).
 
-#### Travas próprias do P4
+#### Travas próprias do P1
 
 Além das seis travas do E10:
 
@@ -467,10 +470,10 @@ Além das seis travas do E10:
 4. Perfil fixo imposto no banco; nenhum caminho do site cria administrador.
 5. Conferência só depois do desmascaramento, por regra determinística e publicada.
 
-#### O que o resultado do P4 não sustenta
+#### O que o resultado do P1 não sustenta
 
 - Não distingue sobrevivência de telepatia com os vivos: as respostas existem na memória do consulente e no banco.
-- Não tem experimentador *proxy*. Nos dois estudos da comparação de Silva e Moreira-Almeida (2022) em que o médium não interagiu com ninguém, o resultado foi nulo; um nulo no P4 não refuta o P1.
+- Não tem experimentador *proxy*. Nos dois estudos da comparação de Silva e Moreira-Almeida (2022) em que o médium não interagiu com ninguém, o resultado foi nulo; um nulo no P1 não refuta o P2.
 - O questionário fechado só captura o que cabe nos campos. As afirmações livres e específicas, que costumam ser as mais marcantes de uma leitura, ficam fora da nota.
 - O primeiro nome carrega informação (gênero, às vezes geração e região). O pareamento e os campos fora da nota reduzem esse vazamento, mas não o eliminam.
 - Com inscrição aberta, o conluio entre um médium e um consulente que se conhecem e usam e-mails diferentes não é detectável com certeza. O sorteio do médium e a sinalização de contas ligadas reduzem o risco.
@@ -479,7 +482,7 @@ Além das seis travas do E10:
 
 | Fase | Conteúdo | Estado |
 |---|---|---|
-| A | Catálogo em duas seções, páginas do P4, contas com perfil fixo, confirmação por e-mail, painéis por perfil, avisos de conta ao administrador | Implementada na SPEC 0.9 |
+| A | Catálogo em duas seções, páginas do P1, contas com perfil fixo, confirmação por e-mail, painéis por perfil, avisos de conta ao administrador | Implementada na SPEC 0.9 |
 | B | Questionário versionado e pedido de consulta com compromisso salgado | Implementada na SPEC 0.10 |
 | C | Pareamento, sorteio do médium, pedido ao médium, leitura, prazos e reenvio | Implementada na SPEC 0.11 |
 | D | Desmascaramento automático no N, conferência, análise, relatório e devolutiva | Implementada na SPEC 0.12 |
@@ -492,8 +495,8 @@ Além das seis travas do E10:
 - **A trilha recebe o código do pedido, o código do consulente, a versão do questionário e o compromisso — nada mais.** Nem os campos de pareamento entram nela: só o compromisso precisa ser público antes da leitura.
 - **Onde fica cada coisa**: primeiro nome, respostas e sal, cifrados, em `identity.consultation_detail`; em `research.consultation_request`, o código, o consulente, a versão, os três atributos de pareamento e o compromisso. O banco recusa alterar o pedido travado e recusa `DELETE`; a única alteração admitida no detalhe é o apagamento, na desistência.
 - **Um pedido ativo por consulente.** Vários pedidos da mesma pessoa criariam dependência entre unidades de análise. Imposto por índice único parcial.
-- **Campos de pareamento são obrigatórios**: gênero, faixa etária e período do falecimento não aceitam "não sei", porque sem eles não há par. As faixas são as mesmas do P1, para que o pareamento seja o mesmo código.
-- **Pedido antes do congelamento.** Como no P1, em que os alvos são cadastrados antes do sorteio, o pedido vem antes do congelamento do estudo. A garantia é outra: na fase C, só entra no estudo o pedido cuja versão de questionário é a declarada no pré-registro congelado.
+- **Campos de pareamento são obrigatórios**: gênero, faixa etária e período do falecimento não aceitam "não sei", porque sem eles não há par. As faixas são as mesmas do P2, para que o pareamento seja o mesmo código.
+- **Pedido antes do congelamento.** Como no P2, em que os alvos são cadastrados antes do sorteio, o pedido vem antes do congelamento do estudo. A garantia é outra: na fase C, só entra no estudo o pedido cuja versão de questionário é a declarada no pré-registro congelado.
 - **Comitê de ética (E10, trava 4)**: em produção, o formulário de pedido fica fechado até que `AIRLAB_CEP_REFERENCE` esteja definida. No perfil local ele abre, porque ali os dados são fictícios.
 - **Desistência**: excluir a conta retira o pedido ativo — o detalhe cifrado é apagado, o pedido fica como retirado, e a trilha registra.
 
@@ -501,16 +504,16 @@ Além das seis travas do E10:
 
 #### Fase C — decisões
 
-- **Estudo P4 numa tela, sem rascunho gravado.** O administrador preenche o pré-registro — título, número de pares (N), prazo do médium, efeito esperado, hipóteses e critérios de inclusão de médiuns —, revê e congela num passo só. Como no pedido do consulente, o banco recebe o estudo já congelado. O documento congelado leva um **anexo canônico** com o questionário inteiro (versão, campos, opções e campos fora da nota), o critério de pareamento, o prazo e o N (trava 1 do P4). Um estudo P4 aberto por vez.
+- **Estudo P1 numa tela, sem rascunho gravado.** O administrador preenche o pré-registro — título, número de pares (N), prazo do médium, efeito esperado, hipóteses e critérios de inclusão de médiuns —, revê e congela num passo só. Como no pedido do consulente, o banco recebe o estudo já congelado. O documento congelado leva um **anexo canônico** com o questionário inteiro (versão, campos, opções e campos fora da nota), o critério de pareamento, o prazo e o N (trava 1 do P1). Um estudo P1 aberto por vez.
 - **Questionário em rascunho não congela em produção.** Uma versão terminada em `-rascunho` só é aceita no perfil local, onde os dados são fictícios. Em produção, o estudo exige a versão revisada pelo pesquisador (questão em aberto 9).
-- **Compromisso sobre a semente.** No P1 o sorteio acontece de uma vez e o compromisso cobre o plano inteiro. No P4 os pares se formam ao longo do estudo, então o compromisso, publicado no documento congelado, é sobre a semente: `SHA-256(semente || "|" || entrada canônica do estudo)`. Cada sorteio é função pública da semente e de entradas registradas: o médium do par é uma escolha de `SeedStream(semente, "p4-medium:" + par + ":" + tentativa)` sobre os médiuns elegíveis em ordem canônica, e a ordem dos dois nomes é um embaralhamento com `"p4-name-order:" + par + ":" + tentativa`. A semente fica em custódia cifrada e é revelada no desmascaramento (fase D).
+- **Compromisso sobre a semente.** No P2 o sorteio acontece de uma vez e o compromisso cobre o plano inteiro. No P1 os pares se formam ao longo do estudo, então o compromisso, publicado no documento congelado, é sobre a semente: `SHA-256(semente || "|" || entrada canônica do estudo)`. Cada sorteio é função pública da semente e de entradas registradas: o médium do par é uma escolha de `SeedStream(semente, "p4-medium:" + par + ":" + tentativa)` sobre os médiuns elegíveis em ordem canônica, e a ordem dos dois nomes é um embaralhamento com `"p4-name-order:" + par + ":" + tentativa`. A semente fica em custódia cifrada e é revelada no desmascaramento (fase D).
 - **Ciclo automático.** Um ciclo do servidor — a cada minuto, por padrão, e logo depois do congelamento — faz, nesta ordem: desfaz pares com pedido retirado; vence os pedidos ao médium fora do prazo; cancela os pedidos de médium que excluiu a conta; forma pares; envia ao médium os pares que estão sem médium. Rodar duas vezes seguidas não muda nada.
 - **Pareamento.** Entram os pedidos travados na versão do questionário congelada. Mesmo estrato (gênero, faixa etária e período do falecimento); dentro do estrato, por ordem de travamento (e pelo código, no empate), dois a dois, até N pares ativos. Um pedido sem par espera, e o painel do consulente diz isso.
-- **Um médium por par, que faz as duas leituras**, uma com cada nome, como no P1. Assim a tendência própria do médium — responder "morreu do coração" a todo pedido, por exemplo — entra nos dois lados de `d` e se cancela.
+- **Um médium por par, que faz as duas leituras**, uma com cada nome, como no P2. Assim a tendência própria do médium — responder "morreu do coração" a todo pedido, por exemplo — entra nos dois lados de `d` e se cancela.
 - **Médiuns elegíveis**: contas de médium confirmadas e ativas no momento do sorteio, menos quem já recebeu este par. A lista vai ao banco em forma canônica e o hash dela, à trilha, para que o sorteio seja refeito depois. Sem médium elegível, o par espera.
 - **O médium responde só aos campos da nota.** Gênero, faixa etária e período não contam e são iguais (ou dedutíveis do nome) dentro do par; perguntá-los seria trabalho sem uso. Cada campo exige uma opção ou "não recebi" — nada fica em branco.
 - **Leitura travada com compromisso salgado**, pela mesma razão do pedido: as respostas fechadas do médium também têm pouca entropia, e a trilha é pública. Respostas e sal ficam cifrados; a regra está em `structured.ReadingCommitment`. Revisão antes de travar, com o rascunho só na sessão.
-- **A trilha não liga médium a par antes do desmascaramento.** Nem o envio, nem a liberação dos nomes, nem a leitura travada levam o código do médium à trilha (matriz do P4: ligação pedido → médium ✗ para o administrador). O vínculo fica no banco e entra no pacote de verificação depois do desmascaramento.
+- **A trilha não liga médium a par antes do desmascaramento.** Nem o envio, nem a liberação dos nomes, nem a leitura travada levam o código do médium à trilha (matriz do P1: ligação pedido → médium ✗ para o administrador). O vínculo fica no banco e entra no pacote de verificação depois do desmascaramento.
 - **Nomes só para quem recebeu.** Só o módulo `participant` lê o primeiro nome, e só o entrega a um médium que tenha liberação registrada (`identity.first_name_release`) e não revogada para aquele pedido. Vencimento, cancelamento e retirada revogam a liberação.
 - **Prazo**: o declarado no pré-registro (padrão: 14 dias). Vencido, o pedido ao médium é encerrado como vencido, as leituras dele que já estavam travadas ficam registradas mas **fora da análise**, e o par vai a outro médium sorteado (tentativa seguinte). A mesma regra vale para o médium que exclui a conta. As duas regras de exclusão entram no pré-registro.
 - **Retirada do consulente**: o par se desfaz, o pedido ao médium é cancelado, e o outro pedido volta a aguardar par. Par desfeito não entra na análise.
@@ -520,7 +523,7 @@ Além das seis travas do E10:
 
 #### Fase D — decisões
 
-- **Desmascaramento automático, no N.** Quando os N pares ativos têm as duas leituras travadas, o próprio ciclo encerra a coleta e desmascara, numa transação só: o estudo passa a coleta encerrada; a semente é revelada; o estudo passa a desmascarado; os pedidos dos pares passam a "estudo concluído"; a conferência, a análise e o relatório rodam; e o estudo passa a relatado. Ninguém escolhe o momento — nem o administrador. O desmascaramento do P4 mora no módulo `structured`, onde estão as entradas dele; o módulo `unblinding` continua reservado ao P1.
+- **Desmascaramento automático, no N.** Quando os N pares ativos têm as duas leituras travadas, o próprio ciclo encerra a coleta e desmascara, numa transação só: o estudo passa a coleta encerrada; a semente é revelada; o estudo passa a desmascarado; os pedidos dos pares passam a "estudo concluído"; a conferência, a análise e o relatório rodam; e o estudo passa a relatado. Ninguém escolhe o momento — nem o administrador. O desmascaramento do P1 mora no módulo `structured`, onde estão as entradas dele; o módulo `unblinding` continua reservado ao P2.
 - **Nenhuma nota antes, imposto no banco.** As tabelas de notas e de relatório recusam linha de estudo que não esteja desmascarado. As respostas do consulente só saem do módulo `participant` para pedido em "estudo concluído".
 - **Integridade conferida antes de pontuar.** Com os sais revelados, o sistema recalcula o compromisso de cada pedido e de cada leitura, e o relatório diz quantos conferiram.
 - **Conferência**: exatamente a regra da seção "Conferência automática", sobre os pares ativos e a leitura do envio concluído. Pares desfeitos e leituras de envios vencidos ou cancelados ficam fora, como o pré-registro declara.
@@ -529,7 +532,7 @@ Além das seis travas do E10:
 - **Devolutiva do consulente**: as próprias respostas ao lado das do médium para o seu alvo, campo a campo, com os campos fora da comparação marcados. Mostra também quantos campos coincidiram com as suas respostas e, para comparação, quantos coincidiram com as do outro consulente do par — só a contagem, nunca as respostas dele —, além do resultado do estudo inteiro. O texto diz que um resultado individual não fala da pessoa falecida nem do médium: o que o estudo avalia é o conjunto.
 - **Vazamento residual declarado**: o campo marcado como fora da comparação revela ao consulente que o outro respondeu "não sei" ali, e a contagem contra o chamariz revela quantas respostas do outro coincidem com a leitura. Nenhuma resposta do outro consulente é mostrada.
 - **Devolutiva do médium**: para cada leitura, as coincidências com o alvo e com o chamariz e o `d` do par — nunca as respostas dos consulentes.
-- **Administrador**: o relatório inteiro. Depois dele, o estudo deixa de estar aberto e um novo estudo P4 pode ser criado; os pedidos que esperavam par continuam travados e entram no próximo.
+- **Administrador**: o relatório inteiro. Depois dele, o estudo deixa de estar aberto e um novo estudo P1 pode ser criado; os pedidos que esperavam par continuam travados e entram no próximo.
 - **Avisos e e-mail**: "estudo desmascarado" e "relatório pronto" para o administrador, com o código do estudo. Os consulentes e médiuns do estudo recebem e-mail dizendo que a devolutiva está disponível, sem nota nenhuma na mensagem.
 - **O que fica para o E9**: o pacote de verificação público, com respostas, sais, envios e listas de elegíveis, depende de uma decisão de LGPD sobre publicar respostas sobre pessoas falecidas.
 
@@ -541,16 +544,16 @@ Além das seis travas do E10:
 - **Sinalizar não é bloquear.** Nenhuma conta é recusada nem suspensa. Enquanto a sinalização está pendente, ou depois que o administrador confirmar que as contas são da mesma pessoa, o sistema só evita o encontro: o médium sinalizado não é sorteado para o par de um consulente sinalizado com ele, e dois consulentes sinalizados entre si não formam par. Se o administrador decidir que as contas não têm relação, a restrição cai. A decisão é registrada uma vez e não muda.
 - **Trilha**: a sinalização e a revisão entram com o código da sinalização, o tipo de sinal e a decisão — sem os códigos das contas, porque a trilha é pública e uma suspeita não é um fato.
 - **A desistência apaga os sinais** da conta, como o resto dos dados identificáveis. A sinalização fica, só com os códigos pseudônimos.
-- **Limite declarado**: os sinais pegam o caso descuidado — o mesmo nome, um apelido do mesmo e-mail. Quem se cadastra com nome e e-mail diferentes não é detectado; isso já está entre o que o P4 não sustenta.
+- **Limite declarado**: os sinais pegam o caso descuidado — o mesmo nome, um apelido do mesmo e-mail. Quem se cadastra com nome e e-mail diferentes não é detectado; isso já está entre o que o P1 não sustenta.
 - **Teto de pares por médium**, declarado no pré-registro (padrão: 10, ou N se N for menor) e no anexo canônico. O médium que já tem o teto de pares no estudo, somando pedidos abertos e concluídos, sai da lista de elegíveis. A lista registrada em cada envio já é a filtrada, e o sorteio continua reproduzível. Com poucos médiuns, os pares esperam, e o painel do administrador mostra quantos (questão 12).
-- **Página pública dos estudos** (`/estudos`): lista os estudos P4 e, para cada um, o documento do pré-registro com o hash e o compromisso da semente. Enquanto o estudo coleta, só contagens; depois do desmascaramento, o relatório inteiro, com o hash que está na trilha. Só o que é público por construção (P2, P7): códigos pseudônimos, contagens, notas por par e a semente revelada — nunca nome, resposta ou leitura.
+- **Página pública dos estudos** (`/estudos`): lista os estudos P1 e, para cada um, o documento do pré-registro com o hash e o compromisso da semente. Enquanto o estudo coleta, só contagens; depois do desmascaramento, o relatório inteiro, com o hash que está na trilha. Só o que é público por construção (P2, P7): códigos pseudônimos, contagens, notas por par e a semente revelada — nunca nome, resposta ou leitura.
 - **Vazamento residual declarado**: quem conhece o código do próprio pedido acha o par na trilha e, no relatório público, as quatro contagens do par. São contagens, nunca respostas.
 
 **Aceite da fase E**: nenhuma sinalização bloqueia conta; médium e consulente sinalizados nunca se encontram num par enquanto a sinalização não for descartada; nenhum médium passa do teto; a página pública não mostra, antes do desmascaramento, nada além do pré-registro e de contagens.
 
 #### Anexo — questionário, versão `v1-rascunho`
 
-Rascunho para revisão do pesquisador; o que vale é a versão congelada no pré-registro. Implementado em `catalog.Questionnaires`. Todo campo pontuável tem também "não sei" (consulente) e "não recebi" (médium); os campos de pareamento são obrigatórios para o consulente.
+Rascunho para revisão do pesquisador; o que vale é a versão congelada no pré-registro. Implementado em `catalog.Questionnaires` e publicado, campo a campo, na página do P1 (`/protocolo/P1`). Todo campo pontuável tem também "não sei" (consulente) e "não recebi" (médium); os campos de pareamento são obrigatórios para o consulente.
 
 | Campo | Opções | Na nota? |
 |---|---|---|
@@ -595,13 +598,13 @@ Account(identity schema: code, profile fixo, nome e e-mail cifrados, índice ceg
         hash da senha, termo aceito, email_confirmed_at)
 Account 1──* EmailConfirmation (token_sha256, expires_at, used_at)
 AdminNotice (kind, subject_code, at)                      — sem dado pessoal, sem escore
-ConsultationRequest(P4) ──1 Account(consulente), answers_commitment, locked_at     [fase B]
-StructuredStudy(P4) ──1 Study, questionnaire_version, target_pairs, deadline_days     [fase C]
-StructuredPair(P4) ──2 ConsultationRequest, dissolved_at                              [fase C]
-ReadingAssignment(P4) ──1 StructuredPair, ──1 Account(médium), attempt, pool, due_at  [fase C]
-StructuredReading(P4) ──1 ReadingAssignment, ──1 ConsultationRequest, commitment      [fase C]
-StructuredScore(P4) ──1 StructuredPair, comparable_fields, s_aa, s_ab, s_bb, s_ba, d  [fase D]
-StructuredReport(P4) ──1 Study, document, results, sha256                            [fase D]
+ConsultationRequest(P1) ──1 Account(consulente), answers_commitment, locked_at     [fase B]
+StructuredStudy(P1) ──1 Study, questionnaire_version, target_pairs, deadline_days     [fase C]
+StructuredPair(P1) ──2 ConsultationRequest, dissolved_at                              [fase C]
+ReadingAssignment(P1) ──1 StructuredPair, ──1 Account(médium), attempt, pool, due_at  [fase C]
+StructuredReading(P1) ──1 ReadingAssignment, ──1 ConsultationRequest, commitment      [fase C]
+StructuredScore(P1) ──1 StructuredPair, comparable_fields, s_aa, s_ab, s_bb, s_ba, d  [fase D]
+StructuredReport(P1) ──1 Study, document, results, sha256                            [fase D]
 FirstNameRelease(identity) ──1 ReadingAssignment, ──1 ConsultationRequest, revoked_at [fase C]
 ```
 
@@ -620,43 +623,43 @@ FirstNameRelease(identity) ──1 ReadingAssignment, ──1 ConsultationReques
 
 ## 8. Corte do MVP
 
-O MVP é o **P4 de ponta a ponta** (E13, fases A a E, implementadas), sobre E1, E2, E3 e E8. Desde a v0.14 o corte não inclui mais o P1 (E4 a E7).
-**Fica para depois**: ancoragem externa por carimbo de tempo (E8), espelho no OSF, pacote de verificação do P4 (E9).
+O MVP é o **P1 de ponta a ponta** (E13, fases A a E, implementadas), sobre E1, E2, E3 e E8. Desde a v0.14 o corte não inclui mais o P2 (E4 a E7).
+**Fica para depois**: ancoragem externa por carimbo de tempo (E8), espelho no OSF, pacote de verificação do P1 (E9).
 
-**Marco de validação do MVP**: um *dry-run* completo do P4 com participantes fictícios (pessoas reais simulando consulentes e médiuns, com falecidos inventados). O objetivo é exercitar todo o fluxo e tentar quebrar o cegamento de propósito antes do piloto real.
+**Marco de validação do MVP**: um *dry-run* completo do P1 com participantes fictícios (pessoas reais simulando consulentes e médiuns, com falecidos inventados). O objetivo é exercitar todo o fluxo e tentar quebrar o cegamento de propósito antes do piloto real.
 
 ## 9. Questões em aberto
 
 1. **Tamanho da amostra**: precisa de cálculo de poder formal, e agora com uma consequência prática em cima da mesa. A dependência entre os dois consulentes de um par **está decidida** (unidade de análise = par, ver E7), e isso tem custo: as cerca de 70 escolhas independentes necessárias para detectar 65% contra 50% (α = 0,05 unilateral, poder de 80%) passam a significar **70 pares, ou seja 140 consulentes e 140 sessões**, não 70 consulentes. A alternativa é usar as duas escolhas de cada par com um método que corrija o agrupamento (por exemplo GEE ou erro-padrão robusto por cluster), o que recupera parte do poder mas exige uma decisão estatística e uma implementação que a v1 não tem. **Decidido na v0.4**: a medida primária passa a ser a diferença pareada contínua, que mantém o par como unidade e recupera o poder — cerca de 30 pares para d = 0,5, contra 240 pares para 58% de acerto na escolha forçada. O cálculo está implementado (`PowerCheck`) e entra no documento congelado. **O que resta decidir**: qual efeito declarar. Os efeitos por seção de leitura em Beischel et al. (2015) vão de d = 0,49 a 0,75, e a seção escolhida muda o tamanho do estudo.
-2. **Escala de itens** — *sem objeto desde a v0.14*: era do P1. No P4 a conferência é por igualdade entre opções, e o "não sei" tira o campo da comparação do par inteiro.
-3. **Primeiro nome**: dar ao médium o nome real ou um pseudônimo? (Isso afeta a ética e a validade.) No P4, ver a questão 10.
+2. **Escala de itens** — *sem objeto desde a v0.14*: era do P2. No P1 a conferência é por igualdade entre opções, e o "não sei" tira o campo da comparação do par inteiro.
+3. **Primeiro nome**: dar ao médium o nome real ou um pseudônimo? (Isso afeta a ética e a validade.) No P1, ver a questão 10.
 4. **Recrutamento de médiuns**: o campo de critérios já existe no pré-registro e é obrigatório; falta decidir o conteúdo — quais critérios de inclusão e se haverá triagem prévia. Se houver triagem por desempenho, ela precisa estar descrita ali, porque é exatamente o ponto que a crítica usa para explicar resultados positivos.
 5. **CEP**: o estudo terá fins de publicação acadêmica? Se sim, a submissão à Plataforma Brasil vem antes do piloto.
 6. **Devolutiva**: o que cada participante recebe ao final, e como comunicar resultados nulos com cuidado.
 7. **Reconciliação** com a documentação de pesquisa já existente no Google Drive (*TransferênciaAnômalaInformação*).
 
-8. **Confiança no compromisso** — *resolvido para os testes públicos; em aberto para o P4*. A
+8. **Confiança no compromisso** — *resolvido para os testes públicos; em aberto para o P1*. A
    entropia do participante está implementada (E11, E12): a semente tem duas metades, o servidor
    se compromete com a dele antes de ver a do participante, e sem a metade do participante não
-   existe tentativa. Para o P2 e o P3, a prova não depende mais de ordem atestada por quem opera
+   existe tentativa. Para o P3 e o P4, a prova não depende mais de ordem atestada por quem opera
    a plataforma.
 
-   Para o **P4**, em que o compromisso da semente e o do pré-registro são atestados pela própria
+   Para o **P1**, em que o compromisso da semente e o do pré-registro são atestados pela própria
    plataforma, a v0.15 implementa a **ancoragem externa** da cabeça da trilha por carimbo RFC 3161
    do FreeTSA (E8, fase 1), que torna reescrita retroativa detectável por terceiros. Fica em
    aberto: (a) se o primeiro envio ao médium deve **esperar** o carimbo do congelamento, o que
    fecha a janela de cerca de um minuto ao custo de parar o estudo quando o carimbador estiver
    fora do ar; (b) a segunda âncora, OpenTimestamps, para não depender de uma autoridade só.
 
-9. **P4 — questionário**: o rascunho do anexo do E13 precisa de revisão do pesquisador. Os
+9. **P1 — questionário**: o rascunho do anexo do E13 precisa de revisão do pesquisador. Os
    critérios são: opções mutuamente exclusivas, poucas opções dominantes, nenhum campo dedutível
    do primeiro nome na nota, e linguagem cuidadosa com quem está de luto.
-10. **P4 — primeiro nome ou nenhum nome**: dar ao médium só um código, sem o nome, eliminaria o
+10. **P1 — primeiro nome ou nenhum nome**: dar ao médium só um código, sem o nome, eliminaria o
     vazamento pelo nome, mas afasta o protocolo da prática da literatura. Fica o nome, por ora,
     com o vazamento declarado.
-11. **P4 — qualificação de médiuns**: uma rodada prévia com o próprio P4 (E10) antes da entrada
+11. **P1 — qualificação de médiuns**: uma rodada prévia com o próprio P1 (E10) antes da entrada
     no estudo confirmatório.
-12. **P4 — carga por médium** — *resolvido na v0.13*: o teto de pares por médium é declarado no
+12. **P1 — carga por médium** — *resolvido na v0.13*: o teto de pares por médium é declarado no
     pré-registro, e o relatório mostra a soma de `d` por médium. O que resta decidir é o valor do
     teto de um estudo real, que depende de quantos médiuns se inscreverem.
 
@@ -664,9 +667,9 @@ O MVP é o **P4 de ponta a ponta** (E13, fases A a E, implementadas), sobre E1, 
 
 Os passos iniciais desta seção estão feitos: os documentos estão em `/docs` e no `CLAUDE.md`, o plano técnico existe (`docs/PLAN.md`), E8 e E3 estão implementados, e a matriz de cegamento é uma suíte de testes (`BlindingMatrixTest`) que cresce antes de cada tela. O estado detalhado por épico está no plano técnico. A ordem daqui em diante:
 
-Desde a v0.14, só o P4.
+Desde a v0.14, só o P1.
 
 1. **E8**: ~~ancoragem externa por carimbo RFC 3161~~ — fase 1, FreeTSA, na v0.15. Falta decidir a espera pelo carimbo antes do primeiro envio e a fase 2, OpenTimestamps (questão 8).
-2. **E9**: pacote de verificação do P4, com os envios, as listas de elegíveis e as leituras — depende da decisão de LGPD sobre publicar respostas sobre pessoas falecidas.
+2. **E9**: pacote de verificação do P1, com os envios, as listas de elegíveis e as leituras — depende da decisão de LGPD sobre publicar respostas sobre pessoas falecidas.
 3. **Questões 9, 11 e 12**: revisão do questionário, qualificação de médiuns e o valor do teto de um estudo real.
-4. ***Dry-run*** do P4 (seção 8).
+4. ***Dry-run*** do P1 (seção 8).
