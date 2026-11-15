@@ -4,9 +4,10 @@
 # aplicação apenas entre sessões de coleta, nunca durante um estudo em andamento. Quem aciona confirma
 # isso no formulário do workflow; o ambiente "production" do GitHub pode, além disso, exigir aprovação.
 #
-# O caminho até a VM passa pela rede Tailscale (regra de implantação 3): a porta 22 não precisa ficar
-# aberta para a internet. O JAR é o mesmo artefato de todas as fases, construído e testado aqui, e a
-# troca de versão guarda a anterior e volta para ela se a aplicação não ficar saudável.
+# O workflow entra na VM por SSH, só com chave, como um usuário que só pode trocar o JAR e reiniciar o
+# serviço, e confere a identidade da VM contra a chave fixada em DEPLOY_KNOWN_HOSTS. O JAR é o mesmo
+# artefato de todas as fases, construído e testado aqui, e a troca de versão guarda a anterior e volta
+# para ela se a aplicação não ficar saudável.
 #
 # Configuração, segredos e preparo da VM: docs/DEPLOY.md.
 
@@ -82,11 +83,9 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-          TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          TS_OAUTH_SECRET: ${{ secrets.TS_OAUTH_SECRET }}
         run: |
           missing=0
-          for name in DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_KNOWN_HOSTS TS_OAUTH_CLIENT_ID TS_OAUTH_SECRET; do
+          for name in DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_KNOWN_HOSTS; do
             if [ -z "${!name}" ]; then
               echo "::error::Falta o segredo $name no ambiente production (ver docs/DEPLOY.md)."
               missing=1
@@ -103,14 +102,6 @@ jobs:
       - name: Conferir o SHA-256
         working-directory: release
         run: sha256sum -c airlab.jar.sha256
-
-      - name: Entrar na rede Tailscale
-        uses: tailscale/github-action@v4
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
-          version: "1.104.7"
 
       - name: Preparar o SSH
         env:
