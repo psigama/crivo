@@ -113,13 +113,21 @@ public final class ProtocolCatalog {
             List.of(PAIRED_READING, PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING, STRUCTURED_READING);
 
     /**
-     * The AIR section of the catalog. Only the fully automated protocol is offered: the paired
-     * reading (P1), which needs a team, was discontinued in SPEC 0.14 and is not listed.
+     * The AIR section of the catalog, the only one the Crivo site lists. Only the fully
+     * automated protocol is offered: the paired reading (P1), which needs a team, was
+     * discontinued in SPEC 0.14 and is not listed.
      */
     private static final List<Protocol> AIR = List.of(STRUCTURED_READING);
 
-    /** The extra experiments: the ESP tests, which say nothing about mediumship. */
-    private static final List<Protocol> EXTRAS = List.of(PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING);
+    /**
+     * The ESP tests, which say nothing about mediumship. Until SPEC 0.15 they were the "extra
+     * experiments" section of the Crivo site; since 0.16 PsiGama presents them and the Crivo
+     * pages do not list them. The engine stays here, at the same addresses (catalog rule 7).
+     */
+    private static final List<Protocol> ESP = List.of(PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING);
+
+    /** Where the ESP tests are presented: the ESP tests page of PsiGama (SPEC 0.16). */
+    private static final String ESP_PAGE = "https://psigama.tec.br/pes/";
 
     private ProtocolCatalog() {
     }
@@ -129,14 +137,19 @@ public final class ProtocolCatalog {
         return ALL;
     }
 
-    /** AIR protocols, in the order the site presents them. */
+    /** AIR protocols, in the order the site presents them: the only protocols it lists. */
     public static List<Protocol> air() {
         return AIR;
     }
 
-    /** Extra experiments, in the order the site presents them. */
-    public static List<Protocol> extras() {
-        return EXTRAS;
+    /** The ESP tests, which run here and which PsiGama presents, not the Crivo site. */
+    public static List<Protocol> esp() {
+        return ESP;
+    }
+
+    /** The PsiGama page that presents the ESP tests; their pages here link back to it. */
+    public static String espPage() {
+        return ESP_PAGE;
     }
 
     public static Protocol structuredReading() {

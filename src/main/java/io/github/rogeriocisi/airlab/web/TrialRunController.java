@@ -1,5 +1,6 @@
 package io.github.rogeriocisi.airlab.web;
 
+import io.github.rogeriocisi.airlab.catalog.ProtocolCatalog;
 import io.github.rogeriocisi.airlab.trials.SessionOutcome;
 import io.github.rogeriocisi.airlab.trials.SessionProgress;
 import io.github.rogeriocisi.airlab.trials.TrialProtocol;
@@ -139,6 +140,9 @@ class TrialRunController {
         model.addAttribute("protocolo", protocol);
         model.addAttribute("desfecho", outcome);
         model.addAttribute("comprovante", receipt(outcome));
+        // The way back is the PsiGama page that presents these tests, not the Crivo catalog,
+        // which no longer lists them (SPEC 0.16, catalog rule 7).
+        model.addAttribute("paginaPes", ProtocolCatalog.espPage());
         return "teste-resultado";
     }
 

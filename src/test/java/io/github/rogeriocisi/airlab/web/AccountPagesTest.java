@@ -76,8 +76,7 @@ class AccountPagesTest {
                 .andExpect(content().string(containsString("Consulente")))
                 .andExpect(content().string(containsString("Médium")));
         mvc.perform(get("/testes")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Protocolos AIR")))
-                .andExpect(content().string(containsString("Experimentos extras")));
+                .andExpect(content().string(containsString("Protocolos AIR")));
         mvc.perform(get("/testes/leitura-estruturada")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Como participar, passo a passo")))
                 .andExpect(content().string(containsString("O que cada perfil vê")));

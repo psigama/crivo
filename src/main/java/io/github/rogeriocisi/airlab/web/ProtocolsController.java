@@ -12,8 +12,9 @@ import org.springframework.http.HttpStatus;
 /**
  * The tests section: the catalog and one page per protocol (SPEC, section 1.1).
  *
- * <p>The catalog is shown in two sections: the AIR protocols, with the automated one featured,
- * and the extra experiments, which are the ESP tests (SPEC 1.1).
+ * <p>The catalog lists only the AIR protocols, with the automated one featured. The ESP tests
+ * are presented by PsiGama since SPEC 0.16: the catalog page points there, and their own pages
+ * stay here, at the same addresses, because the PsiGama page links to them (catalog rule 7).
  *
  * <p>Each protocol page prints what that protocol's result does not support, straight from the
  * catalog, because catalog rule 2 makes it mandatory text rather than a footnote.
@@ -24,7 +25,7 @@ class ProtocolsController {
     @GetMapping("/testes")
     String catalog(Model model) {
         model.addAttribute("air", ProtocolCatalog.air());
-        model.addAttribute("extras", ProtocolCatalog.extras());
+        model.addAttribute("paginaPes", ProtocolCatalog.espPage());
         return "testes";
     }
 
@@ -33,6 +34,7 @@ class ProtocolsController {
         Protocol protocol = ProtocolCatalog.bySlug(slug)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("protocolo", protocol);
+        model.addAttribute("paginaPes", ProtocolCatalog.espPage());
         return "teste-detalhe";
     }
 }

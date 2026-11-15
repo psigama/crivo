@@ -1,6 +1,6 @@
 # Plano técnico do MVP — Crivo (AIR Lab)
 
-> Derivado de `CONSTITUTION.md` (prevalece) e de `SPEC.md`. Versão 1.9 · novembro/2026 · 1.3: protocolo P4 (SPEC E13), fase A — contas com perfil fixo, e-mail e avisos ao administrador · 1.4: fase B — questionário versionado e pedido de consulta travado com compromisso salgado · 1.5: fase C — módulo `structured`: estudo P4, ciclo automático, pareamento, sorteio do médium, leitura travada e prazos · 1.6: fase D — desmascaramento automático no N, conferência, análise, relatório e devolutiva · 1.7: fase E — contas ligadas, teto por médium e página pública dos estudos. · 1.8: o P1 é descontinuado (SPEC 0.14) e fica no site só como referência; `session`, `redaction`, `scoring` e `unblinding` congelam no estado atual; os próximos cortes são só do P4 · 1.9: ancoragem externa da trilha por carimbo RFC 3161 do FreeTSA (SPEC 0.15, E8, fase 1): módulo `anchor`, migração `V22` e a BouncyCastle
+> Derivado de `CONSTITUTION.md` (prevalece) e de `SPEC.md`. Versão 1.10 · novembro/2026 · 1.3: protocolo P4 (SPEC E13), fase A — contas com perfil fixo, e-mail e avisos ao administrador · 1.4: fase B — questionário versionado e pedido de consulta travado com compromisso salgado · 1.5: fase C — módulo `structured`: estudo P4, ciclo automático, pareamento, sorteio do médium, leitura travada e prazos · 1.6: fase D — desmascaramento automático no N, conferência, análise, relatório e devolutiva · 1.7: fase E — contas ligadas, teto por médium e página pública dos estudos. · 1.8: o P1 é descontinuado (SPEC 0.14) e fica no site só como referência; `session`, `redaction`, `scoring` e `unblinding` congelam no estado atual; os próximos cortes são só do P4 · 1.9: ancoragem externa da trilha por carimbo RFC 3161 do FreeTSA (SPEC 0.15, E8, fase 1): módulo `anchor`, migração `V22` e a BouncyCastle · 1.10: os testes de ESP saem das páginas do Crivo e passam a ser apresentados pela PsiGama (SPEC 0.16); `trials`, as rotas e as garantias ficam como estão
 > Este documento registra as decisões de implementação do MVP: estrutura de módulos,
 > esquemas e migrações, execução por linha de comando e justificativa de cada dependência.
 
@@ -50,8 +50,8 @@ quem pode depender; `ModularityTest` verifica isso no build.
 | `unblinding` | E7 | **Congelado (P1 descontinuado)**: só as tabelas da `V9`. O desmascaramento do P4 mora em `structured` |
 | `cli` | E8 | **Implementado**: `airlab verify` — trilha, pré-registros, sorteios e, desde a 1.9, os carimbos de tempo |
 | `anchor` | E8 | **Implementado (fase 1)**: ancoragem externa da cabeça da trilha por carimbo RFC 3161 do FreeTSA — logo depois de cada marco e a cada 24 horas se a trilha mudou; token conferido antes de guardar (`TimestampProtocol`), certificados fixados pelo SHA-256 publicado (`TrustAnchors`), página pública `/carimbos` com o `.tsr`, e reconferência na CLI |
-| `catalog` | — | **Implementado**: catálogo de protocolos (SPEC 1.1) e questionários versionados do P4 (`Questionnaires`), sem estado e sem dependência de outro módulo |
-| `trials` | E11, E12 | **Implementado**: sessões de autoatendimento dos dois testes de ESP — semente comprometida, alvo derivado só no travamento, impressão travada antes das candidatas, sessão abandonada registrada |
+| `catalog` | — | **Implementado**: catálogo de protocolos (SPEC 1.1) e questionários versionados do P4 (`Questionnaires`), sem estado e sem dependência de outro módulo. O site do Crivo lista só `ProtocolCatalog.air()`; `esp()` são os testes que a PsiGama apresenta (`espPage()`, SPEC 0.16) |
+| `trials` | E11, E12 | **Implementado**: sessões de autoatendimento dos dois testes de ESP — semente comprometida, alvo derivado só no travamento, impressão travada antes das candidatas, sessão abandonada registrada. Desde a 1.10, apresentados pela PsiGama e fora das páginas do Crivo, nas mesmas rotas |
 | `support`, `platform`, `web` | — | Infraestrutura, páginas públicas, criação de conta, entrada e painéis por perfil (consulente, médium, administrador) |
 
 Dependências entre módulos: `audit` não depende de nenhum módulo de domínio; todos os outros
@@ -100,7 +100,8 @@ como proprietária do banco.
 ## 4. Os dois testes de autoatendimento (E11 e E12)
 
 A plataforma passou a cobrir mais de um protocolo. O catálogo está na SPEC, seção 1.1; aqui
-ficam as decisões de implementação.
+ficam as decisões de implementação. Desde a SPEC 0.16 os dois testes são apresentados pela
+PsiGama, não pelo site do Crivo; o motor continua aqui (decisões no fim da tabela).
 
 | Decisão | Por quê |
 |---|---|
@@ -117,6 +118,9 @@ ficam as decisões de implementação.
 | `SessionProgress` sem nenhum campo de desfecho | Trava 1 do E10 aplicada ao autoatendimento. Há teste estrutural: um campo com nome de acerto, escore ou alvo derruba o build |
 | Alvo e acerto fora da trilha por tentativa | A trilha é pública. Publicar o acerto de cada tentativa entregaria o placar que a sessão esconde; eles entram no evento de fechamento, com a semente |
 | Sessão abandonada é registrada e fica | Desistir de uma sessão ruim não melhora o número agregado |
+| **Apresentados pela PsiGama, não pelo site do Crivo** (SPEC 0.16) | O site do Crivo fica no foco AIR. A página `/testes` lista só `ProtocolCatalog.air()` e diz, numa linha, que os testes de PES estão na PsiGama; a página inicial, a navegação e o rodapé não os mencionam. Os códigos P2 e P3 ficam em `ProtocolCatalog.all()` e em `esp()`, porque estão nas sessões e na trilha |
+| Rotas no mesmo endereço | A página `/pes` da PsiGama aponta para `/testes/escolha-forcada`, `/testes/visao-remota` e o `/rodar` de cada um, em produção na raiz de `https://crivo.psigama.tec.br`, sem prefixo de caminho. `TrialRunController` e `ProtocolsController` não mudam de rota |
+| As páginas dos testes voltam para a PsiGama | A página do protocolo e a do resultado trocam "Voltar ao catálogo" pelo link de `ProtocolCatalog.espPage()`, um endereço só, no catálogo, porque é texto da SPEC. `NavigationAdvice` não marca "Protocolos" como seção atual nas páginas dos testes de PES (`Protocol.presentedByPsiGama()`) |
 
 **O que estes dois testes não fazem**: não dizem nada sobre mediunidade, e o pool público é
 exploratório — autoatendimento anônimo não controla quem testa, quantas vezes nem em que
@@ -283,10 +287,10 @@ sorteio na CLI, nunca para calcular hash.
 | `LinkedAccountsPagesTest` | E13 | O administrador vê códigos e sinal, sem nome, e decide uma vez; só ele alcança a tela |
 | `AccountPagesTest` | P1, E13 | Segurança real: do cadastro ao painel, cada perfil só alcança o próprio painel, senha errada não revela conta não confirmada, cadastro repetido não revela nada |
 | `TargetDerivationTest` | P5 | Unitário: alvo reproduzível pela semente, dentro do intervalo, candidatas distintas e banco pequeno recusado |
-| `ProtocolCatalogTest` | SPEC 1.1 | Unitário: todo protocolo declara o que não sustenta, e protocolo sem limites não compila em tempo de execução |
+| `ProtocolCatalogTest` | SPEC 1.1 | Unitário: todo protocolo declara o que não sustenta, e protocolo sem limites não compila em tempo de execução; o site lista só o ramo AIR, e os testes de ESP ficam com a PsiGama |
 | `TrialSessionIntegrationTest` | E10 trava 1, E11, E12 | PostgreSQL real: semente só no fim, alvo ausente do banco antes do travamento, impressão não reescrita, tentativa travada imutável, fechamento idempotente, **nada acontece antes da entropia do participante — recusado no serviço e pelo *trigger*** |
 | `TargetDerivationTest` (semente conjunta) | E11 | Unitário: vetor de teste das duas metades, e a ordem das metades faz parte da regra |
-| `TrialRunControllerTest` | E11, E12 | Páginas: passo da entropia antes de qualquer tentativa, reenvio retoma o teste, coluna de figuras só onde há figuras |
+| `TrialRunControllerTest` | E11, E12 | Páginas: passo da entropia antes de qualquer tentativa, reenvio retoma o teste, coluna de figuras só onde há figuras; **o site do Crivo não lista os testes de PES, mas as rotas respondem e levam de volta à PsiGama** (SPEC 1.1, regra 7) |
 | `TimestampProtocolTest` | E8 | Unitário, contra uma autoridade de teste com assinatura real (`TestAuthority`): resposta concedida confere; outro hash, outro *nonce*, outra autoridade, recusa e resposta ilegível são recusados; token guardado só confere com o próprio hash, e um byte adulterado o derruba |
 | `TrustAnchorsTest` | E8 | Os certificados do FreeTSA no repositório conferem com os SHA-256 publicados e formam cadeia; arquivo fora da fixação, outra raiz e certificado sem o uso crítico de carimbo são recusados |
 | `AnchorIntegrationTest` | P4, P7, E8 | PostgreSQL real, em banco próprio: marco carimbado na verificação seguinte sobre o hash da cabeça e registrado na trilha; mudança comum espera o intervalo; trilha parada não é recarimbada; falha fica fora da trilha e espera para repetir; resposta de outra autoridade ou recusa nunca vira carimbo; banco recusa reescrever, apagar e hash que não é o do evento; a CLI pega token que carimba outro valor; `/carimbos` e o `.tsr` são públicos |

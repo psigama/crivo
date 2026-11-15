@@ -1,5 +1,7 @@
 package io.github.rogeriocisi.airlab.web;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -71,6 +73,71 @@ class TrialRunControllerTest {
     @DisplayName("protocolo que nao existe da 404, nao erro")
     void an_unknown_protocol_is_a_404() throws Exception {
         mvc.perform(get("/testes/telepatia-por-telefone")).andExpect(status().isNotFound());
+    }
+
+    /**
+     * SPEC 0.16, catalog rule 7: the PsiGama site presents the ESP tests, so no Crivo page
+     * lists them or leads to them — catalog, home, navigation and footer included, since every
+     * page here carries the header and the footer.
+     */
+    @Test
+    @DisplayName("nenhuma pagina do Crivo lista os testes de PES nem leva a eles")
+    void no_crivo_page_lists_the_esp_tests() throws Exception {
+        for (String page : List.of("/", "/testes", "/testes/leitura-estruturada", "/testes/leitura-pareada",
+                "/historia", "/referencias", "/sobre", "/consulente", "/conta/criar", "/estudos",
+                "/carimbos", "/login")) {
+            mvc.perform(get(page))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(not(containsString("/testes/escolha-forcada"))))
+                    .andExpect(content().string(not(containsString("/testes/visao-remota"))))
+                    .andExpect(content().string(not(containsString("/testes#extras"))))
+                    .andExpect(content().string(not(containsString("Experimentos extras"))));
+        }
+        mvc.perform(get("/testes"))
+                .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")));
+    }
+
+    /**
+     * The other half of rule 7: the PsiGama page links to these addresses, so they keep
+     * answering, and the way back from them is PsiGama, not the Crivo catalog.
+     */
+    @Test
+    @DisplayName("as rotas dos testes de PES continuam respondendo e levam de volta a PsiGama")
+    void the_esp_routes_still_answer_and_lead_back_to_psigama() throws Exception {
+        for (String slug : List.of("escolha-forcada", "visao-remota")) {
+            mvc.perform(get("/testes/" + slug))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("href=\"/testes/" + slug + "/rodar\"")))
+                    .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")))
+                    .andExpect(content().string(not(containsString("Voltar ao catálogo"))))
+                    // The Crivo navigation does not mark these pages as part of "Protocolos".
+                    .andExpect(content().string(not(containsString("aria-current=\"page\""))));
+            mvc.perform(get("/testes/" + slug + "/rodar"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("Começar a sessão")));
+        }
+        mvc.perform(get("/testes/leitura-estruturada"))
+                .andExpect(content().string(containsString("href=\"/testes\" aria-current=\"page\"")))
+                .andExpect(content().string(containsString("Voltar ao catálogo")))
+                .andExpect(content().string(not(containsString("psigama.tec.br/pes"))));
+    }
+
+    @Test
+    @DisplayName("o resultado de um teste de PES leva de volta a PsiGama, nao ao catalogo")
+    void the_result_page_leads_back_to_psigama() throws Exception {
+        given(trialSessions.outcome(anyString()))
+                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
+        given(trialSessions.start(any(), anyInt())).willReturn(progress());
+
+        var session = mvc.perform(
+                post("/testes/escolha-forcada/comecar").param("tentativas", "12").with(csrf()))
+                .andReturn().getRequest().getSession();
+
+        mvc.perform(get("/testes/escolha-forcada/resultado")
+                        .session((org.springframework.mock.web.MockHttpSession) session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")))
+                .andExpect(content().string(not(containsString("Voltar ao catálogo"))));
     }
 
     @Test

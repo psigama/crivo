@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Protocolos — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os protocolos da plataforma Crivo: o protocolo AIR de leitura estruturada automatizada e dois experimentos extras de percepção extrassensorial, que você pode fazer agora no navegador.')}"></th:block>
+  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'O protocolo da plataforma Crivo: a leitura estruturada automatizada, um protocolo de recepção anômala de informação (AIR) que roda inteiro pelo site, com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
@@ -19,13 +19,12 @@
   <section class="abertura">
     <div class="faixa">
       <p class="rotulo aparece">Protocolos</p>
-      <h1 class="aparece">Um protocolo AIR e dois experimentos extras</h1>
+      <h1 class="aparece">Um protocolo AIR, inteiro pelo site</h1>
       <p class="chamada aparece">
         O Crivo é uma plataforma de protocolos cegos para pesquisa de <strong>cognição
         anômala</strong>. A mediunidade é um ramo dela — na literatura, <em>recepção anômala de
         informação</em>, ou AIR. O protocolo AIR daqui roda inteiro pelo site, sem ninguém da
-        equipe no circuito. Os testes de percepção extrassensorial ficam numa seção à parte,
-        de experimentos extras.
+        equipe no circuito.
       </p>
       <p class="tese aparece">
         O que todo protocolo daqui tem em comum: <strong>pré-registro congelado, sorteio com
@@ -65,35 +64,6 @@
     </div>
   </section>
 
-  <section id="extras">
-    <div class="faixa">
-      <p class="rotulo">Percepção extrassensorial</p>
-      <h2>Experimentos extras</h2>
-      <p>
-        Testes rápidos, anônimos e sem conta, que qualquer pessoa faz agora no navegador e confere
-        depois. <strong>Eles não dizem nada sobre mediunidade</strong>, e as replicações grandes
-        dos achados de precognição deram nulo. Estão aqui porque são integralmente verificáveis por
-        quem os faz — uma demonstração do método, não uma promessa de efeito.
-      </p>
-
-      <ul class="protocolos">
-        <li th:each="p : ${extras}">
-          <p class="selo">
-            <span th:text="${p.code}">P2</span> ·
-            <span th:text="${p.branch.label()}">Ramo</span> ·
-            <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
-          </p>
-          <h3><a th:href="'/testes/' + ${p.slug}" th:text="${p.name}">Nome</a></h3>
-          <p th:text="${p.summary}">Resumo</p>
-          <p class="acoes">
-            <a class="botao botao-vazio" th:href="'/testes/' + ${p.slug}">Como funciona</a>
-            <a class="botao botao-cheio" th:href="'/testes/' + ${p.slug} + '/rodar'">Fazer o teste agora</a>
-          </p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
   <section>
     <div class="faixa">
       <h2>Por que um protocolo AIR só, e automatizado</h2>
@@ -122,6 +92,12 @@
       <p class="nota nota-espacada">
         Um nulo na leitura automatizada não refuta os estudos com intermediário da literatura: cada
         desenho paga um preço diferente, e a página do protocolo diz qual é o deste.
+      </p>
+      <p class="nota" id="pes">
+        Procura os testes de percepção extrassensorial — a escolha forçada e a visão remota? Eles
+        não dizem nada sobre mediunidade e ficam fora do catálogo do Crivo: estão na
+        <a th:href="${paginaPes}" href="https://psigama.tec.br/pes/">página de testes de PES da
+        PsiGama</a>.
       </p>
     </div>
   </section>

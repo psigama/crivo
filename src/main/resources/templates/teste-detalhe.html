@@ -69,7 +69,19 @@
         <a class="botao botao-cheio"
            th:if="${protocolo.code == 'P4'}" href="/conta/criar">Criar uma conta</a>
         <a class="botao botao-vazio" th:if="${protocolo.code == 'P4'}" href="/estudos">Estudos e relatórios</a>
-        <a class="botao botao-vazio" href="/testes">Voltar ao catálogo</a>
+        <a class="botao botao-vazio" th:if="${protocolo.presentedByPsiGama()}"
+           th:href="${paginaPes}">Outros testes de PES</a>
+        <a class="botao botao-vazio" th:unless="${protocolo.presentedByPsiGama()}"
+           href="/testes">Voltar ao catálogo</a>
+      </p>
+
+      <p class="nota" th:if="${protocolo.presentedByPsiGama()}">
+        Este teste é apresentado pela PsiGama, na
+        <a th:href="${paginaPes}">página de testes de percepção extrassensorial</a>, e não faz
+        parte do catálogo do Crivo, que é de protocolos de recepção anômala de informação. Ele
+        roda aqui, com as mesmas garantias: a semente é comprometida antes da primeira resposta,
+        o alvo de cada tentativa só é revelado depois que a resposta trava, e tudo vai para a
+        trilha de auditoria.
       </p>
     </div>
   </section>

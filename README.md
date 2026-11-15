@@ -8,16 +8,16 @@ A mediunidade é um ramo da plataforma — na literatura, *recepção anômala d
 
 ## Catálogo de protocolos
 
-O catálogo tem duas seções: **protocolos AIR**, com o automatizado em destaque, e **experimentos extras**.
+O site do Crivo lista só os **protocolos AIR**, com o automatizado em destaque. Os dois testes de percepção extrassensorial rodam no mesmo servidor, com as mesmas garantias, mas desde a [SPEC 0.16](docs/SPEC.md#11-catálogo-de-protocolos) são apresentados pela PsiGama, na [página de testes de PES](https://psigama.tec.br/pes/), e não aparecem nas páginas do Crivo.
 
-| Seção | Código | Protocolo | Acaso | Automação |
+| Onde se apresenta | Código | Protocolo | Acaso | Automação |
 |---|---|---|---|---|
-| Protocolos AIR | **P4** | [Leitura estruturada automatizada](docs/SPEC.md#e13-leitura-estruturada-automatizada-p4) | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe |
-| ~~Protocolos AIR~~ | ~~**P1**~~ | ~~Leitura pareada cega~~ | — | **Só referência** (SPEC 0.14): exigia equipe e não será implementado; a página fica no site como referência |
-| Experimentos extras | **P2** | Escolha forçada precognitiva (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta |
-| Experimentos extras | **P3** | Visão remota com quatro alvos (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta |
+| Crivo · protocolos AIR | **P4** | [Leitura estruturada automatizada](docs/SPEC.md#e13-leitura-estruturada-automatizada-p4) | 50% | **Integral**: conta, pedido, leitura, conferência e avisos sem ninguém da equipe |
+| Crivo · só referência | ~~**P1**~~ | ~~Leitura pareada cega~~ | — | **Só referência** (SPEC 0.14): exigia equipe e não será implementado; a página fica no site como referência |
+| PsiGama · testes de PES | **P2** | Escolha forçada precognitiva (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/testes/escolha-forcada/rodar` |
+| PsiGama · testes de PES | **P3** | Visão remota com quatro alvos (ESP) | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/testes/visao-remota/rodar` |
 
-Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles estão ali porque são integralmente verificáveis por quem os faz. Em `/testes`, no site.
+Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles existem porque são integralmente verificáveis por quem os faz, e por isso quem os apresenta é a PsiGama, não o catálogo do Crivo. As rotas deles não mudam de endereço, porque a página da PsiGama aponta para elas. O catálogo do Crivo fica em `/testes`, no site.
 
 ### O AIR automatizado (P4), em uma frase
 

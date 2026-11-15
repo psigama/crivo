@@ -70,6 +70,15 @@ public record Protocol(String code,
     }
 
     /**
+     * Whether PsiGama, not the Crivo site, presents it (SPEC 0.16, catalog rule 7). The ESP
+     * tests still run on this server, at the same addresses and with the same guarantees; the
+     * Crivo pages just do not list them, and their own pages lead back to PsiGama.
+     */
+    public boolean presentedByPsiGama() {
+        return branch == Branch.ESP;
+    }
+
+    /**
      * Branch of anomalous cognition. The distinction is kept because AIR means something
      * narrower than psi in the literature: information about a deceased person, obtained
      * without a sensory channel.

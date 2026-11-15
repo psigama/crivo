@@ -81,14 +81,25 @@ class ProtocolCatalogTest {
     }
 
     @Test
-    @DisplayName("as duas secoes cobrem o catalogo inteiro menos o descontinuado, com o AIR automatizado")
-    void the_two_sections_cover_the_catalog() {
+    @DisplayName("o site do Crivo lista so o ramo AIR; os testes de ESP sao apresentados pela PsiGama")
+    void the_crivo_site_lists_only_air_and_psigama_presents_esp() {
         assertThat(ProtocolCatalog.air().stream().map(Protocol::code)).containsExactly("P4");
-        assertThat(ProtocolCatalog.extras().stream().map(Protocol::code)).containsExactly("P2", "P3");
-        assertThat(ProtocolCatalog.air()).allMatch(p -> p.branch() == Protocol.Branch.AIR);
-        assertThat(ProtocolCatalog.extras()).allMatch(p -> p.branch() == Protocol.Branch.ESP);
-        assertThat(ProtocolCatalog.air().size() + ProtocolCatalog.extras().size())
+        assertThat(ProtocolCatalog.esp().stream().map(Protocol::code)).containsExactly("P2", "P3");
+        assertThat(ProtocolCatalog.air()).allMatch(p -> p.branch() == Protocol.Branch.AIR)
+                .noneMatch(Protocol::presentedByPsiGama);
+        assertThat(ProtocolCatalog.esp()).allMatch(p -> p.branch() == Protocol.Branch.ESP)
+                .allMatch(Protocol::presentedByPsiGama);
+        assertThat(ProtocolCatalog.air().size() + ProtocolCatalog.esp().size())
                 .isEqualTo((int) ProtocolCatalog.all().stream().filter(p -> !p.discontinued()).count());
+        assertThat(ProtocolCatalog.espPage()).isEqualTo("https://psigama.tec.br/pes/");
+    }
+
+    @Test
+    @DisplayName("os testes de ESP continuam no catalogo, com codigo, slug e limites: o motor segue no Crivo")
+    void the_esp_tests_stay_in_the_catalog() {
+        assertThat(ProtocolCatalog.bySlug("escolha-forcada")).contains(ProtocolCatalog.precognitiveForcedChoice());
+        assertThat(ProtocolCatalog.bySlug("visao-remota")).contains(ProtocolCatalog.remoteViewing());
+        assertThat(ProtocolCatalog.esp()).allMatch(Protocol::implemented).allMatch(Protocol::quickTest);
     }
 
     @Test
@@ -99,7 +110,7 @@ class ProtocolCatalogTest {
         assertThat(paired.status().label()).isEqualTo("Só referência, não implementado");
         assertThat(ProtocolCatalog.byCode("P1")).contains(paired);
         assertThat(ProtocolCatalog.air()).doesNotContain(paired);
-        assertThat(ProtocolCatalog.extras()).doesNotContain(paired);
+        assertThat(ProtocolCatalog.esp()).doesNotContain(paired);
     }
 
     @Test
