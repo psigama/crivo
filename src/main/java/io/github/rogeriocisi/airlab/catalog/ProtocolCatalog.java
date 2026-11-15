@@ -127,7 +127,7 @@ public final class ProtocolCatalog {
     private static final List<Protocol> ESP = List.of(PRECOGNITIVE_FORCED_CHOICE, REMOTE_VIEWING);
 
     /** Where the ESP tests are presented: the ESP tests page of PsiGama (SPEC 0.16). */
-    private static final String ESP_PAGE = "https://psigama.tec.br/pes/";
+    private static final String ESP_PAGE = "https://psigama.com/pes/";
 
     private ProtocolCatalog() {
     }

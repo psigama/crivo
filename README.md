@@ -8,7 +8,7 @@ A mediunidade é um ramo da plataforma — na literatura, *recepção anômala d
 
 ## Catálogo de protocolos
 
-O site do Crivo lista só os **protocolos AIR**, com o automatizado em destaque. Os dois testes de percepção extrassensorial rodam no mesmo servidor, com as mesmas garantias, mas desde a [SPEC 0.16](docs/SPEC.md#11-catálogo-de-protocolos) são apresentados pela PsiGama, na [página de testes de PES](https://psigama.tec.br/pes/), e não aparecem nas páginas do Crivo.
+O site do Crivo lista só os **protocolos AIR**, com o automatizado em destaque. Os dois testes de percepção extrassensorial rodam no mesmo servidor, com as mesmas garantias, mas desde a [SPEC 0.16](docs/SPEC.md#11-catálogo-de-protocolos) são apresentados pela PsiGama, na [página de testes de PES](https://psigama.com/pes/), e não aparecem nas páginas do Crivo.
 
 | Onde se apresenta | Código | Protocolo | Acaso | Automação |
 |---|---|---|---|---|
@@ -140,7 +140,7 @@ Os testes de cegamento e de integridade da trilha rodam contra um PostgreSQL rea
 
 Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, aplicação como serviço (`systemd` no Linux, serviço do Windows), Caddy na borda com HTTPS automático. Os segredos vêm do ambiente ou de um `.env` não versionado — ver [`.env.example`](.env.example). As regras completas estão na Constitution, em *Implantação por fase*.
 
-**Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta em `https://crivo.psigama.tec.br` pela rede Tailscale. O preparo da VM e os segredos estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
+**Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta em `https://crivo.psigama.com` pela rede Tailscale. O preparo da VM e os segredos estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 **Inscrição do P4 em produção.** Fica fechada até que existam envio de e-mail e um contato humano (SPEC E10, travas 3 e 5):
 

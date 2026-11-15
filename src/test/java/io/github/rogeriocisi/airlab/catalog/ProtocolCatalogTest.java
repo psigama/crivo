@@ -91,7 +91,7 @@ class ProtocolCatalogTest {
                 .allMatch(Protocol::presentedByPsiGama);
         assertThat(ProtocolCatalog.air().size() + ProtocolCatalog.esp().size())
                 .isEqualTo((int) ProtocolCatalog.all().stream().filter(p -> !p.discontinued()).count());
-        assertThat(ProtocolCatalog.espPage()).isEqualTo("https://psigama.tec.br/pes/");
+        assertThat(ProtocolCatalog.espPage()).isEqualTo("https://psigama.com/pes/");
     }
 
     @Test

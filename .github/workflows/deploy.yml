@@ -1,4 +1,4 @@
-# Implantação manual na VM de produção (crivo.psigama.tec.br).
+# Implantação manual na VM de produção (crivo.psigama.com).
 #
 # Só roda quando acionado à mão, porque a Constitution (regra de implantação 8) permite atualizar a
 # aplicação apenas entre sessões de coleta, nunca durante um estudo em andamento. Quem aciona confirma
@@ -74,7 +74,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: production
-      url: https://crivo.psigama.tec.br
+      url: https://crivo.psigama.com
     steps:
       - name: Conferir os segredos
         env:

@@ -94,7 +94,7 @@ class TrialRunControllerTest {
                     .andExpect(content().string(not(containsString("Experimentos extras"))));
         }
         mvc.perform(get("/testes"))
-                .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")));
+                .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")));
     }
 
     /**
@@ -108,7 +108,7 @@ class TrialRunControllerTest {
             mvc.perform(get("/testes/" + slug))
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString("href=\"/testes/" + slug + "/rodar\"")))
-                    .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")))
+                    .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")))
                     .andExpect(content().string(not(containsString("Voltar ao catálogo"))))
                     // The Crivo navigation does not mark these pages as part of "Protocolos".
                     .andExpect(content().string(not(containsString("aria-current=\"page\""))));
@@ -119,7 +119,7 @@ class TrialRunControllerTest {
         mvc.perform(get("/testes/leitura-estruturada"))
                 .andExpect(content().string(containsString("href=\"/testes\" aria-current=\"page\"")))
                 .andExpect(content().string(containsString("Voltar ao catálogo")))
-                .andExpect(content().string(not(containsString("psigama.tec.br/pes"))));
+                .andExpect(content().string(not(containsString("psigama.com/pes"))));
     }
 
     @Test
@@ -136,7 +136,7 @@ class TrialRunControllerTest {
         mvc.perform(get("/testes/escolha-forcada/resultado")
                         .session((org.springframework.mock.web.MockHttpSession) session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("href=\"https://psigama.tec.br/pes/\"")))
+                .andExpect(content().string(containsString("href=\"https://psigama.com/pes/\"")))
                 .andExpect(content().string(not(containsString("Voltar ao catálogo"))));
     }
 
