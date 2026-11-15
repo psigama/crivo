@@ -13,10 +13,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * The one mailer. The mode is decided once, at start up, from the profile and from whether
- * Spring Boot configured an SMTP sender ({@code spring.mail.host}).
+ * an SMTP server was configured ({@code spring.mail.host}, not blank).
  *
  * <p>In the local profile the in-memory outbox is the default; setting {@code SPRING_MAIL_HOST}
  * there opts into real SMTP, meant for a local catcher such as Mailpit, which shows the messages
@@ -39,7 +40,7 @@ class DefaultMailer implements Mailer {
     private final Deque<MailMessage> outbox = new ArrayDeque<>();
 
     DefaultMailer(Environment environment, ObjectProvider<JavaMailSender> smtp, Clock clock) {
-        this.smtp = smtp.getIfAvailable();
+        this.smtp = smtpConfigured(environment) ? smtp.getIfAvailable() : null;
         this.from = environment.getProperty("airlab.mail-from", "crivo@localhost");
         this.clock = clock;
         this.mode = modeFor(environment.matchesProfiles("test"), environment.matchesProfiles("local"),
@@ -56,6 +57,17 @@ class DefaultMailer implements Mailer {
             case LOCAL -> {
             }
         }
+    }
+
+    /**
+     * Whether an SMTP server was configured on purpose. Spring Boot creates its sender whenever
+     * {@code spring.mail.host} exists, even blank, which is what an empty {@code SPRING_MAIL_HOST=}
+     * copied from {@code .env.example} leaves. That sender points at localhost, and in production
+     * it would open account sign-up with nothing to send the confirmation through (SPEC E10,
+     * locks 3 and 5). It happened on the first deploy. Blank means no SMTP.
+     */
+    static boolean smtpConfigured(Environment environment) {
+        return StringUtils.hasText(environment.getProperty("spring.mail.host"));
     }
 
     /**

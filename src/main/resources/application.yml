@@ -34,6 +34,12 @@ management:
   endpoint:
     health:
       show-details: never
+  health:
+    # O SMTP fica fora da saude: sem e-mail a aplicacao funciona (a inscricao so fecha), e o deploy
+    # confere justamente /actuator/health. Com o indicador ligado, um SMTP fora do ar, ou um
+    # SPRING_MAIL_HOST vazio, derrubava a saude e fazia o deploy voltar a versao anterior.
+    mail:
+      enabled: false
 
 # Logs estruturados sem dado pessoal (Constitution P6).
 logging:
