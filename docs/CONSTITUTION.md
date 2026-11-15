@@ -2,7 +2,7 @@
 
 > Este documento define os **princípios inegociáveis** do projeto e a **arquitetura tecnológica de referência**. Toda spec, plano e tarefa deve estar em conformidade com ele. Quando houver conflito entre este documento e qualquer outro, **este prevalece**.
 >
-> Versão 1.3.0 · Ratificada em: novembro/2026 · 1.3.0: contas com perfil fixo para o protocolo P4 e envio de e-mail por SMTP, por decisão do pesquisador principal; nenhum princípio alterado · 1.1.0: adicionada a seção "Implantação por fase" · 1.1.1: nome público "Crivo", codinome técnico "AIR Lab" · 1.2.0: arquitetura sem Docker — aplicação executada por linha de comando (JAR/Spring Boot) em Windows e Linux, com PostgreSQL nativo ou embarcado
+> Versão 1.4.0 · Ratificada em: novembro/2026 · 1.4.0: a VM de produção pode ficar fora do Brasil quando a conta do provedor não oferecer região no Brasil sem custo — hoje, a conta Always Free da Oracle Cloud, com região inicial em Phoenix (EUA) —, por decisão do pesquisador principal; dado real de participante só entra nela depois de documentada a base legal da transferência internacional (LGPD, art. 33); nenhum princípio alterado · 1.3.0: contas com perfil fixo para o protocolo P4 e envio de e-mail por SMTP, por decisão do pesquisador principal; nenhum princípio alterado · 1.1.0: adicionada a seção "Implantação por fase" · 1.1.1: nome público "Crivo", codinome técnico "AIR Lab" · 1.2.0: arquitetura sem Docker — aplicação executada por linha de comando (JAR/Spring Boot) em Windows e Linux, com PostgreSQL nativo ou embarcado
 
 ---
 
@@ -139,13 +139,17 @@ O mesmo artefato (um JAR executável) serve a todas as fases, acionado pelo mesm
 |---|---|---|---|
 | **Desenvolvimento** | Workstation do autor, **Windows ou Linux** (perfil `local`) | Somente fictícios | Local (`localhost`) |
 | **Dry-run** | Workstation Windows ou Linux (perfil `local`) | Fictícios (pessoas reais simulando papéis com falecidos inventados) | Temporária, via **Cloudflare Tunnel** ou **Tailscale Funnel**; sem abrir portas no roteador; túnel desligado ao fim de cada sessão de teste |
-| **Piloto / estudos reais** | **VPS Linux com região em São Paulo** (2 vCPU, 2–4 GB RAM são suficientes), perfil `prod`: JAR como serviço `systemd` + PostgreSQL do sistema | Reais, sensíveis | HTTPS público, só com as rotas da aplicação |
+| **Piloto / estudos reais** | **VPS Linux**, de preferência com região no Brasil; hoje, a Oracle Cloud em Phoenix (EUA), nas condições da regra 1 (2 vCPU, 2–4 GB RAM são suficientes), perfil `prod`: JAR como serviço `systemd` + PostgreSQL do sistema | Reais, sensíveis | HTTPS público, só com as rotas da aplicação |
 | **Pós-estudo** | VPS desligada ou arquivada | Dados identificáveis eliminados conforme o termo de consentimento | Nenhuma; o que permanece público fica nos repositórios externos (abaixo) |
 
 #### Regras de implantação
 
-1. **Residência de dados**: dados reais de participantes ficam em infraestrutura com região no Brasil. Transferência internacional só com base legal documentada (LGPD, art. 33).
-2. **Provedor**: preferir VPS simples (uma máquina, pacotes do sistema operacional) a serviços gerenciados ou plataformas de container, por causa do P8. Candidatos com região em São Paulo: AWS, Google Cloud, Azure, Oracle Cloud, Vultr, Magalu Cloud. Confirme preço e condições atuais na hora da escolha.
+1. **Residência de dados**: a preferência é infraestrutura com região no Brasil. A VM pode ficar noutra região quando a conta do provedor não oferecer uma no Brasil sem custo — é o caso da conta Always Free da Oracle Cloud do projeto, cuja região inicial é Phoenix (EUA) e que só assina outra região passando a conta paga (v1.4.0). Fora do Brasil vale o seguinte:
+   - **Transferência internacional só com base legal documentada** (LGPD, art. 33) — por exemplo, o consentimento específico e destacado para a transferência, com o país informado no termo antes do aceite (inciso VIII), ou cláusulas-padrão contratuais com o provedor. A base escolhida fica registrada no termo de consentimento, na submissão ao CEP e no pré-registro.
+   - **Antes disso, nenhum dado pessoal real entra na VM.** Ela só recebe o que não é dado pessoal — os testes de PES, anônimos, e dados fictícios —, e a inscrição do P4 fica fechada: em produção, sem envio de e-mail configurado, a criação de conta não abre (SPEC E10, travas 3 e 5).
+   - As demais garantias não mudam: dados identificáveis cifrados em repouso, banco só em `127.0.0.1`, backups cifrados e transcrição sempre local (regras 4 a 6).
+   - Mudar a VM de região é decisão do pesquisador principal e entra nesta regra, com a versão.
+2. **Provedor**: preferir VPS simples (uma máquina, pacotes do sistema operacional) a serviços gerenciados ou plataformas de container, por causa do P8. Candidatos com região no Brasil: AWS, Google Cloud, Azure, Oracle Cloud, Vultr, Magalu Cloud. A instalação atual usa a Oracle Cloud (Always Free) em Phoenix, nas condições da regra 1. Confirme preço e condições atuais na hora da escolha.
 3. **Borda**: proxy reverso **Caddy** instalado como pacote/serviço do sistema (binário único, HTTPS automático), encaminhando para a aplicação em `127.0.0.1:8080`. Só as portas 80/443 ficam abertas; o SSH usa chave e, de preferência, só é acessível via Tailscale.
 4. **Banco**: em produção, o PostgreSQL é o do sistema operacional (`apt install postgresql`), escutando **somente** em `127.0.0.1`, nunca exposto à internet. Em desenvolvimento e teste, a própria aplicação sobe uma instância embarcada (binários reais do PostgreSQL) em `~/.airlab/pgdata`, descartável e isolada — fora do repositório e fora de pasta sincronizada. Nos dois casos valem os mesmos esquemas, papéis e migrações Flyway — nada de banco diferente por ambiente.
 5. **Backups**: dump diário criptografado (por exemplo, `age` ou `restic`) enviado para **fora da VPS**, seja armazenamento de objetos de outro provedor, seja a workstation do autor. A restauração é testada mensalmente.

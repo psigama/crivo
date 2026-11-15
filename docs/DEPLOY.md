@@ -8,13 +8,13 @@ Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://
 |---|---|---|
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | GitHub Actions | A cada push na `main` e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado |
 | [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) | GitHub Actions, acionado à mão | Constrói e testa o JAR, entra na rede Tailscale, envia o JAR para a VM, troca a versão e confere a saúde; se a aplicação não subir, volta para a versão anterior |
-| VM de produção | Oracle Cloud, região no Brasil | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
+| VM de produção | Oracle Cloud (Always Free), região `us-phoenix-1` (Phoenix, EUA), nas condições da regra de implantação 1 | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
 
 A implantação **nunca é automática**. A regra de implantação 8 só permite atualizar a aplicação entre sessões de coleta, e o formulário do workflow exige que quem o aciona confirme isso.
 
 ## 1. Preparar a VM
 
-Uma vez, na VM (Ubuntu 24.04; na Oracle Cloud, a forma Arm Ampere A1 do Always Free basta). A região precisa ser São Paulo ou Vinhedo (regra de implantação 1).
+Uma vez, na VM (Ubuntu 24.04; na Oracle Cloud, a forma Arm Ampere A1 do Always Free basta). A conta do projeto tem região inicial em Phoenix (EUA) e, no Always Free, só pode usar essa região. A Constitution 1.4.0 admite isso (regra de implantação 1) com uma condição: **nenhum dado pessoal real entra na VM antes de documentada a base legal da transferência internacional** (LGPD, art. 33), no termo de consentimento, na submissão ao CEP e no pré-registro. Até lá, não configure o envio de e-mail (`SPRING_MAIL_*`) no `airlab.env`: sem ele, a inscrição do P4 fica fechada em produção, e no ar ficam só os testes de PES, anônimos.
 
 1. **Pacotes**: `openjdk-21-jre-headless`, `postgresql`, `curl`, o [Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian) e o [Tailscale](https://tailscale.com/download/linux). Registre as versões instaladas (regra de implantação 8).
 2. **Firewall**: abra só as portas 80 e 443 para a internet, na lista de segurança da Oracle e no firewall do sistema. O SSH fica acessível apenas pela rede Tailscale (regra de implantação 3).
