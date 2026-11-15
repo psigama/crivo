@@ -7,17 +7,46 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * The embedded database refuses to start next to another instance with a message that says what
- * to do, instead of the bare "could not lock" the library gives.
+ * The embedded database refuses to start next to another instance, or on a cluster from another
+ * major version, with a message that says what to do, instead of the bare "could not lock" or the
+ * line deep in the PostgreSQL log that the library gives.
  */
 class LocalDatabaseConfigurationTest {
 
     private static final Path DATA = Path.of("dados-de-teste").toAbsolutePath();
+
+    @Test
+    @DisplayName("cluster de outra versao do PostgreSQL: recusa com a mensagem que diz o que fazer")
+    void a_cluster_from_another_major_version_is_refused_with_guidance(@TempDir Path data) throws Exception {
+        Files.writeString(data.resolve("PG_VERSION"), "16\n");
+
+        assertThatThrownBy(() -> LocalDatabaseConfiguration.requireSameMajor(data))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining(data.toString())
+                .hasMessageContaining("PostgreSQL 16")
+                .hasMessageContaining("PostgreSQL " + LocalDatabaseConfiguration.POSTGRES_MAJOR)
+                .hasMessageContaining("AIRLAB_LOCAL_DB_DIR")
+                .hasMessageContaining("AIRLAB_TEST_DB_DIR");
+        assertThat(LocalDatabaseConfiguration.otherMajor(data, "16").chars().allMatch(c -> c < 128)).isTrue();
+    }
+
+    @Test
+    @DisplayName("cluster da mesma versao, ou diretorio ainda sem cluster: nada a dizer")
+    void the_same_major_version_or_no_cluster_passes(@TempDir Path data) throws Exception {
+        assertThatCode(() -> LocalDatabaseConfiguration.requireSameMajor(data)).doesNotThrowAnyException();
+        assertThatCode(() -> LocalDatabaseConfiguration.requireSameMajor(data.resolve("ainda-nao-existe")))
+                .doesNotThrowAnyException();
+
+        Files.writeString(data.resolve("PG_VERSION"), LocalDatabaseConfiguration.POSTGRES_MAJOR + "\n");
+        assertThatCode(() -> LocalDatabaseConfiguration.requireSameMajor(data)).doesNotThrowAnyException();
+    }
 
     @Test
     @DisplayName("porta do banco ocupada: recusa com a mensagem que diz o que fazer")

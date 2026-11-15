@@ -9,7 +9,7 @@ airlab:
     port: ${AIRLAB_TEST_DB_PORT:5434}
     # Fora do diretorio do projeto de proposito: um cluster PostgreSQL nao deve viver
     # em pasta sincronizada (Google Drive, OneDrive) nem em disco de rede.
-    data-directory: ${java.io.tmpdir}/airlab-test-pgdata
+    data-directory: ${AIRLAB_TEST_DB_DIR:${java.io.tmpdir}/airlab-test-pgdata}
   timestamp:
     # Nenhum teste fala com o FreeTSA de verdade (salvo o FreeTsaLiveTest, sob AIRLAB_LIVE_TSA=true):
     # os testes chamam o servico com o relogio que precisam e uma autoridade de teste.

@@ -119,7 +119,7 @@ PsiGama, não pelo site do Crivo; o motor continua aqui (decisões no fim da tab
 | Alvo e acerto fora da trilha por tentativa | A trilha é pública. Publicar o acerto de cada tentativa entregaria o placar que a sessão esconde; eles entram no evento de fechamento, com a semente |
 | Sessão abandonada é registrada e fica | Desistir de uma sessão ruim não melhora o número agregado |
 | **Apresentados pela PsiGama, não pelo site do Crivo** (SPEC 0.16) | O site do Crivo fica no foco AIR. A página `/testes` lista só `ProtocolCatalog.air()` e diz, numa linha, que os testes de PES estão na PsiGama; a página inicial, a navegação e o rodapé não os mencionam. Os códigos P2 e P3 ficam em `ProtocolCatalog.all()` e em `esp()`, porque estão nas sessões e na trilha |
-| Rotas no mesmo endereço | A página `/pes` da PsiGama aponta para `/testes/escolha-forcada`, `/testes/visao-remota` e o `/rodar` de cada um, em produção na raiz de `https://crivo.psigama.tec.br`, sem prefixo de caminho. `TrialRunController` e `ProtocolsController` não mudam de rota |
+| Rotas no mesmo endereço | A página `/pes` da PsiGama aponta para `/testes/escolha-forcada`, `/testes/visao-remota` e o `/rodar` de cada um, em produção na raiz de `https://crivo.psigama.com`, sem prefixo de caminho. `TrialRunController` e `ProtocolsController` não mudam de rota |
 | As páginas dos testes voltam para a PsiGama | A página do protocolo e a do resultado trocam "Voltar ao catálogo" pelo link de `ProtocolCatalog.espPage()`, um endereço só, no catálogo, porque é texto da SPEC. `NavigationAdvice` não marca "Protocolos" como seção atual nas páginas dos testes de PES (`Protocol.presentedByPsiGama()`) |
 
 **O que estes dois testes não fazem**: não dizem nada sobre mediunidade, e o pool público é
@@ -245,7 +245,7 @@ O que resta decidir é qual efeito declarar: os efeitos por seção de leitura e
 | `spring-modulith-starter-core` / `-test` | Fronteiras de módulo verificadas em teste (regra arquitetural 1) | Baixo |
 | `flyway-core`, `flyway-database-postgresql` | Migrações auditáveis | Baixo |
 | `postgresql` (driver) | Banco de referência | Baixo |
-| `io.zonky.test:embedded-postgres` + binários `linux-amd64` e `windows-amd64` (PostgreSQL 16.9) | **Substitui o Testcontainers e o Docker Compose**: PostgreSQL real em desenvolvimento e teste sem container, nos dois sistemas operacionais | Médio: é preciso acompanhar a versão dos binários do PostgreSQL. Aceito porque remove a dependência de Docker, exigida pela regra arquitetural 8. **Os binários 17.x falham no `initdb` em Windows** (`coluna "attnum" não existe`); a versão está fixada em 16.9.0 e só deve subir depois de testada nos dois sistemas |
+| `io.zonky.test:embedded-postgres` + binários `linux-amd64` e `windows-amd64` (PostgreSQL 18.6, a versão de produção) | **Substitui o Testcontainers e o Docker Compose**: PostgreSQL real em desenvolvimento e teste sem container, nos dois sistemas operacionais | Médio: é preciso acompanhar a versão dos binários do PostgreSQL. Aceito porque remove a dependência de Docker, exigida pela regra arquitetural 8. **Os binários 17.x falham no `initdb` em Windows** (`coluna "attnum" não existe`); a versão está fixada em 16.9.0 e só deve subir depois de testada nos dois sistemas |
 | `org.bouncycastle:bcpkix-jdk18on` 1.87 (traz `bcprov` e `bcutil`) | Carimbo de tempo RFC 3161 (SPEC 0.15, E8): montar o pedido e, sobretudo, **conferir o token** — estrutura CMS assinada, ASN.1, `messageImprint`, *nonce* e certificado do signatário. O JDK não tem API para nenhuma das três coisas, e reescrever um verificador de CMS seria o oposto de "maduro e chato" (P8). É a biblioteca de referência do ecossistema Java para isso, mantida há mais de 20 anos | Baixo: uma dependência, versão fixada em `bouncycastle.version`. Usada só no módulo `anchor`; a criptografia do resto do projeto continua JCA puro |
 | `spring-boot-starter-mail` (Jakarta Mail) | Confirmação de conta e avisos do P4 por SMTP externo (SPEC E13, E10 trava 3). É o cliente de e-mail do próprio Spring, sem serviço adicional: em desenvolvimento nada é enviado, em produção basta um SMTP | Baixo, versão alinhada pelo parent |
 | Nenhuma biblioteca de estatística | A análise primária é um teste binomial exato, escrito em aritmética racional (~40 linhas) e validado contra valores de referência | Nenhum |
@@ -301,7 +301,11 @@ Windows e Linux sem Docker e sem banco instalado.
 
 ## 9. Armadilhas conhecidas
 
-1. **Binários do PostgreSQL embarcado**: fixados em 16.9.0. Os 17.x quebram o `initdb` no Windows.
+1. **Binários do PostgreSQL embarcado**: fixados em 18.6.0, a mesma versão principal da produção
+   (Constitution, regra de implantação 4), conferida pelo `EmbeddedPostgresVersionTest`. Os 17.x
+   quebravam o `initdb` no Windows; os 18.x não. Ao mudar de versão principal, um cluster antigo em
+   `~/.airlab/pgdata` ou na pasta temporária dos testes não abre: a aplicação recusa com uma mensagem
+   que manda apagar o diretório (os dados ali são fictícios) ou apontar outro.
 2. **Diretório do cluster**: nunca aponte `airlab.local-database.data-directory` para pasta
    sincronizada (Google Drive, OneDrive) nem para disco de rede — o `initdb` falha ou o cluster
    corrompe. O padrão é `~/.airlab/pgdata`, e os testes usam o diretório temporário do sistema.

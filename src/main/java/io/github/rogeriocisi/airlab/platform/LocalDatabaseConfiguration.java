@@ -43,6 +43,14 @@ class LocalDatabaseConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(LocalDatabaseConfiguration.class);
 
+    /**
+     * Major version of the embedded binaries ({@code embedded-postgres-binaries.version} in
+     * {@code pom.xml}), which is also the version in production (docs/DEPLOY.md), so the suite
+     * proves what production runs. {@code EmbeddedPostgresVersionTest} checks it against the
+     * running server.
+     */
+    static final int POSTGRES_MAJOR = 18;
+
     private static final Object MONITOR = new Object();
     private static EmbeddedPostgres shared;
     private static String sharedKey;
@@ -71,7 +79,9 @@ class LocalDatabaseConfiguration {
             log.info("Subindo PostgreSQL embarcado na porta {} (dados em {})",
                     properties.port(), dataDirectory);
 
-            // Checked before starting: "could not lock" alone does not tell anyone what to do.
+            // Checked before starting: "could not lock" alone does not tell anyone what to do, and a
+            // cluster from another major version only fails deep inside the PostgreSQL log.
+            requireSameMajor(dataDirectory);
             requirePortFree(properties.port(), dataDirectory);
             EmbeddedPostgres instance;
             try {
@@ -110,6 +120,30 @@ class LocalDatabaseConfiguration {
         } catch (IOException e) {
             throw new IllegalStateException(alreadyInUse(dataDirectory, port), e);
         }
+    }
+
+    /**
+     * Refuses a data directory created by another major version of PostgreSQL, which the embedded
+     * binaries cannot open. It happens once on each machine after the binaries move to a new major
+     * version. A directory with no cluster yet passes: the start creates one.
+     */
+    static void requireSameMajor(Path dataDirectory) throws IOException {
+        Path versionFile = dataDirectory.resolve("PG_VERSION");
+        if (!Files.isRegularFile(versionFile)) {
+            return;
+        }
+        String found = Files.readString(versionFile).strip();
+        if (!found.equals(String.valueOf(POSTGRES_MAJOR))) {
+            throw new IllegalStateException(otherMajor(dataDirectory, found));
+        }
+    }
+
+    /** What to tell the person starting the application. ASCII only, like the rest of the log. */
+    static String otherMajor(Path dataDirectory, String found) {
+        return "Os dados em " + dataDirectory + " foram criados pelo PostgreSQL " + found
+                + ", e o Crivo agora embarca o PostgreSQL " + POSTGRES_MAJOR + ", que nao abre esses arquivos. "
+                + "Fora de producao os dados sao ficticios: apague esse diretorio para comecar do zero, "
+                + "ou de a AIRLAB_LOCAL_DB_DIR um diretorio novo (nos testes, AIRLAB_TEST_DB_DIR).";
     }
 
     /** What to tell the person starting the application. ASCII only, like the rest of the log. */
