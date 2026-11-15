@@ -68,8 +68,8 @@ Uma vez, na VM. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinger
 
 O workflow entra na VM como um usuário próprio, `deploy`, que só pode trocar o JAR e reiniciar o serviço.
 
-1. Gere um par de chaves só para isso, fora da VM: `ssh-keygen -t ed25519 -f crivo-deploy -C github-actions-crivo`.
-2. Na VM: `sudo adduser --disabled-password --gecos "" deploy` e coloque o conteúdo de `crivo-deploy.pub` em `/home/deploy/.ssh/authorized_keys`, com permissão `600`.
+1. Gere um par de chaves só para isso, fora da VM e sem senha, porque o workflow não tem como digitá-la: `ssh-keygen -t ed25519 -N '' -f crivo-deploy -C github-actions-crivo`. No Windows, deixe a chave privada legível só pelo seu usuário (o SSH do Windows recusa chave que outra conta lê).
+2. Na VM: `sudo adduser --disabled-password --gecos "" deploy` e coloque `restrict` seguido do conteúdo de `crivo-deploy.pub` em `/home/deploy/.ssh/authorized_keys`, com permissão `600`. O `restrict` corta encaminhamento de porta, de agente e X11 e o terminal; o `scp` e o `bash -s` do workflow continuam funcionando.
 3. Crie `/etc/sudoers.d/airlab-deploy` com `sudo visudo -f /etc/sudoers.d/airlab-deploy`:
 
    ```text
