@@ -3,7 +3,7 @@
 > Spec de alto nível. Cada épico abaixo vira uma spec detalhada própria antes da implementação.
 > Conformidade obrigatória com `CONSTITUTION.md`. Contexto e motivação em `VISION.md`. Fundamentação científica em `REFERENCES.md`.
 >
-> Versão 0.19 · novembro/2026 · 0.2: seção 2.1 "O que é uma leitura", regra "um item = uma afirmação" e referências · 0.3: critérios de inclusão de médiuns no pré-registro, regra de parada vinculante e unidade de análise por par (seções 5 e 9) · 0.4: medida primária pareada com Wilcoxon exato, teste de permutação de Pratt e Birge, controles de comprimento e de pistas temporais, escala de itens de cinco categorias e desvios de protocolo — derivados dos artigos em `references/` · 0.5: *sitter* passa a ser **consulente** em todo o texto em português, com a forma inglesa registrada no glossário e mantida nos identificadores do código · 0.6: épico E10, autoatendimento e automação, com as travas obrigatórias · 0.7: o Crivo passa a ser uma plataforma de protocolos de cognição anômala, com catálogo de protocolos (seção 1.1) e os épicos E11 e E12 — dois testes integralmente automatizáveis · 0.8: a semente dos testes de autoatendimento passa a ter duas metades, uma do servidor e uma do participante, o que remove a necessidade de confiar na plataforma quanto à ordem dos fatos · 0.9: protocolo **P4, leitura estruturada automatizada** (épico E13), o ramo AIR integralmente automatizado: contas com perfil fixo (consulente ou médium), questionário fechado preenchido pelo consulente e pelo médium e conferência automática contra o alvo e o chamariz; o catálogo passa a se dividir em **protocolos AIR** e **experimentos extras** · 0.10: fase B do P4 — questionário versionado `v1-rascunho`, pedido de consulta travado com compromisso salgado, rascunho só na sessão, campos de pareamento iguais aos do P1 e formulário fechado em produção sem referência do CEP; seção 10 atualizada · 0.11: fase C do P4 — estudo P4 congelado numa tela com o questionário no anexo, compromisso sobre a semente, ciclo automático de pareamento e envio, um médium sorteado por par, leitura travada com compromisso salgado, prazo com reenvio, e nenhum código de médium na trilha antes do desmascaramento · 0.12: fase D do P4 — desmascaramento automático no N, conferência com integridade verificada, análise primária e secundárias, relatório com hash, devolutiva do consulente e do médium; e o esclarecimento, na página inicial, de que o P4 não é mensagem do falecido nem resposta a perguntas · 0.13: fase E do P4 — sinalização de contas ligadas por índice cego, sem bloqueio e com revisão humana; teto de pares por médium no pré-registro; página pública dos estudos e relatórios · 0.14: **o P1, leitura pareada conduzida por equipe, é descontinuado** — não será implementado; o Crivo segue só com o protocolo AIR totalmente automático (P4). Os épicos E4 a E7, que eram do P1, ficam no texto como registro e sem implementação · 0.15: **ancoragem externa da trilha por carimbo de tempo RFC 3161, fase 1, com o FreeTSA** (E8) — a cabeça da trilha é carimbada logo depois de cada marco (congelamento, emenda, revelação da semente, relatório) e uma vez por dia se mudou; o token é conferido antes de ser guardado, fica público e a CLI o reconfere · 0.16: **os testes de ESP — P2 (E11) e P3 (E12) — saem do catálogo e da navegação do site do Crivo** e passam a ser apresentados pela PsiGama, na página de testes de percepção extrassensorial (`https://psigama.com/pes/`); o motor, as rotas e as garantias continuam no servidor do Crivo (seção 1.1, regra 7) · 0.17: **renumeração dos protocolos, antes de qualquer dado real** — P1-automático (era P4), P2-supervisionado (era P1, descontinuado), P3-precognição (era P2), P4-visão-remota (era P3) —; os testes de ESP voltam a ser listados no site do Crivo; uma página de protocolos (`/protocolos`) e uma por protocolo (`/protocolo/P1` a `/protocolo/P4`), com as rotas `/testes/...` redirecionadas; o questionário em vigor publicado, campo a campo, na página do P1 · 0.18: vocabulário — o Crivo é a **plataforma**; os quatro **protocolos** são de dois tipos, dois **experimentos** de mediunidade (P1, P2) e dois **testes** de percepção extrassensorial (P3, P4); o catálogo ganha a coluna Tipo, e o glossário, os quatro termos · 0.19: regra 1 do catálogo separa as garantias de toda sessão (sorteio com compromisso e revelação, alvo fora do alcance de quem responde, trilha encadeada e carimbada) das de todo estudo (pré-registro, rótulo confirmatório pela política e pacote de verificação); as sessões anônimas dos testes têm as primeiras, não as segundas
+> Versão 0.20 · novembro/2026 · 0.2: seção 2.1 "O que é uma leitura", regra "um item = uma afirmação" e referências · 0.3: critérios de inclusão de médiuns no pré-registro, regra de parada vinculante e unidade de análise por par (seções 5 e 9) · 0.4: medida primária pareada com Wilcoxon exato, teste de permutação de Pratt e Birge, controles de comprimento e de pistas temporais, escala de itens de cinco categorias e desvios de protocolo — derivados dos artigos em `references/` · 0.5: *sitter* passa a ser **consulente** em todo o texto em português, com a forma inglesa registrada no glossário e mantida nos identificadores do código · 0.6: épico E10, autoatendimento e automação, com as travas obrigatórias · 0.7: o Crivo passa a ser uma plataforma de protocolos de cognição anômala, com catálogo de protocolos (seção 1.1) e os épicos E11 e E12 — dois testes integralmente automatizáveis · 0.8: a semente dos testes de autoatendimento passa a ter duas metades, uma do servidor e uma do participante, o que remove a necessidade de confiar na plataforma quanto à ordem dos fatos · 0.9: protocolo **P4, leitura estruturada automatizada** (épico E13), o ramo AIR integralmente automatizado: contas com perfil fixo (consulente ou médium), questionário fechado preenchido pelo consulente e pelo médium e conferência automática contra o alvo e o chamariz; o catálogo passa a se dividir em **protocolos AIR** e **experimentos extras** · 0.10: fase B do P4 — questionário versionado `v1-rascunho`, pedido de consulta travado com compromisso salgado, rascunho só na sessão, campos de pareamento iguais aos do P1 e formulário fechado em produção sem referência do CEP; seção 10 atualizada · 0.11: fase C do P4 — estudo P4 congelado numa tela com o questionário no anexo, compromisso sobre a semente, ciclo automático de pareamento e envio, um médium sorteado por par, leitura travada com compromisso salgado, prazo com reenvio, e nenhum código de médium na trilha antes do desmascaramento · 0.12: fase D do P4 — desmascaramento automático no N, conferência com integridade verificada, análise primária e secundárias, relatório com hash, devolutiva do consulente e do médium; e o esclarecimento, na página inicial, de que o P4 não é mensagem do falecido nem resposta a perguntas · 0.13: fase E do P4 — sinalização de contas ligadas por índice cego, sem bloqueio e com revisão humana; teto de pares por médium no pré-registro; página pública dos estudos e relatórios · 0.14: **o P1, leitura pareada conduzida por equipe, é descontinuado** — não será implementado; o Crivo segue só com o protocolo AIR totalmente automático (P4). Os épicos E4 a E7, que eram do P1, ficam no texto como registro e sem implementação · 0.15: **ancoragem externa da trilha por carimbo de tempo RFC 3161, fase 1, com o FreeTSA** (E8) — a cabeça da trilha é carimbada logo depois de cada marco (congelamento, emenda, revelação da semente, relatório) e uma vez por dia se mudou; o token é conferido antes de ser guardado, fica público e a CLI o reconfere · 0.16: **os testes de ESP — P2 (E11) e P3 (E12) — saem do catálogo e da navegação do site do Crivo** e passam a ser apresentados pela PsiGama, na página de testes de percepção extrassensorial (`https://psigama.com/pes/`); o motor, as rotas e as garantias continuam no servidor do Crivo (seção 1.1, regra 7) · 0.17: **renumeração dos protocolos, antes de qualquer dado real** — P1-automático (era P4), P2-supervisionado (era P1, descontinuado), P3-precognição (era P2), P4-visão-remota (era P3) —; os testes de ESP voltam a ser listados no site do Crivo; uma página de protocolos (`/protocolos`) e uma por protocolo (`/protocolo/P1` a `/protocolo/P4`), com as rotas `/testes/...` redirecionadas; o questionário em vigor publicado, campo a campo, na página do P1 · 0.18: vocabulário — o Crivo é a **plataforma**; os quatro **protocolos** são de dois tipos, dois **experimentos** de mediunidade (P1, P2) e dois **testes** de percepção extrassensorial (P3, P4); o catálogo ganha a coluna Tipo, e o glossário, os quatro termos · 0.19: regra 1 do catálogo separa as garantias de toda sessão (sorteio com compromisso e revelação, alvo fora do alcance de quem responde, trilha encadeada e carimbada) das de todo estudo (pré-registro, rótulo confirmatório pela política e pacote de verificação); as sessões anônimas dos testes têm as primeiras, não as segundas · 0.20: **protocolos antes do catálogo** (seção 1.2) — os estágios de conjectura e de concepção, que não aparecem em público; o **P5**, o Áxion, precognição com e sem retorno, entra **em concepção** como **experimento**, com o épico E14 em rascunho e as questões 14 a 18 em aberto, sem implementação e fora do catálogo; **o tipo de um protocolo passa a seguir a forma, não o ramo** — experimento roda em estudo pré-registrado, com conta, e só tem resultado no fim; teste roda em sessão anônima, com resultado na hora (seção 1.1, questão 13) —, sem mudar o tipo de P1 a P4; o código **P6** fica reservado para a chave póstuma, uma conjectura; o catálogo continua com P1 a P4, e nenhum código muda
 
 ---
 
@@ -28,10 +28,11 @@ O ramo AIR tem **um protocolo ativo, o P1**, que roda inteiro pelo site, sem nin
 
 **Dentro do escopo**: um estudo por vez e por protocolo, um pesquisador (o **administrador** da instalação), exportação de dados e verificação; o P1 com inscrição aberta por conta; os dois testes de ESP, P3 e P4, em autoatendimento público no site do Crivo.
 **Fora do escopo**: multi-tenant, ganzfeld (exige emissor e cabine), presentimento e DMILS (exigem sensores), ESP em sonho (exige pernoite), juízes externos remunerados, aplicativo mobile, integração com IA na avaliação.
+**Antes do catálogo** (v0.20): o P5, em concepção, e o P6, conjectura (seção 1.2). Nenhum dos dois é implementado, e nenhum aparece em público além do que a seção 1.2 permite.
 
 ### 1.1 Catálogo de protocolos
 
-No site do Crivo, o catálogo é uma página só, **Protocolos** (`/protocolos`), com os quatro em ordem de código: o P1 em destaque, o P2 como referência e os testes de ESP, P3 e P4, que se fazem na hora e anônimos. Os protocolos AIR e os de ESP aparecem separados, com o ramo declarado (regra 4). Até a v0.15 os testes de ESP formavam a seção de **experimentos extras**; na v0.16 passaram a ser apresentados só pela PsiGama; desde a v0.17 voltam a ser listados aqui. O Crivo é a **plataforma**; cada um dos quatro é um **protocolo**, e eles são de dois tipos: os **experimentos** (P1 e P2, mediunidade), que envolvem consulente e médium, pedem conta e só têm resultado no fim de um estudo pré-registrado, e os **testes** (P3 e P4, percepção extrassensorial), anônimos, rápidos e com resultado na hora. O tipo sai do ramo do protocolo e aparece ao lado do rótulo, como em "P1-automático · experimento".
+No site do Crivo, o catálogo é uma página só, **Protocolos** (`/protocolos`), com os quatro em ordem de código: o P1 em destaque, o P2 como referência e os testes de ESP, P3 e P4, que se fazem na hora e anônimos. Os protocolos AIR e os de ESP aparecem separados, com o ramo declarado (regra 4). Até a v0.15 os testes de ESP formavam a seção de **experimentos extras**; na v0.16 passaram a ser apresentados só pela PsiGama; desde a v0.17 voltam a ser listados aqui. O Crivo é a **plataforma**; cada um dos quatro é um **protocolo**, e eles são de dois tipos: os **experimentos** (P1 e P2, mediunidade), que envolvem consulente e médium, pedem conta e só têm resultado no fim de um estudo pré-registrado, e os **testes** (P3 e P4, percepção extrassensorial), anônimos, rápidos e com resultado na hora. **Desde a v0.20, o tipo sai da forma do protocolo, não do ramo**: experimento é o protocolo que roda em estudo pré-registrado, com conta, e só tem resultado no fim do estudo; teste é o que roda em sessão anônima, com resultado na hora. Para P1 a P4 as duas regras dão o mesmo tipo; a diferença aparece no P5, em concepção, que será um experimento do ramo ESP (seção 1.2). A implementação ainda deriva o tipo do ramo (`Protocol.Branch`) e passa a declará-lo em cada protocolo quando o P5 entrar no catálogo. O tipo aparece ao lado do rótulo, como em "P1-automático · experimento".
 
 | Código | Nome curto | Tipo | Nome público | Ramo | Acaso | Automação | Épico |
 |---|---|---|---|---|---|---|---|
@@ -54,15 +55,40 @@ Regras do catálogo:
 
    **Aceite da regra 7**: a página de protocolos lista os quatro, com links para `/protocolo/P1` a `/protocolo/P4`; cada página imprime os limites; a do P1 mostra o questionário em vigor; as rotas antigas redirecionam com 301; e nenhum teste de E11 ou E12 é desativado.
 
+### 1.2 Protocolos antes do catálogo
+
+**Decisão da v0.20.** O catálogo da seção 1.1 lista só os protocolos que existem: P1 a P4. Antes de entrar nele, um protocolo novo passa por dois estágios que não aparecem em público.
+
+| Estágio | O que existe | Onde aparece |
+|---|---|---|
+| **Conjectura** | Um código reservado e uma ideia, sem desenho | Só nesta seção e no documento de visão que a cite |
+| **Em concepção** | Código, épico em rascunho nesta SPEC e documento de visão em `docs/` | Só nesta SPEC e em `docs/`; na PsiGama, no máximo o nome do projeto e a indicação "em concepção" |
+| **No catálogo** | Épico aprovado e implementação, em construção ou pronta | `ProtocolCatalog`, `/protocolos`, a página do protocolo e as páginas da PsiGama |
+
+| Código | Estágio | Nome | Tipo | Ramo | Onde está |
+|---|---|---|---|---|---|
+| **P5** | Em concepção (v0.20) | Precognição com e sem retorno — nome público **Áxion**, rótulo provisório **P5-retorno** | Experimento | ESP (precognição) | E14 e `docs/VISION-AXION.md` |
+| **P6** | Conjectura (v0.20) | Chave póstuma | — | AIR (mediunidade) | Esta linha e `docs/VISION-AXION.md`, seção 12.3 |
+
+Regras:
+
+1. **Fora do catálogo, fora do site.** Um protocolo em conjectura ou em concepção não entra no `ProtocolCatalog`, nem com o status `PLANNED` ("Planejado"); não tem rota, página, tela, aviso nem e-mail no Crivo; e não é citado nas páginas da PsiGama que apresentam o Crivo, que continuam falando de quatro protocolos.
+2. **O que a PsiGama pode dizer.** Um projeto em concepção pode ter página própria na PsiGama com o nome e a indicação "em concepção", sem desenho, sem código de protocolo e sem data. É o caso do Áxion (`psigama.com/axion`). Uma conjectura não aparece.
+3. **Código reservado não volta.** P5 e P6 estão reservados. Se uma conjectura ou uma concepção for abandonada, o código fica sem uso e não é reaproveitado (seção 1.1, regra 6).
+4. **Concepção não é especificação.** O épico de um protocolo em concepção é rascunho: muda sem emenda, e nada dele é implementado. Sair da concepção exige uma versão desta SPEC que decida as questões em aberto do protocolo e aprove o épico. Só então o protocolo entra no catálogo, com o status que a implementação justificar, e vale a regra 2 da seção 1.1: a página dele imprime o que o resultado não sustenta.
+5. **De conjectura a concepção.** Uma conjectura passa a concepção quando ganha documento de visão e épico em rascunho. No caso do P6, o desenho da devolutiva depende do resultado do P5 (`docs/VISION-AXION.md`, seção 12.3).
+
 ## 2. Glossário
 
 | Termo | Definição |
 |---|---|
 | **Estudo** | Uma instância de protocolo, com pré-registro, participantes e análise |
 | **Plataforma** | O Crivo: o software, as garantias comuns e o catálogo de protocolos |
-| **Protocolo** | Cada um dos quatro desenhos do catálogo (seção 1.1), de P1 a P4, com código e nome curto |
-| **Experimento** | Protocolo de mediunidade (AIR), hoje o P1 e o P2: consulente e médium, conta, estudo pré-registrado e resultado só no fim do estudo |
-| **Teste** | Protocolo de percepção extrassensorial (PES), hoje o P3 e o P4: anônimo, rápido, sem conta e com resultado na hora |
+| **Protocolo** | Cada um dos quatro desenhos do catálogo (seção 1.1), de P1 a P4, com código e nome curto. O P5 e o P6 têm código, mas ainda não são protocolos do catálogo (seção 1.2) |
+| **Experimento** | Protocolo que roda em estudo pré-registrado, com conta, e só tem resultado no fim do estudo; desde a v0.20, o tipo segue a forma, não o ramo. Hoje, o P1 e o P2, de mediunidade (AIR), com consulente e médium; o P5, em concepção, será um experimento do ramo ESP |
+| **Teste** | Protocolo que roda em sessão anônima, rápida e sem conta, com resultado na hora. Hoje, o P3 e o P4, de percepção extrassensorial (PES) |
+| **Conjectura** | Ideia de protocolo com código reservado e nenhum desenho, que não aparece em público (seção 1.2). Hoje, o P6 |
+| **Em concepção** | Estágio de um protocolo com código, épico em rascunho e documento de visão, sem implementação e fora do catálogo público (seção 1.2). Hoje, o P5 |
 | **Médium** | Participante que produz as leituras |
 | **Consulente** (em inglês, *sitter*) | Participante que conheceu uma pessoa falecida e avalia as leituras. A literatura internacional usa *sitter*: é o termo a procurar nos artigos e o identificador que permanece no código (`sitter_code`, `ParticipantRole.SITTER`) |
 | **Falecido-alvo** | A pessoa falecida indicada por um consulente; o médium recebe apenas o primeiro nome |
@@ -77,6 +103,9 @@ Regras do catálogo:
 | **Pedido de consulta** (P1) | O que o consulente envia: o primeiro nome do falecido e as respostas dele ao questionário, travadas com hash antes de qualquer médium receber o pedido |
 | **Questionário** (P1) | Lista versionada de campos fechados sobre o falecido, a mesma para o consulente e para o médium, congelada no pré-registro |
 | **Leitura estruturada** (P1) | As respostas do médium ao questionário, conhecendo só o primeiro nome do alvo |
+| **Retorno** (P5; em inglês, *feedback*) | Ver, depois de responder, o alvo da própria tentativa. No P5, cada tentativa é sorteada com retorno ou sem retorno, e o alvo de uma tentativa sem retorno nunca é mostrado ao participante |
+| **Farol de aleatoriedade** (P5; em inglês, *randomness beacon*) | Serviço público que publica, em intervalos fixos, valores aleatórios assinados que ninguém conhece antes da publicação. No P5, a rede drand, da League of Entropy |
+| **Gráfico de exclusão** (P5) | Para cada condição, o maior efeito compatível com os dados. Faz de um resultado nulo um limite superior publicado |
 
 ### 2.1 O que é uma leitura
 
@@ -145,7 +174,7 @@ Esta matriz é a **especificação de segurança central**. Cada célula "✗" v
 
 ## 5. Épicos
 
-> **E4, E5, E6 e E7 eram do P2 e estão descontinuados desde a v0.14.** O texto deles fica como registro das decisões de desenho, e nada neles deve ser implementado. E1, E2, E3, E8 e E9 continuam valendo para o P1 naquilo em que se aplicam; o E10 e o E13 são o centro do projeto.
+> **E4, E5, E6 e E7 eram do P2 e estão descontinuados desde a v0.14.** O texto deles fica como registro das decisões de desenho, e nada neles deve ser implementado. E1, E2, E3, E8 e E9 continuam valendo para o P1 naquilo em que se aplicam; o E10 e o E13 são o centro do projeto. O E14 é do P5, em concepção (seção 1.2): é rascunho, e nada nele deve ser implementado.
 
 ### E1. Estudo e pré-registro
 **Objetivo**: criar um estudo e congelar o pré-registro de forma verificável.
@@ -578,6 +607,64 @@ Rascunho para revisão do pesquisador; o que vale é a versão congelada no pré
 | Usava óculos | sim, não | sim |
 | Fumava | sim, não | sim |
 
+### E14. Precognição com e sem retorno (P5) — *em concepção*
+
+> **Em concepção (v0.20).** Rascunho do desenho, derivado de `docs/VISION-AXION.md`, onde estão também as referências; elas entram em `REFERENCES.md` quando o P5 sair da concepção. Nada aqui é implementado, e o P5 fica fora do catálogo público até lá (seção 1.2). As decisões pendentes são as questões 14 a 18 (seção 9); a 13, o tipo, está decidida: experimento.
+
+**Objetivo**: saber se a taxa de acerto em escolha forçada depende de a pessoa receber retorno sobre o alvo, num estudo confirmatório em que o alvo não está determinado em lugar nenhum na hora da resposta, e publicar o resultado como detecção ou como limite de exclusão.
+
+**Por que este protocolo**: os protocolos do catálogo perguntam se houve informação; nenhum pergunta de que ela depende. O modelo multifásico de Marwaha e May (2015) propõe que a psi informacional seja precognição da própria experiência futura de retorno; nesse caso, sem retorno não haveria sinal. A evidência é indireta: na meta-análise de Honorton e Ferrari (1989), sete dos oito estudos com participantes selecionados, teste individual e retorno a cada tentativa tiveram resultado significativo, numa comparação entre estudos; e o único teste direto encontrado, o Selfield (Varvoglis e colaboradores, 2019), teve 3 mil tentativas e diferença não significativa. A resposta interessa ao ramo AIR: se o acerto só aparece com retorno, negar a devolutiva ao médium vira controle no P1.
+
+**Ramo, tipo e rótulo**: ramo ESP (precognição); tipo **experimento** (questão 13, decidida na v0.20), porque roda só em estudo pré-registrado, com conta, e só tem resultado no fim do estudo; rótulo provisório **P5-retorno**, nome público **Áxion**. Acaso de 25%, declarado (seção 1.1, regra 3). Na implementação, o tipo do P5 é declarado, e não derivado de `Protocol.Branch`, que daria "teste" a um protocolo de ESP; o rótulo do tipo na página é "Experimento de percepção extrassensorial (PES)".
+
+**Desenho**:
+
+- **Só como estudo.** O P5 roda só como estudo pré-registrado, com participantes identificados por conta com e-mail confirmado e termo na versão corrente (E10, travas 3 e 6). Não há sessão anônima.
+- **Sessão com número fixo de tentativas**, declarado no pré-registro, como no P3.
+- **Rodada fixada antes da resposta.** Ao abrir cada tentativa, o sistema fixa a rodada futura do farol que vai defini-la — drand, rede *quicknet*, uma rodada a cada 3 segundos —, e a trilha registra a tentativa com a rodada.
+- **Resposta antes da rodada.** A pessoa escolhe uma entre quatro alternativas, e a resposta trava com recibo. Resposta que chegue depois da publicação da rodada é recusada pelo banco, e a tentativa fica anulada. A anulação não depende do desfecho, que a pessoa não tem como conhecer.
+- **Condição e alvo saem da semente e da rodada.** A semente do estudo é sorteada com `SecureRandom`, comprometida no pré-registro, guardada em custódia cifrada e revelada no desmascaramento (Constitution P5). Publicada a rodada, a condição — com ou sem retorno, com probabilidade 1/2 — e o alvo são função pública da semente e do valor da rodada, como os sorteios do P1 são função da semente e de entradas registradas. A regra exata fica para a especificação.
+- **Na hora da resposta, nada está determinado.** Sem a rodada, nem o servidor conhece o alvo ou a condição; sem a semente, quem conhecer a rodada também não.
+- **Sem retorno, o alvo só existe no desmascaramento.** Imposto no banco: o alvo de uma tentativa sem retorno fica vazio até lá.
+- **Retorno no fim da sessão.** A pessoa vê, de uma vez, o alvo de cada tentativa com retorno ao lado da própria resposta; das tentativas sem retorno, vê a própria resposta e o aviso de que não haverá retorno. O sistema não calcula total, taxa nem agregado de nenhum tipo.
+- **Sessão abandonada** fica registrada e entra no denominador, como no P3. O retorno das tentativas com retorno fica disponível na conta, e a trilha registra se ele foi visto.
+- **Desmascaramento automático no N** pré-registrado: a semente é revelada, os alvos das tentativas sem retorno são calculados, e a análise e o relatório rodam. Ninguém escolhe o momento.
+
+**Trava própria do P5** (proposta; questão 14): uma exceção estreita à trava 1 do E10. O participante vê o retorno das próprias tentativas com retorno no fim de cada sessão, enquanto o estudo corre, porque essa é a manipulação do estudo. Nada além disso: nenhum agregado, para ninguém; nunca o alvo de uma tentativa sem retorno; para o administrador, só contagens. A exceção não reabre a parada opcional, porque a análise é por tentativa, com toda tentativa travada no denominador.
+
+**Análise** (rascunho):
+
+- **Unidade: a tentativa, contra o acaso declarado.** A pessoa vê o próprio retorno e pode continuar ou parar a partir dele, e médias por pessoa ficariam enviesadas por essa decisão. A contagem de acertos sobre todas as tentativas travadas não fica: sob a hipótese nula, cada tentativa acerta com probabilidade 0,25, qualquer que seja a decisão de continuar.
+- **Duas comparações pré-registradas**: o efeito total, com as duas condições juntas contra o acaso, e a diferença entre as condições, com intervalo que leve em conta a variação entre pessoas.
+- **Gráfico de exclusão**: para cada condição e para a diferença, o maior efeito compatível com os dados. "Sem diferença" só vale se o intervalo excluir uma margem declarada no pré-registro.
+- **Tamanho**: o efeito médio de Honorton e Ferrari, cerca de 0,02 por tentativa, é pouco menos de 1 ponto percentual acima de 25%. Detectar uma diferença dessa ordem entre as condições, com poder de 80% e α = 0,05 unilateral, pede cerca de 60 mil tentativas (questão 18).
+
+**Matriz de visibilidade do P5** (rascunho):
+
+| Informação ↓ / Papel → | Administrador | Participante |
+|---|---|---|
+| Identidade das contas | ✓ | só a própria |
+| Respostas | ✗ até o desmascaramento | só as próprias |
+| Condição de cada tentativa | ✗ até o desmascaramento | só as próprias, no fim da sessão |
+| Alvo de tentativa com retorno | ✗ até o desmascaramento | só os próprios, no fim da sessão |
+| Alvo de tentativa sem retorno | ✗ até o desmascaramento, quando passa a existir | ✗ nunca |
+| Total, taxa ou agregado de acertos | ✗ até o desmascaramento, quando passa a existir | ✗ o sistema não calcula |
+| Semente do estudo | ✗ até a revelação | ✗ |
+| Rodadas do farol | ✓ públicas | ✓ públicas |
+
+**Dependência nova** (Constitution P8): o cliente do farol. Ele é o ponto do desenho, o único jeito de o alvo não estar determinado nem para quem opera o servidor. A plataforma não passa a depender dele: só o P5 espera pela rodada, e nunca a troca por semente local. Onde se verifica a assinatura é a questão 16.
+
+**O que o resultado do P5 não sustenta**:
+
+- Um nulo vale para escolha forçada on-line, com voluntários não selecionados e retorno no fim da sessão. Não refuta resposta livre, participantes selecionados nem retorno imediato.
+- No desmascaramento, o administrador vê o agregado das tentativas sem retorno: o desenho não exclui psi do experimentador.
+- Um positivo só com retorno apoia os modelos de retorno, mas não distingue entre eles.
+- Nada sobre pessoas falecidas ou sobrevivência. O vínculo com o P1 é de desenho, não de evidência.
+
+**Aceite** (rascunho, para quando o P5 sair da concepção): nenhuma tentativa sem rodada fixada antes da resposta; resposta depois da rodada recusada pelo banco; alvo e condição não obtíveis por nenhuma via antes da rodada; alvo de tentativa sem retorno nunca exibido ao participante nem calculado antes do desmascaramento; nenhum agregado antes do desmascaramento; a semente revelada e as rodadas públicas reproduzem todos os alvos e todas as condições; sessões abandonadas no denominador; e a análise refeita pelo script de referência dá os mesmos números.
+
+**Fora deste épico**: o retorno imediato e as outras varreduras, que serão novos estudos do P5, cada um com o próprio pré-registro; o braço sem devolutiva no P1; e o P6.
+
 ## 6. Modelo de domínio (macro)
 
 ```
@@ -666,12 +753,30 @@ O MVP é o **P1 de ponta a ponta** (E13, fases A a E, implementadas), sobre E1, 
 12. **P1 — carga por médium** — *resolvido na v0.13*: o teto de pares por médium é declarado no
     pré-registro, e o relatório mostra a soma de `d` por médium. O que resta decidir é o valor do
     teto de um estudo real, que depende de quantos médiuns se inscreverem.
+13. **P5 — experimento ou teste** — *decidido na v0.20: experimento*. Pelo vocabulário da v0.18,
+    o tipo saía do ramo, e o P5, de ESP, seria teste; mas ele pede conta, só roda como estudo
+    pré-registrado e tem resultado no fim do estudo, que é a forma dos experimentos. Desde a v0.20,
+    o tipo segue a forma (seção 1.1). A alternativa descartada era um teste que só rodasse como
+    estudo confirmatório (seção 1.1, regra 1).
+14. **P5 — exceção à trava 1 do E10**: aprovar a trava própria proposta no E14, o retorno no fim
+    da sessão. Retorno imediato pediria outra emenda e fica para um estudo posterior.
+15. **P5 — dados abertos e o "nunca"**: com a semente e as rodadas, o pacote de verificação (E9,
+    Constitution P7) deixaria quem guardou as próprias respostas descobrir o alvo de uma tentativa
+    sem retorno. Opções: publicar as tentativas sem retorno sem nada que as ligue a uma pessoa ou a
+    um horário, entregar o pacote completo só a auditores, ou publicar depois de um embargo longo.
+16. **P5 — o farol**: a justificativa escrita da dependência (Constitution P8) e onde se verifica
+    a assinatura da rodada — no servidor, com uma biblioteca nova, ou só no pacote de verificação,
+    com o servidor conferindo a rodada em mais de um endereço.
+17. **P5 — estímulos**: o banco de imagens versionado do P4 ou quatro alternativas fixas, como no
+    P3.
+18. **P5 — tamanho e análise**: o N em tentativas ou em pessoas, as tentativas por pessoa, a
+    margem de "sem diferença", o α e a ordem das duas comparações.
 
 ## 10. Próximos passos
 
 Os passos iniciais desta seção estão feitos: os documentos estão em `/docs` e no `CLAUDE.md`, o plano técnico existe (`docs/PLAN.md`), E8 e E3 estão implementados, e a matriz de cegamento é uma suíte de testes (`BlindingMatrixTest`) que cresce antes de cada tela. O estado detalhado por épico está no plano técnico. A ordem daqui em diante:
 
-Desde a v0.14, só o P1.
+Desde a v0.14, só o P1. O P5 (E14) não entra nesta lista enquanto estiver em concepção: nada dele é implementado antes de as questões 14 a 18 serem decididas e o épico ser aprovado (seção 1.2).
 
 1. **E8**: ~~ancoragem externa por carimbo RFC 3161~~ — fase 1, FreeTSA, na v0.15. Falta decidir a espera pelo carimbo antes do primeiro envio e a fase 2, OpenTimestamps (questão 8).
 2. **E9**: pacote de verificação do P1, com os envios, as listas de elegíveis e as leituras — depende da decisão de LGPD sobre publicar respostas sobre pessoas falecidas.
