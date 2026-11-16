@@ -2,7 +2,7 @@
 
 > Este documento define os **princípios inegociáveis** do projeto e a **arquitetura tecnológica de referência**. Toda spec, plano e tarefa deve estar em conformidade com ele. Quando houver conflito entre este documento e qualquer outro, **este prevalece**.
 >
-> Versão 1.5.1 · Ratificada em: novembro/2026 · 1.5.1: redação — os protocolos citados aqui seguem a numeração da SPEC 0.17 (o protocolo P1 é a leitura estruturada automatizada, antes P4; o P2, a leitura pareada, antes P1), escritos "protocolo Px" para não se confundirem com os princípios P1–P10; nenhum princípio nem regra alterados · 1.5.0: a produção passa para uma VPS da Hostinger no data center de São Paulo, por decisão do pesquisador principal — os dados ficam no Brasil, e a exceção da regra 1 deixa de ser usada —, e o PostgreSQL embarcado dos testes passa a ter a mesma versão principal que o de produção (regra 4); nenhum princípio alterado · 1.4.0: a VM de produção pode ficar fora do Brasil quando a conta do provedor não oferecer região no Brasil sem custo — hoje, a conta Always Free da Oracle Cloud, com região inicial em Phoenix (EUA) —, por decisão do pesquisador principal; dado real de participante só entra nela depois de documentada a base legal da transferência internacional (LGPD, art. 33); nenhum princípio alterado · 1.3.0: contas com perfil fixo para o protocolo P4 e envio de e-mail por SMTP, por decisão do pesquisador principal; nenhum princípio alterado · 1.1.0: adicionada a seção "Implantação por fase" · 1.1.1: nome público "Crivo", codinome técnico "AIR Lab" · 1.2.0: arquitetura sem Docker — aplicação executada por linha de comando (JAR/Spring Boot) em Windows e Linux, com PostgreSQL nativo ou embarcado
+> Versão 1.6.0 · Ratificada em: novembro/2026 · 1.6.0: as páginas editoriais do Crivo passam a ser um site estático no GitHub Pages, em `crivo.psigama.com`, publicado a cada push na `main`, e a aplicação vai para `app.crivo.psigama.com`, por decisão do pesquisador principal (regra de implantação 9); o que vem do código dos protocolos ou do banco continua só na aplicação; nenhum princípio alterado · 1.5.1: redação — os protocolos citados aqui seguem a numeração da SPEC 0.17 (o protocolo P1 é a leitura estruturada automatizada, antes P4; o P2, a leitura pareada, antes P1), escritos "protocolo Px" para não se confundirem com os princípios P1–P10; nenhum princípio nem regra alterados · 1.5.0: a produção passa para uma VPS da Hostinger no data center de São Paulo, por decisão do pesquisador principal — os dados ficam no Brasil, e a exceção da regra 1 deixa de ser usada —, e o PostgreSQL embarcado dos testes passa a ter a mesma versão principal que o de produção (regra 4); nenhum princípio alterado · 1.4.0: a VM de produção pode ficar fora do Brasil quando a conta do provedor não oferecer região no Brasil sem custo — hoje, a conta Always Free da Oracle Cloud, com região inicial em Phoenix (EUA) —, por decisão do pesquisador principal; dado real de participante só entra nela depois de documentada a base legal da transferência internacional (LGPD, art. 33); nenhum princípio alterado · 1.3.0: contas com perfil fixo para o protocolo P4 e envio de e-mail por SMTP, por decisão do pesquisador principal; nenhum princípio alterado · 1.1.0: adicionada a seção "Implantação por fase" · 1.1.1: nome público "Crivo", codinome técnico "AIR Lab" · 1.2.0: arquitetura sem Docker — aplicação executada por linha de comando (JAR/Spring Boot) em Windows e Linux, com PostgreSQL nativo ou embarcado
 
 ---
 
@@ -139,8 +139,8 @@ O mesmo artefato (um JAR executável) serve a todas as fases, acionado pelo mesm
 |---|---|---|---|
 | **Desenvolvimento** | Workstation do autor, **Windows ou Linux** (perfil `local`) | Somente fictícios | Local (`localhost`) |
 | **Dry-run** | Workstation Windows ou Linux (perfil `local`) | Fictícios (pessoas reais simulando papéis com falecidos inventados) | Temporária, via **Cloudflare Tunnel** ou **Tailscale Funnel**; sem abrir portas no roteador; túnel desligado ao fim de cada sessão de teste |
-| **Piloto / estudos reais** | **VPS Linux**, de preferência com região no Brasil; hoje, uma VPS da Hostinger em São Paulo (1–2 vCPU e 2–4 GB de RAM bastam), perfil `prod`: JAR como serviço `systemd` + PostgreSQL do sistema | Reais, sensíveis | HTTPS público, só com as rotas da aplicação |
-| **Pós-estudo** | VPS desligada ou arquivada | Dados identificáveis eliminados conforme o termo de consentimento | Nenhuma; o que permanece público fica nos repositórios externos (abaixo) |
+| **Piloto / estudos reais** | **VPS Linux**, de preferência com região no Brasil; hoje, uma VPS da Hostinger em São Paulo (1–2 vCPU e 2–4 GB de RAM bastam), perfil `prod`: JAR como serviço `systemd` + PostgreSQL do sistema | Reais, sensíveis | HTTPS público, só com as rotas da aplicação, em `app.crivo.psigama.com`; as páginas editoriais ficam num site estático à parte (regra 9) |
+| **Pós-estudo** | VPS desligada ou arquivada | Dados identificáveis eliminados conforme o termo de consentimento | Nenhuma; o que permanece público fica no site estático e nos repositórios externos (abaixo) |
 
 #### Regras de implantação
 
@@ -156,6 +156,12 @@ O mesmo artefato (um JAR executável) serve a todas as fases, acionado pelo mesm
 6. **Transcrição sempre local (P6, P10)**: o whisper.cpp roda na **workstation**, nunca na VPS. O fluxo é: baixar o áudio por canal autenticado → transcrever localmente → subir apenas o texto → apagar a cópia local do áudio ao fim do estudo, conforme o termo.
 7. **Segredos**: em variáveis de ambiente ou arquivo `.env` com permissão restrita no servidor, nunca no repositório.
 8. **Atualizações**: versões de JDK, PostgreSQL e dependências fixadas e registradas; atualizações de segurança do sistema operacional automáticas; atualização da aplicação só entre sessões de coleta, nunca durante um estudo em andamento sem registro na trilha de auditoria.
+9. **Site editorial** (v1.6.0): as páginas editoriais do Crivo — texto escrito à mão, sem nada que venha do código que roda os protocolos ou do banco — são um site estático no **GitHub Pages**, em `crivo.psigama.com`. Ele é publicado a cada push na `main`, por um workflow que não tem acesso à VPS. Essas páginas não são a aplicação, e a regra 8 não se aplica a elas. Ficam na aplicação, em `app.crivo.psigama.com`, e só mudam com ela:
+   - o que vem do código dos protocolos: catálogo, limites declarados e questionário;
+   - o que vem do banco;
+   - a página que descreve o procedimento e os direitos de quem participa.
+
+   A divisão e as regras do site estão na SPEC, seção 1.3. Quando a VPS for arquivada (fase pós-estudo), as páginas da aplicação que precisarem continuar públicas podem ir para o site numa cópia final, porque o código não muda mais.
 
 #### Execução por linha de comando
 
@@ -187,6 +193,7 @@ O que precisa permanecer acessível depois do estudo **não depende do servidor 
 | Pacote de verificação | **Zenodo** (gera DOI e é citável) |
 | Código-fonte | **GitHub** (repositório público) |
 | Página de resultados | **GitHub Pages** (site estático) |
+| Apresentação do Crivo: as páginas editoriais | **GitHub Pages**, em `crivo.psigama.com` (regra de implantação 9) |
 
 #### Alternativa institucional
 Se o estudo for vinculado a uma universidade (por exemplo, por causa do CEP), avaliar a infraestrutura da própria instituição para a fase de piloto. Isso reforça a credibilidade e pode cumprir exigências do comitê. Nesse caso, as regras 1 a 8 continuam valendo.

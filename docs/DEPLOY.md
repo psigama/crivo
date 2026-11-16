@@ -1,6 +1,6 @@
 # Integração contínua e implantação
 
-Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://crivo.psigama.com`. As regras que valem acima deste roteiro estão na [Constitution](CONSTITUTION.md), em *Implantação por fase*.
+Como o Crivo é testado no GitHub e publicado em dois lugares (SPEC, seção 1.3): a **aplicação**, na VM de produção, em `https://app.crivo.psigama.com`, e o **site** com as páginas editoriais, no GitHub Pages, em `https://crivo.psigama.com`. As regras que valem acima deste roteiro estão na [Constitution](CONSTITUTION.md), em *Implantação por fase*.
 
 ## Visão geral
 
@@ -8,9 +8,11 @@ Como o Crivo é testado no GitHub e implantado na VM de produção, em `https://
 |---|---|---|
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | GitHub Actions | A cada push na `main` e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado |
 | [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) | GitHub Actions, acionado à mão | Constrói e testa o JAR, entra na VM por SSH com chave, envia o JAR, troca a versão e confere a saúde; se a aplicação não subir, volta para a versão anterior |
+| [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) | GitHub Actions, a cada push na `main` | Gera o site estático com `airlab site` e o publica no GitHub Pages. Não tem segredo de SSH nem usa o ambiente `production`: não tem como chegar à VM (seção 5) |
 | VM de produção | VPS KVM da Hostinger no data center de São Paulo (Brasil): Ubuntu 26.04 LTS x86_64, 1 vCPU, 4 GB de RAM | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
+| GitHub Pages | Repositório `crivo` → *Settings* → *Pages* | O site em `crivo.psigama.com`: as páginas editoriais, o CSS e a página 404 que encaminha para a aplicação |
 
-A implantação **nunca é automática**. A regra de implantação 8 só permite atualizar a aplicação entre sessões de coleta, e o formulário do workflow exige que quem o aciona confirme isso.
+A implantação da aplicação **nunca é automática**. A regra de implantação 8 só permite atualizá-la entre sessões de coleta, e o formulário do workflow exige que quem o aciona confirme isso. O site é outra coisa: é publicado a cada push na `main` (regra de implantação 9), porque nada nele vem do código dos protocolos ou do banco.
 
 ## 1. Preparar a VM
 
@@ -50,19 +52,21 @@ Uma vez, na VM. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinger
      GRANT CONNECT ON DATABASE airlab TO airlab_app;
      ```
 
-   - segredos: `/etc/airlab/airlab.env`, com dono `root` e permissão `600`, a partir do [`.env.example`](../.env.example) (regra de implantação 7). Nele vão `AIRLAB_BASE_URL=https://crivo.psigama.com`; `AIRLAB_DB_USER=airlab_app` com a senha desse papel; `SPRING_FLYWAY_USER=airlab_owner` e `SPRING_FLYWAY_PASSWORD` com a do dono, que o Spring Boot usa só nas migrações; e a `AIRLAB_IDENTITY_KEY`, gerada com `openssl rand -base64 32`. **Guarde uma cópia da chave fora da VM**: sem ela, os dados cifrados do esquema `identity` não se recuperam. O `AIRLAB_RESEARCHER_PASSWORD_HASH` tem de estar preenchido antes da primeira implantação. Sem SMTP, o `SPRING_MAIL_HOST` fica vazio ou comentado: o Crivo trata as duas formas como sem e-mail e mantém a inscrição do P1 fechada, e o e-mail fica fora do `/actuator/health`, que o deploy confere;
+   - segredos: `/etc/airlab/airlab.env`, com dono `root` e permissão `600`, a partir do [`.env.example`](../.env.example) (regra de implantação 7). Nele vão `AIRLAB_BASE_URL=https://app.crivo.psigama.com`, o endereço da aplicação, usado nos links dos e-mails; `AIRLAB_SITE_URL=https://crivo.psigama.com`, o endereço do site, que faz a aplicação apontar para ele e responder às rotas do site com 301 — só depois da virada (seção 6); até lá, deixe a variável vazia ou comentada, e a aplicação continua servindo as páginas do site; `AIRLAB_DB_USER=airlab_app` com a senha desse papel; `SPRING_FLYWAY_USER=airlab_owner` e `SPRING_FLYWAY_PASSWORD` com a do dono, que o Spring Boot usa só nas migrações; e a `AIRLAB_IDENTITY_KEY`, gerada com `openssl rand -base64 32`. **Guarde uma cópia da chave fora da VM**: sem ela, os dados cifrados do esquema `identity` não se recuperam. O `AIRLAB_RESEARCHER_PASSWORD_HASH` tem de estar preenchido antes da primeira implantação. Sem SMTP, o `SPRING_MAIL_HOST` fica vazio ou comentado: o Crivo trata as duas formas como sem e-mail e mantém a inscrição do P1 fechada, e o e-mail fica fora do `/actuator/health`, que o deploy confere;
    - serviço: copie [`scripts/airlab.service.example`](../scripts/airlab.service.example) para `/etc/systemd/system/airlab.service` e rode `sudo systemctl daemon-reload && sudo systemctl enable airlab`. O serviço só sobe quando houver um JAR em `/opt/airlab/airlab.jar`, o que a primeira implantação resolve.
 5. **Caddy** (`/etc/caddy/Caddyfile`), com HTTPS automático e só as rotas da aplicação expostas:
 
    ```caddyfile
-   crivo.psigama.com {
+   app.crivo.psigama.com {
    	@interno path /actuator /actuator/*
    	respond @interno 404
    	reverse_proxy 127.0.0.1:8080
    }
    ```
 
-6. **DNS**: um registro `A` de `crivo.psigama.com` para o IP público da VM. Enquanto ele não existir, o Caddy não obtém o certificado e tenta de novo sozinho.
+   Até a virada (seção 6), o mesmo bloco atende também `crivo.psigama.com`: escreva `app.crivo.psigama.com, crivo.psigama.com {` na primeira linha.
+
+6. **DNS**: um registro `A` de `app.crivo.psigama.com` para o IP público da VM. Enquanto ele não existir, o Caddy não obtém o certificado e tenta de novo sozinho. O `crivo.psigama.com` aponta para o GitHub Pages depois da virada (seção 6).
 
 ## 2. Usuário de implantação
 
@@ -94,6 +98,8 @@ O workflow entra na VM como um usuário próprio, `deploy`, que só pode trocar 
 
 Nenhum desses valores vai para o repositório (regra de implantação 7).
 
+**Variável do repositório** (*Settings* → *Secrets and variables* → *Actions* → *Variables*): `APP_URL`, com o endereço da aplicação, `https://app.crivo.psigama.com`. Não é segredo. O `pages.yml` a usa nos links do site para a aplicação e não publica nada enquanto ela não existir; o `deploy.yml` a mostra como endereço do ambiente `production`.
+
 ## 4. Implantar
 
 1. Confirme que nenhuma sessão de coleta está em andamento. Se houver estudo correndo, a atualização precisa de registro na trilha de auditoria (regra de implantação 8).
@@ -107,6 +113,46 @@ sudo install -o airlab -g airlab -m 0644 /opt/airlab/airlab.jar.previous /opt/ai
 sudo systemctl restart airlab
 ```
 
+## 5. Site no GitHub Pages
+
+O `pages.yml` roda **apenas** a cada push na `main`, inclusive os que só mexem em documentação, porque publicar de novo o mesmo site não muda nada. Ele compila o JAR sem a suíte, que o CI roda no mesmo push. Depois, gera o site e o publica:
+
+```bash
+java -jar target/airlab.jar site target/site --aplicacao=https://app.crivo.psigama.com
+```
+
+O mesmo comando roda na sua máquina, pelos scripts da CLI, para ver o site antes de publicar:
+
+```bash
+./scripts/airlab.sh site target/site --aplicacao=http://127.0.0.1:8080
+```
+
+```powershell
+.\scripts\airlab.ps1 site target\site --aplicacao=http://127.0.0.1:8080
+```
+
+O gerador não sobe o Spring nem o banco. Ele só escreve as páginas listadas em `web.SitePages`, o CSS, o favicon, o `js/encaminhar.js` e o `404.html`, que leva qualquer endereço desconhecido para a aplicação com o mesmo caminho e a mesma consulta.
+
+Uma vez, no GitHub:
+
+1. *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
+2. *Settings* → *Pages* → *Custom domain*: `crivo.psigama.com`. Com publicação por Actions, o arquivo `CNAME` não é usado nem precisa existir. Marque **Enforce HTTPS** quando o certificado ficar pronto.
+3. Nas configurações da sua conta, *Pages* → *Verified domains*: verifique `psigama.com`. Isso impede que outra conta publique em `crivo.psigama.com` se um dia o Pages deste repositório for desligado.
+4. *Settings* → *Environments* → `github-pages`: confira que só a `main` pode publicar.
+5. Crie a variável `APP_URL` (seção 3). Sem ela, o `pages.yml` termina sem publicar e avisa no resumo da execução.
+
+## 6. A virada: `crivo.psigama.com` passa a ser o site
+
+Uma vez, **entre sessões de coleta**. Testes de ESP e entradas em andamento na hora da virada se perdem, porque o cookie de sessão é do endereço antigo.
+
+1. Implante a versão com a SPEC 0.21 pelo `deploy.yml`. Sem `AIRLAB_SITE_URL`, ela se comporta como antes.
+2. DNS: crie o `A` de `app.crivo.psigama.com` para o IP da VM. No Caddy, o bloco atende os dois nomes (seção 1, passo 5). Confira `https://app.crivo.psigama.com/protocolos`.
+3. Em `/etc/airlab/airlab.env`: `AIRLAB_BASE_URL=https://app.crivo.psigama.com` e `AIRLAB_SITE_URL=https://crivo.psigama.com`. Depois, `sudo systemctl restart airlab`.
+4. Configure o Pages e a variável `APP_URL` (seção 5) e faça um push na `main` para publicar o site.
+5. DNS: troque o `A` de `crivo.psigama.com` por um `CNAME` para `rogeriocisi.github.io`. Enquanto o GitHub emite o certificado, o endereço pode ficar algum tempo sem HTTPS.
+6. Tire `crivo.psigama.com` do bloco do Caddy e recarregue (`sudo systemctl reload caddy`).
+7. No repositório `psigama`, troque os links para as páginas da aplicação (`/protocolos`, `/protocolo/P1` a `/protocolo/P4` e as rotas `/rodar`) pelo endereço novo. O `404.html` do site já os encaminha, mas o link direto evita o salto.
+
 ## Fora destes workflows
 
 - **Backups** (regra de implantação 5): dump diário criptografado para fora da VM e teste mensal de restauração. Precisam de um roteiro próprio.
@@ -118,3 +164,4 @@ Só os workflows as usam; nenhuma entra na aplicação (P8). As versões princip
 | Ação | Mantenedor | Para quê |
 |---|---|---|
 | `actions/checkout`, `actions/setup-java`, `actions/upload-artifact`, `actions/download-artifact` | GitHub | Baixar o código, instalar o JDK e guardar o JAR entre os jobs |
+| `actions/configure-pages`, `actions/upload-pages-artifact`, `actions/deploy-pages` | GitHub | Publicar o site estático no GitHub Pages (`pages.yml`) |

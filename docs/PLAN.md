@@ -1,6 +1,6 @@
 # Plano técnico do MVP — Crivo (AIR Lab)
 
-> Derivado de `CONSTITUTION.md` (prevalece) e de `SPEC.md`. Versão 1.11 · novembro/2026 · 1.3: protocolo P4 (SPEC E13), fase A — contas com perfil fixo, e-mail e avisos ao administrador · 1.4: fase B — questionário versionado e pedido de consulta travado com compromisso salgado · 1.5: fase C — módulo `structured`: estudo P4, ciclo automático, pareamento, sorteio do médium, leitura travada e prazos · 1.6: fase D — desmascaramento automático no N, conferência, análise, relatório e devolutiva · 1.7: fase E — contas ligadas, teto por médium e página pública dos estudos. · 1.8: o P1 é descontinuado (SPEC 0.14) e fica no site só como referência; `session`, `redaction`, `scoring` e `unblinding` congelam no estado atual; os próximos cortes são só do P4 · 1.9: ancoragem externa da trilha por carimbo RFC 3161 do FreeTSA (SPEC 0.15, E8, fase 1): módulo `anchor`, migração `V22` e a BouncyCastle · 1.10: os testes de ESP saem das páginas do Crivo e passam a ser apresentados pela PsiGama (SPEC 0.16); `trials`, as rotas e as garantias ficam como estão · 1.11: protocolos renumerados (SPEC 0.17) — P1-automático, P2-supervisionado, P3-precognição, P4-visão-remota; `/protocolos` e `/protocolo/P{X}` (`ProtocolsController`), rotas `/testes/...` com 301 (`LegacyRoutesController`); os testes de ESP voltam ao site do Crivo; questionário em vigor na página do P1
+> Derivado de `CONSTITUTION.md` (prevalece) e de `SPEC.md`. Versão 1.12 · novembro/2026 · 1.3: protocolo P4 (SPEC E13), fase A — contas com perfil fixo, e-mail e avisos ao administrador · 1.4: fase B — questionário versionado e pedido de consulta travado com compromisso salgado · 1.5: fase C — módulo `structured`: estudo P4, ciclo automático, pareamento, sorteio do médium, leitura travada e prazos · 1.6: fase D — desmascaramento automático no N, conferência, análise, relatório e devolutiva · 1.7: fase E — contas ligadas, teto por médium e página pública dos estudos. · 1.8: o P1 é descontinuado (SPEC 0.14) e fica no site só como referência; `session`, `redaction`, `scoring` e `unblinding` congelam no estado atual; os próximos cortes são só do P4 · 1.9: ancoragem externa da trilha por carimbo RFC 3161 do FreeTSA (SPEC 0.15, E8, fase 1): módulo `anchor`, migração `V22` e a BouncyCastle · 1.10: os testes de ESP saem das páginas do Crivo e passam a ser apresentados pela PsiGama (SPEC 0.16); `trials`, as rotas e as garantias ficam como estão · 1.11: protocolos renumerados (SPEC 0.17) — P1-automático, P2-supervisionado, P3-precognição, P4-visão-remota; `/protocolos` e `/protocolo/P{X}` (`ProtocolsController`), rotas `/testes/...` com 301 (`LegacyRoutesController`); os testes de ESP voltam ao site do Crivo; questionário em vigor na página do P1 · 1.12: site e aplicação separados (SPEC 0.21, seção 1.3) — as páginas editoriais ficam em `templates/site/`, listadas em `web.SitePages`; a aplicação as serve no perfil `local` e responde com 301 quando `AIRLAB_SITE_URL` está definida; `airlab site` (`web.StaticSite`) gera o site sem banco, e o workflow `pages.yml` o publica no GitHub Pages a cada push na `main`; a página inicial se divide em Participar, Por quê, Garantias e Auditar; as oito etapas vão para a página do P1; o estado da trilha vai para `/verificar`
 > Este documento registra as decisões de implementação do MVP: estrutura de módulos,
 > esquemas e migrações, execução por linha de comando e justificativa de cada dependência.
 
@@ -19,6 +19,7 @@
 | Processo em produção | Unidade `systemd` (Linux) ou serviço do Windows / Agendador de Tarefas |
 | Borda em produção | Caddy instalado como pacote do sistema, HTTPS automático, proxy para `127.0.0.1:8080` |
 | CLI de auditoria | Mesmo JAR: `scripts/airlab.sh verify`, `scripts\airlab.ps1 verify` |
+| Site editorial (SPEC 1.3) | Mesmo JAR, sem banco e sem Spring: `scripts/airlab.sh site <pasta> --aplicacao=<endereço>` (ou `airlab.ps1`). `AirLabApplication.main` desvia para `web.StaticSite` antes de subir o contexto, e o gerador renderiza os templates de `templates/site/` com o `SpringTemplateEngine` (o mesmo dialeto da aplicação), copia o CSS, o favicon e o `encaminhar.js` e escreve a página 404 que encaminha para a aplicação. Publicado pelo GitHub Pages (`pages.yml`), a cada push na `main` |
 
 **Por que o PostgreSQL continua obrigatório**: o P4 (trilha append-only) e o P6 (separação de
 esquemas com permissões por papel) são impostos *no banco*. H2 ou SQLite não oferecem papéis,
@@ -52,7 +53,7 @@ quem pode depender; `ModularityTest` verifica isso no build.
 | `anchor` | E8 | **Implementado (fase 1)**: ancoragem externa da cabeça da trilha por carimbo RFC 3161 do FreeTSA — logo depois de cada marco e a cada 24 horas se a trilha mudou; token conferido antes de guardar (`TimestampProtocol`), certificados fixados pelo SHA-256 publicado (`TrustAnchors`), página pública `/carimbos` com o `.tsr`, e reconferência na CLI |
 | `catalog` | — | **Implementado**: catálogo de protocolos (SPEC 1.1) e questionários versionados do P1 (`Questionnaires`), sem estado e sem dependência de outro módulo. `all()` em ordem de código; `air()` (P1, P2) e `esp()` (P3, P4) são as duas seções da página `/protocolos`; `Protocol.label()` dá o rótulo, como `P1-automático` |
 | `trials` | E11, E12 | **Implementado**: sessões de autoatendimento dos dois testes de ESP (P3 e P4) — semente comprometida, alvo derivado só no travamento, impressão travada antes das candidatas, sessão abandonada registrada. Rodam em `/protocolo/P3/rodar` e `/protocolo/P4/rodar`; o compromisso usa o nome do enum, não o código, e por isso não mudou com a renumeração |
-| `support`, `platform`, `web` | — | Infraestrutura, páginas públicas, criação de conta, entrada e painéis por perfil (consulente, médium, administrador) |
+| `support`, `platform`, `web` | — | Infraestrutura, páginas públicas, criação de conta, entrada e painéis por perfil (consulente, médium, administrador). Desde a 1.12, `web` também tem as páginas editoriais (`SitePages`, `templates/site/`), o gerador do site estático (`StaticSite`) e o estado da trilha em `/verificar` (SPEC 1.3) |
 
 Dependências entre módulos: `audit` não depende de nenhum módulo de domínio; todos os outros
 dependem dele. O plano de alocação sai do módulo `allocation` apenas como evento de domínio
@@ -248,6 +249,7 @@ O que resta decidir é qual efeito declarar: os efeitos por seção de leitura e
 | `io.zonky.test:embedded-postgres` + binários `linux-amd64` e `windows-amd64` (PostgreSQL 18.6, a versão de produção) | **Substitui o Testcontainers e o Docker Compose**: PostgreSQL real em desenvolvimento e teste sem container, nos dois sistemas operacionais | Médio: é preciso acompanhar a versão dos binários do PostgreSQL. Aceito porque remove a dependência de Docker, exigida pela regra arquitetural 8. **Os binários 17.x falham no `initdb` em Windows** (`coluna "attnum" não existe`); a versão está fixada em 16.9.0 e só deve subir depois de testada nos dois sistemas |
 | `org.bouncycastle:bcpkix-jdk18on` 1.87 (traz `bcprov` e `bcutil`) | Carimbo de tempo RFC 3161 (SPEC 0.15, E8): montar o pedido e, sobretudo, **conferir o token** — estrutura CMS assinada, ASN.1, `messageImprint`, *nonce* e certificado do signatário. O JDK não tem API para nenhuma das três coisas, e reescrever um verificador de CMS seria o oposto de "maduro e chato" (P8). É a biblioteca de referência do ecossistema Java para isso, mantida há mais de 20 anos | Baixo: uma dependência, versão fixada em `bouncycastle.version`. Usada só no módulo `anchor`; a criptografia do resto do projeto continua JCA puro |
 | `spring-boot-starter-mail` (Jakarta Mail) | Confirmação de conta e avisos do P1 por SMTP externo (SPEC E13, E10 trava 3). É o cliente de e-mail do próprio Spring, sem serviço adicional: em desenvolvimento nada é enviado, em produção basta um SMTP | Baixo, versão alinhada pelo parent |
+| Nenhuma dependência para o site estático (SPEC 1.3) | O gerador usa o Thymeleaf que já vem com o starter e o `PathMatchingResourcePatternResolver` do Spring; a publicação usa só as ações oficiais do GitHub Pages, no workflow | Nenhum na aplicação |
 | Nenhuma biblioteca de estatística | A análise primária é um teste binomial exato, escrito em aritmética racional (~40 linhas) e validado contra valores de referência | Nenhum |
 | Nenhuma biblioteca de JSON para hashing | A forma canônica é escrita no projeto (`CanonicalJson`), porque o hash não pode mudar quando uma biblioteca muda de versão | Nenhum |
 
@@ -347,6 +349,16 @@ Windows e Linux sem Docker e sem banco instalado.
    a encerra por *shutdown hook*, não por fechamento de contexto. Ao criar um teste que force
    contexto novo (por exemplo com `@MockitoBean`), nada precisa ser feito — mas não volte a
    registrar `destroyMethod` no bean.
+
+8. **O GitHub Pages não faz redirecionamento nem manda cabeçalhos** (SPEC 1.3): nada de 301 e
+   nada de CSP por cabeçalho. Por isso as páginas do site levam a CSP numa `<meta>`, e o
+   `404.html` encaminha para a aplicação por um script em arquivo à parte, que a CSP
+   `default-src 'self'` permite e um script embutido não. O `frame-ancestors` não vale em
+   `<meta>`, o que é aceitável em páginas sem formulário. Uma página do site **não pode** usar
+   dado do modelo além de `site`, `aplicacao`, `secaoAtual` e `logado` (e a 404, `paginasDoSite`), porque o gerador não
+   tem mais nada para entregar: o `StaticSiteTest` falha se uma tentar. E o script da 404 nunca
+   encaminha um caminho que é página do site: com `AIRLAB_SITE_URL`, a aplicação o mandaria de
+   volta com 301, e as duas pontas ficariam mandando a pessoa uma para a outra.
 
 
 ## 10. Próximos cortes
