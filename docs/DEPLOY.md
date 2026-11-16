@@ -137,7 +137,7 @@ Uma vez, no GitHub:
 
 1. *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
 2. *Settings* → *Pages* → *Custom domain*: `crivo.psigama.com`. Com publicação por Actions, o arquivo `CNAME` não é usado nem precisa existir. Marque **Enforce HTTPS** quando o certificado ficar pronto.
-3. Nas configurações da sua conta, *Pages* → *Verified domains*: verifique `psigama.com`. Isso impede que outra conta publique em `crivo.psigama.com` se um dia o Pages deste repositório for desligado.
+3. Nas configurações da sua conta, *Pages* → *Verified domains*: verifique `psigama.com`, com o registro `TXT` que o GitHub mostra (nome `_github-pages-challenge-rogeriocisi.psigama.com`). Isso impede que outra conta publique em `crivo.psigama.com` se um dia o Pages deste repositório for desligado.
 4. *Settings* → *Environments* → `github-pages`: confira que só a `main` pode publicar.
 5. Crie a variável `APP_URL` (seção 3). Sem ela, o `pages.yml` termina sem publicar e avisa no resumo da execução.
 
@@ -145,13 +145,15 @@ Uma vez, no GitHub:
 
 Uma vez, **entre sessões de coleta**. Testes de ESP e entradas em andamento na hora da virada se perdem, porque o cookie de sessão é do endereço antigo.
 
+0. Na véspera, baixe o TTL do registro de `crivo.psigama.com` para 300 segundos, para que a troca do passo 5 se espalhe em minutos.
 1. Implante a versão com a SPEC 0.21 pelo `deploy.yml`. Sem `AIRLAB_SITE_URL`, ela se comporta como antes.
 2. DNS: crie o `A` de `app.crivo.psigama.com` para o IP da VM. No Caddy, o bloco atende os dois nomes (seção 1, passo 5). Confira `https://app.crivo.psigama.com/protocolos`.
-3. Em `/etc/airlab/airlab.env`: `AIRLAB_BASE_URL=https://app.crivo.psigama.com` e `AIRLAB_SITE_URL=https://crivo.psigama.com`. Depois, `sudo systemctl restart airlab`.
+3. Em `/etc/airlab/airlab.env`: `AIRLAB_BASE_URL=https://app.crivo.psigama.com`, **ainda sem** `AIRLAB_SITE_URL`. Depois, `sudo systemctl restart airlab`.
 4. Configure o Pages e a variável `APP_URL` (seção 5) e faça um push na `main` para publicar o site.
-5. DNS: troque o `A` de `crivo.psigama.com` por um `CNAME` para `rogeriocisi.github.io`. Enquanto o GitHub emite o certificado, o endereço pode ficar algum tempo sem HTTPS.
-6. Tire `crivo.psigama.com` do bloco do Caddy e recarregue (`sudo systemctl reload caddy`).
-7. No repositório `psigama`, troque os links para as páginas da aplicação (`/protocolos`, `/protocolo/P1` a `/protocolo/P4` e as rotas `/rodar`) pelo endereço novo. O `404.html` do site já os encaminha, mas o link direto evita o salto.
+5. DNS: troque o `A` de `crivo.psigama.com` por um `CNAME` para `rogeriocisi.github.io`. Um nome com `CNAME` não pode ter outro registro: apague antes o `A` (e o `AAAA`, se houver). Enquanto o GitHub emite o certificado, o endereço pode ficar algum tempo sem HTTPS.
+6. Espere a troca se espalhar e o site responder com HTTPS em `https://crivo.psigama.com/participar`. Só então defina `AIRLAB_SITE_URL=https://crivo.psigama.com` e reinicie a aplicação. **A ordem importa**: enquanto `crivo.psigama.com` ainda chega à VM, o Caddy o entrega à própria aplicação, e com `AIRLAB_SITE_URL` definida ela responderia com 301 para si mesma, num laço.
+7. Tire `crivo.psigama.com` do bloco do Caddy e recarregue (`sudo systemctl reload caddy`).
+8. No repositório `psigama`, troque os links para as páginas da aplicação (`/protocolos`, `/protocolo/P1` a `/protocolo/P4` e as rotas `/rodar`) pelo endereço novo. O `404.html` do site já os encaminha, mas o link direto evita o salto.
 
 ## Fora destes workflows
 
