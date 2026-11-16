@@ -8,8 +8,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Catalog rules of SPEC section 1.1, as tests. Rule 2 in particular — every protocol states
- * what its result does not support — is the kind of promise that quietly disappears from a
+ * Catalog rules of SPEC section 1.1, as tests. Rule 2 in particular — every
+ * protocol states
+ * what its result does not support — is the kind of promise that quietly
+ * disappears from a
  * page unless something fails when it does.
  */
 class ProtocolCatalogTest {
@@ -34,9 +36,8 @@ class ProtocolCatalogTest {
             assertThat(protocol.limits())
                     .describedAs("limites de %s", protocol.code())
                     .isNotEmpty();
-            protocol.limits().forEach(limit ->
-                    assertThat(limit).describedAs("limite de %s", protocol.code())
-                            .isNotBlank().hasSizeGreaterThan(20));
+            protocol.limits().forEach(limit -> assertThat(limit).describedAs("limite de %s", protocol.code())
+                    .isNotBlank().hasSizeGreaterThan(20));
         }
     }
 
@@ -105,7 +106,7 @@ class ProtocolCatalogTest {
         assertThat(ProtocolCatalog.structuredReading().branch().kindLabel())
                 .isEqualTo("Experimento de mediunidade (AIR)");
         assertThat(ProtocolCatalog.remoteViewing().branch().kindLabel())
-                .isEqualTo("Teste de percepção extrassensorial (PES)");
+                .isEqualTo("Teste de percepção extrassensorial (ESP)");
     }
 
     @Test

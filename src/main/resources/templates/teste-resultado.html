@@ -1,87 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Resultado da sessão — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Resultado da sessão — Crivo', 'Protocolos cegos para pesquisa de cognição anômala, com sorteio verificável e trilha de auditoria encadeada por hash.')}"></th:block>
+  <th:block
+    th:replace="~{fragments/site :: social('Resultado da sessão — Crivo', 'Protocolos cegos para pesquisa de cognição anômala, com sorteio verificável e trilha de auditoria encadeada por hash.')}">
+  </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
+
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="faixa">
-  <header th:replace="~{fragments/site :: topo}"></header>
-</div>
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
 
-<main id="conteudo">
+  <main id="conteudo">
 
-  <section class="abertura">
-    <div class="faixa">
-      <p class="rotulo" th:text="${protocolo.catalogCode()} + ' · sessão encerrada'">Sessão</p>
-      <h1>Resultado</h1>
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo" th:text="${protocolo.catalogCode()} + ' · sessão encerrada'">Sessão</p>
+        <h1>Resultado</h1>
 
-      <dl class="leituras">
-        <div><dt>Acertos</dt><dd>
-          <strong th:text="${desfecho.hits()}">0</strong>
-          em <span th:text="${desfecho.lockedTrials()}">24</span> tentativa(s)
-        </dd></div>
-        <div><dt>Esperado pelo acaso</dt><dd th:text="${#numbers.formatDecimal(desfecho.expectedByChance(), 1, 2)} + ' (acaso de '
-                     + ${desfecho.chanceNumerator()} + '/' + ${desfecho.chanceDenominator()} + ')'">6</dd></div>
-        <div><dt>Valor p exato, unilateral</dt><dd><code th:text="${#numbers.formatDecimal(desfecho.pValue(), 1, 4)}">0,5000</code></dd></div>
-        <div><dt>Situação da sessão</dt><dd th:text="${desfecho.state().name() == 'FINISHED'}
-                     ? 'completa' : 'abandonada antes do fim'">completa</dd></div>
-      </dl>
+        <dl class="leituras">
+          <div>
+            <dt>Acertos</dt>
+            <dd>
+              <strong th:text="${desfecho.hits()}">0</strong>
+              em <span th:text="${desfecho.lockedTrials()}">24</span> tentativa(s)
+            </dd>
+          </div>
+          <div>
+            <dt>Esperado pelo acaso</dt>
+            <dd th:text="${#numbers.formatDecimal(desfecho.expectedByChance(), 1, 2)} + ' (acaso de '
+                     + ${desfecho.chanceNumerator()} + '/' + ${desfecho.chanceDenominator()} + ')'">6</dd>
+          </div>
+          <div>
+            <dt>Valor p exato, unilateral</dt>
+            <dd><code th:text="${#numbers.formatDecimal(desfecho.pValue(), 1, 4)}">0,5000</code></dd>
+          </div>
+          <div>
+            <dt>Situação da sessão</dt>
+            <dd th:text="${desfecho.state().name() == 'FINISHED'}
+                     ? 'completa' : 'abandonada antes do fim'">completa</dd>
+          </div>
+        </dl>
 
-      <p class="nota" th:text="${desfecho.exploratoryReason()}">Exploratório</p>
-    </div>
-  </section>
+        <p class="nota" th:text="${desfecho.exploratoryReason()}">Exploratório</p>
+      </div>
+    </section>
 
-  <section>
-    <div class="faixa">
-      <h2>Confira por conta própria</h2>
-      <p>
-        Esta é a parte que interessa, e agora ela não depende de confiar em nós. A semente tem
-        duas metades: a do servidor, cujo hash foi publicado <strong>antes</strong> de você
-        sortear a sua, e a sua, sorteada no seu navegador. Com as duas, qualquer pessoa recomputa
-        o alvo de cada tentativa.
-      </p>
+    <section>
+      <div class="faixa">
+        <h2>Confira por conta própria</h2>
+        <p>
+          Esta é a parte que interessa, e agora ela não depende de confiar em nós. A semente tem
+          duas metades: a do servidor, cujo hash foi publicado <strong>antes</strong> de você
+          sortear a sua, e a sua, sorteada no seu navegador. Com as duas, qualquer pessoa recomputa
+          o alvo de cada tentativa.
+        </p>
 
-      <dl class="cadeia" data-copiavel>
-        <dt>Sessão</dt>
-        <dd><code th:text="${desfecho.sessionCode()}">codigo</code></dd>
-        <dt>Compromisso publicado no início</dt>
-        <dd><code th:text="${desfecho.seedCommitment()}">hash</code></dd>
-        <dt>Metade do servidor, revelada agora</dt>
-        <dd><code th:text="${desfecho.serverSeedHex()}">metade</code></dd>
-        <dt th:if="${desfecho.participantNonce() != null}">A sua metade, sorteada no seu navegador</dt>
-        <dd th:if="${desfecho.participantNonce() != null}">
-          <code th:text="${desfecho.participantNonce()}">nonce</code></dd>
-        <dt>Semente efetiva, das duas juntas</dt>
-        <dd><code th:text="${desfecho.seedHex()}">semente</code></dd>
-        <dt>Banco de figuras</dt>
-        <dd><code th:text="${desfecho.targetPoolVersion()}">v1</code></dd>
-      </dl>
+        <dl class="cadeia" data-copiavel>
+          <dt>Sessão</dt>
+          <dd><code th:text="${desfecho.sessionCode()}">codigo</code></dd>
+          <dt>Compromisso publicado no início</dt>
+          <dd><code th:text="${desfecho.seedCommitment()}">hash</code></dd>
+          <dt>Metade do servidor, revelada agora</dt>
+          <dd><code th:text="${desfecho.serverSeedHex()}">metade</code></dd>
+          <dt th:if="${desfecho.participantNonce() != null}">A sua metade, sorteada no seu navegador</dt>
+          <dd th:if="${desfecho.participantNonce() != null}">
+            <code th:text="${desfecho.participantNonce()}">nonce</code>
+          </dd>
+          <dt>Semente efetiva, das duas juntas</dt>
+          <dd><code th:text="${desfecho.seedHex()}">semente</code></dd>
+          <dt>Banco de figuras</dt>
+          <dd><code th:text="${desfecho.targetPoolVersion()}">v1</code></dd>
+        </dl>
 
-      <p class="acoes">
-        <button class="botao botao-vazio" type="button" data-baixar-comprovante hidden>
-          Baixar comprovante da sessão (JSON)</button>
-      </p>
-      <script type="application/json" id="comprovante-sessao" th:utext="${comprovante}">{}</script>
+        <p class="acoes">
+          <button class="botao botao-vazio" type="button" data-baixar-comprovante hidden>
+            Baixar comprovante da sessão (JSON)</button>
+        </p>
+        <script type="application/json" id="comprovante-sessao" th:utext="${comprovante}">{}</script>
 
-      <p>A regra de derivação é esta, e é toda a regra:</p>
-      <pre class="comando">semente = SHA-256(metade do servidor || sua metade)
+        <p>A regra de derivação é esta, e é toda a regra:</p>
+        <pre class="comando">semente = SHA-256(metade do servidor || sua metade)
 alvo(n) = SHA-256(semente || "trial:" || n || contador) mod 4</pre>
 
-      <p class="nota" th:if="${desfecho.participantNonce() == null}">
-        Esta sessão é anterior à entropia do participante: a semente foi inteiramente do
-        servidor. A conferência automática aqui só vale para sessões feitas depois dessa
-        mudança; esta pode ser conferida à mão, pela regra acima, com a semente revelada.
-      </p>
+        <p class="nota" th:if="${desfecho.participantNonce() == null}">
+          Esta sessão é anterior à entropia do participante: a semente foi inteiramente do
+          servidor. A conferência automática aqui só vale para sessões feitas depois dessa
+          mudança; esta pode ser conferida à mão, pela regra acima, com a semente revelada.
+        </p>
 
-      <div class="verificador" data-verificador th:if="${desfecho.participantNonce() != null}"
-           th:attr="data-alvos=${#strings.listJoin(desfecho.recordedTargets(), ',')},
+        <div class="verificador" data-verificador th:if="${desfecho.participantNonce() != null}" th:attr="data-alvos=${#strings.listJoin(desfecho.recordedTargets(), ',')},
                     data-alternativas=${desfecho.chanceDenominator()},
                     data-compromisso=${desfecho.seedCommitment()},
                     data-protocolo=${desfecho.protocol().name()},
@@ -89,157 +105,160 @@ alvo(n) = SHA-256(semente || "trial:" || n || contador) mod 4</pre>
                     data-semente-efetiva=${desfecho.seedHex()},
                     data-tentativas-declaradas=${desfecho.declaredTrials()},
                     data-banco-figuras=${desfecho.targetPoolVersion()}">
-        <h3>Recompute aqui, agora</h3>
+          <h3>Recompute aqui, agora</h3>
+          <p class="nota">
+            O botão abaixo roda a regra no seu navegador, sem falar com o servidor, e compara o
+            resultado com o que esta sessão gravou. O código está em
+            <a href="/js/verificador-alvos.js"><code>/js/verificador-alvos.js</code></a> — pode ler
+            antes de clicar.
+          </p>
+
+          <p>
+            <label for="campo-semente-servidor">Metade do servidor (revelada agora)</label>
+            <textarea id="campo-semente-servidor" data-campo="semente-servidor" rows="2" spellcheck="false"
+              th:text="${desfecho.serverSeedHex()}"></textarea>
+          </p>
+          <p>
+            <label for="campo-nonce">A sua metade (sorteada no seu navegador no início)</label>
+            <textarea id="campo-nonce" data-campo="nonce" rows="1" spellcheck="false"
+              th:text="${desfecho.participantNonce()}"></textarea>
+          </p>
+          <p>
+            <label for="campo-tentativas">Quantas tentativas recomputar</label>
+            <input id="campo-tentativas" data-campo="tentativas" type="number" min="1" max="200"
+              th:value="${desfecho.lockedTrials()}">
+          </p>
+          <p class="acoes">
+            <button class="botao botao-cheio" type="button" data-campo="gerar">Gerar os alvos</button>
+          </p>
+
+          <div data-campo="saida" hidden>
+            <p class="resumo-verificacao" data-campo="compromisso" role="status"></p>
+            <p class="resumo-verificacao" data-campo="semente-efetiva" role="status"></p>
+            <p class="resumo-verificacao" data-campo="resumo" role="status"></p>
+            <table class="tentativas">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Alvo recomputado aqui</th>
+                  <th scope="col">Alvo gravado na sessão</th>
+                  <th scope="col">Confere</th>
+                </tr>
+              </thead>
+              <tbody data-campo="corpo"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3>Como saber que esta é a mesma semente do início</h3>
+
+        <p>
+          Essa é a pergunta que decide tudo. Recomputar os alvos a partir de uma semente só vale
+          alguma coisa se a semente já estava fixada <strong>antes</strong> das suas respostas —
+          caso contrário bastaria escolher, no fim, uma semente que fizesse você errar.
+        </p>
+
+        <p>
+          O sistema publicou <code th:text="${desfecho.seedCommitment()}">hash</code> antes de você
+          sortear a sua metade. Ele é o SHA-256 de:
+        </p>
+
+        <pre class="comando">metade do servidor | protocolo | tentativas | alternativas | banco de figuras</pre>
+
+        <p>
+          Daí a conta não fecha para um servidor desonesto: para escolher alvos que fizessem você
+          errar, ele precisaria de uma metade que, combinada com a <strong>sua</strong>, desse o
+          resultado desejado — e ele já tinha publicado o hash da metade dele antes de ver a sua.
+          Isso é um ataque de pré-imagem ao SHA-256.
+        </p>
+
         <p class="nota">
-          O botão abaixo roda a regra no seu navegador, sem falar com o servidor, e compara o
-          resultado com o que esta sessão gravou. O código está em
-          <a href="/js/verificador-alvos.js"><code>/js/verificador-alvos.js</code></a> — pode ler
-          antes de clicar.
+          O botão acima confere as duas coisas: que a metade revelada bate com o compromisso, e que
+          as duas metades juntas dão a semente que gerou os alvos. Confere também, quando possível,
+          contra o compromisso que o <em>seu</em> navegador guardou no início da sessão.
         </p>
 
-        <p>
-          <label for="campo-semente-servidor">Metade do servidor (revelada agora)</label>
-          <textarea id="campo-semente-servidor" data-campo="semente-servidor" rows="2"
-                    spellcheck="false" th:text="${desfecho.serverSeedHex()}"></textarea>
+        <div class="atestado">
+          <div class="nao">
+            <h3>O que esta verificação ainda não prova</h3>
+            <ul>
+              <li>
+                Se a sessão começou <strong>noutro navegador</strong>, em janela privativa, ou com
+                o armazenamento local bloqueado, o compromisso do início não ficou guardado. Aí a
+                conferência de ordem volta a depender do registro da plataforma — e quem quiser a
+                prova completa copia o compromisso na primeira tela e compara no fim.
+              </li>
+              <li>
+                A ordem dos fatos fica registrada na trilha de auditoria, encadeada por hash: a
+                abertura da sessão, com o compromisso, entra antes de cada resposta. Mas a trilha é
+                mantida por esta mesma aplicação — ela prova consistência interna, não honestidade
+                de quem a opera.
+              </li>
+              <li>
+                A prova que não depende de confiar em nós é outra pessoa reimplementar a regra por
+                fora. Por isso ela cabe em oito linhas, está escrita aqui por extenso e tem vetor
+                de teste público: semente de 64 zeros, 12 tentativas, 4 alternativas, alvos
+                1, 1, 3, 3, 2, 3, 2, 1, 1, 4, 1, 3.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="nota">
+          A implementação de referência está em
+          <a
+            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/support/SeedStream.java"><code>support/SeedStream.java</code></a>
+          e em
+          <a
+            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/trials/TargetDerivation.java"><code>trials/TargetDerivation.java</code></a>.
+          O compromisso liga a semente aos parâmetros da sessão: protocolo, número de tentativas,
+          número de alternativas e versão do banco de figuras.
         </p>
-        <p>
-          <label for="campo-nonce">A sua metade (sorteada no seu navegador no início)</label>
-          <textarea id="campo-nonce" data-campo="nonce" rows="1" spellcheck="false"
-                    th:text="${desfecho.participantNonce()}"></textarea>
-        </p>
-        <p>
-          <label for="campo-tentativas">Quantas tentativas recomputar</label>
-          <input id="campo-tentativas" data-campo="tentativas" type="number" min="1" max="200"
-                 th:value="${desfecho.lockedTrials()}">
-        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="faixa">
+        <h2>Tentativa por tentativa</h2>
+        <table class="tentativas">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Sua resposta</th>
+              <th scope="col">Alvo</th>
+              <th scope="col">Acerto</th>
+              <th scope="col" th:if="${desfecho.usesFigures()}">Figuras mostradas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="t : ${desfecho.trials()}">
+              <td th:text="${t.index()}">1</td>
+              <td th:text="${t.chosenIndex()}">1</td>
+              <td th:text="${t.targetIndex()}">1</td>
+              <td th:text="${t.hit()} ? 'sim' : 'não'">não</td>
+              <td th:if="${desfecho.usesFigures()}" th:text="${#strings.listJoin(t.candidateSlugs(), ', ')}">figuras
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
         <p class="acoes">
-          <button class="botao botao-cheio" type="button" data-campo="gerar">Gerar os alvos</button>
+          <a class="botao botao-cheio" th:href="'/protocolo/' + ${protocolo.catalogCode()} + '/rodar'">
+            Fazer outra sessão</a>
+          <a class="botao botao-vazio" href="/protocolos#pes">Outros testes de ESP</a>
         </p>
-
-        <div data-campo="saida" hidden>
-          <p class="resumo-verificacao" data-campo="compromisso" role="status"></p>
-          <p class="resumo-verificacao" data-campo="semente-efetiva" role="status"></p>
-          <p class="resumo-verificacao" data-campo="resumo" role="status"></p>
-          <table class="tentativas">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Alvo recomputado aqui</th>
-                <th scope="col">Alvo gravado na sessão</th>
-                <th scope="col">Confere</th>
-              </tr>
-            </thead>
-            <tbody data-campo="corpo"></tbody>
-          </table>
-        </div>
+        <p class="nota">
+          Uma sessão nova sorteia outra semente. Repetir o teste é livre, e é justamente por isso
+          que o conjunto público destes dados é exploratório: não há como saber quem testou,
+          quantas vezes nem em que condições.
+        </p>
       </div>
+    </section>
 
-      <h3>Como saber que esta é a mesma semente do início</h3>
+  </main>
 
-      <p>
-        Essa é a pergunta que decide tudo. Recomputar os alvos a partir de uma semente só vale
-        alguma coisa se a semente já estava fixada <strong>antes</strong> das suas respostas —
-        caso contrário bastaria escolher, no fim, uma semente que fizesse você errar.
-      </p>
-
-      <p>
-        O sistema publicou <code th:text="${desfecho.seedCommitment()}">hash</code> antes de você
-        sortear a sua metade. Ele é o SHA-256 de:
-      </p>
-
-      <pre class="comando">metade do servidor | protocolo | tentativas | alternativas | banco de figuras</pre>
-
-      <p>
-        Daí a conta não fecha para um servidor desonesto: para escolher alvos que fizessem você
-        errar, ele precisaria de uma metade que, combinada com a <strong>sua</strong>, desse o
-        resultado desejado — e ele já tinha publicado o hash da metade dele antes de ver a sua.
-        Isso é um ataque de pré-imagem ao SHA-256.
-      </p>
-
-      <p class="nota">
-        O botão acima confere as duas coisas: que a metade revelada bate com o compromisso, e que
-        as duas metades juntas dão a semente que gerou os alvos. Confere também, quando possível,
-        contra o compromisso que o <em>seu</em> navegador guardou no início da sessão.
-      </p>
-
-      <div class="atestado">
-        <div class="nao">
-          <h3>O que esta verificação ainda não prova</h3>
-          <ul>
-            <li>
-              Se a sessão começou <strong>noutro navegador</strong>, em janela privativa, ou com
-              o armazenamento local bloqueado, o compromisso do início não ficou guardado. Aí a
-              conferência de ordem volta a depender do registro da plataforma — e quem quiser a
-              prova completa copia o compromisso na primeira tela e compara no fim.
-            </li>
-            <li>
-              A ordem dos fatos fica registrada na trilha de auditoria, encadeada por hash: a
-              abertura da sessão, com o compromisso, entra antes de cada resposta. Mas a trilha é
-              mantida por esta mesma aplicação — ela prova consistência interna, não honestidade
-              de quem a opera.
-            </li>
-            <li>
-              A prova que não depende de confiar em nós é outra pessoa reimplementar a regra por
-              fora. Por isso ela cabe em oito linhas, está escrita aqui por extenso e tem vetor
-              de teste público: semente de 64 zeros, 12 tentativas, 4 alternativas, alvos
-              1, 1, 3, 3, 2, 3, 2, 1, 1, 4, 1, 3.
-            </li>
-          </ul>
-        </div>
-      </div>
-      <p class="nota">
-        A implementação de referência está em
-        <a href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/support/SeedStream.java"><code>support/SeedStream.java</code></a>
-        e em
-        <a href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/trials/TargetDerivation.java"><code>trials/TargetDerivation.java</code></a>.
-        O compromisso liga a semente aos parâmetros da sessão: protocolo, número de tentativas,
-        número de alternativas e versão do banco de figuras.
-      </p>
-    </div>
-  </section>
-
-  <section>
-    <div class="faixa">
-      <h2>Tentativa por tentativa</h2>
-      <table class="tentativas">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Sua resposta</th>
-            <th scope="col">Alvo</th>
-            <th scope="col">Acerto</th>
-            <th scope="col" th:if="${desfecho.usesFigures()}">Figuras mostradas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="t : ${desfecho.trials()}">
-            <td th:text="${t.index()}">1</td>
-            <td th:text="${t.chosenIndex()}">1</td>
-            <td th:text="${t.targetIndex()}">1</td>
-            <td th:text="${t.hit()} ? 'sim' : 'não'">não</td>
-            <td th:if="${desfecho.usesFigures()}"
-                th:text="${#strings.listJoin(t.candidateSlugs(), ', ')}">figuras</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p class="acoes">
-        <a class="botao botao-cheio" th:href="'/protocolo/' + ${protocolo.catalogCode()} + '/rodar'">
-          Fazer outra sessão</a>
-        <a class="botao botao-vazio" href="/protocolos#pes">Outros testes de PES</a>
-      </p>
-      <p class="nota">
-        Uma sessão nova sorteia outra semente. Repetir o teste é livre, e é justamente por isso
-        que o conjunto público destes dados é exploratório: não há como saber quem testou,
-        quantas vezes nem em que condições.
-      </p>
-    </div>
-  </section>
-
-</main>
-
-<footer th:replace="~{fragments/site :: rodape}"></footer>
-<script src="/js/verificador-alvos.js" defer></script>
-<script src="/js/sessao-teste.js" defer></script>
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+  <script src="/js/verificador-alvos.js" defer></script>
+  <script src="/js/sessao-teste.js" defer></script>
 </body>
+
 </html>

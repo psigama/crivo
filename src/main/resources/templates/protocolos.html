@@ -1,110 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Protocolos — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os quatro protocolos da plataforma Crivo: dois experimentos de mediunidade (AIR), P1-automático e P2-supervisionado, e dois testes de percepção extrassensorial (PES), P3-precognição e P4-visão-remota, todos com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
+  <th:block
+    th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os quatro protocolos da plataforma Crivo: dois experimentos de mediunidade (AIR), P1-automático e P2-supervisionado, e dois testes de percepção extrassensorial (ESP), P3-precognição e P4-visão-remota, todos com pré-registro congelado, sorteio verificável e trilha de auditoria.')}">
+  </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
+
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="faixa">
-  <header th:replace="~{fragments/site :: topo}"></header>
-</div>
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
 
-<main id="conteudo">
+  <main id="conteudo">
 
-  <section class="abertura">
-    <div class="faixa">
-      <p class="rotulo aparece">Protocolos</p>
-      <h1 class="aparece">Quatro protocolos: dois experimentos e dois testes</h1>
-      <p class="chamada aparece">
-        O Crivo é uma plataforma de protocolos cegos para pesquisa de <strong>cognição
-        anômala</strong>, de dois tipos. Os <strong>experimentos</strong> são de mediunidade — na
-        literatura, <em>recepção anômala de informação</em>, ou AIR —: envolvem consulente e médium,
-        pedem conta e só têm resultado no fim de um estudo pré-registrado. Os <strong>testes</strong>
-        são de <em>percepção extrassensorial</em>: o alvo é sorteado pelo próprio sistema, não há
-        pessoa falecida envolvida, e o resultado sai na hora.
-      </p>
-      <p class="tese aparece">
-        O que todo protocolo daqui tem em comum: <strong>sorteio com compromisso publicado antes e
-        revelado depois, alvo fora do alcance de quem responde e trilha de auditoria encadeada por
-        hash e carimbada</strong>. Protocolo que não consegue oferecer isso não entra no catálogo. Os
-        experimentos acrescentam pré-registro congelado e desmascaramento automático no fim do
-        estudo; os testes são sessões anônimas e exploratórias, com o resultado no fim da sessão.
-      </p>
-    </div>
-  </section>
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Protocolos</p>
+        <h1 class="aparece">Quatro protocolos: dois experimentos e dois testes</h1>
+        <p class="chamada aparece">
+          O Crivo é uma plataforma de protocolos cegos para pesquisa de <strong>cognição
+            anômala</strong>, de dois tipos. Os <strong>experimentos</strong> são de mediunidade — na
+          literatura, <em>recepção anômala de informação</em>, ou AIR —: envolvem consulente e médium,
+          pedem conta e só têm resultado no fim de um estudo pré-registrado. Os <strong>testes</strong>
+          são de <em>percepção extrassensorial</em>: o alvo é sorteado pelo próprio sistema, não há
+          pessoa falecida envolvida, e o resultado sai na hora.
+        </p>
+        <p class="tese aparece">
+          O que todo protocolo daqui tem em comum: <strong>sorteio com compromisso publicado antes e
+            revelado depois, alvo fora do alcance de quem responde e trilha de auditoria encadeada por
+            hash e carimbada</strong>. Protocolo que não consegue oferecer isso não entra no catálogo. Os
+          experimentos acrescentam pré-registro congelado e desmascaramento automático no fim do
+          estudo; os testes são sessões anônimas e exploratórias, com o resultado no fim da sessão.
+        </p>
+      </div>
+    </section>
 
-  <section id="air">
-    <div class="faixa">
-      <p class="rotulo">Mediunidade · P1 e P2</p>
-      <h2>Experimentos de mediunidade (AIR)</h2>
+    <section id="air">
+      <div class="faixa">
+        <p class="rotulo">Mediunidade · P1 e P2</p>
+        <h2>Experimentos de mediunidade (AIR)</h2>
 
-      <ul class="protocolos">
-        <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
-          <p class="selo">
-            <span th:text="${p.label()}">P1-automático</span> ·
-            <span th:text="${#strings.toLowerCase(p.kind())}">experimento</span> ·
-            <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
-            <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span> ·
-            <span th:text="${#strings.toLowerCase(p.status.label())}">situação</span>
-          </p>
-          <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
-          <p th:text="${p.summary}">Resumo</p>
-          <p class="acoes">
-            <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
-            <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}"
-               href="/conta/criar">Criar uma conta</a>
-            <span class="nota" th:if="${p.discontinued()}">
-              Só como referência: este protocolo precisa de uma equipe — experimentador e redator —
-              e não roda sozinho pelo site.
-            </span>
-          </p>
-        </li>
-      </ul>
+        <ul class="protocolos">
+          <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
+            <p class="selo">
+              <span th:text="${p.label()}">P1-automático</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind())}">experimento</span> ·
+              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
+              <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span> ·
+              <span th:text="${#strings.toLowerCase(p.status.label())}">situação</span>
+            </p>
+            <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
+            <p th:text="${p.summary}">Resumo</p>
+            <p class="acoes">
+              <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
+              <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}" href="/conta/criar">Criar uma
+                conta</a>
+              <span class="nota" th:if="${p.discontinued()}">
+                Só como referência: este protocolo precisa de uma equipe — experimentador e redator —
+                e não roda sozinho pelo site.
+              </span>
+            </p>
+          </li>
+        </ul>
 
-      <p class="nota nota-espacada">
-        Um nulo na leitura automatizada não refuta os estudos com intermediário da literatura: cada
-        desenho paga um preço diferente, e a página de cada protocolo diz qual é o dele.
-      </p>
-    </div>
-  </section>
+        <p class="nota nota-espacada">
+          Um nulo na leitura automatizada não refuta os estudos com intermediário da literatura: cada
+          desenho paga um preço diferente, e a página de cada protocolo diz qual é o dele.
+        </p>
+      </div>
+    </section>
 
-  <section id="pes">
-    <div class="faixa">
-      <p class="rotulo">Percepção extrassensorial · P3 e P4</p>
-      <h2>Testes de percepção extrassensorial (PES)</h2>
-      <p>
-        Testes rápidos e anônimos, sem conta. Eles <strong>não dizem nada sobre mediunidade</strong>:
-        servem para mostrar o método funcionando, e qualquer pessoa pode conferir depois a lisura do
-        próprio teste.
-      </p>
+    <section id="pes">
+      <div class="faixa">
+        <p class="rotulo">Percepção extrassensorial · P3 e P4</p>
+        <h2>Testes de percepção extrassensorial (ESP)</h2>
+        <p>
+          Testes rápidos e anônimos, sem conta. Eles <strong>não dizem nada sobre mediunidade</strong>:
+          servem para mostrar o método funcionando, e qualquer pessoa pode conferir depois a lisura do
+          próprio teste.
+        </p>
 
-      <ul class="protocolos">
-        <li th:each="p : ${esp}">
-          <p class="selo">
-            <span th:text="${p.label()}">P3-precognição</span> ·
-            <span th:text="${#strings.toLowerCase(p.kind())}">teste</span> ·
-            <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
-            <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
-          </p>
-          <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
-          <p th:text="${p.summary}">Resumo</p>
-          <p class="acoes">
-            <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
-            <a class="botao botao-cheio" th:href="'/protocolo/' + ${p.code} + '/rodar'">Fazer o teste</a>
-          </p>
-        </li>
-      </ul>
-    </div>
-  </section>
+        <ul class="protocolos">
+          <li th:each="p : ${esp}">
+            <p class="selo">
+              <span th:text="${p.label()}">P3-precognição</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind())}">teste</span> ·
+              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
+              <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
+            </p>
+            <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
+            <p th:text="${p.summary}">Resumo</p>
+            <p class="acoes">
+              <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
+              <a class="botao botao-cheio" th:href="'/protocolo/' + ${p.code} + '/rodar'">Fazer o teste</a>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-</main>
+  </main>
 
-<footer th:replace="~{fragments/site :: rodape}"></footer>
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
 </body>
+
 </html>

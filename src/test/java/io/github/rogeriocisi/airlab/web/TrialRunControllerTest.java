@@ -35,13 +35,20 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * The pages of the self-service tests, from the outside.
  *
- * <p>Two things matter here. A repeated or stale submission must resume the test rather than
- * land the person on an error page or a login screen — reloading is something people do, and
- * the refusal already happened in the domain. And the catalog page must stay public: these
+ * <p>
+ * Two things matter here. A repeated or stale submission must resume the test
+ * rather than
+ * land the person on an error page or a login screen — reloading is something
+ * people do, and
+ * the refusal already happened in the domain. And the catalog page must stay
+ * public: these
  * tests exist to be taken by anyone.
  *
- * <p>Runs with the real security configuration rather than a sliced web context, because
- * "this page is public" is a claim about that configuration. The service is mocked, so the
+ * <p>
+ * Runs with the real security configuration rather than a sliced web context,
+ * because
+ * "this page is public" is a claim about that configuration. The service is
+ * mocked, so the
  * subject here is the pages and the flow, not the protocol.
  */
 @SpringBootTest
@@ -49,275 +56,280 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 class TrialRunControllerTest {
 
-    private static final String SEED = "a1b2c3d4e5f6".repeat(5) + "a1b2";
-    private static final String SERVER_SEED = "f6e5d4c3b2a1".repeat(5) + "f6e5";
-    private static final String NONCE = "22".repeat(16);
+        private static final String SEED = "a1b2c3d4e5f6".repeat(5) + "a1b2";
+        private static final String SERVER_SEED = "f6e5d4c3b2a1".repeat(5) + "f6e5";
+        private static final String NONCE = "22".repeat(16);
 
-    @Autowired
-    MockMvc mvc;
+        @Autowired
+        MockMvc mvc;
 
-    @MockitoBean
-    TrialSessionService trialSessions;
+        @MockitoBean
+        TrialSessionService trialSessions;
 
-    @Test
-    @DisplayName("o catalogo e as paginas dos quatro protocolos sao publicos")
-    void the_catalog_is_public() throws Exception {
-        mvc.perform(get("/protocolos"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("catálogo")));
-        for (String code : List.of("P1", "P2", "P3", "P4")) {
-            mvc.perform(get("/protocolo/" + code)).andExpect(status().isOk());
+        @Test
+        @DisplayName("o catalogo e as paginas dos quatro protocolos sao publicos")
+        void the_catalog_is_public() throws Exception {
+                mvc.perform(get("/protocolos"))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(containsString("catálogo")));
+                for (String code : List.of("P1", "P2", "P3", "P4")) {
+                        mvc.perform(get("/protocolo/" + code)).andExpect(status().isOk());
+                }
         }
-    }
 
-    @Test
-    @DisplayName("protocolo que nao existe da 404, nao erro")
-    void an_unknown_protocol_is_a_404() throws Exception {
-        mvc.perform(get("/protocolo/P9")).andExpect(status().isNotFound());
-        mvc.perform(get("/testes/telepatia-por-telefone")).andExpect(status().isNotFound());
-    }
-
-    /**
-     * SPEC 0.17, catalog rule 7: the catalog lists the four protocols and links to their pages,
-     * the ESP tests included, apart from the AIR protocols.
-     */
-    @Test
-    @DisplayName("a pagina de protocolos lista os quatro, com links para /protocolo/P1 a P4")
-    void the_catalog_lists_the_four_protocols() throws Exception {
-        mvc.perform(get("/protocolos"))
-                .andExpect(content().string(containsString("href=\"/protocolo/P1\"")))
-                .andExpect(content().string(containsString("href=\"/protocolo/P2\"")))
-                .andExpect(content().string(containsString("href=\"/protocolo/P3\"")))
-                .andExpect(content().string(containsString("href=\"/protocolo/P4\"")))
-                .andExpect(content().string(containsString("href=\"/protocolo/P3/rodar\"")))
-                .andExpect(content().string(containsString("href=\"/protocolo/P4/rodar\"")))
-                .andExpect(content().string(containsString("P1-automático")))
-                .andExpect(content().string(containsString("P2-supervisionado")))
-                .andExpect(content().string(containsString("P3-precognição")))
-                .andExpect(content().string(containsString("P4-visão-remota")));
-    }
-
-    /**
-     * The other half of rule 7: the addresses used until SPEC 0.16, which the PsiGama page and
-     * shared links pointed at, answer with a permanent redirect to the new ones.
-     */
-    @Test
-    @DisplayName("as rotas antigas /testes redirecionam com 301 para /protocolos e /protocolo/P{X}")
-    void the_old_routes_redirect_permanently() throws Exception {
-        mvc.perform(get("/testes")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolos"));
-        mvc.perform(get("/testes/leitura-estruturada")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolo/P1"));
-        mvc.perform(get("/testes/leitura-pareada")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolo/P2"));
-        mvc.perform(get("/testes/escolha-forcada")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolo/P3"));
-        mvc.perform(get("/testes/visao-remota/rodar")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
-        mvc.perform(get("/testes/escolha-forcada/resultado")).andExpect(status().isMovedPermanently())
-                .andExpect(redirectedUrl("/protocolo/P3/resultado"));
-        mvc.perform(get("/protocolo/p3")).andExpect(redirectedUrl("/protocolo/P3"));
-    }
-
-    @Test
-    @DisplayName("as paginas dos testes de PES levam ao teste e de volta aos protocolos, na secao Protocolos")
-    void the_esp_pages_belong_to_the_protocols_section() throws Exception {
-        for (String code : List.of("P3", "P4")) {
-            mvc.perform(get("/protocolo/" + code))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("href=\"/protocolo/" + code + "/rodar\"")))
-                    .andExpect(content().string(containsString("Todos os protocolos")))
-                    .andExpect(content().string(containsString("href=\"/protocolos\" aria-current=\"page\"")));
-            mvc.perform(get("/protocolo/" + code + "/rodar"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("Começar a sessão")));
+        @Test
+        @DisplayName("protocolo que nao existe da 404, nao erro")
+        void an_unknown_protocol_is_a_404() throws Exception {
+                mvc.perform(get("/protocolo/P9")).andExpect(status().isNotFound());
+                mvc.perform(get("/testes/telepatia-por-telefone")).andExpect(status().isNotFound());
         }
-    }
 
-    @Test
-    @DisplayName("o resultado de um teste de PES leva aos outros testes de PES do catalogo")
-    void the_result_page_leads_back_to_the_catalog() throws Exception {
-        given(trialSessions.outcome(anyString()))
-                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
-        given(trialSessions.start(any(), anyInt())).willReturn(progress());
+        /**
+         * SPEC 0.17, catalog rule 7: the catalog lists the four protocols and links to
+         * their pages,
+         * the ESP tests included, apart from the AIR protocols.
+         */
+        @Test
+        @DisplayName("a pagina de protocolos lista os quatro, com links para /protocolo/P1 a P4")
+        void the_catalog_lists_the_four_protocols() throws Exception {
+                mvc.perform(get("/protocolos"))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P1\"")))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P2\"")))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P3\"")))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P4\"")))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P3/rodar\"")))
+                                .andExpect(content().string(containsString("href=\"/protocolo/P4/rodar\"")))
+                                .andExpect(content().string(containsString("P1-automático")))
+                                .andExpect(content().string(containsString("P2-supervisionado")))
+                                .andExpect(content().string(containsString("P3-precognição")))
+                                .andExpect(content().string(containsString("P4-visão-remota")));
+        }
 
-        var session = mvc.perform(
-                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
-                .andReturn().getRequest().getSession();
+        /**
+         * The other half of rule 7: the addresses used until SPEC 0.16, which the
+         * PsiGama page and
+         * shared links pointed at, answer with a permanent redirect to the new ones.
+         */
+        @Test
+        @DisplayName("as rotas antigas /testes redirecionam com 301 para /protocolos e /protocolo/P{X}")
+        void the_old_routes_redirect_permanently() throws Exception {
+                mvc.perform(get("/testes")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolos"));
+                mvc.perform(get("/testes/leitura-estruturada")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolo/P1"));
+                mvc.perform(get("/testes/leitura-pareada")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolo/P2"));
+                mvc.perform(get("/testes/escolha-forcada")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolo/P3"));
+                mvc.perform(get("/testes/visao-remota/rodar")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
+                mvc.perform(get("/testes/escolha-forcada/resultado")).andExpect(status().isMovedPermanently())
+                                .andExpect(redirectedUrl("/protocolo/P3/resultado"));
+                mvc.perform(get("/protocolo/p3")).andExpect(redirectedUrl("/protocolo/P3"));
+        }
 
-        mvc.perform(get("/protocolo/P3/resultado")
-                        .session((org.springframework.mock.web.MockHttpSession) session))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("href=\"/protocolos#pes\"")));
-    }
+        @Test
+        @DisplayName("as paginas dos testes de ESP levam ao teste e de volta aos protocolos, na secao Protocolos")
+        void the_esp_pages_belong_to_the_protocols_section() throws Exception {
+                for (String code : List.of("P3", "P4")) {
+                        mvc.perform(get("/protocolo/" + code))
+                                        .andExpect(status().isOk())
+                                        .andExpect(content().string(
+                                                        containsString("href=\"/protocolo/" + code + "/rodar\"")))
+                                        .andExpect(content().string(containsString("Todos os protocolos")))
+                                        .andExpect(content().string(
+                                                        containsString("href=\"/protocolos\" aria-current=\"page\"")));
+                        mvc.perform(get("/protocolo/" + code + "/rodar"))
+                                        .andExpect(status().isOk())
+                                        .andExpect(content().string(containsString("Começar a sessão")));
+                }
+        }
 
-    @Test
-    @DisplayName("sem sessao aberta, a pagina de rodar mostra o convite")
-    void without_a_session_the_run_page_invites() throws Exception {
-        mvc.perform(get("/protocolo/P3/rodar"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Começar a sessão")));
-    }
+        @Test
+        @DisplayName("o resultado de um teste de ESP leva aos outros testes de ESP do catalogo")
+        void the_result_page_leads_back_to_the_catalog() throws Exception {
+                given(trialSessions.outcome(anyString()))
+                                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
+                given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
-    @Test
-    @DisplayName("comecar a sessao leva para a tentativa")
-    void starting_redirects_to_the_trial() throws Exception {
-        given(trialSessions.start(any(), anyInt())).willReturn(progress());
+                var session = mvc.perform(
+                                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        mvc.perform(post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
-                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
-    }
+                mvc.perform(get("/protocolo/P3/resultado")
+                                .session((org.springframework.mock.web.MockHttpSession) session))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(containsString("href=\"/protocolos#pes\"")));
+        }
 
-    @Test
-    @DisplayName("reenvio de resposta ja travada retoma o teste, sem erro e sem tela de login")
-    void a_repeated_submission_resumes_the_test() throws Exception {
-        given(trialSessions.start(any(), anyInt())).willReturn(progress());
-        willThrow(new IllegalStateException("a sessao ja tem as tentativas declaradas"))
-                .given(trialSessions).submitChoice(anyString(), anyInt());
+        @Test
+        @DisplayName("sem sessao aberta, a pagina de rodar mostra o convite")
+        void without_a_session_the_run_page_invites() throws Exception {
+                mvc.perform(get("/protocolo/P3/rodar"))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString("Começar a sessão")));
+        }
 
-        var session = mvc.perform(
-                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
-                .andReturn().getRequest().getSession();
+        @Test
+        @DisplayName("comecar a sessao leva para a tentativa")
+        void starting_redirects_to_the_trial() throws Exception {
+                given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
-        mvc.perform(post("/protocolo/P3/escolha").param("posicao", "1")
-                        .session((org.springframework.mock.web.MockHttpSession) session)
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
-    }
+                mvc.perform(post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
+        }
 
-    @Test
-    @DisplayName("impressao reescrita depois das figuras retoma o teste, e nao e aceita")
-    void rewriting_a_locked_impression_resumes_the_test() throws Exception {
-        given(trialSessions.start(any(), anyInt()))
-                .willReturn(progress(TrialProtocol.REMOTE_VIEWING_RANKED));
-        willThrow(new IllegalStateException("ja foi travada"))
-                .given(trialSessions).lockImpression(anyString(), anyString());
+        @Test
+        @DisplayName("reenvio de resposta ja travada retoma o teste, sem erro e sem tela de login")
+        void a_repeated_submission_resumes_the_test() throws Exception {
+                given(trialSessions.start(any(), anyInt())).willReturn(progress());
+                willThrow(new IllegalStateException("a sessao ja tem as tentativas declaradas"))
+                                .given(trialSessions).submitChoice(anyString(), anyInt());
 
-        var session = mvc.perform(
-                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
-                .andReturn().getRequest().getSession();
+                var session = mvc.perform(
+                                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        mvc.perform(post("/protocolo/P4/impressao").param("impressao", "outra coisa")
-                        .session((org.springframework.mock.web.MockHttpSession) session)
-                        .with(csrf()))
-                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
-    }
+                mvc.perform(post("/protocolo/P3/escolha").param("posicao", "1")
+                                .session((org.springframework.mock.web.MockHttpSession) session)
+                                .with(csrf()))
+                                .andExpect(status().is3xxRedirection())
+                                .andExpect(redirectedUrl("/protocolo/P3/rodar"));
+        }
 
-    @Test
-    @DisplayName("a escolha forcada nao mostra coluna de figuras: nao ha figuras nesse teste")
-    void the_forced_choice_result_has_no_figures_column() throws Exception {
-        given(trialSessions.outcome(anyString()))
-                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
-        given(trialSessions.start(any(), anyInt())).willReturn(progress());
+        @Test
+        @DisplayName("impressao reescrita depois das figuras retoma o teste, e nao e aceita")
+        void rewriting_a_locked_impression_resumes_the_test() throws Exception {
+                given(trialSessions.start(any(), anyInt()))
+                                .willReturn(progress(TrialProtocol.REMOTE_VIEWING_RANKED));
+                willThrow(new IllegalStateException("ja foi travada"))
+                                .given(trialSessions).lockImpression(anyString(), anyString());
 
-        var session = mvc.perform(
-                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
-                .andReturn().getRequest().getSession();
+                var session = mvc.perform(
+                                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/protocolo/P3/resultado")
-                        .session((org.springframework.mock.web.MockHttpSession) session))
-                .andExpect(status().isOk())
-                .andExpect(content().string(
-                        org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("Figuras mostradas"))));
-    }
+                mvc.perform(post("/protocolo/P4/impressao").param("impressao", "outra coisa")
+                                .session((org.springframework.mock.web.MockHttpSession) session)
+                                .with(csrf()))
+                                .andExpect(redirectedUrl("/protocolo/P4/rodar"));
+        }
 
-    @Test
-    @DisplayName("a visao remota mostra as figuras de cada tentativa")
-    void the_remote_viewing_result_lists_the_figures() throws Exception {
-        given(trialSessions.outcome(anyString()))
-                .willReturn(Optional.of(outcome(TrialProtocol.REMOTE_VIEWING_RANKED,
-                        List.of("farol", "ponte", "espiral", "barco"))));
-        given(trialSessions.start(any(), anyInt()))
-                .willReturn(progress(TrialProtocol.REMOTE_VIEWING_RANKED));
+        @Test
+        @DisplayName("a escolha forcada nao mostra coluna de figuras: nao ha figuras nesse teste")
+        void the_forced_choice_result_has_no_figures_column() throws Exception {
+                given(trialSessions.outcome(anyString()))
+                                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
+                given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
-        var session = mvc.perform(
-                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
-                .andReturn().getRequest().getSession();
+                var session = mvc.perform(
+                                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/protocolo/P4/resultado")
-                        .session((org.springframework.mock.web.MockHttpSession) session))
-                .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Figuras mostradas")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("farol")));
-    }
+                mvc.perform(get("/protocolo/P3/resultado")
+                                .session((org.springframework.mock.web.MockHttpSession) session))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(
+                                                org.hamcrest.Matchers.not(org.hamcrest.Matchers
+                                                                .containsString("Figuras mostradas"))));
+        }
 
-    @Test
-    @DisplayName("a pagina de resultado entrega semente e alvos gravados ao verificador")
-    void the_result_page_feeds_the_verifier() throws Exception {
-        given(trialSessions.outcome(anyString()))
-                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
-        given(trialSessions.start(any(), anyInt())).willReturn(progress());
+        @Test
+        @DisplayName("a visao remota mostra as figuras de cada tentativa")
+        void the_remote_viewing_result_lists_the_figures() throws Exception {
+                given(trialSessions.outcome(anyString()))
+                                .willReturn(Optional.of(outcome(TrialProtocol.REMOTE_VIEWING_RANKED,
+                                                List.of("farol", "ponte", "espiral", "barco"))));
+                given(trialSessions.start(any(), anyInt()))
+                                .willReturn(progress(TrialProtocol.REMOTE_VIEWING_RANKED));
 
-        var session = mvc.perform(
-                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
-                .andReturn().getRequest().getSession();
+                var session = mvc.perform(
+                                post("/protocolo/P4/comecar").param("tentativas", "3").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        mvc.perform(get("/protocolo/P3/resultado")
-                        .session((org.springframework.mock.web.MockHttpSession) session))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-verificador")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-alvos=\"2,3\"")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString(SEED)))
-                .andExpect(content().string(
-                        org.hamcrest.Matchers.containsString("/js/verificador-alvos.js")))
-                .andExpect(content().string(
-                        org.hamcrest.Matchers.containsString("id=\"comprovante-sessao\"")));
-    }
+                mvc.perform(get("/protocolo/P4/resultado")
+                                .session((org.springframework.mock.web.MockHttpSession) session))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString("Figuras mostradas")))
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString("farol")));
+        }
 
-    @Test
-    @DisplayName("o comprovante JSON traz semente, alvos e respostas, e nao fecha o script")
-    void the_receipt_carries_the_closed_session() throws Exception {
-        SessionOutcome base = outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of());
-        SessionOutcome hostile = new SessionOutcome(base.sessionCode(), base.protocol(),
-                base.state(), base.declaredTrials(), base.lockedTrials(), base.hits(),
-                base.chanceNumerator(), base.chanceDenominator(), base.pValue(),
-                base.seedCommitment(), base.serverSeedHex(), base.participantNonce(),
-                base.seedHex(), base.targetPoolVersion(), base.startedAt(), base.closedAt(),
-                base.trials(), "</script><b>x</b>");
+        @Test
+        @DisplayName("a pagina de resultado entrega semente e alvos gravados ao verificador")
+        void the_result_page_feeds_the_verifier() throws Exception {
+                given(trialSessions.outcome(anyString()))
+                                .willReturn(Optional.of(outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of())));
+                given(trialSessions.start(any(), anyInt())).willReturn(progress());
 
-        String json = TrialRunController.receipt(hostile);
+                var session = mvc.perform(
+                                post("/protocolo/P3/comecar").param("tentativas", "12").with(csrf()))
+                                .andReturn().getRequest().getSession();
 
-        org.assertj.core.api.Assertions.assertThat(json)
-                .contains("\"formato\" : \"" + TrialRunController.RECEIPT_FORMAT + "\"")
-                .contains(SEED).contains(SERVER_SEED).contains(NONCE)
-                .contains("\"alvo\" : 3")
-                .doesNotContain("<");
-        var tree = new com.fasterxml.jackson.databind.ObjectMapper().readTree(json);
-        org.assertj.core.api.Assertions.assertThat(tree.get("natureza").asText())
-                .isEqualTo("</script><b>x</b>");
-        org.assertj.core.api.Assertions.assertThat(tree.get("tentativas").size()).isEqualTo(2);
-    }
+                mvc.perform(get("/protocolo/P3/resultado")
+                                .session((org.springframework.mock.web.MockHttpSession) session))
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-verificador")))
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-alvos=\"2,3\"")))
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString(SEED)))
+                                .andExpect(content().string(
+                                                org.hamcrest.Matchers.containsString("/js/verificador-alvos.js")))
+                                .andExpect(content().string(
+                                                org.hamcrest.Matchers.containsString("id=\"comprovante-sessao\"")));
+        }
 
-    @Test
-    @DisplayName("a navegacao marca a secao atual com aria-current")
-    void the_navigation_marks_the_current_section() throws Exception {
-        mvc.perform(get("/protocolos"))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString(
-                        "href=\"/protocolos\" aria-current=\"page\"")))
-                .andExpect(content().string(org.hamcrest.Matchers.not(
-                        org.hamcrest.Matchers.containsString(
-                                "href=\"/historia\" aria-current=\"page\""))))
-                .andExpect(content().string(
-                        org.hamcrest.Matchers.containsString("property=\"og:title\"")));
-    }
+        @Test
+        @DisplayName("o comprovante JSON traz semente, alvos e respostas, e nao fecha o script")
+        void the_receipt_carries_the_closed_session() throws Exception {
+                SessionOutcome base = outcome(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE, List.of());
+                SessionOutcome hostile = new SessionOutcome(base.sessionCode(), base.protocol(),
+                                base.state(), base.declaredTrials(), base.lockedTrials(), base.hits(),
+                                base.chanceNumerator(), base.chanceDenominator(), base.pValue(),
+                                base.seedCommitment(), base.serverSeedHex(), base.participantNonce(),
+                                base.seedHex(), base.targetPoolVersion(), base.startedAt(), base.closedAt(),
+                                base.trials(), "</script><b>x</b>");
 
-    private static SessionOutcome outcome(TrialProtocol protocol, List<String> figuras) {
-        List<TrialOutcome> trials = List.of(
-                new TrialOutcome(1, 2, 2, true, figuras, Optional.empty(), Optional.empty()),
-                new TrialOutcome(2, 1, 3, false, figuras, Optional.empty(), Optional.empty()));
-        return new SessionOutcome("TS-TEST0001", protocol, SessionState.FINISHED, 2, 2, 1,
-                1, 4, new java.math.BigDecimal("0.4375"), "0".repeat(64), SERVER_SEED, NONCE, SEED,
-                "v1", Instant.parse("2026-01-01T00:00:00Z"), Instant.parse("2026-01-01T00:10:00Z"),
-                trials, "Dados exploratórios.");
-    }
+                String json = TrialRunController.receipt(hostile);
 
-    private static SessionProgress progress() {
-        return progress(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE);
-    }
+                org.assertj.core.api.Assertions.assertThat(json)
+                                .contains("\"formato\" : \"" + TrialRunController.RECEIPT_FORMAT + "\"")
+                                .contains(SEED).contains(SERVER_SEED).contains(NONCE)
+                                .contains("\"alvo\" : 3")
+                                .doesNotContain("<");
+                var tree = new com.fasterxml.jackson.databind.ObjectMapper().readTree(json);
+                org.assertj.core.api.Assertions.assertThat(tree.get("natureza").asText())
+                                .isEqualTo("</script><b>x</b>");
+                org.assertj.core.api.Assertions.assertThat(tree.get("tentativas").size()).isEqualTo(2);
+        }
 
-    private static SessionProgress progress(TrialProtocol protocol) {
-        return new SessionProgress("TS-TEST0001", protocol, 12, 0, 1, "0".repeat(64),
-                Instant.parse("2026-01-01T00:00:00Z"), SessionState.ACTIVE,
-                false, protocol.impressionRequired());
-    }
+        @Test
+        @DisplayName("a navegacao marca a secao atual com aria-current")
+        void the_navigation_marks_the_current_section() throws Exception {
+                mvc.perform(get("/protocolos"))
+                                .andExpect(content().string(org.hamcrest.Matchers.containsString(
+                                                "href=\"/protocolos\" aria-current=\"page\"")))
+                                .andExpect(content().string(org.hamcrest.Matchers.not(
+                                                org.hamcrest.Matchers.containsString(
+                                                                "href=\"/historia\" aria-current=\"page\""))))
+                                .andExpect(content().string(
+                                                org.hamcrest.Matchers.containsString("property=\"og:title\"")));
+        }
+
+        private static SessionOutcome outcome(TrialProtocol protocol, List<String> figuras) {
+                List<TrialOutcome> trials = List.of(
+                                new TrialOutcome(1, 2, 2, true, figuras, Optional.empty(), Optional.empty()),
+                                new TrialOutcome(2, 1, 3, false, figuras, Optional.empty(), Optional.empty()));
+                return new SessionOutcome("TS-TEST0001", protocol, SessionState.FINISHED, 2, 2, 1,
+                                1, 4, new java.math.BigDecimal("0.4375"), "0".repeat(64), SERVER_SEED, NONCE, SEED,
+                                "v1", Instant.parse("2026-01-01T00:00:00Z"), Instant.parse("2026-01-01T00:10:00Z"),
+                                trials, "Dados exploratórios.");
+        }
+
+        private static SessionProgress progress() {
+                return progress(TrialProtocol.PRECOGNITIVE_FORCED_CHOICE);
+        }
+
+        private static SessionProgress progress(TrialProtocol protocol) {
+                return new SessionProgress("TS-TEST0001", protocol, 12, 0, 1, "0".repeat(64),
+                                Instant.parse("2026-01-01T00:00:00Z"), SessionState.ACTIVE,
+                                false, protocol.impressionRequired());
+        }
 }
