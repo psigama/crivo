@@ -85,7 +85,7 @@ class DefaultAllocationService implements AllocationService {
         }
         String seedHex = AllocationEngine.newSeedHex();
         Map<String, Object> input = new LinkedHashMap<>();
-        input.put("mode", "P1_INCREMENTAL");
+        input.put("mode", AllocationEngine.INCREMENTAL_MODE);
         input.put("studyCode", studyCode);
         String canonicalInput = CanonicalJson.write(input);
         String commitment = AllocationEngine.seedCommitment(seedHex, canonicalInput);
@@ -97,7 +97,7 @@ class DefaultAllocationService implements AllocationService {
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("commitment", commitment);
-        payload.put("mode", "P1_INCREMENTAL");
+        payload.put("mode", AllocationEngine.INCREMENTAL_MODE);
         payload.put("drawInputSha256", Hashes.sha256Hex(canonicalInput));
         auditTrail.append(AuditEventType.ALLOCATION_SEED_COMMITTED, ActorRole.SYSTEM, null,
                 "study:" + studyId, payload);

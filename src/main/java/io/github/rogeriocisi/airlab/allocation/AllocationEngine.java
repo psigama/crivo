@@ -211,6 +211,13 @@ public final class AllocationEngine {
     }
 
     /**
+     * P1: the {@code mode} of the canonical draw input stored for a study whose draws happen
+     * during collection ({@link #seedCommitment}). There is no plan to replay for such a study,
+     * so the verification has to tell it apart from a P2 draw.
+     */
+    public static final String INCREMENTAL_MODE = "P1_INCREMENTAL";
+
+    /**
      * P1 (SPEC E13, phase C): the commitment published in the frozen preregistration of a study
      * whose pairs form during collection, so that there is no plan to commit to yet. It covers the
      * seed and the canonical description of the study; every later draw is a public function of

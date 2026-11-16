@@ -1,5 +1,6 @@
 package io.github.rogeriocisi.airlab.cli;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.rogeriocisi.airlab.allocation.AllocationEngine;
 import io.github.rogeriocisi.airlab.anchor.AnchorCheck;
@@ -14,6 +15,7 @@ import io.github.rogeriocisi.airlab.study.PreregistrationSnapshot;
 import io.github.rogeriocisi.airlab.study.StudyService;
 import io.github.rogeriocisi.airlab.study.StudySummary;
 import io.github.rogeriocisi.airlab.support.Hashes;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +145,21 @@ class VerifyRunner implements ApplicationRunner {
             return;
         }
         try {
+            if (incremental(snapshot, objectMapper)) {
+                // P1: the pairs, the mediums and the name orders are drawn during collection, so
+                // there is no plan to replay here. What this command can check on its own is the
+                // revealed seed against the commitment frozen in the preregistration; each draw is
+                // a public function of that seed and of the pool recorded with it (SPEC E13).
+                boolean sameCommitment = incrementalCommitmentHolds(snapshot);
+                println("     - semente revelada contra o compromisso publicado: "
+                        + (sameCommitment ? "confere" : "NAO CONFERE"));
+                println("     - sorteios do P1 (medium e ordem dos nomes de cada par): refeitos a partir"
+                        + " desta semente pelo pacote de verificacao (E9), ainda em preparacao");
+                if (!sameCommitment) {
+                    failures.add("sorteio do estudo " + study.code());
+                }
+                return;
+            }
             DrawInput input = objectMapper.readValue(snapshot.canonicalDrawInput(), DrawInput.class);
             AllocationPlan replayed = AllocationEngine.plan(snapshot.seedHex().get(), input);
             boolean sameAllocations = replayed.canonicalForm().equals(snapshot.canonicalAllocations());
@@ -160,6 +177,21 @@ class VerifyRunner implements ApplicationRunner {
             println("     - sorteio: nao foi possivel reproduzir (" + e.getClass().getSimpleName() + ")");
             failures.add("sorteio do estudo " + study.code());
         }
+    }
+
+    /** Whether the stored draw input is the one a P1 study commits to, with no plan behind it. */
+    static boolean incremental(AllocationSnapshot snapshot, ObjectMapper objectMapper) throws IOException {
+        JsonNode input = objectMapper.readTree(snapshot.canonicalDrawInput());
+        return input != null && input.isObject()
+                && AllocationEngine.INCREMENTAL_MODE.equals(input.path("mode").asText());
+    }
+
+    /** P1: the revealed seed, with the stored canonical input, gives back the published commitment. */
+    static boolean incrementalCommitmentHolds(AllocationSnapshot snapshot) {
+        return snapshot.seedHex()
+                .map(seed -> AllocationEngine.seedCommitment(seed, snapshot.canonicalDrawInput()))
+                .filter(snapshot.commitment()::equals)
+                .isPresent();
     }
 
     private void println(String text) {
