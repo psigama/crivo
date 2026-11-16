@@ -141,7 +141,7 @@ congelado, participantes identificados e N declarado antes da coleta.
 | Cadastro repetido mostra a mesma página | O formulário não serve para descobrir quem participa; o e-mail enviado diz o que aconteceu |
 | Confirmação por botão, não ao abrir o link | Serviços de e-mail abrem links sozinhos para checá-los; um GET que confirmasse seria consumido por eles |
 | Token de confirmação só como hash, 48 horas | Mesmo esquema do `AccessLink` do E6 |
-| Inscrição fechada sem e-mail ou sem contato humano | Travas 3 e 5 do E10. No perfil local, nada sai da máquina: o link vai para a caixa de saída (só o administrador abre) e para o log, com código e sem endereço |
+| Inscrição fechada sem e-mail, sem contato humano ou, em produção, sem a referência do CEP | Travas 3, 4 e 5 do E10. No perfil local, nada sai da máquina: o link vai para a caixa de saída (só o administrador abre) e para o log, com código e sem endereço |
 | Aviso ao administrador só com tipo, código e hora | Painel e e-mail não são canais cegos. O registro não tem coluna para mais nada |
 | Notas não existem antes do desmascaramento (fases B a D) | A conferência só roda depois dele; não é questão de esconder, é de não calcular |
 | **Fase B**: rascunho só na sessão HTTP | O banco recebe o pedido uma vez, já travado; não existe janela em que um pedido gravado pudesse mudar antes de o compromisso sair |

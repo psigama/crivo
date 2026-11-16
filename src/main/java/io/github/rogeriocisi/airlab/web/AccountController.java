@@ -118,6 +118,7 @@ class AccountController {
 
     private String signUpPage(Model model) {
         model.addAttribute("inscricaoAberta", gate.open());
+        model.addAttribute("aguardaCep", gate.awaitingEthicsApproval());
         model.addAttribute("contato", gate.contactEmail().orElse(null));
         model.addAttribute("perfilLocal", gate.localProfile());
         model.addAttribute("versaoTermo", AccountService.CURRENT_TERM_VERSION);

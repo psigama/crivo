@@ -31,9 +31,12 @@
         </p>
 
         <div class="ressalva" th:unless="${inscricaoAberta}">
-          <p>
-            <strong>As inscrições estão fechadas nesta instalação.</strong> Necessário aguardar confirmação do Comitê de
-            Ética em Pesquisa (CEP).
+          <p th:if="${aguardaCep}">
+            <strong>As inscrições ainda não estão abertas.</strong> Elas abrem depois que o estudo
+            for aprovado pelo Comitê de Ética em Pesquisa (CEP).
+          </p>
+          <p th:unless="${aguardaCep}">
+            <strong>As inscrições estão fechadas nesta instalação.</strong>
           </p>
         </div>
 

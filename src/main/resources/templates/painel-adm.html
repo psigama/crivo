@@ -40,7 +40,8 @@
       <h3>Situação da instalação</h3>
       <ul>
         <li>Inscrição:
-          <strong th:text="${inscricaoAberta} ? 'aberta' : 'fechada'">aberta</strong></li>
+          <strong th:text="${inscricaoAberta} ? 'aberta' : 'fechada'">aberta</strong>
+          <span class="nota" th:unless="${inscricaoAberta}">(em produção, exige envio de e-mail, <code>AIRLAB_CONTACT_EMAIL</code> e <code>AIRLAB_CEP_REFERENCE</code>)</span></li>
         <li>Pedidos de consulta:
           <strong th:text="${pedidosAbertos} ? 'abertos' : 'fechados'">abertos</strong>
           <span class="nota" th:unless="${pedidosAbertos}">(em produção, exigem <code>AIRLAB_CEP_REFERENCE</code>)</span></li>

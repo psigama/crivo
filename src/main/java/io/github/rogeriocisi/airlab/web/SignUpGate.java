@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
  *
  * <p>Open only when an account can actually be confirmed and a person can be reached: e-mail
  * working (E10, lock 3) and, outside the local profile, a human contact configured (E10,
- * lock 5). A closed sign-up says why, in the page, instead of failing half-way.
+ * lock 5) and the ethics committee approval reference recorded (E10, lock 4: approval before
+ * sign-up opens, not after). A closed sign-up says why, in the page, instead of failing half-way.
  */
 @Component
 class SignUpGate {
@@ -24,7 +25,16 @@ class SignUpGate {
     }
 
     boolean open() {
-        return mailer.enabled() && (localProfile() || contactEmail().isPresent());
+        return mailer.enabled() && (localProfile() || (contactEmail().isPresent() && cepReference().isPresent()));
+    }
+
+    /**
+     * Whether sign-up is closed only for want of the ethics committee approval, outside the local
+     * profile: what the sign-up page tells the visitor. Closed for any other reason, the page says
+     * only that sign-up is closed on this installation.
+     */
+    boolean awaitingEthicsApproval() {
+        return !localProfile() && cepReference().isEmpty() && mailer.enabled() && contactEmail().isPresent();
     }
 
     boolean localProfile() {
@@ -32,12 +42,12 @@ class SignUpGate {
     }
 
     /**
-     * Whether sitters may file P1 requests: the request collects sensitive data about a deceased
-     * person, so outside the local profile it needs the ethics committee approval reference
-     * (E10, lock 4) on top of an open sign-up.
+     * Whether sitters may file P1 requests. The request collects sensitive data about a deceased
+     * person; outside the local profile it needs the ethics committee approval reference (E10,
+     * lock 4), which an open sign-up already requires.
      */
     boolean requestsOpen() {
-        return open() && (localProfile() || cepReference().isPresent());
+        return open();
     }
 
     Optional<String> cepReference() {
