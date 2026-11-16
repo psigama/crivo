@@ -2,8 +2,6 @@ package io.github.rogeriocisi.airlab.audit.internal;
 
 import io.github.rogeriocisi.airlab.audit.ActorRole;
 import io.github.rogeriocisi.airlab.audit.AuditEventType;
-import io.github.rogeriocisi.airlab.support.CanonicalJson;
-import io.github.rogeriocisi.airlab.support.Hashes;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,8 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * One link of the audit chain. Rows are never updated nor deleted: the database rejects
@@ -80,15 +76,14 @@ class AuditEvent {
      * no knowledge of how rows were numbered.
      */
     String computeHash() {
-        Map<String, Object> preimage = new LinkedHashMap<>();
-        preimage.put("occurredAt", occurredAt.toString());
-        preimage.put("eventType", eventType.name());
-        preimage.put("actorRole", actorRole.name());
-        preimage.put("actorCode", actorCode);
-        preimage.put("subjectRef", subjectRef);
-        preimage.put("payload", payload);
-        preimage.put("prevHash", prevHash);
-        return Hashes.sha256Hex(CanonicalJson.write(preimage));
+        // One rule for the database and for the exported trail (SPEC E9): AuditChain.
+        return io.github.rogeriocisi.airlab.audit.AuditChain.hashOf(occurredAt.toString(), eventType.name(),
+                actorRole.name(), actorCode, subjectRef, payload, prevHash);
+    }
+
+    io.github.rogeriocisi.airlab.audit.ExportedEvent export() {
+        return new io.github.rogeriocisi.airlab.audit.ExportedEvent(seq, occurredAt.toString(), eventType.name(),
+                actorRole.name(), actorCode, subjectRef, payload, prevHash, hash);
     }
 
     Long seq() {

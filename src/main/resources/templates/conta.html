@@ -24,7 +24,7 @@
       <dl class="leituras">
         <div><dt>Perfil</dt><dd th:text="${conta.profile.label()} + ' (fixo)'">Consulente</dd></div>
         <div><dt>Código na pesquisa</dt><dd><code th:text="${conta.code}">CON-0000</code></dd></div>
-        <div><dt>Termo aceito</dt><dd th:text="${conta.termVersion}">conta-v1</dd></div>
+        <div><dt>Termo aceito</dt><dd th:text="${conta.termVersion}">conta-v2</dd></div>
         <div><dt>Conta criada em</dt><dd th:text="${@datas.dia(conta.createdAt)}">13/11/2026</dd></div>
         <div><dt>E-mail confirmado em</dt><dd th:text="${@datas.dia(conta.emailConfirmedAt)}">13/11/2026</dd></div>
       </dl>

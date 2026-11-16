@@ -112,4 +112,18 @@ class HashChainAuditTrail implements AuditTrail {
     public java.util.Optional<String> hashAt(long position) {
         return events.findById(position).map(AuditEvent::hash);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<io.github.rogeriocisi.airlab.audit.ExportedEvent> upTo(long position) {
+        return events.findUpTo(position).stream().map(AuditEvent::export).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.OptionalLong lastPositionOf(AuditEventType type, String subjectRef) {
+        return events.findFirstByEventTypeAndSubjectRefOrderBySeqDesc(type, subjectRef)
+                .map(event -> java.util.OptionalLong.of(event.seq()))
+                .orElse(java.util.OptionalLong.empty());
+    }
 }

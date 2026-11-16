@@ -2,7 +2,12 @@ package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyView;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +45,22 @@ class PublicStudiesController {
         model.addAttribute("estudo", study.get());
         model.addAttribute("progresso", open ? studies.progress() : null);
         model.addAttribute("relatorio", studies.report(code).orElse(null));
+        model.addAttribute("pacote", studies.verificationPackage(code).orElse(null));
         return "estudo-publico";
+    }
+
+    /**
+     * The verification package (SPEC E9), byte for byte as stored, so its SHA-256 is the one in the
+     * trail. 404 for a study still collecting: the package does not exist before the unblinding.
+     */
+    @GetMapping("/estudos/{code}/pacote.json")
+    ResponseEntity<byte[]> verificationPackage(@PathVariable String code) {
+        return studies.verificationPackage(code)
+                .map(pacote -> ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                ContentDisposition.attachment().filename(pacote.fileName()).build().toString())
+                        .body(pacote.document().getBytes(StandardCharsets.UTF_8)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

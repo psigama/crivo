@@ -8,5 +8,5 @@
  */
 @org.springframework.modulith.ApplicationModule(
         displayName = "cli",
-        allowedDependencies = {"anchor", "audit", "allocation", "study", "support"})
+        allowedDependencies = {"anchor", "audit", "allocation", "study", "structured", "support"})
 package io.github.rogeriocisi.airlab.cli;

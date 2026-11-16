@@ -19,6 +19,11 @@
 
     Gera o site estatico com as paginas editoriais (SPEC 0.21, secao 1.3), sem banco e sem Spring,
     numa pasta vazia ou inexistente.
+.EXAMPLE
+    .\scripts\airlab.ps1 verificar-pacote pacote-STD-7Q4K2M9B.json
+
+    Confere o pacote de verificacao de um estudo P1 (SPEC 0.22, E9) so a partir do arquivo, sem
+    banco e sem servidor, baixado de /estudos/{codigo}/pacote.json.
 #>
 [CmdletBinding()]
 param(

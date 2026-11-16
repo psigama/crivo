@@ -55,6 +55,13 @@ public interface StructuredStudyService {
      */
     Optional<StructuredReport> report(String studyCode);
 
+    /**
+     * The public verification package of a P1 study (SPEC E9). Empty for a study still collecting —
+     * the database refuses it before the unblinding — and for one whose package the privacy check
+     * withheld.
+     */
+    Optional<VerificationPackage> verificationPackage(String studyCode);
+
     /** Counts of the open study; {@link StructuredProgress#none()} when there is none. */
     StructuredProgress progress();
 

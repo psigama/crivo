@@ -19,6 +19,7 @@ import io.github.rogeriocisi.airlab.structured.StructuredProgress;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyTerms;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyView;
+import io.github.rogeriocisi.airlab.structured.VerificationPackage;
 import io.github.rogeriocisi.airlab.study.PreregistrationSnapshot;
 import io.github.rogeriocisi.airlab.study.StudyService;
 import io.github.rogeriocisi.airlab.study.StudyStatus;
@@ -69,6 +70,7 @@ class DefaultStructuredStudyService implements StructuredStudyService {
     private final StructuredReadingRepository readings;
     private final StructuredScoreRepository scores;
     private final StructuredReportRepository reports;
+    private final StructuredPackageRepository packages;
     private final StructuredUnblinding unblinding;
     private final AuditTrail auditTrail;
     private final ApplicationEventPublisher events;
@@ -85,6 +87,7 @@ class DefaultStructuredStudyService implements StructuredStudyService {
                                   StructuredReadingRepository readings,
                                   StructuredScoreRepository scores,
                                   StructuredReportRepository reports,
+                                  StructuredPackageRepository packages,
                                   StructuredUnblinding unblinding,
                                   AuditTrail auditTrail,
                                   ApplicationEventPublisher events,
@@ -100,6 +103,7 @@ class DefaultStructuredStudyService implements StructuredStudyService {
         this.readings = readings;
         this.scores = scores;
         this.reports = reports;
+        this.packages = packages;
         this.unblinding = unblinding;
         this.auditTrail = auditTrail;
         this.events = events;
@@ -211,6 +215,14 @@ class DefaultStructuredStudyService implements StructuredStudyService {
                     report.sitterVerified(), report.sitterTotal(), report.readingVerified(), report.readingTotal(),
                     report.seedHex(), report.document(), report.documentSha256(), report.createdAt(), results);
         }));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<VerificationPackage> verificationPackage(String studyCode) {
+        return studies.byCode(studyCode).flatMap(summary -> packages.findById(summary.id()).map(stored ->
+                new VerificationPackage(summary.code(), stored.document(), stored.documentSha256(),
+                        stored.createdAt())));
     }
 
     private StructuredStudyView view(StructuredStudyEntity structured, StudySummary study) {

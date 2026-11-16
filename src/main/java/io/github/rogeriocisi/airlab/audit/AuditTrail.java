@@ -42,4 +42,13 @@ public interface AuditTrail {
 
     /** Hash stored for the event at a position, or empty when there is none. */
     java.util.Optional<String> hashAt(long position);
+
+    /**
+     * The trail from its first event up to a position, inclusive, as the verification package
+     * exports it (SPEC E9).
+     */
+    java.util.List<ExportedEvent> upTo(long position);
+
+    /** Position of the last event of a type about a subject, or empty when there is none. */
+    java.util.OptionalLong lastPositionOf(AuditEventType type, String subjectRef);
 }

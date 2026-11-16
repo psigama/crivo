@@ -47,7 +47,8 @@ class DefaultAnchorService implements AnchorService {
             AuditEventType.ALLOCATION_DRAWN,
             AuditEventType.SEED_REVEALED,
             AuditEventType.UNBLINDING_PERFORMED,
-            AuditEventType.REPORT_GENERATED);
+            AuditEventType.REPORT_GENERATED,
+            AuditEventType.VERIFICATION_PACKAGE_EXPORTED);
 
     private final AnchorRepository anchors;
     private final AuditTrail trail;

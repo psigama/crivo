@@ -1,11 +1,8 @@
 package io.github.rogeriocisi.airlab.structured.internal;
 
 import io.github.rogeriocisi.airlab.allocation.AllocationService;
-import io.github.rogeriocisi.airlab.analysis.BinomialTest;
 import io.github.rogeriocisi.airlab.analysis.PermutationResult;
-import io.github.rogeriocisi.airlab.analysis.StratifiedPermutationTest;
 import io.github.rogeriocisi.airlab.analysis.WilcoxonResult;
-import io.github.rogeriocisi.airlab.analysis.WilcoxonSignedRank;
 import io.github.rogeriocisi.airlab.audit.ActorRole;
 import io.github.rogeriocisi.airlab.audit.AuditEventType;
 import io.github.rogeriocisi.airlab.audit.AuditTrail;
@@ -17,6 +14,7 @@ import io.github.rogeriocisi.airlab.participant.ConsultationState;
 import io.github.rogeriocisi.airlab.participant.RevealedAnswers;
 import io.github.rogeriocisi.airlab.structured.AssignmentState;
 import io.github.rogeriocisi.airlab.structured.ReadingCommitment;
+import io.github.rogeriocisi.airlab.structured.StructuredAnalysis;
 import io.github.rogeriocisi.airlab.structured.StructuredReport;
 import io.github.rogeriocisi.airlab.structured.StructuredScoring;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyReported;
@@ -61,12 +59,14 @@ class StructuredUnblinding {
     private final AuditTrail auditTrail;
     private final ApplicationEventPublisher events;
     private final EntityManager entityManager;
+    private final VerificationPackageWriter packageWriter;
 
     StructuredUnblinding(StudyService studies, AllocationService allocation, ConsultationService consultations,
                          StructuredPairRepository pairs, ReadingAssignmentRepository assignments,
                          StructuredReadingRepository readings, StructuredScoreRepository scores,
                          StructuredReportRepository reports, FieldCipher cipher, AuditTrail auditTrail,
-                         ApplicationEventPublisher events, EntityManager entityManager) {
+                         ApplicationEventPublisher events, EntityManager entityManager,
+                         VerificationPackageWriter packageWriter) {
         this.studies = studies;
         this.allocation = allocation;
         this.consultations = consultations;
@@ -79,6 +79,7 @@ class StructuredUnblinding {
         this.auditTrail = auditTrail;
         this.events = events;
         this.entityManager = entityManager;
+        this.packageWriter = packageWriter;
     }
 
     /**
@@ -128,40 +129,54 @@ class StructuredUnblinding {
         int readingVerified = 0;
         int readingTotal = 0;
         Map<String, Map<String, String>> readingFor = new TreeMap<>();
+        List<VerificationPackageWriter.RevealedReading> revealedReadings = new ArrayList<>();
         for (ReadingAssignmentEntity assignment : completed.values()) {
             for (StructuredReadingEntity reading : readings.findByAssignmentCodeOrderBySlotAsc(assignment.code())) {
                 Map<String, String> answers = DefaultMediumReadingService.decodeAnswers(cipher.decrypt(reading.answersEnc()));
+                String salt = cipher.decrypt(reading.saltEnc());
                 String recomputed = ReadingCommitment.of(study.questionnaireVersion(), reading.code(),
-                        reading.requestCode(), answers, cipher.decrypt(reading.saltEnc()));
+                        reading.requestCode(), answers, salt);
                 readingTotal++;
                 if (recomputed.equals(reading.commitment())) {
                     readingVerified++;
                 }
                 readingFor.put(reading.requestCode(), answers);
+                revealedReadings.add(new VerificationPackageWriter.RevealedReading(reading.code(), assignment.code(),
+                        reading.requestCode(), answers, salt, reading.commitment()));
             }
         }
 
+        Map<String, Map<String, String>> sitterAnswers = new TreeMap<>();
+        requestCodes.forEach(code -> sitterAnswers.put(code, answersOf(revealed, code)));
+        Map<String, String> strata = new TreeMap<>();
+        consultations.requestsByCode(requestCodes).forEach(request -> strata.put(request.code(), request.stratum()));
+        List<StructuredAnalysis.Pair> analysed = active.stream()
+                .map(pair -> new StructuredAnalysis.Pair(pair.code(), pair.requestA(), pair.requestB())).toList();
+        // One function for the scoring and the analysis, the same the verification package reruns (E9).
+        StructuredAnalysis.Outcome outcome = StructuredAnalysis.run(questionnaire, analysed, sitterAnswers,
+                readingFor, strata, seed);
+
         List<StructuredReport.PairResult> results = new ArrayList<>();
-        List<Double> differences = new ArrayList<>();
-        for (StructuredPairEntity pair : active) {
-            ReadingAssignmentEntity assignment = completed.get(pair.code());
-            StructuredScoring.PairScore score = StructuredScoring.score(questionnaire,
-                    answersOf(revealed, pair.requestA()), answersOf(revealed, pair.requestB()),
-                    readingFor.getOrDefault(pair.requestA(), Map.of()), readingFor.getOrDefault(pair.requestB(), Map.of()));
-            scores.save(new StructuredScoreEntity(studyId, pair.code(), assignment.code(), assignment.mediumCode(),
-                    score.comparableFields(), score.targetMatchesA(), score.decoyMatchesA(), score.targetMatchesB(),
-                    score.decoyMatchesB(), now));
-            results.add(new StructuredReport.PairResult(pair.code(), assignment.mediumCode(),
+        Map<String, String> mediumByPair = new TreeMap<>();
+        Map<String, String> assignmentByPair = new TreeMap<>();
+        for (StructuredAnalysis.PairOutcome pairOutcome : outcome.pairs()) {
+            ReadingAssignmentEntity assignment = completed.get(pairOutcome.pairCode());
+            StructuredScoring.PairScore score = pairOutcome.score();
+            scores.save(new StructuredScoreEntity(studyId, pairOutcome.pairCode(), assignment.code(),
+                    assignment.mediumCode(), score.comparableFields(), score.targetMatchesA(), score.decoyMatchesA(),
+                    score.targetMatchesB(), score.decoyMatchesB(), now));
+            results.add(new StructuredReport.PairResult(pairOutcome.pairCode(), assignment.mediumCode(),
                     score.comparableFields().size(), score.targetMatchesA(), score.decoyMatchesA(),
                     score.targetMatchesB(), score.decoyMatchesB(), score.d()));
-            differences.add((double) score.d());
+            mediumByPair.put(pairOutcome.pairCode(), assignment.mediumCode());
+            assignmentByPair.put(pairOutcome.pairCode(), assignment.code());
         }
 
-        WilcoxonResult primary = WilcoxonSignedRank.greaterThanZero(differences);
-        int positive = (int) differences.stream().filter(d -> d > 0).count();
-        int nonZero = (int) differences.stream().filter(d -> d != 0).count();
-        BigDecimal signP = BinomialTest.pValueGreaterOrEqual(positive, nonZero);
-        PermutationResult permutation = permutation(questionnaire, active, revealed, readingFor, seed);
+        WilcoxonResult primary = outcome.primary();
+        int positive = outcome.positive();
+        int nonZero = outcome.nonZero();
+        BigDecimal signP = outcome.signP();
+        PermutationResult permutation = outcome.permutation();
 
         List<StructuredPairEntity> all = pairs.findByStudyIdOrderByCodeAsc(studyId);
         long dissolved = all.stream().filter(pair -> !pair.active()).count();
@@ -201,6 +216,10 @@ class StructuredUnblinding {
         report.put("documentSha256", documentSha256);
         auditTrail.append(AuditEventType.REPORT_GENERATED, ActorRole.SYSTEM, null, "study:" + studyId, report);
 
+        // The public verification package (SPEC E9): written once, here, with the trail up to the report.
+        packageWriter.write(study, summary, questionnaire, active, sitterAnswers, strata, revealedReadings,
+                mediumByPair, assignmentByPair, outcome, document, documentSha256, seed, now);
+
         studies.advanceStatus(studyId, StudyStatus.REPORTED, ActorRole.SYSTEM, null);
 
         List<String> sitters = consultations.requestsByCode(requestCodes).stream()
@@ -210,40 +229,12 @@ class StructuredUnblinding {
         events.publishEvent(new StructuredStudyReported(summary.code(), sitters, mediums));
     }
 
-    /**
-     * The permutation matrix: one row per sitter, one column per reading, in pair order (A, B); the
-     * reading on the same index is the one made for that sitter's target. Readings move only within
-     * the stratum of the pairing.
-     */
-    private PermutationResult permutation(Questionnaire questionnaire, List<StructuredPairEntity> active,
-                                          Map<String, RevealedAnswers> revealed,
-                                          Map<String, Map<String, String>> readingFor, String seed) {
-        List<String> order = new ArrayList<>();
-        active.forEach(pair -> order.addAll(pair.requests()));
-        Map<String, String> strata = new TreeMap<>();
-        consultations.requestsByCode(order).forEach(request -> strata.put(request.code(), request.stratum()));
-        List<String> strataIndex = new ArrayList<>(new TreeSet<>(strata.values()));
-
-        int n = order.size();
-        double[][] matrix = new double[n][n];
-        int[] stratum = new int[n];
-        for (int i = 0; i < n; i++) {
-            stratum[i] = strataIndex.indexOf(strata.get(order.get(i)));
-            Map<String, String> sitter = answersOf(revealed, order.get(i));
-            for (int j = 0; j < n; j++) {
-                matrix[i][j] = StructuredScoring.answeredMatches(questionnaire,
-                        readingFor.getOrDefault(order.get(j), Map.of()), sitter);
-            }
-        }
-        return StratifiedPermutationTest.diagonalExceedsChance(matrix, stratum, seed);
-    }
-
     private static Map<String, String> answersOf(Map<String, RevealedAnswers> revealed, String requestCode) {
         RevealedAnswers answers = revealed.get(requestCode);
         return answers == null ? Map.of() : answers.answers();
     }
 
     static String plain(BigDecimal value) {
-        return value.setScale(6, java.math.RoundingMode.HALF_EVEN).toPlainString();
+        return StructuredAnalysis.plain(value);
     }
 }

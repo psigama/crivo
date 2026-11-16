@@ -242,6 +242,15 @@ class ReadingAssignmentEntity {
         };
     }
 
+    /** The eligible mediums of this send, as recorded for the draw (canonical JSON list). */
+    List<String> eligible() {
+        try {
+            return List.of(new com.fasterxml.jackson.databind.ObjectMapper().readValue(pool, String[].class));
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new IllegalStateException("stored eligible list is not a JSON list", e);
+        }
+    }
+
     Instant assignedAt() {
         return assignedAt;
     }

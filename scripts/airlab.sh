@@ -18,6 +18,10 @@
 # sem banco e sem Spring, numa pasta vazia ou inexistente:
 #   ./scripts/airlab.sh site target/site --aplicacao=http://127.0.0.1:8080
 #
+# E confere o pacote de verificacao de um estudo P1 (SPEC 0.22, E9) so a partir do arquivo, sem
+# banco e sem servidor, baixado de /estudos/{codigo}/pacote.json:
+#   ./scripts/airlab.sh verificar-pacote pacote-STD-7Q4K2M9B.json
+#
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

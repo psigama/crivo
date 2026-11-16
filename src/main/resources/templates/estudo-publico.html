@@ -59,6 +59,32 @@
         <div class="largo"><dt>Semente revelada</dt><dd><code class="hash" th:text="${relatorio.seedHex}">semente</code></dd></div>
         <div class="largo"><dt>Hash do relatório (SHA-256)</dt><dd><code class="hash" th:text="${relatorio.documentSha256}">hash</code></dd></div>
       </dl>
+      <h3>Pacote de verificação</h3>
+      <div th:if="${pacote}">
+        <p>
+          Tudo o que é preciso para refazer este estudo por fora, sem pedir nada a ninguém: a trilha até o
+          relatório, a semente, cada envio com a lista de médiuns elegíveis, as respostas de cada consulente e
+          de cada leitura, as notas e as análises. Sem nome nenhum: nem o primeiro nome da pessoa falecida, nem
+          o de quem participou.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="@{/estudos/{code}/pacote.json(code=${estudo.studyCode})}">Baixar o pacote (JSON)</a>
+        </p>
+        <dl class="leituras">
+          <div class="largo"><dt>Hash do pacote (SHA-256)</dt><dd><code class="hash" th:text="${pacote.sha256}">hash</code></dd></div>
+        </dl>
+        <p class="nota">
+          Para conferir na sua máquina, com o artefato do repositório público e nenhum acesso a este servidor:
+          <code th:text="'./scripts/airlab.sh verificar-pacote ' + ${pacote.fileName()}">./scripts/airlab.sh verificar-pacote pacote.json</code>.
+          O comando refaz a trilha, o sorteio do médium de cada par, o compromisso de cada leitura, a conferência
+          e as três análises. Os compromissos dos pedidos não se refazem por fora: cobrem o primeiro nome, que
+          não é publicado.
+        </p>
+      </div>
+      <p th:unless="${pacote}">
+        O pacote de verificação deste estudo não foi publicado: a checagem de privacidade o reteve, e a trilha
+        registra o motivo.
+      </p>
       <h3>Relatório</h3>
       <pre class="documento" th:text="${relatorio.document}">relatório</pre>
     </div>
