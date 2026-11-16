@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title th:text="${status == 404} ? 'Página não encontrada — Crivo'
+      : (${status == 403} ? 'Acesso restrito — Crivo'
+      : (${status == 400} ? 'Pedido não entendido — Crivo' : 'Algo deu errado — Crivo'))">Algo deu errado — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/* Página de erro do Spring Boot (BasicErrorController). Mostra só o código da resposta:
+       nenhuma mensagem de exceção chega à tela, porque ela pode carregar dado pessoal (P6). */-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo" th:text="${status != null} ? 'Erro ' + ${status} : 'Erro'">Erro</p>
+
+      <th:block th:switch="${status}">
+        <th:block th:case="404">
+          <h1>Página não encontrada</h1>
+          <p class="chamada">
+            Este endereço não existe no Crivo. Pode ter sido digitado errado, ou o link era de uma
+            versão anterior do site.
+          </p>
+        </th:block>
+        <th:block th:case="403">
+          <h1>Esta página não é do seu perfil</h1>
+          <p class="chamada">
+            Cada perfil — consulente, médium ou administrador — enxerga só as próprias telas. A regra
+            é aplicada no servidor, e não por esconder botões.
+          </p>
+        </th:block>
+        <th:block th:case="400">
+          <h1>Não deu para entender o pedido</h1>
+          <p class="chamada">
+            O formulário chegou incompleto ou com um valor que o Crivo não reconhece. Volte, confira
+            os campos e envie de novo.
+          </p>
+        </th:block>
+        <th:block th:case="*">
+          <h1>Algo deu errado</h1>
+          <p class="chamada">
+            O Crivo não conseguiu atender a este pedido agora. Nada do que você já tinha travado se
+            perde: pedidos, leituras e a trilha de auditoria só mudam por operações completas.
+            Tente de novo em alguns minutos.
+          </p>
+        </th:block>
+      </th:block>
+
+      <p class="acoes">
+        <a class="botao botao-cheio" href="/">Ir para o início</a>
+        <a class="botao botao-vazio" href="/protocolos">Ver os protocolos</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>
