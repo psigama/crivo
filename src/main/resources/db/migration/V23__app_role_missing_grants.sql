@@ -5,7 +5,7 @@
 -- nos perfis local e de teste a aplicacao conecta como dona do banco. Em producao ela conecta
 -- como airlab_app, e:
 --   * a V12 criou research.protocol_deviation sem conceder nada: registrar um desvio falharia;
---   * a V15 concedeu as tabelas dos testes de ESP, mas nao as sequencias do BIGSERIAL: o
+--   * a V15 concedeu as tabelas dos testes de PES, mas nao as sequencias do BIGSERIAL: o
 --     INSERT de uma sessao ou tentativa falharia com "permission denied for sequence".
 -- O AppRoleGrantsTest passa a conferir isso para toda tabela e sequencia dos tres esquemas.
 
