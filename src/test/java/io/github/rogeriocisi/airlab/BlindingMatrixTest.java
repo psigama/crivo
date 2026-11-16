@@ -191,7 +191,9 @@ class BlindingMatrixTest {
         // wrapped in an Optional that stays empty until the unblinding (integration test).
         assertThat(java.util.Arrays.stream(io.github.rogeriocisi.airlab.structured.StructuredStudyService.class.getMethods())
                 .filter(method -> method.getName().equals("report"))
-                .map(Method::getReturnType)).containsOnly(java.util.Optional.class);
+                // Explicit Class<?>: the Eclipse compiler (ECJ) cannot match Class<Optional> against
+                // the captured wildcard that javac accepts.
+                .<Class<?>>map(Method::getReturnType)).containsOnly(java.util.Optional.class);
     }
 
     // --- P1, fase D: a devolutiva (SPEC E13, matriz do P1 depois do desmascaramento) -----------
