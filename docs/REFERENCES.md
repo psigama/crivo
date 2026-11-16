@@ -52,10 +52,11 @@
 ### Silva & Moreira-Almeida (2022/2023)
 **Silva, J., & Moreira-Almeida, A.** (2022). Controlled experiments involving anomalous information reception with mediums: An analysis of recent studies. *Journal of Scientific Exploration*, 36(4), 749–759 (publicado online em fev/2023). DOI: [10.31275/20222575](https://doi.org/10.31275/20222575)
 
-- **O que fez:** analisou sete estudos recentes de AIR para entender por que chegaram a resultados conflitantes, com foco em como cada um controlou o vazamento de informação.
+- **O que fez:** analisou oito estudos recentes de AIR, com protocolo no mínimo triplo-cego (cinco com resultado significativo, três nulos), para entender por que chegaram a resultados conflitantes, com foco em como cada um controlou o vazamento de informação.
 - **Conclusão:** resultados significativos parecem mais prováveis quando o protocolo:
   - seleciona médiuns com evidência prévia consistente;
   - escolhe consulentes motivados;
+  - dá ao médium alguma interação, mesmo que só com um *proxy* por telefone (os dois estudos sem interação nenhuma foram nulos);
   - dá ao médium alguma informação sobre o falecido;
   - permite fala livre combinada com perguntas objetivas;
   - pontua tanto a leitura global quanto os itens;

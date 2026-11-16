@@ -67,7 +67,7 @@ O'Keeffe e Wiseman [-@okeeffe2005] revisaram o debate metodológico sobre testes
 
 ## 2.3 Revisões, meta-análises e o contexto brasileiro
 
-Sarraf, Woodley of Menie e Tressoldi [-@sarraf2021] conduziram uma meta-análise dos estudos controlados de AIR com médiuns. <!-- TODO: inserir tamanho de efeito agregado e heterogeneidade após leitura do texto integral. --> Silva e Moreira-Almeida [-@silva2022] analisaram sete estudos recentes e concluíram que resultados significativos parecem mais prováveis quando o protocolo:
+Sarraf, Woodley of Menie e Tressoldi [-@sarraf2021] conduziram uma meta-análise dos estudos controlados de AIR com médiuns. <!-- TODO: inserir tamanho de efeito agregado e heterogeneidade após leitura do texto integral. --> Silva e Moreira-Almeida [-@silva2022] analisaram oito estudos recentes e concluíram que resultados significativos parecem mais prováveis quando o protocolo:
 - seleciona médiuns com evidência prévia;
 - recruta consulentes motivados;
 - combina fala livre com perguntas objetivas;
