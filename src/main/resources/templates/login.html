@@ -41,6 +41,10 @@
         <p class="aviso" th:if="${param.logout}" role="status">
           Sessão encerrada.
         </p>
+        <p class="aviso" th:if="${param.contaEncerrada}" role="status">
+          Sua conta foi excluída. Nome, e-mail e senha foram apagados; só o código pseudônimo
+          permanece na pesquisa, marcado como encerrado.
+        </p>
 
         <label for="username">E-mail ou usuário</label>
         <input id="username" name="username" type="text" autocomplete="username" required
@@ -77,7 +81,7 @@
         </p>
       </div>
 
-      <p class="nota nota-espacada"><a href="/">Voltar ao início</a></p>
+      <p class="nota nota-espacada"><a th:href="${site} + '/'">Voltar ao início</a></p>
     </div>
   </section>
 </main>

@@ -14,6 +14,10 @@
 #
 # Sai com codigo 0 se tudo confere e 1 caso contrario.
 #
+# O mesmo artefato tambem gera o site estatico com as paginas editoriais (SPEC 0.21, secao 1.3),
+# sem banco e sem Spring, numa pasta vazia ou inexistente:
+#   ./scripts/airlab.sh site target/site --aplicacao=http://127.0.0.1:8080
+#
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

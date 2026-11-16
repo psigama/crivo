@@ -1328,11 +1328,76 @@ label {
 
 /* ---------- navegação: página atual ---------- */
 
-.navegacao a[aria-current="page"] {
+.navegacao a[aria-current="page"],
+.submenu.atual > summary {
     color: var(--verdete);
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 0.35em;
+}
+
+/* ---------- navegação: o submenu Biblioteca (SPEC 0.21, seção 1.3) ----------
+ * Um <details>, sem script: abre e fecha pelo próprio navegador, com teclado inclusive, e passa
+ * pela CSP default-src 'self' sem exceção nenhuma. */
+
+.submenu {
+    position: relative;
+}
+
+.submenu > summary {
+    cursor: pointer;
+    list-style: none;
+    text-decoration: underline;
+    text-decoration-color: var(--verdete);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+}
+
+.submenu > summary::-webkit-details-marker {
+    display: none;
+}
+
+.submenu > summary::after {
+    content: " ▾";
+}
+
+.submenu[open] > summary::after {
+    content: " ▴";
+}
+
+.submenu > summary:hover {
+    color: var(--verdete);
+}
+
+.submenu > summary:focus-visible {
+    outline: 2px solid var(--verdete);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+.submenu-itens {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-width: 11rem;
+    padding: 0.85rem 1rem;
+    background: var(--papel);
+    border: 1px solid var(--fio-forte);
+}
+
+@media (max-width: 44rem) {
+    .submenu-itens {
+        position: static;
+        min-width: 0;
+        padding: 0.6rem 0 0 0.9rem;
+        background: none;
+        border: none;
+        border-left: 1px solid var(--fio);
+    }
 }
 
 /* ---------- sessões: progresso, teclado, envio ---------- */

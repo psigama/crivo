@@ -55,9 +55,14 @@ airlab:
   admin-email: ${AIRLAB_ADMIN_EMAIL:}
   contact-email: ${AIRLAB_CONTACT_EMAIL:}
   mail-from: ${AIRLAB_MAIL_FROM:crivo@localhost}
-  # Endereco publico do site, para os links dos e-mails enviados fora de uma requisicao (o aviso
-  # de pedido novo ao medium sai do ciclo do servidor).
+  # Endereco publico da aplicacao, para os links dos e-mails enviados fora de uma requisicao (o
+  # aviso de pedido novo ao medium sai do ciclo do servidor).
   base-url: ${AIRLAB_BASE_URL:http://localhost:8080}
+  # Endereco do site estatico com as paginas editoriais (SPEC 0.21, secao 1.3), por exemplo
+  # https://crivo.psigama.com. Vazio: a aplicacao serve ela mesma as paginas do site, como no perfil
+  # local. Definido: os links da aplicacao para o site usam este endereco, e as rotas do site
+  # respondem com 301 para ele.
+  site-url: ${AIRLAB_SITE_URL:}
   p4:
     # Referencia da aprovacao do comite de etica (CEP/Plataforma Brasil). Sem ela, em producao,
     # o formulario de pedido do P4 fica fechado (SPEC E10, trava 4; E13, fase B).

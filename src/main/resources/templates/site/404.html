@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--
+  Página 404 do site estático (SPEC 0.21, seção 1.3, regra 5). Só o gerador a usa: o GitHub Pages
+  a devolve para todo endereço que não existe no site, e o encaminhar.js leva a pessoa à aplicação,
+  com o mesmo caminho, a mesma consulta e o mesmo fragmento. É o que mantém de pé os endereços
+  antigos de crivo.psigama.com (/protocolo/..., /testes/..., os links de e-mail), porque o
+  GitHub Pages não faz redirecionamento 301. O script fica num arquivo à parte por causa da CSP.
+-->
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:attr="data-aplicacao=${aplicacao},data-paginas-do-site=${paginasDoSite}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Levando você à aplicação — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo">Endereço que não existe neste site</p>
+        <h1>Levando você à aplicação</h1>
+        <p class="chamada">
+          As páginas dos protocolos, as contas, os testes e os estudos ficam na aplicação do Crivo,
+          num endereço próprio. Se nada acontecer em alguns segundos, siga pelo botão.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" id="destino" th:href="${aplicacao} + '/'">Ir para a aplicação</a>
+          <a class="botao botao-vazio" href="/">Início do site</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+  <script src="/js/encaminhar.js"></script>
+</body>
+
+</html>

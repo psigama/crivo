@@ -79,15 +79,36 @@ class AccountPagesTest {
                 .andExpect(content().string(containsString("Experimentos de mediunidade (AIR)")));
         mvc.perform(get("/protocolo/P1")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Como participar, passo a passo")))
-                .andExpect(content().string(containsString("O que cada perfil vê")));
+                .andExpect(content().string(containsString("O que cada perfil vê")))
+                .andExpect(content().string(containsString("A leitura estruturada automatizada: oito etapas")));
+        // Since SPEC 0.21 the home page is short; the eight steps moved to the P1 page (section 1.3).
         mvc.perform(get("/")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("id=\"air-automatizado\"")))
-                .andExpect(content().string(containsString("A leitura estruturada automatizada: oito etapas")));
+                .andExpect(content().string(containsString("id=\"o-que-nao-e\"")));
         mvc.perform(get("/consulente")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Você faz o pedido")))
                 .andExpect(content().string(org.hamcrest.Matchers.not(containsString("link de uso único"))));
         mvc.perform(get("/sobre")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Questionário")));
+    }
+
+    @Test
+    @DisplayName("quem exclui a conta cai na pagina de entrada, com o aviso de conta encerrada")
+    void closing_the_account_lands_on_the_sign_in_page() throws Exception {
+        String email = uniqueEmail();
+        String token = signUp(email, "consulente");
+        mvc.perform(post("/conta/confirmar").with(csrf()).param("token", token)).andExpect(status().isOk());
+        MvcResult login = mvc.perform(formLogin("/login").user(email).password(PASSWORD))
+                .andExpect(redirectedUrl("/painel"))
+                .andReturn();
+        MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
+
+        // The home page belongs to the static site since SPEC 0.21 and cannot show the notice.
+        mvc.perform(post("/conta/excluir").session(session).with(csrf()).param("confirmo", "true"))
+                .andExpect(redirectedUrl("/login?contaEncerrada"));
+        mvc.perform(get("/login?contaEncerrada"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Sua conta foi excluída")));
     }
 
     @Test

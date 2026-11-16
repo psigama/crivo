@@ -85,6 +85,84 @@
         <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
       </div>
     </section>
+    <!-- As oito etapas, que até a SPEC 0.20 ficavam na página inicial (SPEC 0.21, seção 1.3). -->
+    <section id="etapas">
+      <div class="faixa">
+        <p class="rotulo">Como funciona</p>
+        <h2>A leitura estruturada automatizada: oito etapas, cada uma presa à anterior</h2>
+        <p>
+          O protocolo AIR do Crivo roda inteiro pelo site. O consulente e o médium respondem ao
+          <strong>mesmo questionário fechado</strong> sobre a pessoa falecida — o consulente porque a
+          conheceu, o médium conhecendo só o primeiro nome. Dois pedidos de perfil semelhante formam
+          um par, e cada um serve de <em>chamariz</em> para o outro. Só conta como evidência aquilo
+          que se ajusta ao alvo verdadeiro mais do que ao chamariz, de forma consistente e acima do
+          acaso.
+        </p>
+
+        <ol class="corrente">
+          <li>
+            <h3>Pré-registro</h3>
+            <p>
+              O pesquisador declara hipóteses, critérios de inclusão de médiuns, o questionário, o
+              número de pares e o prazo — e o documento é congelado com hash antes do primeiro par.
+            </p>
+            <span class="selo">o poder estatístico do desenho fica declarado no próprio documento</span>
+          </li>
+          <li>
+            <h3>Conta e consentimento</h3>
+            <p>
+              Cada pessoa cria uma conta com perfil fixo — consulente ou médium, nunca os dois — e
+              confirma o e-mail. Os dados identificáveis ficam cifrados, num esquema separado do banco.
+            </p>
+          </li>
+          <li>
+            <h3>Pedido travado</h3>
+            <p>
+              O consulente informa o primeiro nome e responde ao questionário. As respostas travam na
+              hora, e a trilha recebe um compromisso salgado delas, antes de qualquer médium ver o pedido.
+            </p>
+            <span class="selo">compromisso → revelação: as respostas não podem mudar depois</span>
+          </li>
+          <li>
+            <h3>Pareamento e sorteio</h3>
+            <p>
+              Pedidos do mesmo gênero, faixa etária e período formam pares, e o médium de cada par é
+              sorteado a partir de uma semente cujo compromisso foi publicado no pré-registro.
+            </p>
+          </li>
+          <li>
+            <h3>Leitura</h3>
+            <p>
+              O médium recebe só os dois primeiros nomes do par, em ordem sorteada, e responde ao
+              questionário para cada um. Ao enviar, a leitura trava com hash na trilha.
+            </p>
+          </li>
+          <li>
+            <h3>Desmascaramento automático</h3>
+            <p>
+              Quando o número de pares declarado se completa, o próprio sistema encerra a coleta e
+              revela a semente e os sais. Ninguém escolhe o momento — nem o administrador.
+            </p>
+          </li>
+          <li>
+            <h3>Conferência e análise</h3>
+            <p>
+              As respostas são comparadas campo a campo, contra o alvo e contra o chamariz, por uma
+              regra determinística e publicada. A análise pré-registrada roda, e o relatório sai no
+              mesmo formato para qualquer resultado.
+            </p>
+            <span class="selo">nenhuma nota existe antes do desmascaramento, nem no banco</span>
+          </li>
+          <li>
+            <h3>Devolutiva</h3>
+            <p>
+              Cada consulente vê as respostas do médium para o seu alvo ao lado das suas; cada médium
+              vê as contagens das próprias leituras. Tudo deixa rastro na trilha encadeada por hash.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
     <section th:replace="~{fragments/p1 :: como-participar}"></section>
     <section th:replace="~{fragments/p1 :: telas}"></section>
     <section id="questionario" th:if="${questionario}">

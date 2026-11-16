@@ -10,7 +10,7 @@
 
   <!--
     O que o P1 nao e (SPEC, E13): nao e mensagem do falecido nem resposta a perguntas do consulente.
-    Usado na pagina inicial e na pagina do protocolo, para que as duas digam a mesma coisa.
+    Usado na pagina inicial do site e na pagina do protocolo, para que as duas digam a mesma coisa.
   -->
   <div th:fragment="o-que-nao-e" class="ressalva esclarecimento" id="o-que-nao-e">
     <p>
@@ -28,8 +28,8 @@
   </div>
 
   <!--
-    Como participar do P1 (SPEC, E13). Usado na página inicial e na página do protocolo, para que
-    as duas digam a mesma coisa.
+    Como participar do P1 (SPEC, E13). Usado na página do protocolo; os links levam ${aplicacao}, para que
+    funcionem também numa página do site (SPEC 0.21, seção 1.3).
   -->
   <section th:fragment="como-participar" id="como-participar">
     <div class="faixa">
@@ -45,7 +45,7 @@
           <div>
             <h3>Crie uma conta</h3>
             <p>
-              Em <a href="/conta/criar">Criar conta</a>, informe nome, e-mail e senha e aceite o termo.
+              Em <a th:href="${aplicacao} + '/conta/criar'">Criar conta</a>, informe nome, e-mail e senha e aceite o termo.
               Seus dados ficam cifrados, separados dos dados da pesquisa, que usam só um código.
             </p>
           </div>
@@ -102,8 +102,8 @@
       </ol>
 
       <p class="acoes">
-        <a class="botao botao-cheio" href="/conta/criar">Criar uma conta</a>
-        <a class="botao botao-vazio" href="/login">Já tenho conta</a>
+        <a class="botao botao-cheio" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/login'">Já tenho conta</a>
       </p>
     </div>
   </section>
@@ -159,7 +159,7 @@
           <strong>caminho até a leitura</strong> — pareamento, sorteio do médium, envio com prazo e
           reenvio, leitura travada — e o <strong>fim do estudo</strong>: no número de pares declarado,
           o próprio sistema desmascara, confere, analisa, escreve o relatório e libera a devolutiva,
-          que fica pública em <a href="/estudos">Estudos e relatórios</a>. Contas que parecem da
+          que fica pública em <a th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a>. Contas que parecem da
           mesma pessoa são sinalizadas para revisão, e um teto declarado limita os pares de cada
           médium. A plataforma ainda não foi usada com participantes reais.
         </p>

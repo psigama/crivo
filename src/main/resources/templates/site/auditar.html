@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Auditar — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Auditar — Crivo', 'Como conferir a trilha de auditoria, os carimbos de tempo e o sorteio do Crivo sem pedir permissão a ninguém, e como clonar, bifurcar e contestar o código.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Auditar</p>
+        <h1 class="aparece">Confira sem pedir permissão</h1>
+        <p class="chamada aparece">
+          Céticos são bem-vindos, e não por gentileza: um protocolo que ninguém tentou quebrar não
+          vale muito.
+        </p>
+      </div>
+    </section>
+
+    <section id="verificar">
+      <div class="faixa">
+        <p class="rotulo">A trilha de auditoria</p>
+        <h2>Como conferir a integridade da cadeia</h2>
+        <p>
+          Qualquer pessoa pode conferir a integridade da cadeia sem pedir permissão a ninguém e sem
+          confiar numa página: a verificação roda fora da aplicação, pelo mesmo artefato.
+        </p>
+
+        <div class="painel">
+          <p class="nota">Verificação por linha de comando:</p>
+          <code class="comando">./scripts/airlab.sh verify</code>
+          <code class="comando">.\scripts\airlab.ps1 verify</code>
+          <p class="nota">
+            O comando confere a cadeia de hashes, o hash de cada versão do pré-registro e,
+            nos estudos já desmascarados, refaz o sorteio a partir da semente. Sai com código
+            diferente de zero se algo não conferir.
+          </p>
+        </div>
+
+        <p>
+          A trilha, os compromissos, os carimbos de tempo e a semente revelada já podem ser
+          conferidos por qualquer pessoa. O pacote de verificação, em preparação, vai permitir
+          refazer a análise do zero e chegar ao mesmo número — ou mostrar que não chega.
+        </p>
+
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/verificar'">O estado da trilha, agora</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="codigo">
+      <div class="faixa">
+        <p class="rotulo">Código aberto</p>
+        <h2>Baixe, bifurque, proponha mudanças</h2>
+        <p>
+          Todo o projeto vive em um repositório público — código, especificação, plano técnico,
+          bibliografia e as migrações do banco. Não existe versão interna diferente desta.
+        </p>
+
+        <p class="repositorio">
+          <a href="https://github.com/rogeriocisi/crivo">github.com/rogeriocisi/crivo</a>
+        </p>
+
+        <div class="passos">
+          <article>
+            <h3>Clonar e rodar</h3>
+            <p class="nota">Pré-requisito único: um JDK 21 ou mais novo.</p>
+            <code class="comando">git clone https://github.com/rogeriocisi/crivo.git</code>
+            <code class="comando">cd crivo &amp;&amp; ./scripts/start.sh</code>
+            <p class="nota">
+              No Windows, <code>scripts\start.cmd</code> — é o caminho que funciona em máquina
+              recém-instalada, porque o PowerShell recusa script não assinado por padrão. O script
+              constrói o projeto, sobe o PostgreSQL embarcado e inicia a aplicação em
+              <code>127.0.0.1:8080</code>.
+            </p>
+          </article>
+
+          <article>
+            <h3>Bifurcar e propor</h3>
+            <p class="nota">Contribuições entram por <em>pull request</em>.</p>
+            <code class="comando">git switch -c minha-contribuicao</code>
+            <code class="comando">./mvnw test</code>
+            <p class="nota">
+              Faça o <em>fork</em> pelo GitHub, trabalhe em um ramo, rode a suíte e abra o
+              <em>pull request</em>. Commits pequenos, mensagens no padrão
+              <em>Conventional Commits</em>, e nenhuma funcionalidade sem a especificação
+              correspondente — a regra está no <code>CLAUDE.md</code> do repositório.
+            </p>
+          </article>
+
+          <article>
+            <h3>Discordar</h3>
+            <p class="nota">Uma objeção metodológica é uma contribuição.</p>
+            <p>
+              Encontrou um furo no cegamento, um viés na análise ou uma referência que contradiz uma
+              decisão de projeto? Abra uma
+              <a href="https://github.com/rogeriocisi/crivo/issues">issue</a>. O mapa de
+              <em>crítica publicada → controle no sistema</em> está em <code>docs/REFERENCES.md</code>,
+              inclusive com as linhas em que nada no software responde.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

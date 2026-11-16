@@ -14,6 +14,11 @@
     .\scripts\airlab.ps1 verify
 .EXAMPLE
     .\scripts\airlab.ps1 verify --study=STD-7Q4K2M9B
+.EXAMPLE
+    .\scripts\airlab.ps1 site target\site --aplicacao=http://127.0.0.1:8080
+
+    Gera o site estatico com as paginas editoriais (SPEC 0.21, secao 1.3), sem banco e sem Spring,
+    numa pasta vazia ou inexistente.
 #>
 [CmdletBinding()]
 param(

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Participar — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Participar — Crivo', 'Como entrar no Crivo: como consulente ou médium no experimento automatizado, num teste de percepção extrassensorial, conduzindo um estudo, auditando ou contribuindo com o código.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Participar</p>
+        <h1 class="aparece">Cinco formas de entrar nisso</h1>
+        <p class="chamada aparece">
+          Como consulente ou médium, num teste rápido, conduzindo um estudo, auditando ou
+          contribuindo com o código.
+        </p>
+      </div>
+    </section>
+
+    <section id="participar">
+      <div class="faixa">
+        <div class="caminhos">
+          <article class="caminho">
+            <h3>Participar como consulente ou médium</h3>
+            <p>
+              Pela leitura estruturada automatizada, tudo acontece no site: crie uma conta, escolha
+              o perfil e acompanhe pelo seu painel. O passo a passo, o que cada perfil vê e o
+              questionário em vigor estão na página do protocolo.
+            </p>
+            <p class="acoes">
+              <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">Como funciona o P1</a>
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
+            </p>
+            <p class="nota">
+              Vai participar como consulente?
+              <a th:href="${aplicacao} + '/consulente'">Há uma página só sobre isso</a>, com o
+              passo a passo do pedido, o que se pede de você e os seus direitos.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3>Fazer um teste de percepção extrassensorial</h3>
+            <p>
+              Os dois testes do Crivo são anônimos, sem conta, e dão o resultado na hora. Cada um
+              declara, na própria página, o que o resultado dele não sustenta.
+            </p>
+            <p><a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos#pes'">Ver os testes</a></p>
+          </article>
+          <article class="caminho">
+            <h3>Conduzir um estudo</h3>
+            <p>
+              Grupos de pesquisa, centros espíritas e universidades podem rodar a plataforma na
+              própria infraestrutura: ela é software livre e sobe com um comando, sem container e sem
+              serviço em nuvem. Antes de começar, um estudo precisa de:
+            </p>
+            <ul>
+              <li>uma pergunta de pesquisa e um plano de análise escritos;</li>
+              <li>critérios de triagem de médiuns e de consulentes definidos de antemão;</li>
+              <li>aprovação em comitê de ética (CEP/Plataforma Brasil), se houver fim de publicação acadêmica;</li>
+              <li>clareza sobre o financiamento, declarada junto com o estudo.</li>
+            </ul>
+          </article>
+          <article class="caminho">
+            <h3>Auditar</h3>
+            <p>
+              Céticos são bem-vindos, e não por gentileza: um protocolo que ninguém tentou quebrar não
+              vale muito. A trilha, os compromissos, os carimbos de tempo e a semente revelada já podem
+              ser conferidos por qualquer pessoa. <a href="/auditar">Veja como auditar</a>.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3>Contribuir com o código</h3>
+            <p>
+              O repositório é público, com a especificação, o plano técnico e a fundamentação
+              científica versionados junto. Críticas metodológicas valem tanto quanto código:
+              <a href="/auditar#codigo">veja como clonar e enviar uma contribuição</a>.
+            </p>
+          </article>
+        </div>
+
+        <div class="ressalva">
+          <p>
+            <strong>Estado honesto do projeto.</strong> O núcleo de confiança está implementado e testado:
+            trilha de auditoria, sorteio verificável, pré-registro e análise. Na leitura estruturada
+            automatizada já funcionam as contas com perfil, o pedido de consulta com compromisso
+            publicado, o estudo congelado, o pareamento e o sorteio do médium automáticos, a leitura
+            travada e, no fim, o desmascaramento, a conferência, o relatório e a devolutiva automáticos.
+            A leitura pareada conduzida por equipe, que chegou a ser especificada, foi descontinuada.
+            A plataforma ainda não foi usada com participantes reais.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

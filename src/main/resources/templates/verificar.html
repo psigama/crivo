@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>O estado da trilha — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('O estado da trilha — Crivo', 'Eventos na trilha de auditoria, estudos cadastrados e o hash do último evento desta instalação do Crivo, lidos do banco no momento do pedido.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Esta instalação</p>
+        <h1 class="aparece">O estado desta instância, agora</h1>
+        <p class="chamada aparece">
+          Números lidos do banco no momento em que esta página foi pedida.
+        </p>
+      </div>
+    </section>
+
+    <section id="verificar">
+      <div class="faixa">
+        <p>
+          Qualquer pessoa pode conferir a integridade da cadeia sem pedir permissão a ninguém e sem
+          confiar nesta página: a verificação roda fora da aplicação, pelo mesmo artefato.
+        </p>
+
+        <div class="painel">
+          <dl class="leituras">
+            <div>
+              <dt>Eventos na trilha</dt>
+              <dd th:text="${auditEvents}">0</dd>
+            </div>
+            <div>
+              <dt>Estudos cadastrados</dt>
+              <dd th:text="${studyCount}">0</dd>
+            </div>
+          </dl>
+          <dl class="cadeia">
+            <dt>Hash do último evento</dt>
+            <dd><code th:text="${auditHead}">0</code></dd>
+          </dl>
+          <p class="nota nota-espacada">Verificação por linha de comando:</p>
+          <code class="comando">./scripts/airlab.sh verify</code>
+          <code class="comando">.\scripts\airlab.ps1 verify</code>
+          <p class="nota">
+            O comando confere a cadeia de hashes, o hash de cada versão do pré-registro e,
+            nos estudos já desmascarados, refaz o sorteio a partir da semente. Sai com código
+            diferente de zero se algo não conferir.
+          </p>
+        </div>
+
+        <p class="acoes">
+          <a class="botao botao-vazio" href="/carimbos">Carimbos de tempo</a>
+          <a class="botao botao-vazio" href="/estudos">Estudos e relatórios</a>
+          <a class="botao botao-vazio" th:href="${site} + '/auditar'">Como auditar</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

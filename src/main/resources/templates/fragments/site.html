@@ -20,9 +20,16 @@
     <meta name="twitter:description" th:content="${descricao}">
   </th:block>
 
+  <!--
+    Cabeçalho e rodapé, usados pelas páginas do site e pelas da aplicação (SPEC 0.21, seção 1.3).
+    Cada link leva o endereço do lado a que a página pertence: ${site} para as páginas do site,
+    ${aplicacao} para as da aplicação. Na aplicação, ${aplicacao} é vazio e ${site} é o
+    AIRLAB_SITE_URL (vazio no perfil local); no gerador do site, é o contrário. Com os dois vazios,
+    todo link é relativo e um processo só serve tudo.
+  -->
   <header th:fragment="topo" class="topo">
     <div class="marcas">
-      <a class="marca" href="/">Crivo <span>AIR Lab</span></a>
+      <a class="marca" th:href="${site} + '/'">Crivo <span>AIR Lab</span></a>
       <a class="por-psigama" href="https://psigama.com/"
         title="PsiGama, Tecnologia da Informação para Pesquisa Psíquica">
         by
@@ -38,16 +45,22 @@
       </a>
     </div>
     <nav class="navegacao" aria-label="Navegação principal">
-      <a href="/#air-automatizado">Como participar</a>
-      <a href="/historia" th:attr="aria-current=${secaoAtual == 'historia'} ? 'page' : null">História</a>
-      <a href="/referencias" th:attr="aria-current=${secaoAtual == 'referencias'} ? 'page' : null">Referências</a>
-      <a href="/sobre" th:attr="aria-current=${secaoAtual == 'sobre'} ? 'page' : null">Glossário</a>
-      <a href="/consulente" th:attr="aria-current=${secaoAtual == 'consulente'} ? 'page' : null">Para participantes</a>
-      <a href="/protocolos" th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
-      <a href="/conta/criar" th:unless="${logado}" th:attr="aria-current=${secaoAtual == 'conta'} ? 'page' : null">Criar
-        conta</a>
-      <a href="/login" th:unless="${logado}" th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
-      <a href="/painel" th:if="${logado}" th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
+      <a th:href="${aplicacao} + '/protocolos'" th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
+      <a th:href="${site} + '/participar'" th:attr="aria-current=${secaoAtual == 'participar'} ? 'page' : null">Participar</a>
+      <a th:href="${site} + '/por-que'" th:attr="aria-current=${secaoAtual == 'por-que'} ? 'page' : null">Por quê</a>
+      <a th:href="${site} + '/garantias'" th:attr="aria-current=${secaoAtual == 'garantias'} ? 'page' : null">Garantias</a>
+      <a th:href="${site} + '/auditar'" th:attr="aria-current=${secaoAtual == 'auditar'} ? 'page' : null">Auditar</a>
+      <details class="submenu"
+        th:classappend="${secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre'} ? 'atual'">
+        <summary>Biblioteca</summary>
+        <div class="submenu-itens">
+          <a th:href="${site} + '/historia'" th:attr="aria-current=${secaoAtual == 'historia'} ? 'page' : null">História</a>
+          <a th:href="${site} + '/referencias'" th:attr="aria-current=${secaoAtual == 'referencias'} ? 'page' : null">Referências</a>
+          <a th:href="${site} + '/sobre'" th:attr="aria-current=${secaoAtual == 'sobre'} ? 'page' : null">Glossário</a>
+        </div>
+      </details>
+      <a th:href="${aplicacao} + '/login'" th:unless="${logado}" th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
+      <a th:href="${aplicacao} + '/painel'" th:if="${logado}" th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
     </nav>
   </header>
 
@@ -56,17 +69,21 @@
       <ul>
         <li><a href="https://psigama.com/">PsiGama</a></li>
         <li><a href="https://github.com/rogeriocisi/crivo">Repositório no GitHub</a></li>
-        <li><a href="/protocolos">Protocolos</a></li>
-        <li><a href="/protocolo/P1">P1-automático</a></li>
-        <li><a href="/estudos">Estudos e relatórios</a></li>
-        <li><a href="/carimbos">Carimbos de tempo</a></li>
-        <li><a href="/conta/criar">Criar conta</a></li>
-        <li><a href="/consulente">Para participantes</a></li>
-        <li><a href="/historia">Linha do tempo</a></li>
-        <li><a href="/referencias">Referências</a></li>
-        <li><a href="/sobre">Glossário</a></li>
-        <li><a href="/#verificar">Como auditar</a></li>
-        <li><a href="/login">Entrar</a></li>
+        <li><a th:href="${aplicacao} + '/protocolos'">Protocolos</a></li>
+        <li><a th:href="${aplicacao} + '/protocolo/P1'">P1-automático</a></li>
+        <li><a th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a></li>
+        <li><a th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a></li>
+        <li><a th:href="${aplicacao} + '/verificar'">Estado da trilha</a></li>
+        <li><a th:href="${aplicacao} + '/conta/criar'">Criar conta</a></li>
+        <li><a th:href="${aplicacao} + '/consulente'">Para participantes</a></li>
+        <li><a th:href="${site} + '/participar'">Participar</a></li>
+        <li><a th:href="${site} + '/por-que'">Por quê</a></li>
+        <li><a th:href="${site} + '/garantias'">Garantias</a></li>
+        <li><a th:href="${site} + '/auditar'">Como auditar</a></li>
+        <li><a th:href="${site} + '/historia'">Linha do tempo</a></li>
+        <li><a th:href="${site} + '/referencias'">Referências</a></li>
+        <li><a th:href="${site} + '/sobre'">Glossário</a></li>
+        <li><a th:href="${aplicacao} + '/login'">Entrar</a></li>
       </ul>
       <p>
         O Crivo é software livre (licença MIT), desenvolvido por Rogerio Cisi e mantido pela

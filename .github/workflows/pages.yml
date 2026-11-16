@@ -1,0 +1,85 @@
+# Publicação do site estático no GitHub Pages (crivo.psigama.com).
+#
+# Roda apenas a cada push na main (SPEC 0.21, seção 1.3; Constitution, regra de implantação 9). O site
+# só tem as páginas editoriais, escritas à mão, sem nada que venha do código dos protocolos ou do banco;
+# por isso ele pode mudar a qualquer momento, inclusive durante uma sessão de coleta, enquanto a
+# aplicação só muda pelo deploy.yml, entre sessões.
+#
+# Este workflow não tem segredo de SSH nem usa o ambiente production: não tem como chegar à VM. Ele
+# compila o JAR sem a suíte de testes, que o CI roda no mesmo push, gera o site com `airlab site`, que
+# não sobe o Spring nem o banco, e o publica.
+#
+# O endereço da aplicação, para os links do site, vem da variável do repositório APP_URL. Enquanto ela
+# não existir, nada é publicado. Configuração do Pages e do DNS: docs/DEPLOY.md, seções 5 e 6.
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Gerar o site
+    if: ${{ vars.APP_URL != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v7
+
+      - name: Instalar o JDK 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Compilar o JAR
+        run: ./mvnw -B -ntp -q package -DskipTests
+
+      - name: Gerar o site
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: java -jar target/airlab.jar site target/site --aplicacao="$APP_URL"
+
+      - name: Preparar o Pages
+        uses: actions/configure-pages@v6
+
+      - name: Guardar o site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: target/site
+
+  deploy:
+    name: Publicar no GitHub Pages
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: publicar
+        uses: actions/deploy-pages@v5
+
+  sem-endereco:
+    name: Sem APP_URL, nada a publicar
+    if: ${{ vars.APP_URL == '' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Avisar
+        run: |
+          echo "::notice::O site não foi publicado: falta a variável do repositório APP_URL (docs/DEPLOY.md, seção 5)."
+          echo "O site não foi publicado: falta a variável do repositório APP_URL (docs/DEPLOY.md, seção 5)." >> "$GITHUB_STEP_SUMMARY"

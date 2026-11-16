@@ -217,6 +217,8 @@ class AccountController {
         }
         accounts.close(principal.getName());
         request.logout();
-        return "redirect:/?contaEncerrada";
+        // The sign-in page, not the home page: the home page belongs to the static site, which
+        // cannot show a notice that depends on the request (SPEC 0.21, section 1.3).
+        return "redirect:/login?contaEncerrada";
     }
 }
