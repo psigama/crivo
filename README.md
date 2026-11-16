@@ -192,7 +192,7 @@ Faça o *fork* pelo GitHub, trabalhe num ramo, rode `./mvnw test` e abra o *pull
 
 Em caso de conflito entre documentos, a **Constitution prevalece**.
 
-**Artigo técnico** (rascunho, em português): [`paper/artigo-tecnico.pt-BR.md`](paper/artigo-tecnico.pt-BR.md)
+**Artigo técnico** (rascunho, em português): [`paper/artigo-tecnico.pt-BR.md`](paper/artigo-tecnico.pt-BR.md); o esboço publicado está em [crivo.psigama.com/artigo/](https://crivo.psigama.com/artigo/)
 
 ## Stack
 

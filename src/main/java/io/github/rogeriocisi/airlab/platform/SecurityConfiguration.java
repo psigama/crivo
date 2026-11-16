@@ -59,7 +59,7 @@ class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         // The editorial pages (SPEC 0.21, section 1.3) and the state of the trail.
                         .requestMatchers("/", "/participar", "/por-que", "/garantias", "/auditar",
-                                "/sobre", "/historia", "/referencias", "/verificar",
+                                "/sobre", "/historia", "/referencias", "/artigo/", "/verificar",
                                 "/consulente", "/login", "/css/**", "/js/**", "/targets/**", "/favicon.svg", "/favicon.ico",
                                 "/protocolos", "/protocolo/**", "/testes", "/testes/**", "/error", "/actuator/health",
                                 "/conta/criar", "/conta/verifique-seu-email", "/conta/confirmar",

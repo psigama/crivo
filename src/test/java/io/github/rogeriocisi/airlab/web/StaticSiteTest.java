@@ -106,6 +106,18 @@ class StaticSiteTest {
     }
 
     @Test
+    @DisplayName("o artigo fica em /artigo/, numa pasta com index.html, e entra no submenu Biblioteca")
+    void the_article_is_a_folder_page() throws IOException {
+        Path site = site();
+        assertThat(SitePages.byPath("/artigo/")).map(SitePages.Page::file).contains("artigo/index.html");
+        assertThat(read(site.resolve("artigo/index.html")))
+                .contains("href=\"/artigo/\" aria-current=\"page\"")
+                .contains("class=\"submenu atual\"")
+                .contains("<h2>Referências</h2>");
+        assertThat(read(site.resolve("index.html"))).contains("href=\"/artigo/\"");
+    }
+
+    @Test
     @DisplayName("a pagina 404 entrega ao script o endereco da aplicacao")
     void the_not_found_page_forwards_to_the_application() throws IOException {
         Path site = site();

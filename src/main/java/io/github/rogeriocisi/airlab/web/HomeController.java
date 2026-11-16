@@ -41,7 +41,8 @@ class HomeController {
     }
 
     /** The editorial pages. Every path of {@link SitePages#ALL} is here, and a test checks it. */
-    @GetMapping({"/", "/participar", "/por-que", "/garantias", "/auditar", "/historia", "/referencias", "/sobre"})
+    @GetMapping({"/", "/participar", "/por-que", "/garantias", "/auditar", "/historia", "/referencias", "/sobre",
+            "/artigo/"})
     ModelAndView sitePage(HttpServletRequest request) {
         String path = request.getRequestURI().substring(request.getContextPath().length());
         SitePages.Page page = SitePages.byPath(path.isEmpty() ? "/" : path)

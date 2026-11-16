@@ -45,7 +45,8 @@ final class SitePages {
             page("/auditar", "auditar"),
             page("/historia", "historia"),
             page("/referencias", "referencias"),
-            page("/sobre", "sobre"));
+            page("/sobre", "sobre"),
+            page("/artigo/", "artigo"));
 
     private SitePages() {
     }
@@ -79,8 +80,12 @@ final class SitePages {
         return trimmed;
     }
 
+    /**
+     * A path ending in a slash is a folder with its {@code index.html}, as the GitHub Pages serves
+     * it; any other is a file named after it, which the Pages serves without the extension.
+     */
     private static Page page(String path, String name) {
-        String file = path.equals("/") ? "index.html" : path.substring(1) + ".html";
+        String file = path.endsWith("/") ? path.substring(1) + "index.html" : path.substring(1) + ".html";
         return new Page(path, "site/" + name, file);
     }
 }

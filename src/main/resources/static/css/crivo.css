@@ -1101,6 +1101,97 @@ code,
     }
 }
 
+/* ---------- artigo técnico (/artigo/) ---------- */
+
+.ficha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+    margin: 2rem 0 0;
+}
+
+.ficha dt {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+}
+
+.ficha dd {
+    margin: 0.2rem 0 0;
+}
+
+.artigo .ressalva:first-child {
+    margin-top: 0;
+}
+
+.artigo h2 {
+    margin-top: 3rem;
+}
+
+.artigo h3 {
+    margin-top: 2rem;
+}
+
+.artigo ul,
+.artigo ol {
+    max-width: var(--medida);
+}
+
+.artigo li {
+    margin-bottom: 0.5rem;
+}
+
+.pendente {
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--verdete);
+    background: color-mix(in srgb, var(--verdete) 6%, transparent);
+    font-size: 0.95rem;
+}
+
+.tabela-rolavel {
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.tabela-rolavel table {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.tabela-rolavel th,
+.tabela-rolavel td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--fio);
+}
+
+.tabela-rolavel th {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    border-bottom-color: var(--fio-forte);
+}
+
+.referencias-artigo {
+    list-style: none;
+    padding-left: 0;
+    font-size: 0.95rem;
+}
+
+.referencias-artigo li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+}
+
 @media print {
     body {
         background: #fff;
