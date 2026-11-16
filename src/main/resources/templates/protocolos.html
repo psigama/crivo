@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Protocolos — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os quatro protocolos da plataforma Crivo: P1-automático e P2-supervisionado, de recepção anômala de informação (AIR), e P3-precognição e P4-visão-remota, testes de percepção extrassensorial, todos com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
+  <th:block th:replace="~{fragments/site :: social('Protocolos — Crivo', 'Os quatro protocolos da plataforma Crivo: dois experimentos de mediunidade (AIR), P1-automático e P2-supervisionado, e dois testes de percepção extrassensorial (PES), P3-precognição e P4-visão-remota, todos com pré-registro congelado, sorteio verificável e trilha de auditoria.')}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
@@ -20,12 +20,14 @@
   <section class="abertura">
     <div class="faixa">
       <p class="rotulo aparece">Protocolos</p>
-      <h1 class="aparece">Quatro protocolos, as mesmas garantias</h1>
+      <h1 class="aparece">Quatro protocolos: dois experimentos e dois testes</h1>
       <p class="chamada aparece">
         O Crivo é uma plataforma de protocolos cegos para pesquisa de <strong>cognição
-        anômala</strong>. A mediunidade é um ramo dela — na literatura, <em>recepção anômala de
-        informação</em>, ou AIR. O outro ramo são os testes de <em>percepção extrassensorial</em>,
-        em que o alvo é sorteado pelo próprio sistema e não há pessoa falecida envolvida.
+        anômala</strong>, de dois tipos. Os <strong>experimentos</strong> são de mediunidade — na
+        literatura, <em>recepção anômala de informação</em>, ou AIR —: envolvem consulente e médium,
+        pedem conta e só têm resultado no fim de um estudo pré-registrado. Os <strong>testes</strong>
+        são de <em>percepção extrassensorial</em>: o alvo é sorteado pelo próprio sistema, não há
+        pessoa falecida envolvida, e o resultado sai na hora.
       </p>
       <p class="tese aparece">
         O que todo protocolo daqui tem em comum: <strong>pré-registro congelado, sorteio com
@@ -38,13 +40,14 @@
 
   <section id="air">
     <div class="faixa">
-      <p class="rotulo">Mediunidade</p>
-      <h2>Protocolos AIR</h2>
+      <p class="rotulo">Mediunidade · P1 e P2</p>
+      <h2>Experimentos de mediunidade (AIR)</h2>
 
       <ul class="protocolos">
         <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
           <p class="selo">
             <span th:text="${p.label()}">P1-automático</span> ·
+            <span th:text="${#strings.toLowerCase(p.kind())}">experimento</span> ·
             <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
             <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span> ·
             <span th:text="${#strings.toLowerCase(p.status.label())}">situação</span>
@@ -72,8 +75,8 @@
 
   <section id="pes">
     <div class="faixa">
-      <p class="rotulo">Percepção extrassensorial</p>
-      <h2>Testes de PES</h2>
+      <p class="rotulo">Percepção extrassensorial · P3 e P4</p>
+      <h2>Testes de percepção extrassensorial (PES)</h2>
       <p>
         Testes rápidos e anônimos, sem conta. Eles <strong>não dizem nada sobre mediunidade</strong>:
         servem para mostrar o método funcionando, e qualquer pessoa pode conferir depois a lisura do
@@ -84,6 +87,7 @@
         <li th:each="p : ${esp}">
           <p class="selo">
             <span th:text="${p.label()}">P3-precognição</span> ·
+            <span th:text="${#strings.toLowerCase(p.kind())}">teste</span> ·
             <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
             <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
           </p>

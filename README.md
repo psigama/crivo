@@ -17,7 +17,7 @@ O site do Crivo lista os quatro protocolos em [`/protocolos`](https://crivo.psig
 | **P3-precognição** | Escolha forçada precognitiva | ESP | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/protocolo/P3/rodar` |
 | **P4-visão-remota** | Visão remota com quatro alvos | ESP | 25% | Integral — qualquer pessoa faz pelo navegador, sem conta; roda em `/protocolo/P4/rodar` |
 
-Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles existem porque são integralmente verificáveis por quem os faz, e aparecem separados dos protocolos AIR. A [PsiGama](https://psigama.com/), que mantém o Crivo, também os apresenta na [página de testes de PES](https://psigama.com/pes/). As rotas antigas, `/testes/...`, redirecionam para as novas.
+Todos herdam as mesmas garantias, e cada um declara na própria página **o que o seu resultado não sustenta**. Os dois testes de ESP não dizem nada sobre mediunidade: eles existem porque são integralmente verificáveis por quem os faz, e aparecem separados dos protocolos AIR. A [PsiGama](https://psigama.com/), que mantém o Crivo, também os apresenta na [página de testes de PES](https://psigama.com/crivo/pes/). As rotas antigas, `/testes/...`, redirecionam para as novas.
 
 ### O AIR automatizado (P1), em uma frase
 

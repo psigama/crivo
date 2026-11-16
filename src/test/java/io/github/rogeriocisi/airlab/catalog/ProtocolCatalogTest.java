@@ -98,6 +98,17 @@ class ProtocolCatalogTest {
     }
 
     @Test
+    @DisplayName("SPEC 0.18: os protocolos AIR sao experimentos; os de ESP, testes")
+    void experiments_and_tests() {
+        assertThat(ProtocolCatalog.air()).allMatch(p -> p.kind().equals("Experimento"));
+        assertThat(ProtocolCatalog.esp()).allMatch(p -> p.kind().equals("Teste"));
+        assertThat(ProtocolCatalog.structuredReading().branch().kindLabel())
+                .isEqualTo("Experimento de mediunidade (AIR)");
+        assertThat(ProtocolCatalog.remoteViewing().branch().kindLabel())
+                .isEqualTo("Teste de percepção extrassensorial (PES)");
+    }
+
+    @Test
     @DisplayName("os codigos das tentativas seguem o catalogo: P3 e P4")
     void the_trial_codes_follow_the_catalog() {
         assertThat(io.github.rogeriocisi.airlab.trials.TrialProtocol.PRECOGNITIVE_FORCED_CHOICE.catalogCode())
