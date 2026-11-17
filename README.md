@@ -189,6 +189,7 @@ Faça o *fork* pelo GitHub, trabalhe num ramo, rode `./mvnw test` e abra o *pull
 | [`docs/SPEC.md`](docs/SPEC.md) | Especificação macro: o que é uma leitura, protocolo pareado, matriz de cegamento, épicos, modelo de domínio e MVP |
 | [`docs/PLAN.md`](docs/PLAN.md) | Plano técnico do MVP: módulos, migrações, decisões criptográficas, dependências e estado por épico |
 | [`docs/REFERENCES.md`](docs/REFERENCES.md) | Papers que embasam o projeto (a favor e críticos) e a decisão de projeto que cada um informa |
+| [`docs/UX.md`](docs/UX.md) | Plano de UX, linguagem e celular para os dois públicos (pesquisadores e participantes): diagnóstico medido, camadas, glossário e fases |
 
 Em caso de conflito entre documentos, a **Constitution prevalece**.
 
