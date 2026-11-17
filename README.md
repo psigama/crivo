@@ -130,7 +130,7 @@ Confere a cadeia de hashes da trilha, o hash de cada versão do pré-registro e,
 
 ### Site estático (páginas editoriais)
 
-Desde a [SPEC 0.21](docs/SPEC.md#13-site-e-aplicação), as páginas editoriais formam um site estático à parte, publicado pelo GitHub Pages em `https://crivo.psigama.com` a cada push na `main`: início, Participar, Por quê, Garantias, Auditar, História, Referências e Glossário. São texto escrito à mão, e os templates ficam em `src/main/resources/templates/site/`. Todo o resto é a aplicação, em `https://app.crivo.psigama.com`: as páginas dos protocolos, `/consulente`, contas, testes, estudos, carimbos e o estado da trilha (`/verificar`).
+Desde a [SPEC 0.21](docs/SPEC.md#13-site-e-aplicação), as páginas editoriais formam um site estático à parte, publicado pelo GitHub Pages em `https://crivo.psigama.com` a cada push na `main`: início, Participar, Por quê, Garantias, Auditar, História, Referências e Glossário. São texto escrito à mão, e os templates ficam em `src/main/resources/templates/site/`. Todo o resto é a aplicação, em `https://app.crivo.psigama.com`: as páginas dos protocolos, `/consulente`, `/medium`, `/perguntas`, `/pesquisa` (com `/pesquisa/en`), contas, testes, estudos, carimbos e o estado da trilha (`/verificar`).
 
 No perfil local, a aplicação serve as duas partes, e nada muda para quem desenvolve. Para ver o site como ele é publicado, gere-o numa pasta vazia, sem banco e sem servidor:
 

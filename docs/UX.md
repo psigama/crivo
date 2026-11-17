@@ -2,7 +2,7 @@
 
 > Como tornar o site e a aplicação do Crivo rigorosos para quem pesquisa e, ao mesmo tempo, simples, convidativos e usáveis no celular para médiuns e consulentes. As regras que já valem estão na `SPEC.md`, seção 1.4. Este documento guarda o diagnóstico, a estratégia e as fases.
 >
-> Versão 1.0 · novembro/2026 · Fase 1 implementada na SPEC 0.23.
+> Versão 1.1 · novembro/2026 · Fase 1 implementada na SPEC 0.23 · Fase 2 na SPEC 0.24, menos o áudio.
 
 ---
 
@@ -234,7 +234,7 @@ Pessoas simples confiam em pessoas, não em sites. É o "fluxo em duas etapas" d
 |---|---|---|
 | 0. Escuta | Entrevistas e testes, glossário, guia de voz e metas de legibilidade | A fazer |
 | 1. Correções rápidas | Menu no celular e alvos de toque; tamanhos mínimos de letra; campos de 16 px; horário de Brasília nas telas de participante e no e-mail do pedido de leitura; mensagens reescritas nas telas de participante; "abertura dos resultados" e "pessoa de comparação"; notas do médium por extenso, sem "d do par"; CVV; `og:image`; ação no fim do `/consulente` | Feita na SPEC 0.23 |
-| 2. Camadas | Página inicial com três portas; `/medium`; `/perguntas`; `/pesquisa` com versão em inglês; detalhe técnico em `<details>` em Garantias e Como funciona; termo em camadas, com áudio. Tudo pronto para a submissão ao CEP | A fazer, cada item com a sua versão da SPEC |
+| 2. Camadas | Página inicial com três portas; `/medium`; `/perguntas`; `/pesquisa` com versão em inglês; detalhe técnico em `<details>` em Garantias e Como funciona; termo em camadas, com áudio. Tudo pronto para a submissão ao CEP | Feita na SPEC 0.24, com o menu e o rodapé agrupados e o termo `conta-v3`. Falta o áudio, que espera gravação em voz humana |
 | 3. Comunicação | Kit para dirigentes; vídeo de 2 minutos e versões curtas na vertical; preprint, OSF e Zenodo | A fazer, perto da aprovação do CEP |
 | 4. Medir e ajustar | Funil; novo teste de compreensão a cada versão; teste de legibilidade rodando a cada mudança | Depois que as inscrições abrirem |
 
