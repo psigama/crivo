@@ -1181,6 +1181,41 @@ code,
     border-bottom-color: var(--fio-forte);
 }
 
+/* Tabela numerada: a legenda fica fora da rolagem, para ser lida no celular sem arrastar a tabela. */
+.artigo figure.tabela {
+    margin: 1.75rem 0;
+}
+
+.artigo figure.tabela figcaption {
+    max-width: var(--medida);
+    font-size: 0.9rem;
+    color: var(--tinta-suave);
+}
+
+.artigo figure.tabela .tabela-rolavel {
+    margin: 0.6rem 0 0;
+}
+
+.formula {
+    max-width: none;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+}
+
+/* Os espaços dentro de cada colchete são inseparáveis: no celular, a fórmula só quebra no "+". */
+.formula code {
+    font-size: 0.95rem;
+}
+
+/* Caixas explicativas do artigo: a mesma medida do texto corrido. */
+.artigo .definicao {
+    max-width: var(--medida);
+}
+
+.artigo .definicao p:not(.rotulo) + p {
+    margin-top: 0.75rem;
+}
+
 .referencias-artigo {
     list-style: none;
     padding-left: 0;
