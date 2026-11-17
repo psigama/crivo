@@ -61,6 +61,8 @@ class SecurityConfiguration {
                         .requestMatchers("/", "/participar", "/por-que", "/garantias", "/auditar",
                                 "/sobre", "/historia", "/referencias", "/artigo/", "/verificar",
                                 "/consulente", "/login", "/css/**", "/js/**", "/targets/**", "/favicon.svg", "/favicon.ico",
+                                // The share image of every page's og:image (SPEC 0.23, section 1.4, rule 6).
+                                "/img/**",
                                 "/protocolos", "/protocolo/**", "/testes", "/testes/**", "/error", "/actuator/health",
                                 "/conta/criar", "/conta/verifique-seu-email", "/conta/confirmar",
                                 "/estudos", "/estudos/**", "/carimbos", "/carimbos/**")

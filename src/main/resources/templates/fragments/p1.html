@@ -28,6 +28,20 @@
   </div>
 
   <!--
+    Apoio a quem está de luto (SPEC 0.23, seção 1.4, regra 5): um caminho concreto, e não só "procure
+    ajuda". Usado em /consulente e na devolutiva, para que as duas digam a mesma coisa.
+  -->
+  <div th:fragment="apoio" class="ressalva apoio" id="apoio">
+    <p>
+      <strong>Se pesar, fale com alguém.</strong> Isto não é atendimento, nem terapia, nem consolo, e
+      participar pode despertar algo difícil. O CVV, Centro de Valorização da Vida, conversa com
+      qualquer pessoa, de graça e a qualquer hora: pelo telefone <a href="tel:188">188</a> ou pelo
+      chat em <a href="https://cvv.org.br/">cvv.org.br</a>. E você pode excluir a sua conta a
+      qualquer momento, sem dizer por quê.
+    </p>
+  </div>
+
+  <!--
     Como participar do P1 (SPEC, E13). Usado na página do protocolo; os links levam ${aplicacao}, para que
     funcionem também numa página do site (SPEC 0.21, seção 1.3).
   -->

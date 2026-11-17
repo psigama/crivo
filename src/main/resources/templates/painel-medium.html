@@ -32,7 +32,8 @@
     <div class="faixa">
       <h2>Pedidos recebidos</h2>
       <p class="aviso" th:if="${param.travada}" role="status">
-        Leitura travada. A trilha pública recebeu o compromisso dela — sem o seu código e sem as respostas.
+        Leitura travada e guardada. Ninguém pode mudá-la — nem você, nem a equipe. O resultado aparece
+        aqui quando o estudo terminar.
       </p>
       <dl class="contagens">
         <div><dt>Aguardando leitura</dt><dd th:text="${#lists.size(abertos)}">0</dd></div>
@@ -47,10 +48,12 @@
 
       <ul class="pedidos" th:unless="${#lists.isEmpty(abertos)}">
         <li th:each="pedido : ${abertos}">
-          <p class="prazo">
-            Pedido <code th:text="${pedido.code}">ENV-0000</code> · prazo até
-            <time th:datetime="${pedido.dueAt}" th:text="${@datas.utc(pedido.dueAt)}">2026-11-27 10:00</time> (UTC)
+          <p class="prazo-claro">
+            Responda até
+            <time th:datetime="${pedido.dueAt}" th:text="${@datas.prazo(pedido.dueAt)}">sexta-feira, 27 de novembro, às 7h</time>
+            (horário de Brasília).
           </p>
+          <p class="prazo">Pedido <code th:text="${pedido.code}">ENV-0000</code></p>
           <ol>
             <li th:each="vaga : ${pedido.slots}">
               <span><span class="nota" th:text="${vaga.position} + '.'">1.</span>
@@ -65,14 +68,18 @@
 
       <th:block th:unless="${#lists.isEmpty(enviados)}">
         <h3>Leituras enviadas</h3>
-        <p class="nota">Sem nota até o fim do estudo: a conferência só roda depois do desmascaramento.</p>
+        <p class="nota">
+          Ainda sem nota: a conferência só acontece na abertura dos resultados, quando o estudo terminar.
+        </p>
         <ul class="pedidos">
           <li th:each="pedido : ${enviados}">
             <p class="prazo">Pedido <code th:text="${pedido.code}">ENV-0000</code> · <span th:text="${pedido.state.label()}">Leituras enviadas</span></p>
             <ol>
               <li th:each="vaga : ${pedido.slots}">
                 <span class="nome" th:text="${vaga.firstName}">Nome</span>
-                <span class="nota" th:if="${vaga.lockedAt}">travada em <time th:text="${@datas.utc(vaga.lockedAt)}">2026-11-13</time></span>
+                <span class="nota" th:if="${vaga.lockedAt}">travada em
+                  <time th:datetime="${vaga.lockedAt}" th:text="${@datas.momento(vaga.lockedAt)}">13 de novembro de 2026, às 7h</time>
+                  (horário de Brasília)</span>
               </li>
             </ol>
           </li>
@@ -82,35 +89,41 @@
       <th:block th:unless="${#lists.isEmpty(notas)}">
         <h3>Notas das suas leituras</h3>
         <p class="nota">
-          Estudos concluídos. Cada leitura foi comparada com as respostas da pessoa para quem foi feita
-          e com as da outra pessoa do par; o que conta é a diferença. As respostas dos consulentes ficam
-          com eles.
+          Estes estudos terminaram. Cada leitura sua foi comparada com as respostas de quem conheceu a
+          pessoa daquele nome e, para comparação, com as respostas sobre a outra pessoa do mesmo
+          pedido. O que conta é a diferença entre as duas contagens. Uma leitura sozinha diz pouco: o
+          acaso explica muitas coincidências, e o estudo olha o conjunto. As respostas dos consulentes
+          ficam com eles.
         </p>
-        <div class="tabela">
-          <table class="tentativas">
-            <thead>
-              <tr><th scope="col">Estudo</th><th scope="col">Nome</th><th scope="col">Campos</th>
-                <th scope="col">Com o alvo</th><th scope="col">Com o chamariz</th><th scope="col">d do par</th></tr>
-            </thead>
-            <tbody>
-              <tr th:each="nota : ${notas}">
-                <td><code th:text="${nota.studyCode}">STD-0000</code></td>
-                <td th:text="${nota.firstName}">Nome</td>
-                <td th:text="${nota.comparableFields}">13</td>
-                <td th:text="${nota.targetMatches}">0</td>
-                <td th:text="${nota.decoyMatches}">0</td>
-                <td th:text="${nota.pairDifference}">0</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="notas">
+          <li th:each="nota : ${notas}">
+            <h4 th:text="'Leitura para ' + ${nota.firstName}">Leitura para Nome</h4>
+            <p class="nota">Estudo <code th:text="${nota.studyCode}">STD-0000</code></p>
+            <p th:text="'Com a pessoa certa, ' + ${nota.targetMatches} + ' de ' + ${nota.comparableFields} + ' respostas coincidiram.'">
+              Com a pessoa certa, 7 de 13 respostas coincidiram.</p>
+            <p th:text="'Com a pessoa de comparação, ' + ${nota.decoyMatches} + ' de ' + ${nota.comparableFields} + '.'">
+              Com a pessoa de comparação, 5 de 13.</p>
+            <p th:text="'Diferença do pedido, somando as suas duas leituras: ' + ${nota.pairDifference} + '.'">
+              Diferença do pedido, somando as suas duas leituras: 2.</p>
+          </li>
+        </ul>
+        <details class="detalhe-tecnico">
+          <summary>Detalhe técnico</summary>
+          <p>
+            A pessoa de comparação é o chamariz do par: o outro pedido, de perfil parecido. A diferença
+            do pedido é o <code>d</code> do par: nas duas leituras, as coincidências com o alvo menos
+            as coincidências com o chamariz. Os campos em que um dos consulentes marcou "não sei" ficam
+            fora da comparação. A análise primária do estudo é o teste de Wilcoxon pareado sobre os
+            <code>d</code> de todos os pares, como no pré-registro.
+          </p>
+        </details>
       </th:block>
 
       <h3>Como funciona uma leitura</h3>
       <ol class="etapas">
         <li><div><h3>O pedido chega</h3><p>Dois primeiros nomes, em ordem sorteada, e o prazo declarado no estudo. Você não sabe quem pediu, e os dois nomes são de perfil parecido.</p></div></li>
         <li><div><h3>Você responde a cada nome</h3><p>As perguntas de múltipla escolha que contam na comparação. Para cada uma, uma opção ou "não recebi".</p></div></li>
-        <li><div><h3>A leitura trava</h3><p>Antes de travar, você revê. Ao travar, as respostas não mudam mais, e a trilha pública recebe um compromisso delas.</p></div></li>
+        <li><div><h3>A leitura trava</h3><p>Antes de travar, você revê. Ao travar, as respostas ficam lacradas e não mudam mais.</p></div></li>
         <li><div><h3>Notas no fim</h3><p>Quando o estudo é concluído, você vê a nota de cada leitura sua.</p></div></li>
       </ol>
     </div>

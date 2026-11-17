@@ -72,9 +72,9 @@
         <li>
           <h3>Ao enviar, trava</h3>
           <p>
-            Suas respostas não podem mais mudar. No mesmo instante, a trilha pública do estudo recebe
-            um compromisso criptográfico delas — uma impressão digital, não as respostas —, antes que
-            qualquer médium receba o pedido.
+            Suas respostas não podem mais mudar. No mesmo instante, o registro público do estudo recebe
+            um lacre digital delas — uma espécie de impressão digital, que não mostra as respostas —,
+            antes que qualquer médium receba o pedido.
           </p>
           <span class="selo">isso protege o estudo de um ajuste depois do fato, e protege você da suspeita de ter ajustado</span>
         </li>
@@ -170,8 +170,8 @@
           <h3>Seu nome fica fora</h3>
           <p>
             Nos dados de pesquisa você é um código. Seu nome, seu e-mail, o primeiro nome da pessoa
-            falecida e as suas respostas ficam cifrados, numa parte separada do banco que uma única
-            parte do sistema consegue ler.
+            falecida e as suas respostas ficam guardados com criptografia, numa parte separada do banco
+            de dados que só uma parte do sistema consegue ler.
           </p>
         </div>
         <div class="garantia">
@@ -224,18 +224,48 @@
         E o resultado mais provável, pelo que a literatura mostra até hoje, é modesto ou nulo.
       </p>
 
-      <div class="ressalva">
-        <p>
-          Isto não é atendimento, nem terapia, nem consolo. Se a participação despertar algo difícil
-          — e pode despertar —, procure apoio de quem cuida disso. Você pode excluir a conta a
-          qualquer momento, sem nenhuma pergunta.
-        </p>
-      </div>
+      <div th:replace="~{fragments/p1 :: apoio}"></div>
 
       <p class="nota nota-espacada">
         Para entender o protocolo por inteiro, veja <a href="/protocolo/P1#etapas">como ele funciona</a>, a
         <a href="/protocolo/P1">página do protocolo</a> e o
         <a th:href="${site} + '/sobre'">vocabulário</a>. Esta página pode ser impressa e entregue em papel.
+      </p>
+    </div>
+  </section>
+
+  <!--/* A página termina dizendo o que fazer, conforme o estado da inscrição (SPEC 0.23, seção 1.4, regra 7). */-->
+  <section id="o-que-fazer">
+    <div class="faixa">
+      <p class="rotulo">E agora</p>
+      <h2>O que fazer agora</h2>
+      <th:block th:if="${inscricaoAberta}">
+        <p>
+          Se quiser participar, crie a sua conta com o perfil de consulente. Leva poucos minutos, e
+          você pode parar quando quiser.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" href="/conta/criar">Criar minha conta</a>
+          <a class="botao botao-vazio" href="/login">Já tenho conta</a>
+        </p>
+      </th:block>
+      <th:block th:unless="${inscricaoAberta}">
+        <p th:if="${aguardaCep}">
+          <strong>As inscrições ainda não estão abertas.</strong> Elas abrem depois que o estudo for
+          aprovado pelo Comitê de Ética em Pesquisa (CEP), que confere se ele respeita quem participa.
+          Até lá, nenhum pedido é recebido.
+        </p>
+        <p th:unless="${aguardaCep}">
+          <strong>As inscrições estão fechadas nesta instalação.</strong>
+        </p>
+        <p class="acoes">
+          <a class="botao botao-vazio" href="/protocolo/P1">Ver como o estudo funciona</a>
+        </p>
+      </th:block>
+      <p th:if="${contato}">
+        Ficou alguma dúvida, ou algo aqui pesou? Escreva para
+        <a th:href="'mailto:' + ${contato}" th:text="${contato}">contato</a>. Quem responde é uma
+        pessoa.
       </p>
     </div>
   </section>

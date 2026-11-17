@@ -22,9 +22,9 @@
       <p class="rotulo">Entrar</p>
       <h1>Entrar</h1>
       <p class="chamada">
-        <strong>Consulentes e médiuns</strong> da leitura estruturada automatizada entram com o
-        e-mail e a senha da conta. <strong>O administrador</strong> entra com o usuário definido na
-        configuração do servidor. Cada um cai no painel do seu perfil.
+        <strong>Consulentes e médiuns</strong> entram com o e-mail e a senha da conta e vão para o
+        seu painel. <strong>O administrador</strong> entra com o usuário definido na configuração do
+        servidor.
       </p>
       <p class="nota">
         Ainda não tem conta? <a href="/conta/criar">Crie uma</a>.
@@ -42,8 +42,8 @@
           Sessão encerrada.
         </p>
         <p class="aviso" th:if="${param.contaEncerrada}" role="status">
-          Sua conta foi excluída. Nome, e-mail e senha foram apagados; só o código pseudônimo
-          permanece na pesquisa, marcado como encerrado.
+          Sua conta foi excluída. Nome, e-mail e senha foram apagados. Na pesquisa fica só um código,
+          sem o seu nome, marcado como encerrado.
         </p>
 
         <label for="username">E-mail ou usuário</label>

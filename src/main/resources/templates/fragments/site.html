@@ -15,9 +15,23 @@
     <meta property="og:type" content="website">
     <meta property="og:title" th:content="${titulo}">
     <meta property="og:description" th:content="${descricao}">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" th:content="${titulo}">
     <meta name="twitter:description" th:content="${descricao}">
+    <!--/*
+      Imagem de compartilhamento (SPEC 0.23, seção 1.4, regra 6): o link colado no WhatsApp mostra
+      a imagem. O Open Graph pede endereço absoluto: a aplicação aponta para o site, e o site, para
+      a aplicação. As duas servem a imagem. No perfil local, os dois endereços são vazios, e o
+      caminho fica relativo.
+    */-->
+    <th:block th:with="imagem=${(#strings.isEmpty(site) ? (aplicacao ?: '') : site) + '/img/compartilhar.png'}">
+      <meta property="og:image" th:content="${imagem}">
+      <meta property="og:image:type" content="image/png">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+      <meta property="og:image:alt" content="Crivo: um jeito justo de pesquisar a mediunidade">
+      <meta name="twitter:image" th:content="${imagem}">
+    </th:block>
   </th:block>
 
   <!--
@@ -44,6 +58,26 @@
       </a>
     </div>
     <nav class="navegacao" aria-label="Navegação principal">
+      <th:block th:replace="~{fragments/site :: links}"></th:block>
+    </nav>
+    <!--/*
+      No celular (SPEC 0.23, seção 1.4, regra 4), a navegação acima sai de cena pelo CSS, e os
+      mesmos links ficam atrás do Menu, um <details> sem script. Entrar, ou Painel, fica à vista.
+    */-->
+    <a class="entrar-movel" th:href="${aplicacao} + '/login'" th:unless="${logado}"
+      th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
+    <a class="entrar-movel" th:href="${aplicacao} + '/painel'" th:if="${logado}"
+      th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
+    <details class="menu-movel">
+      <summary>Menu</summary>
+      <nav class="navegacao navegacao-movel" aria-label="Navegação principal">
+        <th:block th:replace="~{fragments/site :: links}"></th:block>
+      </nav>
+    </details>
+  </header>
+
+  <!-- Os links da navegação, uma vez só: o cabeçalho os usa no computador e no Menu do celular. -->
+  <th:block th:fragment="links">
       <a th:href="${aplicacao} + '/protocolos'"
         th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
       <a th:href="${site} + '/participar'"
@@ -65,12 +99,11 @@
             th:attr="aria-current=${secaoAtual == 'artigo'} ? 'page' : null">Artigo</a>
         </div>
       </details>
-      <a th:href="${aplicacao} + '/login'" th:unless="${logado}"
+      <a class="entrar" th:href="${aplicacao} + '/login'" th:unless="${logado}"
         th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
-      <a th:href="${aplicacao} + '/painel'" th:if="${logado}"
+      <a class="entrar" th:href="${aplicacao} + '/painel'" th:if="${logado}"
         th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
-    </nav>
-  </header>
+  </th:block>
 
   <footer th:fragment="rodape" class="rodape">
     <div class="faixa">

@@ -27,14 +27,17 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  * to reach the protocol catalog or the database (rule 3). Links to the site stay relative, and
  * links to the application carry its address.
  *
- * <p>Besides the pages it writes the stylesheet, the favicon, and the {@code 404.html} with its
- * script, which takes any address the site does not have to the application (rule 5). The output
- * depends only on the templates and the address, so two runs over the same commit are identical.
+ * <p>Besides the pages it writes the stylesheet, the favicon, the share image, and the
+ * {@code 404.html} with its script, which takes any address the site does not have to the
+ * application (rule 5). The share image is there because the application's pages point their
+ * {@code og:image} at the site (SPEC 0.23, section 1.4, rule 6). The output depends only on the
+ * templates and the address, so two runs over the same commit are identical.
  */
 public final class StaticSite {
 
     /** Files under {@code static/} that the site needs, at the same path. */
-    static final List<String> ASSETS = List.of("css/crivo.css", "favicon.svg", "js/encaminhar.js");
+    static final List<String> ASSETS =
+            List.of("css/crivo.css", "favicon.svg", "js/encaminhar.js", "img/compartilhar.png");
 
     private static final String USAGE =
             "Uso: airlab site <pasta> --aplicacao=<endereço da aplicação, como https://app.crivo.psigama.com>";

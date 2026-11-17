@@ -120,7 +120,7 @@ section {
 
 .rotulo {
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -171,12 +171,19 @@ a:focus-visible {
 code,
 .mono {
     font-family: var(--mono);
-    font-size: 0.85em;
+    /* Relativo ao texto em volta, mas nunca abaixo de 13 px (SPEC 0.23, seção 1.4, regra 4):
+       um código num rótulo pequeno ficaria com 11 px. */
+    font-size: max(0.85em, 0.8125rem);
+}
+
+small {
+    font-size: max(0.875em, 0.8125rem);
 }
 
 /* ---------- cabeçalho ---------- */
 
 .topo {
+    position: relative;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -195,7 +202,7 @@ code,
 
 .marca span {
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -217,7 +224,7 @@ code,
     align-items: center;
     gap: 0.35rem;
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.06em;
     color: var(--tinta-suave);
     text-decoration: none;
@@ -255,10 +262,24 @@ code,
 .navegacao {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
+    align-items: center;
+    gap: 0 1.25rem;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.875rem;
     letter-spacing: 0.04em;
+}
+
+/* Alvo de toque de 44 px, também no tablet, onde a navegação de sempre continua à vista
+   (SPEC 0.23, seção 1.4, regra 4). */
+.navegacao a,
+.navegacao .submenu > summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+}
+
+.navegacao .submenu > summary {
+    gap: 0.35em;
 }
 
 /* ---------- abertura ---------- */
@@ -307,12 +328,16 @@ code,
 }
 
 .botao {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
     padding: 0.7rem 1.3rem;
     border: 1px solid var(--tinta);
+    text-align: center;
     text-decoration: none;
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
@@ -379,7 +404,7 @@ code,
     content: "hoje";
     display: block;
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--fio-forte);
@@ -390,7 +415,7 @@ code,
     content: "no Crivo";
     display: block;
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--verdete);
@@ -442,7 +467,7 @@ code,
     border-radius: 50%;
     background: var(--papel);
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     color: var(--verdete);
 }
 
@@ -478,7 +503,7 @@ code,
     display: inline-block;
     margin-top: 0.4rem;
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.06em;
     color: var(--verdete);
     border: 1px dashed color-mix(in srgb, var(--verdete) 45%, transparent);
@@ -540,7 +565,7 @@ code,
 
 .garantia h3 {
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--verdete);
@@ -587,7 +612,7 @@ code,
 
 .leituras dt {
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -646,7 +671,7 @@ code,
 
 .cadeia dt {
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -671,7 +696,7 @@ code,
     background: color-mix(in srgb, var(--tinta) 6%, transparent);
     border-left: 2px solid var(--verdete);
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     overflow-x: auto;
 }
 
@@ -695,7 +720,7 @@ code,
     counter-increment: caminho;
     content: counter(caminho);
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--verdete);
     border-bottom: 1px solid var(--verdete);
 }
@@ -741,7 +766,7 @@ code,
 
 .atestado h3 {
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding-bottom: 0.5rem;
@@ -810,7 +835,7 @@ code,
     margin: 0;
     text-align: right;
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.04em;
     color: var(--tinta-suave);
 }
@@ -895,7 +920,7 @@ code,
     left: 0;
     top: 0.15rem;
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     color: var(--verdete);
 }
 
@@ -906,7 +931,7 @@ code,
 
 .citacao a {
     font-family: var(--mono);
-    font-size: 0.78em;
+    font-size: max(0.78em, 0.8125rem);
     white-space: nowrap;
 }
 
@@ -922,7 +947,7 @@ code,
 .informa::before {
     content: "Informa no Crivo: ";
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--verdete);
@@ -961,22 +986,28 @@ code,
     gap: 0.35rem;
 }
 
+/* O nome do campo é texto que precisa ser lido: na letra do texto, sem maiúsculas espaçadas
+   (SPEC 0.23, seção 1.4). */
 .formulario label {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--tinta-suave);
+    font-family: var(--serifada);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--tinta);
     margin-top: 0.75rem;
 }
 
+/* 16 px no campo: abaixo disso, o Safari do iPhone dá zoom ao tocar nele. */
 .formulario input {
     font-family: var(--mono);
-    font-size: 0.95rem;
+    font-size: 1rem;
     padding: 0.6rem 0.7rem;
     border: 1px solid var(--fio-forte);
     background: var(--papel);
     color: var(--tinta);
+}
+
+.formulario input:not([type="radio"], [type="checkbox"]) {
+    min-height: 3rem;
 }
 
 .formulario input:focus-visible {
@@ -1052,11 +1083,25 @@ code,
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 0.25rem 1.25rem;
     padding: 0;
     margin: 0 0 1.25rem;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.875rem;
+}
+
+.rodape li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+}
+
+@media (max-width: 40rem) {
+    .rodape ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 1rem;
+    }
 }
 
 /* ---------- texto corrido das páginas internas ---------- */
@@ -1114,7 +1159,7 @@ code,
 
 .ficha dt {
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -1175,7 +1220,7 @@ code,
 
 .tabela-rolavel th {
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -1365,7 +1410,7 @@ code,
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
 }
 
 .tentativas td {
@@ -1409,7 +1454,7 @@ label {
 
 .verificador textarea {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: 0.85rem;
+    font-size: 1rem;
     word-break: break-all;
 }
 
@@ -1512,9 +1557,14 @@ label {
     flex-direction: column;
     gap: 0.6rem;
     min-width: 11rem;
-    padding: 0.85rem 1rem;
+    padding: 0.4rem 1rem;
     background: var(--papel);
     border: 1px solid var(--fio-forte);
+}
+
+.navegacao .submenu-itens {
+    /* Cada link já tem 44 px de altura. */
+    gap: 0;
 }
 
 @media (max-width: 44rem) {
@@ -1560,7 +1610,7 @@ label {
 
 kbd {
     font-family: var(--mono);
-    font-size: 0.85em;
+    font-size: max(0.85em, 0.8125rem);
     padding: 0.05em 0.4em;
     border: 1px solid var(--fio-forte);
     border-bottom-width: 2px;
@@ -1589,7 +1639,7 @@ form.enviando button {
     margin-left: 0.5rem;
     padding: 0.1rem 0.5rem;
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     color: var(--tinta-suave);
     background: transparent;
     border: 1px solid var(--fio-forte);
@@ -1619,11 +1669,15 @@ form.enviando button {
 .formulario textarea,
 .formulario select {
     font-family: var(--mono);
-    font-size: 0.95rem;
+    font-size: 1rem;
     padding: 0.6rem 0.7rem;
     border: 1px solid var(--fio-forte);
     background: var(--papel);
     color: var(--tinta);
+}
+
+.formulario select {
+    min-height: 3rem;
 }
 
 .formulario fieldset {
@@ -1634,30 +1688,49 @@ form.enviando button {
     gap: 0.6rem;
 }
 
+/* Na leitura e no pedido, a legenda é a própria pergunta: o texto mais importante da tela, e
+   não o menor (SPEC 0.23, seção 1.4). */
 .formulario legend {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--tinta-suave);
+    font-family: var(--serifada);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--tinta);
     padding: 0 0.35rem;
 }
 
+/* Cada opção inteira é o alvo de toque, com pelo menos 44 px de altura. */
 .formulario .opcao {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.6rem;
     align-items: start;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--fio);
+    cursor: pointer;
     font-family: var(--serifada);
-    font-size: 0.98rem;
+    font-size: 1rem;
+    font-weight: normal;
     letter-spacing: normal;
     text-transform: none;
     color: var(--tinta);
     margin: 0;
 }
 
+.formulario .opcao:hover {
+    border-color: var(--fio-forte);
+}
+
+.formulario .opcao:has(input:checked) {
+    border-color: var(--verdete);
+    background: color-mix(in srgb, var(--verdete) 7%, transparent);
+}
+
 .formulario .opcao input {
     margin-top: 0.3rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--verdete);
 }
 
 .formulario .opcao small {
@@ -1698,7 +1771,7 @@ form.enviando button {
 
 .perfil li strong {
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.06em;
 }
 
@@ -1756,7 +1829,7 @@ form.enviando button {
 
 .contagens dt {
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.8125rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--tinta-suave);
@@ -1833,7 +1906,7 @@ form.enviando button {
 .pedidos .prazo {
     margin: 0;
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     color: var(--tinta-suave);
 }
 
@@ -1863,14 +1936,14 @@ form.enviando button {
     white-space: pre-wrap;
     word-break: break-word;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     border: 1px solid var(--fio);
     padding: 1rem;
 }
 
 .hash {
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     word-break: break-all;
 }
 
@@ -1886,4 +1959,210 @@ form.enviando button {
         grid-template-columns: 1fr;
         gap: 0.2rem;
     }
+}
+
+/* ---------- navegação no celular (SPEC 0.23, seção 1.4, regra 4) ----------
+ * Até 48rem, a navegação de sempre sai de cena, e o mesmo conjunto de links fica atrás de um
+ * botão Menu: um <details>, sem script, como o submenu Biblioteca. Entrar, ou Painel, fica à
+ * vista, fora do menu. Com display: none, só uma das duas navegações existe de cada vez, também
+ * para o leitor de tela. */
+
+.menu-movel,
+.entrar-movel {
+    display: none;
+}
+
+@media (max-width: 48rem) {
+    .topo {
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .marcas {
+        gap: 0.35rem 0.75rem;
+    }
+
+    .topo > .navegacao {
+        display: none;
+    }
+
+    .menu-movel {
+        display: block;
+    }
+
+    .entrar-movel {
+        margin-left: auto;
+    }
+
+    .entrar-movel,
+    .menu-movel > summary {
+        display: inline-flex;
+        align-items: center;
+        min-height: 3rem;
+        padding: 0 0.75rem;
+        border: 1px solid var(--fio-forte);
+        background: var(--papel);
+        color: var(--tinta);
+        font-family: var(--mono);
+        font-size: 1rem;
+        text-decoration: none;
+    }
+
+    .menu-movel > summary {
+        gap: 0.35em;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .menu-movel > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .menu-movel > summary::after {
+        content: "▾";
+    }
+
+    .menu-movel[open] > summary::after {
+        content: "▴";
+    }
+
+    .menu-movel > summary:focus-visible,
+    .entrar-movel:focus-visible {
+        outline: 2px solid var(--verdete);
+        outline-offset: 2px;
+    }
+
+    .entrar-movel[aria-current="page"] {
+        border-color: var(--verdete);
+        color: var(--verdete);
+    }
+
+    .navegacao-movel {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 0;
+        padding: 0.25rem 0 0.75rem;
+        background: var(--papel);
+        border-bottom: 1px solid var(--fio-forte);
+        font-size: 1rem;
+    }
+
+    .navegacao-movel a,
+    .navegacao-movel .submenu > summary {
+        display: flex;
+        min-height: 3rem;
+        border-bottom: 1px solid var(--fio);
+    }
+
+    .navegacao-movel .entrar {
+        display: none;
+    }
+
+    .navegacao-movel .submenu-itens {
+        position: static;
+        min-width: 0;
+        padding: 0 0 0 1rem;
+        background: none;
+        border: none;
+    }
+}
+
+/* ---------- detalhe técnico (SPEC 0.23, seção 1.4, regra 1) ----------
+ * A terceira camada: o vocabulário de método a um toque, num <details> sem script, para quem
+ * quer conferir. A camada simples, em volta, nunca diz o que este detalhe não sustenta. */
+
+.detalhe-tecnico {
+    margin-top: 1rem;
+    max-width: 40rem;
+}
+
+.detalhe-tecnico > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    min-height: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    color: var(--tinta-suave);
+    text-decoration: underline;
+    text-decoration-color: var(--verdete);
+    text-underline-offset: 0.22em;
+}
+
+.detalhe-tecnico > summary::-webkit-details-marker {
+    display: none;
+}
+
+.detalhe-tecnico > summary::after {
+    content: "▾";
+}
+
+.detalhe-tecnico[open] > summary::after {
+    content: "▴";
+}
+
+.detalhe-tecnico > summary:hover {
+    color: var(--verdete);
+}
+
+.detalhe-tecnico > summary:focus-visible {
+    outline: 2px solid var(--verdete);
+    outline-offset: 3px;
+}
+
+.detalhe-tecnico > p,
+.detalhe-tecnico dd {
+    color: var(--tinta-suave);
+}
+
+.detalhe-tecnico > p {
+    font-size: 0.95rem;
+    margin: 0.5rem 0 0;
+}
+
+/* ---------- apoio a quem está de luto (SPEC 0.23, seção 1.4, regra 5) ---------- */
+
+.apoio a[href^="tel:"] {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* O prazo do pedido, por extenso e em destaque, acima do código (SPEC 0.23, seção 1.4, regra 3). */
+.pedidos .prazo-claro {
+    margin: 0 0 0.15rem;
+    font-weight: 600;
+}
+
+/* ---------- notas das leituras do médium, por extenso (SPEC 0.23, seção 1.4) ---------- */
+
+.notas {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.notas > li {
+    border: 1px solid var(--fio-forte);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+}
+
+.notas h4 {
+    margin: 0 0 0.25rem;
+    font-size: 1.15rem;
+}
+
+.notas p {
+    margin: 0.35rem 0 0;
 }

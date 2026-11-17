@@ -4,8 +4,7 @@ import io.github.rogeriocisi.airlab.notification.Mailer;
 import io.github.rogeriocisi.airlab.participant.AccountService;
 import io.github.rogeriocisi.airlab.structured.ReadingRequestSent;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyReported;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import io.github.rogeriocisi.airlab.support.BrasiliaTime;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,12 +19,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
  * undid.
  *
  * <p>No first name in the message, and no pair code: e-mail is not a blind channel, and the names
- * are one sign-in away, on the panel.
+ * are one sign-in away, on the panel. The deadline is written out in Brasília time (SPEC 0.23,
+ * section 1.4, rule 3): the medium reads it on a phone, not beside the audit trail.
  */
 @Component
 class MediumRequestMail {
-
-    private static final DateTimeFormatter DUE = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneOffset.UTC);
 
     private final Mailer mailer;
     private final AccountService accounts;
@@ -50,13 +48,14 @@ class MediumRequestMail {
 
                 Há um pedido de leitura para você no Crivo: dois primeiros nomes e o questionário em branco.
 
-                Prazo para enviar as duas leituras: %s (UTC).
+                Envie as duas leituras até %s (horário de Brasília).
 
                 Entre no seu painel para ver os nomes e responder:
                 %s/painel/medium
 
-                Este e-mail não traz os nomes de propósito: e-mail não é um canal cego.
-                """.formatted(DUE.format(event.dueAt()), baseUrl)));
+                Por segurança, este e-mail não traz os nomes: eles só aparecem no seu painel, depois que
+                você entra.
+                """.formatted(BrasiliaTime.deadline(event.dueAt()), baseUrl)));
     }
 
     /**

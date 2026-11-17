@@ -25,8 +25,9 @@
         "Não recebi", se nada veio. "Não recebi" não tem penalidade: só não conta como acerto.
       </p>
       <p class="nota">
-        Nada é gravado enquanto você preenche. Antes de travar, você revê tudo. Prazo do pedido:
-        <time th:text="${@datas.utc(pedido.dueAt)}">2026-11-27 10:00</time> (UTC).
+        Nada é gravado enquanto você preenche. Antes de travar, você revê tudo. Prazo: responda até
+        <time th:datetime="${pedido.dueAt}" th:text="${@datas.prazo(pedido.dueAt)}">sexta-feira, 27 de novembro, às 7h</time>
+        (horário de Brasília).
       </p>
       <p class="nota" th:text="'Questionário, versão ' + ${versao}">Questionário, versão v1</p>
     </div>

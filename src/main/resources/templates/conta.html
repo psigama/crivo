@@ -25,12 +25,12 @@
         <div><dt>Perfil</dt><dd th:text="${conta.profile.label()} + ' (fixo)'">Consulente</dd></div>
         <div><dt>Código na pesquisa</dt><dd><code th:text="${conta.code}">CON-0000</code></dd></div>
         <div><dt>Termo aceito</dt><dd th:text="${conta.termVersion}">conta-v2</dd></div>
-        <div><dt>Conta criada em</dt><dd th:text="${@datas.dia(conta.createdAt)}">13/11/2026</dd></div>
-        <div><dt>E-mail confirmado em</dt><dd th:text="${@datas.dia(conta.emailConfirmedAt)}">13/11/2026</dd></div>
+        <div><dt>Conta criada em</dt><dd th:text="${@datas.data(conta.createdAt)}">13 de novembro de 2026</dd></div>
+        <div><dt>E-mail confirmado em</dt><dd th:text="${@datas.data(conta.emailConfirmedAt)}">13 de novembro de 2026</dd></div>
       </dl>
       <p class="nota">
-        Os dados da pesquisa usam só o código acima. Seu nome e seu e-mail ficam cifrados, em um
-        esquema separado do banco.
+        Os dados da pesquisa usam só o código acima, sem o seu nome. Seu nome e seu e-mail ficam
+        guardados com criptografia, numa parte separada do banco de dados.
       </p>
 
       <p class="acoes">
@@ -44,8 +44,8 @@
       <h2>Excluir a conta</h2>
       <p>
         Você pode sair a qualquer momento, sem justificativa. Nome, e-mail e senha são apagados na
-        hora; o código pseudônimo permanece, marcado como encerrado, para que a trilha de auditoria
-        continue íntegra. Não há como desfazer.
+        hora. Fica só o código, sem o seu nome, marcado como encerrado, para que o registro público do
+        estudo continue completo. Não há como desfazer.
       </p>
       <p class="erro" th:if="${param.confirmeExclusao}" role="alert">
         Marque a caixa de confirmação para excluir a conta.

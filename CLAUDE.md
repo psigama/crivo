@@ -10,6 +10,7 @@ Instruções para o Claude Code neste repositório.
 4. `docs/VISION.md`: contexto, objetivos e não objetivos.
 5. `docs/REFERENCES.md`: fundamentação científica. Ao mudar uma regra do protocolo, verifique se ela contraria alguma decisão mapeada ali.
 6. `docs/VISION-AXION.md`: visão do P5 (Áxion), em concepção, com o P6 (chave póstuma) como trabalho futuro.
+7. `docs/UX.md`: plano de linguagem, camadas e celular para os dois públicos, pesquisadores e participantes (SPEC, seção 1.4). Leia antes de mexer em qualquer texto ou tela.
 
 ## Regras de trabalho
 
@@ -29,6 +30,11 @@ Instruções para o Claude Code neste repositório.
   - não repete acaso, limites, etapas nem questionário: aponta para a página do protocolo.
 
   Nos templates, link para o site leva `${site}` e link para a aplicação leva `${aplicacao}`; nos templates de `site/`, os links entre páginas do site ficam relativos. Não ponha no site um link para rota nova da aplicação antes do deploy que a cria. No perfil `local`, a aplicação serve tudo; com `AIRLAB_SITE_URL`, as rotas do site respondem com 301.
+- **Linguagem, celular e acessibilidade (SPEC 0.23, seção 1.4; plano em `docs/UX.md`)**:
+  - Nas telas de participante (`/consulente`, contas, entrada, painéis do consulente e do médium, pedido, leitura e devolutiva), o vocabulário de método fica num `<details class="detalhe-tecnico">`: "lacre digital", "registro público", "pessoa de comparação", "abertura dos resultados", e o `d` dito por extenso.
+  - Prazos e datas para participantes saem por extenso no horário de Brasília (`support.BrasiliaTime`; nos templates, `@datas.prazo`, `@datas.momento` e `@datas.data`), também nos e-mails. `@datas.utc` fica para as páginas de auditoria e de administração, que dizem "UTC".
+  - No CSS, nenhum texto abaixo de 0,8125rem (13 px); campos com 1rem e 3rem de altura; alvos de toque com pelo menos 2,75rem. No celular (até 48rem), a navegação fica atrás do Menu do fragmento `topo`, um `<details>` sem script.
+  - Toda página declara `og:image` pelo fragmento `social`. A imagem está em `static/img/compartilhar.png` e na lista `StaticSite.ASSETS`.
 - **Um papel por pessoa em cada estudo (E10, trava 2)**: recusado na camada de domínio e registrado na trilha.
 - **Contas do P1 (E13)**: perfil fixo (consulente ou médium), imposto por *trigger*; nenhum caminho do site cria administrador, que vem da configuração do servidor. O principal da sessão é o código pseudônimo, nunca o e-mail. Avisos ao administrador carregam só tipo, código e hora. No P1, nenhuma nota existe antes do desmascaramento: a conferência só roda depois dele. **Nenhum código de médium vai à trilha** em envio, liberação de nome ou leitura antes do desmascaramento, e o primeiro nome só sai de `participant` para o médium com liberação registrada. Os testes do P1 dividem um banco persistente: use um estrato próprio por teste e o `structured.P1Fixture`, e nomes de conta únicos (`TestNames.unique`), porque nomes iguais viram sinalização de contas ligadas. O que precisa de um estudo que complete (desmascaramento) roda em banco próprio, recriado a cada execução — ver `web.P1UnblindingTest`.
 - **Análise vedada**: nunca multiplicar as probabilidades individuais dos itens como se fossem independentes (Hyslop, 1919). Para dados de acurácia de leitura, a análise do campo é o teste de permutação de Pratt e Birge (`analysis.PermutationTest`).
@@ -70,6 +76,7 @@ Já implementado (ver `docs/PLAN.md`, seção 2, para a tabela completa):
 15. SPEC 0.17: protocolos renumerados (P1-automático, P2-supervisionado, P3-precognição, P4-visão-remota); `/protocolos` lista os quatro e `/protocolo/P{X}` é a página de cada um; os testes de ESP voltam ao site do Crivo; rotas `/testes/...` redirecionadas com 301; questionário em vigor publicado na página do P1; o rodapé leva à PsiGama, que mantém o Crivo
 16. SPEC 0.21: site e aplicação separados. As páginas editoriais formam um site estático no GitHub Pages, gerado por `airlab site` e publicado pelo `pages.yml`. A aplicação vai para `app.crivo.psigama.com`. A página inicial curta e as páginas Participar, Por quê, Garantias e Auditar têm o menu novo, com Biblioteca. As oito etapas foram para `/protocolo/P1`, e o estado da trilha, para `/verificar`. A virada de DNS está em `docs/DEPLOY.md`, seção 6
 17. SPEC 0.22: pacote de verificação do P1 (E9), público, sem primeiro nome e sem o sal do pedido. Escrito uma vez no desmascaramento (`V24`), com hash na trilha; a checagem por lista fechada retém a exportação se aparecer qualquer outra coisa; `airlab verificar-pacote` confere o arquivo sem Spring e sem banco, rodando a mesma `StructuredAnalysis` do desmascaramento. O termo de participação é `conta-v2`
+18. SPEC 0.23: linguagem, celular e acessibilidade (seção 1.4), primeira fase do plano em `docs/UX.md`. As telas de participante usam vocabulário de quem participa, com o técnico num detalhe que se abre. Prazos e datas para participantes saem em horário de Brasília por extenso (`support.BrasiliaTime`), e a auditoria continua em UTC. No celular, a navegação fica atrás do Menu. O CSS ganha mínimos de letra e de alvo de toque, `/consulente` e a devolutiva indicam o CVV, toda página tem `og:image`, e `/consulente` termina com uma ação
 
 A fazer, só no P1: as decisões da ancoragem que a SPEC deixa em aberto (questão 8: esperar o carimbo antes do primeiro envio, e a fase 2 com OpenTimestamps); e as questões 9, 11 e 12.
 

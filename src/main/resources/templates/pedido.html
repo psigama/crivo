@@ -26,15 +26,26 @@
 
       <dl class="leituras">
         <div><dt>Situação</dt><dd th:text="${situacao.state.label()}">Travado</dd></div>
-        <div><dt>Travado em</dt><dd th:text="${@datas.utc(pedido.lockedAt)} + ' UTC'">2026-11-13 10:00 UTC</dd></div>
+        <div><dt>Travado em</dt><dd><time th:datetime="${pedido.lockedAt}"
+          th:text="${@datas.momento(pedido.lockedAt)}">13 de novembro de 2026, às 7h</time> (horário de Brasília)</dd></div>
         <div><dt>Questionário</dt><dd th:text="${pedido.questionnaireVersion}">v1</dd></div>
-        <div class="largo"><dt>Compromisso publicado</dt><dd><code class="hash" th:text="${pedido.commitment}">hash</code></dd></div>
       </dl>
       <p class="nota">
-        O compromisso está na trilha pública de auditoria desde o momento em que o pedido travou. No
-        fim do estudo, o sal secreto que entrou no cálculo é revelado, e qualquer pessoa pode refazer
-        a conta e conferir que as respostas abaixo são as mesmas de hoje.
+        Suas respostas estão lacradas: ninguém pode mudá-las. No fim do estudo, qualquer pessoa pode
+        conferir que elas são as mesmas de hoje.
       </p>
+      <details class="detalhe-tecnico">
+        <summary>Detalhe técnico</summary>
+        <dl class="leituras">
+          <div class="largo"><dt>Compromisso publicado</dt><dd><code class="hash" th:text="${pedido.commitment}">hash</code></dd></div>
+          <div><dt>Travado em, na trilha (UTC)</dt><dd th:text="${@datas.utc(pedido.lockedAt)}">2026-11-13 10:00</dd></div>
+        </dl>
+        <p>
+          O compromisso está na trilha pública de auditoria desde o momento em que o pedido travou. No
+          fim do estudo, o sal secreto que entrou no cálculo é revelado, e qualquer pessoa pode refazer
+          a conta e conferir que as respostas abaixo são as mesmas de hoje.
+        </p>
+      </details>
     </div>
   </section>
 

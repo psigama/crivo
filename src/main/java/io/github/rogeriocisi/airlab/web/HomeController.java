@@ -30,13 +30,15 @@ class HomeController {
     private final AuditTrail auditTrail;
     private final StudyService studies;
     private final Environment environment;
+    private final SignUpGate gate;
     private final String siteUrl;
 
-    HomeController(AuditTrail auditTrail, StudyService studies, Environment environment,
+    HomeController(AuditTrail auditTrail, StudyService studies, Environment environment, SignUpGate gate,
                    @Value("${airlab.site-url:}") String siteUrl) {
         this.auditTrail = auditTrail;
         this.studies = studies;
         this.environment = environment;
+        this.gate = gate;
         this.siteUrl = SitePages.base(siteUrl, "airlab.site-url (AIRLAB_SITE_URL)");
     }
 
@@ -71,9 +73,16 @@ class HomeController {
      * their rights in plain words, not the argument for the platform (Constitution P6). It stays
      * in the application, not on the static site: what participants are told about the procedure
      * and their rights must not change with a push during a study (SPEC 1.3, rule 2).
+     *
+     * <p>It ends with what to do next, by the state of the sign-up (SPEC 0.23, section 1.4, rule 7):
+     * create the account when it is open, or know that it waits for the ethics committee and talk to
+     * a person meanwhile. The same three facts as the sign-up page, from the same gate.
      */
     @GetMapping("/consulente")
-    String participant() {
+    String participant(Model model) {
+        model.addAttribute("inscricaoAberta", gate.open());
+        model.addAttribute("aguardaCep", gate.awaitingEthicsApproval());
+        model.addAttribute("contato", gate.contactEmail().orElse(null));
         return "consulente";
     }
 
