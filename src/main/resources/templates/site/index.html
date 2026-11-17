@@ -62,10 +62,11 @@
           fica no circuito: do cadastro ao aviso de conclusão, tudo é automático.
         </p>
         <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
-        <p class="acoes">
-          <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">Como funciona o P1</a>
+        <div class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">Como funciona</a>
           <a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
-        </p>
+          <a class="botao botao-vazio" href="/artigo/">Ler o artigo técnico</a>
+        </div>
       </div>
     </section>
 
