@@ -205,7 +205,9 @@ code,
 /* A marca do Crivo e, ao lado, quem o mantém: a PsiGama, com o logo ψγ. */
 .marcas {
     display: flex;
-    align-items: baseline;
+    /* Centro, não linha de base: o primeiro item da PsiGama é o logo, e a linha de base dele
+       seria a borda de baixo do desenho, o que levantava o conjunto em relação a "Crivo". */
+    align-items: center;
     flex-wrap: wrap;
     gap: 0.35rem 1rem;
 }
