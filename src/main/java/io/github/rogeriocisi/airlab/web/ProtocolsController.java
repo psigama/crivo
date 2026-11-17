@@ -46,4 +46,27 @@ class ProtocolsController {
         }
         return "protocolo";
     }
+
+    /**
+     * The one technical page for researchers (SPEC 0.24, section 1.4, rule 11). The chance level and
+     * the limits of the P1 come from the catalog, and the questionnaire counts from the questionnaire
+     * in force, so the page never describes a version other than the one running.
+     */
+    @GetMapping("/pesquisa")
+    String research(Model model) {
+        researchModel(model);
+        return "pesquisa";
+    }
+
+    /** The same page in English. The catalog states the limits in Portuguese, quoted as they are. */
+    @GetMapping("/pesquisa/en")
+    String researchInEnglish(Model model) {
+        researchModel(model);
+        return "pesquisa-en";
+    }
+
+    private static void researchModel(Model model) {
+        model.addAttribute("protocolo", ProtocolCatalog.structuredReading());
+        model.addAttribute("questionario", Questionnaires.current());
+    }
 }

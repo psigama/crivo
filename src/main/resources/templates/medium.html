@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Para médiuns — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Para médiuns — Crivo', 'Para quem é médium e quer contribuir com o estudo: o que acontece, passo a passo, o que é pedido e quais são os seus direitos.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/*
+  Página do médium (SPEC 0.24, seção 1.4, regra 9): o espelho do /consulente. Fica na aplicação pelo
+  mesmo motivo (seção 1.3, regra 2): descreve o procedimento do P1 e os direitos de quem participa.
+*/-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">Para médiuns</p>
+      <h1 class="aparece">Você é médium e quer contribuir. O que acontece.</h1>
+      <p class="chamada aparece">
+        Esta página é para você, que pensa em participar como <strong>médium</strong>. Ela explica o
+        que será pedido, por que cada condição existe e o que você recebe no fim.
+      </p>
+      <p class="tese aparece">
+        As condições do estudo existem para <strong>proteger a sua honestidade</strong>. Você não sabe
+        quem pediu, não vê ninguém e só recebe um primeiro nome. Por isso, se houver acerto, ninguém
+        vai poder dizer que foi truque, pesquisa na internet ou leitura das reações de alguém.
+      </p>
+      <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Passo a passo</p>
+      <h2>O que vai acontecer, na ordem</h2>
+      <ol class="corrente">
+        <li>
+          <h3>Conta e consentimento</h3>
+          <p>
+            Você cria uma conta com o perfil de médium e confirma o e-mail. O termo diz quais dados são
+            guardados e por quanto tempo.
+          </p>
+          <span class="selo">o perfil é fixo: quem é médium não pode ser consulente, em estudo nenhum</span>
+        </li>
+        <li>
+          <h3>Um pedido chega para você</h3>
+          <p>
+            Quando o sorteio escolhe você, chega um e-mail com o aviso e o prazo, sem nenhum nome. Os nomes
+            só aparecem no seu painel, depois que você entra.
+          </p>
+        </li>
+        <li>
+          <h3>Dois primeiros nomes</h3>
+          <p>
+            Cada pedido traz os primeiros nomes de duas pessoas que já faleceram, em ordem sorteada. Os
+            dois vêm de dois consulentes diferentes, com pessoas de perfil parecido, e cada nome serve de
+            comparação para o outro. Você não sabe quem pediu nenhum dos dois.
+          </p>
+        </li>
+        <li>
+          <h3>Você responde para cada nome</h3>
+          <p>
+            Para cada nome, você responde ao mesmo questionário de múltipla escolha que o consulente
+            respondeu: como foi a morte, onde a pessoa viveu, o temperamento, alguns hábitos. Em cada
+            pergunta, escolha uma opção ou "Não recebi".
+          </p>
+        </li>
+        <li>
+          <h3>Ao travar, a leitura fica lacrada</h3>
+          <p>
+            Antes de enviar, você revê tudo. Depois de travada, a leitura não muda mais, nem por você,
+            nem pela equipe.
+          </p>
+          <span class="selo">isso protege o estudo de um ajuste depois do fato, e protege você da suspeita de ter ajustado</span>
+        </li>
+        <li>
+          <h3>Ninguém vê nota antes do fim</h3>
+          <p>
+            Enquanto o estudo coleta, não existe nota nenhuma: nem para você, nem para o consulente, nem
+            para quem administra a plataforma. Quando o número de pares combinado no início se completa,
+            o próprio sistema abre os resultados.
+          </p>
+        </li>
+        <li>
+          <h3>Suas notas</h3>
+          <p>
+            No fim, você recebe um e-mail e vê no seu painel quantas respostas de cada leitura
+            coincidiram com as da pessoa certa e quantas com as da pessoa de comparação, além do
+            resultado do estudo inteiro.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Como responder</p>
+      <h2>O que se pede de você</h2>
+      <div class="definicao">
+        <p>
+          <strong>"Não recebi" é uma resposta legítima, e não tem penalidade.</strong> Só não conta como
+          acerto. Um palpite dado só para preencher entra na conta como se fosse informação.
+        </p>
+      </div>
+      <h3>Responda ao que vier para cada nome</h3>
+      <p>
+        Responda do jeito que você trabalha, mas dentro das opções do questionário. Se nada vier para
+        uma pergunta, marque "Não recebi".
+      </p>
+      <h3>Respeite o prazo</h3>
+      <p>
+        Cada pedido tem um prazo, combinado no início do estudo; o normal é de 14 dias. Se o prazo
+        vencer, o pedido vai para outro médium sorteado, e as leituras que você já tinha travado nele
+        ficam fora da análise.
+      </p>
+      <h3>Não procure saber de quem é o pedido</h3>
+      <p>
+        Não pergunte a ninguém quem fez o pedido nem converse sobre os nomes que recebeu. O estudo só vale
+        alguma coisa se você não tiver como saber de quem é cada nome por outro caminho.
+      </p>
+      <h3>Um limite de pedidos</h3>
+      <p>
+        Cada médium recebe no máximo o número de pares combinado no início do estudo; o normal é 10.
+        Assim, o resultado não depende de uma pessoa só.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Seus direitos</p>
+      <h2>O que é garantido a você</h2>
+      <div class="garantias">
+        <div class="garantia">
+          <h3>Sair quando quiser</h3>
+          <p>
+            A qualquer momento, sem justificar. Se você excluir a conta com um pedido em aberto, ele vai
+            para outro médium, e os seus dados identificáveis são apagados.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Seu nome fica fora</h3>
+          <p>
+            Nos dados da pesquisa você é um código. Seu nome e seu e-mail ficam guardados com
+            criptografia, numa parte separada do banco de dados. Antes do fim do estudo, nem o seu código
+            aparece no registro público.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Ninguém é exposto</h3>
+          <p>
+            O relatório e o pacote de verificação, publicados no fim, usam só códigos. A plataforma não
+            publica nomes, não mantém lista pública de médiuns e não é vitrine de ninguém.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Nenhuma máquina julga</h3>
+          <p>
+            A conferência compara as opções marcadas, por uma regra publicada que qualquer pessoa pode
+            refazer. Nenhum programa de inteligência artificial lê ou dá nota a nada.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Respeito à sua prática</h3>
+          <p>
+            Na sua casa espírita ou no seu terreiro, isso pode ter outro nome. Aqui, para não tomar
+            partido, chamamos de leitura. A plataforma não interpreta nada do ponto de vista de nenhuma
+            doutrina.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Honestidade sobre o resultado</p>
+      <h2>O que isto não vai lhe dar</h2>
+      <p>
+        <strong>Não é um certificado de mediunidade, nem o contrário.</strong> O resultado é do
+        <strong>estudo</strong>, calculado sobre dezenas de pares. Uma leitura sozinha diz pouco: respostas
+        comuns, como "morreu do coração", coincidem com muita gente, e o acaso explica boa parte das
+        coincidências de qualquer leitura.
+      </p>
+      <p>
+        Um resultado positivo no conjunto também não decide de onde veio a informação. E o resultado mais
+        provável, pelo que a literatura mostra até hoje, é modesto ou nulo. Ainda assim, um estudo bem
+        feito, qualquer que seja o resultado, vale mais do que mil relatos que ninguém pode conferir.
+      </p>
+      <p class="nota nota-espacada">
+        Para entender o protocolo por inteiro, veja a <a href="/protocolo/P1">página do protocolo</a>,
+        as <a href="/perguntas">perguntas frequentes</a> e o
+        <a th:href="${site} + '/sobre'">vocabulário</a>. Esta página pode ser impressa e entregue em papel.
+      </p>
+    </div>
+  </section>
+
+  <section id="o-que-fazer">
+    <div class="faixa">
+      <p class="rotulo">E agora</p>
+      <h2>O que fazer agora</h2>
+      <th:block th:if="${inscricaoAberta}">
+        <p>
+          Se quiser participar, crie a sua conta com o perfil de médium. Você pode parar quando quiser.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" href="/conta/criar">Criar minha conta</a>
+          <a class="botao botao-vazio" href="/login">Já tenho conta</a>
+        </p>
+      </th:block>
+      <th:block th:unless="${inscricaoAberta}">
+        <p th:if="${aguardaCep}">
+          <strong>As inscrições ainda não estão abertas.</strong> Elas abrem depois que o estudo for
+          aprovado pelo Comitê de Ética em Pesquisa (CEP), que confere se ele respeita quem participa.
+        </p>
+        <p th:unless="${aguardaCep}">
+          <strong>As inscrições estão fechadas nesta instalação.</strong>
+        </p>
+        <p class="acoes">
+          <a class="botao botao-vazio" href="/protocolo/P1">Ver como o estudo funciona</a>
+        </p>
+      </th:block>
+      <p th:if="${contato}">
+        Ficou alguma dúvida? Escreva para
+        <a th:href="'mailto:' + ${contato}" th:text="${contato}">contato</a>. Quem responde é uma pessoa.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -98,10 +98,11 @@ class StaticSiteTest {
         Path site = site();
         assertThat(read(site.resolve("historia.html")))
                 .contains("href=\"/historia\" aria-current=\"page\"")
-                .contains("class=\"submenu atual\"");
+                .contains("class=\"submenu biblioteca atual\"");
         assertThat(read(site.resolve("garantias.html")))
                 .contains("href=\"/garantias\" aria-current=\"page\"")
-                .doesNotContain("class=\"submenu atual\"")
+                .contains("class=\"submenu pesquisa atual\"")
+                .doesNotContain("class=\"submenu biblioteca atual\"")
                 .doesNotContain("href=\"/historia\" aria-current=\"page\"");
     }
 
@@ -112,7 +113,7 @@ class StaticSiteTest {
         assertThat(SitePages.byPath("/artigo/")).map(SitePages.Page::file).contains("artigo/index.html");
         assertThat(read(site.resolve("artigo/index.html")))
                 .contains("href=\"/artigo/\" aria-current=\"page\"")
-                .contains("class=\"submenu atual\"")
+                .contains("class=\"submenu biblioteca atual\"")
                 .contains("<h2>Referências</h2>");
         assertThat(read(site.resolve("index.html"))).contains("href=\"/artigo/\"");
     }

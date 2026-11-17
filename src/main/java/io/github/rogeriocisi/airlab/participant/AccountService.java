@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface AccountService {
 
     /** Version of the account consent term currently in force (E10, lock 6). */
-    String CURRENT_TERM_VERSION = "conta-v2";
+    String CURRENT_TERM_VERSION = "conta-v3";
 
     int MINIMUM_PASSWORD_LENGTH = 10;
 

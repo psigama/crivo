@@ -80,10 +80,36 @@ class HomeController {
      */
     @GetMapping("/consulente")
     String participant(Model model) {
+        signUpState(model);
+        return "consulente";
+    }
+
+    /**
+     * The medium's mirror of {@code /consulente} (SPEC 0.24, section 1.4, rule 9): the procedure, why
+     * the conditions protect the medium's honesty, the rights, and what it is not. In the application
+     * for the same reason as {@code /consulente} (SPEC 1.3, rule 2).
+     */
+    @GetMapping("/medium")
+    String medium(Model model) {
+        signUpState(model);
+        return "medium";
+    }
+
+    /**
+     * Frequently asked questions in plain words (SPEC 0.24, section 1.4, rule 10). In the application,
+     * because the answers describe the procedure; one of them says whether sign-up is open.
+     */
+    @GetMapping("/perguntas")
+    String questions(Model model) {
+        signUpState(model);
+        return "perguntas";
+    }
+
+    /** The same three facts as the sign-up page, from the same gate. */
+    private void signUpState(Model model) {
         model.addAttribute("inscricaoAberta", gate.open());
         model.addAttribute("aguardaCep", gate.awaitingEthicsApproval());
         model.addAttribute("contato", gate.contactEmail().orElse(null));
-        return "consulente";
     }
 
     /**

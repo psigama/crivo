@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Para pesquisadores — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Para pesquisadores — Crivo', 'O desenho do P1 numa página: cegamento, sorteio verificável, pré-registro congelado, análise declarada, regra de parada, trilha carimbada, pacote de verificação e limites.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/*
+  A página técnica única (SPEC 0.24, seção 1.4, regra 11). O acaso e os limites do P1 vêm do catálogo
+  (seção 1.1, regra 2), e as contagens do questionário, do questionário em vigor.
+*/-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">Para pesquisadores · <a href="/pesquisa/en" hreflang="en" lang="en">English</a></p>
+      <h1 class="aparece">Um protocolo que se defende sozinho</h1>
+      <p class="chamada aparece">
+        O desenho do experimento de mediunidade do Crivo, o P1-automático, numa página: o que é cego, o que
+        é sorteado, o que fica congelado antes do primeiro dado, qual análise roda e como conferir tudo
+        sem pedir permissão a ninguém.
+      </p>
+      <div class="ressalva">
+        <p>
+          <strong>Estado.</strong> O P1 está implementado de ponta a ponta, mas ainda não rodou com
+          participantes reais. As inscrições abrem depois da aprovação de um comitê de ética em pesquisa.
+          A especificação completa está na <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>,
+          épico E13.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Desenho</p>
+      <h2>Leitura estruturada automatizada, em pares</h2>
+      <ul>
+        <li>O consulente informa o primeiro nome da pessoa falecida e responde a um questionário fechado
+          sobre ela. As respostas travam com um compromisso salgado publicado na trilha, antes de qualquer
+          médium receber o pedido.</li>
+        <li>Os pedidos travados formam pares dentro do mesmo estrato: gênero, faixa etária e período do
+          falecimento. Cada pedido é o chamariz do outro.</li>
+        <li>Um médium é sorteado para o par, entre os elegíveis em ordem canônica, e recebe só os dois
+          primeiros nomes, em ordem também sorteada. Ele responde ao mesmo questionário para cada nome, e
+          cada leitura trava com o seu próprio compromisso.</li>
+        <li>
+          O questionário em vigor, versão <code th:text="${questionario.version()}">v1</code>, tem
+          <span th:text="${#lists.size(questionario.fields())}">16</span> campos, dos quais
+          <span th:text="${#lists.size(questionario.scoredFields())}">13</span> entram na nota; os demais
+          servem só ao pareamento. "Não sei" e "não recebi" nunca coincidem com nada.
+          <a href="/protocolo/P1#questionario">O questionário, campo a campo</a>.
+        </li>
+        <li>A conferência é igualdade entre opções fechadas, por regra publicada. Para cada par,
+          <code>d</code> é, nas duas leituras, o número de coincidências com o alvo menos o número de
+          coincidências com o chamariz. Ninguém julga texto livre, e nenhum modelo de IA pontua nada.</li>
+        <li>
+          Acerto por acaso:
+          <strong th:text="${protocolo.chanceNumerator()} + ' em ' + ${protocolo.chanceDenominator()}">1 em 2</strong>,
+          na escolha entre o alvo e o chamariz.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Antes do primeiro dado</p>
+      <h2>Pré-registro e sorteio</h2>
+      <ul>
+        <li>O pré-registro é congelado com hash antes do primeiro par: hipóteses, número de pares
+          (<em>N</em>), prazo do médium (14 dias por padrão), teto de pares por médium (10 por padrão),
+          efeito esperado e critérios de inclusão de médiuns, com o questionário inteiro no anexo canônico.
+          Depois de congelado, o banco recusa mudanças; emendas criam nova versão.</li>
+        <li>A semente tem 32 bytes do gerador criptográfico e é expandida por SHA-256 em modo contador.
+          O compromisso publicado no documento congelado é
+          <code>SHA-256(semente || "|" || entrada canônica do estudo)</code>. A semente fica em custódia
+          cifrada e é revelada no desmascaramento; com ela, qualquer pessoa refaz o sorteio de cada médium
+          e de cada ordem de nomes, em qualquer ordem de entrada.</li>
+        <li>Prazo vencido ou médium que sai: o pedido vai a outro médium sorteado, e as leituras travadas
+          do envio vencido ficam fora da análise. As duas regras de exclusão estão no pré-registro.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Análise</p>
+      <h2>Declarada antes, rodada sem escolha</h2>
+      <ul>
+        <li><strong>Regra de parada vinculante.</strong> Quando os <em>N</em> pares ativos têm as duas
+          leituras travadas, o próprio ciclo do servidor encerra a coleta e desmascara. Ninguém escolhe o
+          momento, nem o administrador. Antes disso, nenhuma tela, API ou projeção expõe função dos
+          escores: o progresso é contagem de unidades.</li>
+        <li><strong>Primária:</strong> Wilcoxon exato unilateral sobre os <code>d</code> dos pares (exato
+          até 20 pares com <code>d</code> diferente de zero; acima disso, aproximação normal, e o relatório
+          diz qual foi usado).</li>
+        <li><strong>Secundárias:</strong> binomial exato do sinal de <code>d</code>; e permutação das
+          leituras entre os alvos dentro dos estratos do pareamento (Pratt e Birge), exata enquanto cabe na
+          enumeração e, acima disso, com 100 mil arranjos sorteados da semente revelada.</li>
+        <li>O rótulo "confirmatória" só vale se o pré-registro estava congelado e a amostra é a declarada;
+          fora disso, a análise sai marcada como exploratória, com o motivo. As probabilidades dos itens
+          nunca são multiplicadas como se fossem independentes.</li>
+        <li>O relatório, com hash na trilha, traz o pré-registro, o compromisso e a semente revelada, as três
+          análises, as exclusões, a tabela por par e por médium, e o que o resultado não sustenta.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Integridade</p>
+      <h2>Cegamento e trilha que se conferem por fora</h2>
+      <ul>
+        <li>Cada papel tem projeções próprias: o campo proibido não existe na consulta. Cada regra da
+          matriz de cegamento tem um teste que tenta violá-la (<code>BlindingMatrixTest</code>). Nenhum código
+          de médium entra na trilha antes do desmascaramento.</li>
+        <li>A trilha é <em>append-only</em>, encadeada por SHA-256, com <em>update</em> e
+          <em>delete</em> bloqueados no banco. A cabeça é carimbada pelo FreeTSA (RFC 3161) depois de cada
+          marco e a cada 24 horas se mudou; os tokens estão em <a href="/carimbos">Carimbos de tempo</a>, e
+          <code>airlab verify</code> os reconfere.</li>
+        <li>No desmascaramento, o pacote de verificação de cada estudo, público e sem nomes, permite refazer
+          a trilha, o sorteio, a conferência e a análise; <code>airlab verificar-pacote</code> confere o
+          arquivo sem servidor e sem banco. Estudos e relatórios estão em <a href="/estudos">Estudos</a>, e o
+          estado da trilha, em <a href="/verificar">Verificar</a>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Limites declarados</p>
+      <h2>O que um resultado do P1 não sustenta</h2>
+      <ul>
+        <li th:each="limite : ${protocolo.limits()}" th:text="${limite}">Limite</li>
+      </ul>
+      <p class="nota">
+        Saídos do catálogo de protocolos, que exige de cada protocolo uma lista de limites não vazia. O
+        Crivo não afirma nem nega o fenômeno, e um valor de p é uma afirmação sobre o teste, não sobre a
+        origem da informação.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Para ler e conferir</p>
+      <h2>Fontes, código e como citar</h2>
+      <ul>
+        <li><a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">Especificação (SPEC)</a>,
+          com a matriz de cegamento e o épico E13.</li>
+        <li><a th:href="${site} + '/artigo/'">Artigo técnico</a>, em esboço, e
+          <a th:href="${site} + '/referencias'">referências</a>, inclusive as críticas.</li>
+        <li><a href="https://github.com/rogeriocisi/crivo">Código-fonte</a>, licença MIT, e
+          <a th:href="${site} + '/auditar'">como auditar</a>.</li>
+      </ul>
+      <p>Como citar o software:</p>
+      <pre class="citar">@software{cisi_crivo,
+  author  = {Cisi, Rogerio},
+  title   = {Crivo: plataforma de protocolos cegos para pesquisa de cognição anômala},
+  year    = {2026},
+  url     = {https://github.com/rogeriocisi/crivo},
+  license = {MIT}
+}</pre>
+      <p class="nota">
+        Objeções metodológicas valem tanto quanto código: abra uma
+        <a href="https://github.com/rogeriocisi/crivo/issues">issue</a>.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

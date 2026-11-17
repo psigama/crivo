@@ -37,49 +37,78 @@
       <div class="faixa">
         <p class="rotulo">O que o sistema garante</p>
         <h2>Garantias impostas pelo código, não pela boa vontade</h2>
+        <p>
+          Em poucas palavras: ninguém sabe o que não deve, as regras são lacradas antes de começar,
+          nada muda depois, e todo resultado é publicado, a favor ou contra. Cada garantia abaixo diz
+          isso numa frase, e o detalhe técnico está a um toque.
+        </p>
 
         <div class="garantias">
           <div class="garantia">
             <h3>Cegamento</h3>
-            <p>
+            <p>Ninguém vê o que não deve: o médium não sabe quem pediu, e ninguém vê nota antes do fim.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               Cada papel tem projeções próprias: o campo proibido não existe na consulta, em vez de ser
               escondido na tela. Cada regra tem um teste que tenta violá-la.
-            </p>
+              </p>
+            </details>
           </div>
           <div class="garantia">
             <h3>Sorteio verificável</h3>
-            <p>
+            <p>O sorteio pode ser refeito por qualquer pessoa, e dá sempre o mesmo resultado.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               Semente de 32 bytes do gerador criptográfico, expandida por SHA-256 em modo contador, para
               que o sorteio seja refeito em qualquer máquina e sistema operacional.
-            </p>
+              </p>
+            </details>
           </div>
           <div class="garantia">
             <h3>Pré-registro imutável</h3>
-            <p>
+            <p>As regras são escritas e lacradas antes de começar. Ninguém muda as regras no meio do jogo.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               Depois de congelado, o documento não muda — o banco recusa. Emendas criam nova versão, e
               desvios de execução são registrados à parte, também sem apagamento.
-            </p>
+              </p>
+            </details>
           </div>
           <div class="garantia">
             <h3>Trilha append-only</h3>
-            <p>
+            <p>Cada passo fica num registro público que não aceita borracha, nem do administrador.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               Cada evento carrega o hash do anterior. <em>Update</em> e <em>delete</em> são bloqueados
               por gatilho no banco, inclusive para o administrador.
-            </p>
+              </p>
+            </details>
           </div>
           <div class="garantia">
             <h3>Análise sem escapatória</h3>
-            <p>
+            <p>A conta feita no fim é a que foi combinada no começo. Se não for, isso aparece escrito.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               A análise só recebe o rótulo de confirmatória se o pré-registro estava congelado e a
               amostra é a declarada. Fora disso, sai marcada como exploratória, com o motivo ao lado.
-            </p>
+              </p>
+            </details>
           </div>
           <div class="garantia">
             <h3>Nenhuma IA no julgamento</h3>
-            <p>
+            <p>Nenhuma máquina julga as leituras: as respostas são comparadas por uma regra simples e pública.</p>
+            <details class="detalhe-tecnico">
+              <summary>Detalhe técnico</summary>
+              <p>
               Nenhum modelo avalia leitura nem atribui pontuação. A conferência é uma comparação de
               igualdade entre opções, por uma regra determinística e publicada.
-            </p>
+              </p>
+            </details>
           </div>
         </div>
       </div>
@@ -161,9 +190,9 @@
         </div>
 
         <p class="nota nota-espacada">
-          Vai participar como consulente?
-          <a th:href="${aplicacao} + '/consulente'">Há uma página só sobre isso</a>, com o passo a passo do pedido, o
-          que se pede de você e os seus direitos. Ela pode ser impressa e entregue em papel.
+          Vai participar? Há uma página <a th:href="${aplicacao} + '/consulente'">para consulentes</a> e outra
+          <a th:href="${aplicacao} + '/medium'">para médiuns</a>, com o passo a passo, o que se pede de você e os
+          seus direitos. As duas podem ser impressas e entregues em papel.
         </p>
       </div>
     </section>

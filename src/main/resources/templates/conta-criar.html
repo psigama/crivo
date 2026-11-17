@@ -82,6 +82,27 @@
 
           <fieldset>
             <legend th:text="'Termo de participação · versão ' + ${versaoTermo}">Termo</legend>
+            <!--/*
+              SPEC 0.24, seção 1.4, regra 14: o resumo em seis pontos vem antes do texto completo, que
+              continua igual ao da conta-v2 e à vista. O resumo não diz nada que o texto completo não diga.
+            */-->
+            <p><strong>Em seis pontos</strong></p>
+            <ol class="resumo-termo">
+              <li><strong>O que pedimos:</strong> seu nome e seu e-mail. Se você for consulente, também
+                informações sobre a pessoa que faleceu, que a lei (LGPD) trata como dados sensíveis.</li>
+              <li><strong>O que guardamos:</strong> seu nome e seu e-mail ficam guardados com criptografia,
+                separados dos dados da pesquisa, que usam só um código.</li>
+              <li><strong>Quem vê:</strong> ninguém da equipe lê as suas respostas antes do fim do estudo, e
+                nenhuma inteligência artificial dá nota a nada.</li>
+              <li><strong>O que fica público:</strong> no fim, as respostas e as leituras, só com códigos —
+                sem o seu nome, sem o seu e-mail e sem o primeiro nome da pessoa que faleceu. Depois de
+                publicadas, elas não mudam, nem se você sair.</li>
+              <li><strong>Como sair:</strong> exclua a conta quando quiser, sem explicar por quê. Os dados
+                que identificam você são apagados, e fica só o código.</li>
+              <li><strong>Com quem falar:</strong> uma pessoa responde pelo contato logo abaixo deste
+                formulário.</li>
+            </ol>
+            <p><strong>Texto completo</strong></p>
             <p class="nota">
               Seus dados de cadastro — nome e e-mail — ficam cifrados, num esquema do banco separado dos
               dados da pesquisa, que usam só um código. As informações sobre a pessoa falecida são

@@ -76,20 +76,50 @@
     </details>
   </header>
 
-  <!-- Os links da navegação, uma vez só: o cabeçalho os usa no computador e no Menu do celular. -->
+  <!--/*
+    Os links da navegação, uma vez só: o cabeçalho os usa no computador e no Menu do celular.
+    Desde a SPEC 0.24 (seção 1.4, regra 12) o menu se agrupa por assunto, e o submenu que contém a
+    página atual fica marcado. Cada submenu leva uma classe própria, para os testes saberem qual é.
+  */-->
   <th:block th:fragment="links">
-      <a th:href="${aplicacao} + '/protocolos'"
-        th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
-      <a th:href="${site} + '/participar'"
-        th:attr="aria-current=${secaoAtual == 'participar'} ? 'page' : null">Participar</a>
-      <a th:href="${site} + '/por-que'" th:attr="aria-current=${secaoAtual == 'por-que'} ? 'page' : null">Por quê</a>
-      <a th:href="${site} + '/garantias'"
-        th:attr="aria-current=${secaoAtual == 'garantias'} ? 'page' : null">Garantias</a>
-      <a th:href="${site} + '/auditar'" th:attr="aria-current=${secaoAtual == 'auditar'} ? 'page' : null">Auditar</a>
-      <details class="submenu"
-        th:classappend="${secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre' or secaoAtual == 'artigo'} ? 'atual'">
+      <details class="submenu participar"
+        th:classappend="${secaoAtual == 'participar' or secaoAtual == 'consulente' or secaoAtual == 'medium'} ? 'atual'">
+        <summary>Participar</summary>
+        <div class="submenu-itens">
+          <a th:href="${aplicacao} + '/consulente'"
+            th:attr="aria-current=${secaoAtual == 'consulente'} ? 'page' : null">Para consulentes</a>
+          <a th:href="${aplicacao} + '/medium'"
+            th:attr="aria-current=${secaoAtual == 'medium'} ? 'page' : null">Para médiuns</a>
+          <a th:href="${aplicacao} + '/protocolos#pes'">Testes rápidos</a>
+          <a th:href="${site} + '/participar'"
+            th:attr="aria-current=${secaoAtual == 'participar'} ? 'page' : null">Todas as formas</a>
+        </div>
+      </details>
+      <a th:href="${aplicacao} + '/protocolo/P1'">Como funciona</a>
+      <a th:href="${aplicacao} + '/perguntas'"
+        th:attr="aria-current=${secaoAtual == 'perguntas'} ? 'page' : null">Perguntas</a>
+      <details class="submenu pesquisa"
+        th:classappend="${secaoAtual == 'pesquisa' or secaoAtual == 'protocolos' or secaoAtual == 'garantias' or secaoAtual == 'auditar' or secaoAtual == 'estudos' or secaoAtual == 'carimbos' or secaoAtual == 'verificar'} ? 'atual'">
+        <summary>Pesquisa</summary>
+        <div class="submenu-itens">
+          <a th:href="${aplicacao} + '/pesquisa'"
+            th:attr="aria-current=${secaoAtual == 'pesquisa'} ? 'page' : null">Para pesquisadores</a>
+          <a th:href="${aplicacao} + '/protocolos'"
+            th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
+          <a th:href="${site} + '/garantias'"
+            th:attr="aria-current=${secaoAtual == 'garantias'} ? 'page' : null">Garantias</a>
+          <a th:href="${site} + '/auditar'" th:attr="aria-current=${secaoAtual == 'auditar'} ? 'page' : null">Auditar</a>
+          <a th:href="${aplicacao} + '/estudos'"
+            th:attr="aria-current=${secaoAtual == 'estudos'} ? 'page' : null">Estudos</a>
+          <a th:href="${aplicacao} + '/carimbos'"
+            th:attr="aria-current=${secaoAtual == 'carimbos'} ? 'page' : null">Carimbos</a>
+        </div>
+      </details>
+      <details class="submenu biblioteca"
+        th:classappend="${secaoAtual == 'por-que' or secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre' or secaoAtual == 'artigo'} ? 'atual'">
         <summary>Biblioteca</summary>
         <div class="submenu-itens">
+          <a th:href="${site} + '/por-que'" th:attr="aria-current=${secaoAtual == 'por-que'} ? 'page' : null">Por quê</a>
           <a th:href="${site} + '/historia'"
             th:attr="aria-current=${secaoAtual == 'historia'} ? 'page' : null">História</a>
           <a th:href="${site} + '/referencias'"
@@ -105,28 +135,48 @@
         th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
   </th:block>
 
+  <!--/* O rodapé, nos mesmos três assuntos do menu (SPEC 0.24, seção 1.4, regra 12). */-->
   <footer th:fragment="rodape" class="rodape">
     <div class="faixa">
-      <ul>
-        <li><a href="https://psigama.com/">PsiGama</a></li>
-        <li><a href="https://github.com/rogeriocisi/crivo">Repositório no GitHub</a></li>
-        <li><a th:href="${aplicacao} + '/protocolos'">Protocolos</a></li>
-        <li><a th:href="${aplicacao} + '/protocolo/P1'">P1-automático</a></li>
-        <li><a th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a></li>
-        <li><a th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a></li>
-        <li><a th:href="${aplicacao} + '/verificar'">Estado da trilha</a></li>
-        <li><a th:href="${aplicacao} + '/conta/criar'">Criar conta</a></li>
-        <li><a th:href="${aplicacao} + '/consulente'">Para participantes</a></li>
-        <li><a th:href="${site} + '/participar'">Participar</a></li>
-        <li><a th:href="${site} + '/por-que'">Por quê</a></li>
-        <li><a th:href="${site} + '/garantias'">Garantias</a></li>
-        <li><a th:href="${site} + '/auditar'">Como auditar</a></li>
-        <li><a th:href="${site} + '/historia'">Linha do tempo</a></li>
-        <li><a th:href="${site} + '/referencias'">Referências</a></li>
-        <li><a th:href="${site} + '/sobre'">Glossário</a></li>
-        <li><a th:href="${site} + '/artigo/'">Artigo (esboço)</a></li>
-        <li><a th:href="${aplicacao} + '/login'">Entrar</a></li>
-      </ul>
+      <div class="rodape-grupos">
+        <nav aria-label="Participar">
+          <p class="rotulo">Participar</p>
+          <ul>
+            <li><a th:href="${aplicacao} + '/consulente'">Para consulentes</a></li>
+            <li><a th:href="${aplicacao} + '/medium'">Para médiuns</a></li>
+            <li><a th:href="${aplicacao} + '/perguntas'">Perguntas frequentes</a></li>
+            <li><a th:href="${site} + '/participar'">Todas as formas de participar</a></li>
+            <li><a th:href="${aplicacao} + '/conta/criar'">Criar conta</a></li>
+            <li><a th:href="${aplicacao} + '/login'">Entrar</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Pesquisa e auditoria">
+          <p class="rotulo">Pesquisa e auditoria</p>
+          <ul>
+            <li><a th:href="${aplicacao} + '/pesquisa'">Para pesquisadores</a></li>
+            <li><a th:href="${aplicacao} + '/pesquisa/en'" hreflang="en" lang="en">For researchers</a></li>
+            <li><a th:href="${aplicacao} + '/protocolos'">Protocolos</a></li>
+            <li><a th:href="${aplicacao} + '/protocolo/P1'">P1-automático</a></li>
+            <li><a th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a></li>
+            <li><a th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a></li>
+            <li><a th:href="${aplicacao} + '/verificar'">Estado da trilha</a></li>
+            <li><a th:href="${site} + '/garantias'">Garantias</a></li>
+            <li><a th:href="${site} + '/auditar'">Como auditar</a></li>
+            <li><a href="https://github.com/rogeriocisi/crivo">Repositório no GitHub</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Sobre o projeto">
+          <p class="rotulo">Sobre o projeto</p>
+          <ul>
+            <li><a th:href="${site} + '/por-que'">Por quê</a></li>
+            <li><a th:href="${site} + '/historia'">Linha do tempo</a></li>
+            <li><a th:href="${site} + '/referencias'">Referências</a></li>
+            <li><a th:href="${site} + '/sobre'">Glossário</a></li>
+            <li><a th:href="${site} + '/artigo/'">Artigo (esboço)</a></li>
+            <li><a href="https://psigama.com/">PsiGama</a></li>
+          </ul>
+        </nav>
+      </div>
       <p>
         O Crivo é software livre (licença MIT), desenvolvido por Rogerio Cisi e mantido pela
         <a href="https://psigama.com/">PsiGama</a>, Tecnologia da Informação. Nome público <strong>Crivo</strong>;

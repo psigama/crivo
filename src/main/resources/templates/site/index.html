@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <title>Crivo — plataforma de pesquisa de cognição anômala</title>
+  <title>Crivo — pesquisa sobre mediunidade, com método aberto</title>
   <th:block
-    th:replace="~{fragments/site :: social('Crivo — plataforma de protocolos cegos para pesquisa de cognição anômala', 'Plataforma aberta de pesquisa de cognição anômala, com dois experimentos de mediunidade (AIR) e dois testes de percepção extrassensorial (ESP): cegamento múltiplo, sorteio verificável, pré-registro imutável e trilha de auditoria encadeada por hash.')}">
+    th:replace="~{fragments/site :: social('Crivo — pesquisa sobre mediunidade, com método aberto', 'Um jeito justo de pesquisar a mediunidade: o médium não sabe para quem responde, ninguém mexe nas respostas depois, e todo resultado é publicado, a favor ou contra.')}">
   </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
@@ -22,49 +22,80 @@
 
   <main id="conteudo">
 
-    <section class="abertura">
+    <!--/*
+      SPEC 0.24, seção 1.4, regra 8: uma frase simples e três portas por papel, que cabem na
+      primeira tela do celular. O parágrafo técnico de antes continua aqui, no detalhe técnico.
+    */-->
+    <section class="abertura abertura-portas">
       <div class="faixa">
-        <p class="rotulo aparece">Plataforma de protocolos cegos para pesquisa de cognição anômala</p>
+        <p class="rotulo aparece">Pesquisa sobre mediunidade, com método aberto</p>
         <h1 class="aparece">Crivo</h1>
         <p class="chamada aparece">
-          Crivo é uma plataforma de pesquisa dos fenômenos de cognição anômala.
-          A mediunidade, que é considerada um ramo da cognição anômala, recebe, na literatura, o nome técnico de
-          <strong>recepção anômala de informação</strong>, ou
-          AIR (<em lang="en">Anomalous Information Reception</em>). A plataforma tem quatro protocolos: dois
-          <strong>experimentos</strong> de mediunidade e dois <strong>testes</strong> de percepção
-          extrassensorial.
+          Um jeito justo de pesquisar a mediunidade: o médium não sabe para quem responde, ninguém
+          mexe nas respostas depois, e todo resultado é publicado, a favor ou contra.
         </p>
-        <p class="tese aparece">
-          Os experimentos de AIR não existem para provar que a mediunidade é real, nem que não é.
-          Existem para que <strong>a resposta, qualquer que seja, seja defensável</strong> —
-          diante de um cético, de um comitê de ética ou de um revisor que leia o estudo
-          anos depois.
+
+        <nav class="entradas aparece" aria-label="Por onde começar">
+          <a class="entrada" th:href="${aplicacao} + '/consulente'">
+            <strong>Perdi alguém</strong>
+            <span>Participar como consulente</span>
+          </a>
+          <a class="entrada" th:href="${aplicacao} + '/medium'">
+            <strong>Sou médium</strong>
+            <span>Como funciona para você</span>
+          </a>
+          <a class="entrada entrada-metodo" th:href="${aplicacao} + '/pesquisa'">
+            <strong>Pesquiso ou quero conferir</strong>
+            <span>Desenho, dados e auditoria</span>
+          </a>
+        </nav>
+
+        <p class="nota aparece">
+          Só quer experimentar? <a th:href="${aplicacao} + '/protocolos#pes'">Faça um teste rápido</a>,
+          sem cadastro e com o resultado na hora.
         </p>
-        <div class="acoes aparece">
-          <a class="botao botao-cheio" href="/participar">Participar</a>
-          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos'">Os protocolos</a>
-          <a class="botao botao-vazio" href="/por-que">Por que o Crivo existe</a>
-        </div>
-        <blockquote class="epigrafe aparece">Passar pelo crivo da razão.</blockquote>
+
+        <ul class="confianca aparece" aria-label="Por que confiar">
+          <li>Código aberto, que qualquer pessoa pode conferir</li>
+          <li>Resultados publicados, mesmo quando nulos</li>
+          <li>Dados pessoais protegidos, pela LGPD</li>
+          <li>Aprovação de comitê de ética antes de qualquer inscrição</li>
+        </ul>
+
+        <details class="detalhe-tecnico aparece">
+          <summary>Detalhe técnico</summary>
+          <p>
+            O Crivo é uma plataforma de pesquisa dos fenômenos de cognição anômala. A mediunidade,
+            considerada um ramo da cognição anômala, recebe na literatura o nome técnico de
+            <strong>recepção anômala de informação</strong>, ou AIR (<em lang="en">Anomalous Information
+            Reception</em>). A plataforma tem quatro protocolos: dois <strong>experimentos</strong> de
+            mediunidade e dois <strong>testes</strong> de percepção extrassensorial, todos em
+            <a th:href="${aplicacao} + '/protocolos'">Protocolos</a>.
+          </p>
+          <p>
+            Os experimentos não existem para provar que a mediunidade é real, nem que não é. Existem para
+            que a resposta, qualquer que seja, seja defensável diante de um cético, de um comitê de ética
+            ou de um revisor que leia o estudo anos depois.
+          </p>
+        </details>
       </div>
     </section>
 
     <section id="air-automatizado">
       <div class="faixa">
         <p class="rotulo">Protocolo P1-automático · experimento de mediunidade</p>
-        <h2>Um experimento de AIR que roda inteiro pelo site</h2>
+        <h2>Um experimento que roda inteiro pelo site</h2>
         <p>
-          O consulente informa o primeiro nome da pessoa falecida e responde a um questionário de
-          múltipla escolha sobre ela. Um médium sorteado recebe só o primeiro nome e responde ao
-          mesmo questionário. O sistema confere as respostas campo a campo — contra o alvo
-          verdadeiro e contra um chamariz de perfil parecido —, e o que conta é a diferença entre as
-          duas notas. <strong>Ninguém julga se uma afirmação "encaixa"</strong>, e ninguém da equipe
-          fica no circuito: do cadastro ao aviso de conclusão, tudo é automático.
+          Quem perdeu alguém informa o primeiro nome da pessoa e responde a perguntas de múltipla escolha
+          sobre ela. Um médium sorteado recebe só o primeiro nome e responde às mesmas perguntas. O
+          sistema compara as respostas do médium com as da pessoa certa e com as de outra pessoa
+          parecida, para medir quanto o acaso explica. <strong>Ninguém julga se uma frase "encaixa"</strong>,
+          e ninguém da equipe fica no meio: do cadastro ao resultado, tudo é automático.
         </p>
         <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
         <div class="acoes">
           <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">Como funciona</a>
-          <a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/perguntas'">Perguntas frequentes</a>
           <a class="botao botao-vazio" href="/artigo/">Ler o artigo técnico</a>
         </div>
       </div>
@@ -79,8 +110,8 @@
           <article class="caminho">
             <h3><a href="/participar">Participar</a></h3>
             <p>
-              Como consulente ou médium, num teste de percepção extrassensorial, conduzindo um
-              estudo, auditando ou contribuindo com o código.
+              Como consulente ou médium, num teste rápido, conduzindo um estudo, auditando ou
+              contribuindo com o código.
             </p>
           </article>
           <article class="caminho">
@@ -93,18 +124,19 @@
           <article class="caminho">
             <h3><a href="/garantias">Garantias</a></h3>
             <p>
-              O que o código impõe, o que o Crivo atesta e o que não atesta, e o que se pede a quem
+              O que o sistema garante, o que ele atesta e o que não atesta, e o que se pede a quem
               participa.
             </p>
           </article>
           <article class="caminho">
             <h3><a href="/auditar">Auditar</a></h3>
             <p>
-              Como conferir a trilha, os carimbos e o sorteio sem pedir permissão a ninguém, e como
-              contestar o código.
+              Como conferir os registros, os carimbos de data e o sorteio sem pedir permissão a ninguém,
+              e como contestar o código.
             </p>
           </article>
         </div>
+        <blockquote class="epigrafe">Passar pelo crivo da razão.</blockquote>
       </div>
     </section>
 

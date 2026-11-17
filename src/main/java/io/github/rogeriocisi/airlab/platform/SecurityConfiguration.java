@@ -60,7 +60,7 @@ class SecurityConfiguration {
                         // The editorial pages (SPEC 0.21, section 1.3) and the state of the trail.
                         .requestMatchers("/", "/participar", "/por-que", "/garantias", "/auditar",
                                 "/sobre", "/historia", "/referencias", "/artigo/", "/verificar",
-                                "/consulente", "/login", "/css/**", "/js/**", "/targets/**", "/favicon.svg", "/favicon.ico",
+                                "/consulente", "/medium", "/perguntas", "/pesquisa", "/pesquisa/en", "/login", "/css/**", "/js/**", "/targets/**", "/favicon.svg", "/favicon.ico",
                                 // The share image of every page's og:image (SPEC 0.23, section 1.4, rule 6).
                                 "/img/**",
                                 "/protocolos", "/protocolo/**", "/testes", "/testes/**", "/error", "/actuator/health",

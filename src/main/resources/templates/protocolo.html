@@ -26,6 +26,24 @@
       </p>
       <h1 class="aparece" th:text="${protocolo.name}">Nome</h1>
       <p class="chamada aparece" th:text="${protocolo.summary}">Resumo</p>
+      <!--/* SPEC 0.24, seção 1.4, regra 13: "em poucas palavras" antes do desenho completo do P1. */-->
+      <div class="definicao" id="em-poucas-palavras" th:if="${protocolo.code() == 'P1'}">
+        <p><strong>Em poucas palavras.</strong></p>
+        <ul>
+          <li>Quem perdeu alguém informa o primeiro nome da pessoa e responde a perguntas de múltipla
+            escolha sobre ela.</li>
+          <li>Um médium sorteado recebe só o primeiro nome, sem saber quem pediu, e responde às mesmas
+            perguntas.</li>
+          <li>O sistema compara as respostas com as da pessoa certa e com as de outra pessoa parecida, para
+            medir quanto o acaso explica.</li>
+          <li>Ninguém vê nota antes do fim, e as regras foram lacradas antes de começar.</li>
+          <li>O resultado é do estudo inteiro, e é publicado, a favor ou contra.</li>
+        </ul>
+        <p class="nota">
+          Mais simples ainda: a página <a href="/consulente">para consulentes</a>, a página
+          <a href="/medium">para médiuns</a> e as <a href="/perguntas">perguntas frequentes</a>.
+        </p>
+      </div>
     </div>
   </section>
 

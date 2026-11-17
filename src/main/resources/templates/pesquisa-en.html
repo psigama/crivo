@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>For researchers — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('For researchers — Crivo', 'The P1 design on one page: blinding, verifiable randomization, frozen preregistration, declared analysis, stopping rule, timestamped audit trail, verification package and limits.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo" lang="pt-BR">Pular para o conteúdo</a>
+<div class="faixa" lang="pt-BR">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/*
+  The one technical page, in English (SPEC 0.24, section 1.4, rule 11). The chance level and the
+  limits come from the catalog; the catalog states the limits in Portuguese, quoted as they are, so
+  this page never drifts from the code.
+*/-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">For researchers · <a href="/pesquisa" hreflang="pt-BR" lang="pt-BR">Português</a></p>
+      <h1 class="aparece">A protocol that defends itself</h1>
+      <p class="chamada aparece">
+        The design of Crivo's mediumship experiment, P1-automated, on one page: what is blind, what is
+        randomized, what is frozen before the first datum, which analysis runs, and how to check all of it
+        without asking anyone for permission.
+      </p>
+      <div class="ressalva">
+        <p>
+          <strong>Status.</strong> P1 is implemented end to end but has not yet run with real participants.
+          Sign-up opens after approval by a research ethics committee. The full specification, in
+          Portuguese, is the <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>,
+          epic E13.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Design</p>
+      <h2>Automated structured reading, in pairs</h2>
+      <ul>
+        <li>The sitter (<em lang="pt-BR">consulente</em>) gives the first name of the deceased person and
+          answers a closed questionnaire about them. The answers lock with a salted commitment published on
+          the audit trail before any medium receives the request.</li>
+        <li>Locked requests are paired within the same stratum: gender, age band and time since death.
+          Each request is the decoy of the other.</li>
+        <li>A medium is drawn for the pair from the eligible mediums in canonical order and receives only
+          the two first names, in a drawn order. The medium answers the same questionnaire for each name,
+          and each reading locks with its own commitment.</li>
+        <li>
+          The questionnaire in force, version <code th:text="${questionario.version()}">v1</code>, has
+          <span th:text="${#lists.size(questionario.fields())}">16</span> fields, of which
+          <span th:text="${#lists.size(questionario.scoredFields())}">13</span> are scored; the others only
+          serve the pairing. "Don't know" and "nothing received" never match anything.
+          <a href="/protocolo/P1#questionario">The questionnaire, field by field</a> (in Portuguese).
+        </li>
+        <li>Scoring is equality between closed options under a published rule. For each pair,
+          <code>d</code> is, over both readings, the number of matches with the target minus the number of
+          matches with the decoy. Nobody judges free text, and no AI model scores anything.</li>
+        <li>
+          Chance hit rate:
+          <strong th:text="${protocolo.chanceNumerator()} + ' in ' + ${protocolo.chanceDenominator()}">1 in 2</strong>,
+          choosing between target and decoy.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Before the first datum</p>
+      <h2>Preregistration and randomization</h2>
+      <ul>
+        <li>The preregistration is frozen with a hash before the first pair: hypotheses, number of pairs
+          (<em>N</em>), medium deadline (14 days by default), cap of pairs per medium (10 by default),
+          expected effect and medium inclusion criteria, with the whole questionnaire in the canonical
+          annex. Once frozen, the database refuses changes; amendments create a new version.</li>
+        <li>The seed is 32 bytes from the cryptographic generator, expanded with SHA-256 in counter mode.
+          The commitment published in the frozen document is
+          <code>SHA-256(seed || "|" || canonical study input)</code>. The seed is kept encrypted and revealed
+          at unblinding; with it, anyone can redo the draw of every medium and every name order, in any
+          input order.</li>
+        <li>Expired deadline or a medium who leaves: the request goes to another drawn medium, and the
+          locked readings of the expired assignment stay out of the analysis. Both exclusion rules are in
+          the preregistration.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Analysis</p>
+      <h2>Declared beforehand, run without choices</h2>
+      <ul>
+        <li><strong>Binding stopping rule.</strong> When the <em>N</em> active pairs have both readings
+          locked, the server's own cycle closes collection and unblinds. Nobody picks the moment, not even
+          the administrator. Before that, no screen, API or projection exposes any function of the scores:
+          progress is a count of units.</li>
+        <li><strong>Primary:</strong> exact one-sided Wilcoxon signed-rank test on the pairs' <code>d</code>
+          (exact up to 20 pairs with nonzero <code>d</code>; above that, normal approximation, and the
+          report says which was used).</li>
+        <li><strong>Secondary:</strong> exact binomial sign test of <code>d</code>; and a permutation of the
+          readings across targets within the pairing strata (Pratt and Birge), exact while it fits the
+          enumeration and, above that, with 100,000 arrangements drawn from the revealed seed.</li>
+        <li>The "confirmatory" label only holds if the preregistration was frozen and the sample is the
+          declared one; otherwise the analysis is marked exploratory, with the reason. Item probabilities
+          are never multiplied as if independent.</li>
+        <li>The report, hashed on the trail, carries the preregistration, the commitment and the revealed
+          seed, the three analyses, the exclusions, the per-pair and per-medium tables, and what the result
+          does not support.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Integrity</p>
+      <h2>Blinding and a trail you can check from outside</h2>
+      <ul>
+        <li>Each role has its own projections: a forbidden field does not exist in the query. Every rule of
+          the blinding matrix has a test that tries to break it (<code>BlindingMatrixTest</code>). No medium
+          code enters the trail before unblinding.</li>
+        <li>The trail is append-only, chained with SHA-256, with update and delete blocked in the database.
+          Its head is timestamped by FreeTSA (RFC 3161) after every milestone and every 24 hours if it
+          changed; the tokens are at <a href="/carimbos">Carimbos de tempo</a>, and <code>airlab verify</code>
+          rechecks them.</li>
+        <li>At unblinding, each study's verification package, public and without names, lets anyone redo
+          the trail, the draw, the scoring and the analysis; <code>airlab verificar-pacote</code> checks the
+          file with no server and no database. Studies and reports are at <a href="/estudos">Estudos</a>, and
+          the state of the trail at <a href="/verificar">Verificar</a>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Declared limits</p>
+      <h2>What a P1 result does not support</h2>
+      <p>
+        Quoted from the protocol catalog, which states them in Portuguese and requires a non-empty list
+        from every protocol, so this page never drifts from the code:
+      </p>
+      <ul lang="pt-BR">
+        <li th:each="limite : ${protocolo.limits()}" th:text="${limite}">Limite</li>
+      </ul>
+      <p class="nota">
+        In short: an above-chance result shows that information was there, not where it came from; there
+        is no proxy experimenter; the closed questionnaire only captures what fits its fields; the first
+        name leaks some information; and collusion between people who know each other cannot be ruled out
+        with certainty. Crivo neither asserts nor denies the phenomenon, and a p-value is a statement about
+        the test, not about the source of the information.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">To read and check</p>
+      <h2>Sources, code and how to cite</h2>
+      <ul>
+        <li><a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">Specification (SPEC)</a>,
+          with the blinding matrix and epic E13, in Portuguese.</li>
+        <li><a th:href="${site} + '/artigo/'">Technical article</a>, a draft in Portuguese, and the
+          <a th:href="${site} + '/referencias'">references</a>, including the critical ones.</li>
+        <li><a href="https://github.com/rogeriocisi/crivo">Source code</a>, MIT license, and
+          <a th:href="${site} + '/auditar'">how to audit</a>.</li>
+      </ul>
+      <p>How to cite the software:</p>
+      <pre class="citar">@software{cisi_crivo,
+  author  = {Cisi, Rogerio},
+  title   = {Crivo: plataforma de protocolos cegos para pesquisa de cognição anômala},
+  year    = {2026},
+  url     = {https://github.com/rogeriocisi/crivo},
+  license = {MIT}
+}</pre>
+      <p class="nota">
+        Methodological objections count as much as code: open an
+        <a href="https://github.com/rogeriocisi/crivo/issues">issue</a>.
+      </p>
+    </div>
+  </section>
+</main>
+
+<div lang="pt-BR">
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</div>
+</body>
+</html>

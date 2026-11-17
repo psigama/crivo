@@ -48,9 +48,10 @@
               <a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
             </p>
             <p class="nota">
-              Vai participar como consulente?
-              <a th:href="${aplicacao} + '/consulente'">Há uma página só sobre isso</a>, com o
-              passo a passo do pedido, o que se pede de você e os seus direitos.
+              Há uma página <a th:href="${aplicacao} + '/consulente'">para consulentes</a> e outra
+              <a th:href="${aplicacao} + '/medium'">para médiuns</a>, com o passo a passo, o que se pede
+              de você e os seus direitos. Dúvidas rápidas estão nas
+              <a th:href="${aplicacao} + '/perguntas'">perguntas frequentes</a>.
             </p>
           </article>
           <article class="caminho">

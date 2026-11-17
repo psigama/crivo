@@ -1,6 +1,7 @@
 package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.TestNames;
+import io.github.rogeriocisi.airlab.participant.AccountService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -53,7 +54,7 @@ class AccountPagesTest {
                         .param("senha", PASSWORD)
                         .param("confirmacao", PASSWORD)
                         .param("perfil", profile)
-                        .param("termo", "conta-v2")
+                        .param("termo", AccountService.CURRENT_TERM_VERSION)
                         .param("aceite", "true"))
                 .andExpect(redirectedUrl("/conta/verifique-seu-email"));
 
@@ -193,7 +194,7 @@ class AccountPagesTest {
                         .param("senha", PASSWORD)
                         .param("confirmacao", PASSWORD)
                         .param("perfil", "medium")
-                        .param("termo", "conta-v2")
+                        .param("termo", AccountService.CURRENT_TERM_VERSION)
                         .param("aceite", "true"))
                 .andExpect(redirectedUrl("/conta/verifique-seu-email"));
     }
@@ -207,7 +208,7 @@ class AccountPagesTest {
                         .param("senha", PASSWORD)
                         .param("confirmacao", "outra-senha-qualquer")
                         .param("perfil", "consulente")
-                        .param("termo", "conta-v2")
+                        .param("termo", AccountService.CURRENT_TERM_VERSION)
                         .param("aceite", "true"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("A confirmação não é igual à senha.")))
