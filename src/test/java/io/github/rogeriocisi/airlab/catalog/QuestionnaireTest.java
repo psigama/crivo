@@ -91,6 +91,22 @@ class QuestionnaireTest {
     }
 
     @Test
+    @DisplayName("a v2 e a vigente, e a v1 continua legivel para os pedidos feitos nela")
+    void v2_is_current_and_v1_stays_readable() {
+        assertThat(current.version()).isEqualTo("v2-rascunho");
+        assertThat(current.scoredFields()).hasSize(20);
+        Questionnaire v1 = Questionnaires.byVersion("v1-rascunho").orElseThrow();
+        assertThat(v1.scoredFields()).hasSize(13);
+        assertThat(Questionnaires.all()).first().isEqualTo(current);
+        assertThat(Questionnaires.all()).contains(v1);
+        // O pareamento nao muda entre as versoes: mesmos campos, mesmas faixas, mesmas chaves.
+        for (String key : List.of(Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD)) {
+            assertThat(current.field(key).orElseThrow().options())
+                    .isEqualTo(v1.field(key).orElseThrow().options());
+        }
+    }
+
+    @Test
     @DisplayName("os rotulos de nao sei e nao recebi sao fixos")
     void labels() {
         assertThat(current.labelOf("causa", Questionnaire.UNKNOWN)).isEqualTo("Não sei");

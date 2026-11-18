@@ -39,7 +39,7 @@ O consulente informa o primeiro nome da pessoa falecida e responde a um question
 
 O administrador **não é um perfil escolhível**: é a conta do pesquisador, definida na configuração do servidor (ver *Entrar na aplicação*).
 
-**Estado:** as quatro fases do E13 estão implementadas. Contas com perfil fixo, confirmação por e-mail, painéis por perfil e avisos ao administrador; o **pedido de consulta**, com o questionário (versão `v1-rascunho`, ainda em revisão) travado e só o compromisso salgado na trilha; e o **fluxo até a leitura**: o administrador congela o estudo P1, e um ciclo do servidor, a cada minuto, forma os pares, sorteia o médium, libera os dois primeiros nomes, controla o prazo e reenvia o que vencer. O médium responde, revê e trava cada leitura. Quando os N pares têm as duas leituras, o próprio ciclo **desmascara o estudo**, confere os compromissos, pontua, roda a análise pré-registrada e escreve o relatório; o consulente vê a leitura do seu alvo ao lado das suas respostas, o médium vê as notas das próprias leituras, e o administrador, o relatório inteiro.
+**Estado:** as quatro fases do E13 estão implementadas. Contas com perfil fixo, confirmação por e-mail, painéis por perfil e avisos ao administrador; o **pedido de consulta**, com o questionário (versão `v2-rascunho`, ainda em revisão; a `v1-rascunho` fica legível para os pedidos feitos nela) travado e só o compromisso salgado na trilha; e o **fluxo até a leitura**: o administrador congela o estudo P1, e um ciclo do servidor, a cada minuto, forma os pares, sorteia o médium, libera os dois primeiros nomes, controla o prazo e reenvia o que vencer. O médium responde, revê e trava cada leitura. Quando os N pares têm as duas leituras, o próprio ciclo **desmascara o estudo**, confere os compromissos, pontua, roda a análise pré-registrada e escreve o relatório; o consulente vê a leitura do seu alvo ao lado das suas respostas, o médium vê as notas das próprias leituras, e o administrador, o relatório inteiro.
 
 **Para experimentar no perfil local:** crie uma conta de médium e duas de consulente e faça dois pedidos com o mesmo gênero, a mesma faixa etária e o mesmo período do falecimento. Depois entre como administrador, abra **Estudo P1** e congele o pré-registro. Em até um minuto, o médium vê o pedido no painel.
 
@@ -169,7 +169,7 @@ Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, a
 | `AIRLAB_SITE_URL` | Opcional: endereço do site estático (`https://crivo.psigama.com`). Definido, os links da aplicação apontam para ele, e as rotas do site respondem com 301; vazio, a aplicação serve as páginas do site |
 | `AIRLAB_TIMESTAMP_ENABLED` | Carimbo de tempo externo da trilha (RFC 3161, FreeTSA). Ligado por padrão; exige saída HTTPS do servidor para `freetsa.org`. Só o hash da cabeça da trilha sai do servidor. Os tokens ficam em `/carimbos` e o `airlab verify` os reconfere |
 
-Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação do comitê de ética (CEP/Plataforma Brasil). O pedido de consulta, que coleta os dados sensíveis, só abre em produção com `AIRLAB_CEP_REFERENCE` definida. E o estudo P1 só congela, em produção, um questionário revisado: a versão `v1-rascunho` vale só no perfil local.
+Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação do comitê de ética (CEP/Plataforma Brasil). O pedido de consulta, que coleta os dados sensíveis, só abre em produção com `AIRLAB_CEP_REFERENCE` definida. E o estudo P1 só congela, em produção, um questionário revisado: as versões terminadas em `-rascunho`, como a `v2-rascunho` vigente, valem só no perfil local.
 
 ## Contribuir
 
@@ -207,7 +207,7 @@ Só o P1 (leitura estruturada automatizada). Ver `docs/SPEC.md`, seção 10.
 
 1. ~~Ancoragem externa da trilha por carimbo de tempo RFC 3161~~ — fase 1, FreeTSA, feita; falta decidir se o primeiro envio ao médium espera o carimbo, e a fase 2 com OpenTimestamps (E8)
 2. Pacote de verificação do P1 (E9), depois da decisão de LGPD sobre publicar respostas sobre pessoas falecidas
-3. Revisão do questionário `v1-rascunho` pelo pesquisador (questão em aberto 9)
+3. Revisão do questionário `v2-rascunho` por pesquisadores da área e entrevista cognitiva com consulentes (questão em aberto 9)
 4. *Dry-run* completo do P1 com participantes fictícios
 
 ## Autor

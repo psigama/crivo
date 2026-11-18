@@ -113,7 +113,7 @@ class ConsultationIntegrationTest {
         assertThat(ConsultationCommitment.of(version, FIRST_NAME, answers(), salt)).isEqualTo(status.commitment());
 
         Map<String, String> changed = answers();
-        changed.put("fumava", "sim".equals(changed.get("fumava")) ? "nao" : "sim");
+        changed.put("oculos", "sim".equals(changed.get("oculos")) ? "nao" : "sim");
         assertThat(ConsultationCommitment.of(version, FIRST_NAME, changed, salt)).isNotEqualTo(status.commitment());
         assertThat(ConsultationCommitment.of(version, "Sebastiana", answers(), salt)).isNotEqualTo(status.commitment());
     }
@@ -143,7 +143,7 @@ class ConsultationIntegrationTest {
 
         String stored = jdbc.queryForObject("SELECT first_name_enc || answers_enc || salt_enc "
                 + "FROM identity.consultation_detail WHERE request_code = ?", String.class, status.code());
-        assertThat(stored).doesNotContain(FIRST_NAME).doesNotContain("causa=").doesNotContain("fumava");
+        assertThat(stored).doesNotContain(FIRST_NAME).doesNotContain("causa=").doesNotContain("oculos");
     }
 
     @Test

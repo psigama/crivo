@@ -61,10 +61,22 @@ public final class P1Fixture {
 
     /** The open P1 study, created with a large N when there is none. */
     public StructuredStudyView ensureStudy() {
-        return studies.current().orElseGet(() -> studies.open(new StructuredStudyTerms("Estudo P1 de teste",
+        StructuredStudyView study = studies.current().orElseGet(() -> studies.open(new StructuredStudyTerms(
+                "Estudo P1 de teste",
                 StructuredStudyTerms.MAXIMUM_TARGET_PAIRS, StructuredStudyTerms.DEFAULT_DEADLINE_DAYS, 0.5,
                 "Hipotese de teste.", "Qualquer medium confirmado.", StructuredStudyTerms.MAXIMUM_TARGET_PAIRS),
                 "pesquisador"));
+        // A study only takes requests answered under its own questionnaire version (SPEC E13), so an
+        // open study left by a run before a version change never pairs anything again. Say so,
+        // instead of letting every pairing test fail with an empty result.
+        String current = Questionnaires.current().version();
+        if (!study.questionnaireVersion().equals(current)) {
+            throw new IllegalStateException("The shared test database has an open P1 study frozen under "
+                    + study.questionnaireVersion() + ", and new requests use " + current
+                    + ". Delete the test database directory (AIRLAB_TEST_DB_DIR, by default "
+                    + "airlab-test-pgdata in the temporary directory) or point AIRLAB_TEST_DB_DIR elsewhere.");
+        }
+        return study;
     }
 
     /** A confirmed account; its e-mail is random and its password is {@link #PASSWORD}. */
