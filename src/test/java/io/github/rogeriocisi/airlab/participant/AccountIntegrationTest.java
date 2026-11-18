@@ -46,7 +46,7 @@ class AccountIntegrationTest {
 
     private static AccountSignUp signUp(String email, AccountProfile profile) {
         return new AccountSignUp(TestNames.unique("Maria"), email, PASSWORD, profile,
-                AccountService.CURRENT_TERM_VERSION, true);
+                AccountService.CURRENT_TERM_VERSION, true, true);
     }
 
     @Test
@@ -151,17 +151,37 @@ class AccountIntegrationTest {
     @DisplayName("senha curta, termo antigo ou sem aceite: recusado com mensagem para a pessoa")
     void invalid_sign_ups_are_refused() {
         assertThatThrownBy(() -> accounts.register(new AccountSignUp("Ana", uniqueEmail(), "curta",
-                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, true)))
+                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, true, true)))
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("senha");
         assertThatThrownBy(() -> accounts.register(new AccountSignUp("Ana", uniqueEmail(), PASSWORD,
-                AccountProfile.SITTER, "conta-v0", true)))
+                AccountProfile.SITTER, "conta-v0", true, true)))
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("termo");
         assertThatThrownBy(() -> accounts.register(new AccountSignUp("Ana", uniqueEmail(), PASSWORD,
-                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, false)))
+                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, false, true)))
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("aceitar");
         assertThatThrownBy(() -> accounts.register(new AccountSignUp("Ana", "sem-arroba", PASSWORD,
-                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, true)))
+                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, true, true)))
                 .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("e-mail");
+    }
+
+    @Test
+    @DisplayName("sem a declaracao de 18 anos a conta e recusada; com ela, a trilha guarda so o booleano (SPEC 0.26)")
+    void only_adults_by_declaration() {
+        String email = uniqueEmail();
+        assertThatThrownBy(() -> accounts.register(new AccountSignUp("Ana", email, PASSWORD,
+                AccountProfile.SITTER, AccountService.CURRENT_TERM_VERSION, true, false)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Para participar é preciso ter 18 anos ou mais.");
+
+        // Nothing was stored by the refusal: the same e-mail creates a new account afterwards.
+        AccountRegistration registration = accounts.register(signUp(email, AccountProfile.SITTER));
+        assertThat(registration.alreadyExisted()).isFalse();
+
+        String created = jdbc.queryForObject(
+                "SELECT payload FROM audit.event WHERE subject_ref = ? AND event_type = 'ACCOUNT_CREATED'",
+                String.class, "account:" + registration.code());
+        assertThat(created).containsPattern("\"adultDeclared\"\\s*:\\s*true")
+                .doesNotContainIgnoringCase("nascimento").doesNotContainIgnoringCase("birth");
     }
 
     @Test

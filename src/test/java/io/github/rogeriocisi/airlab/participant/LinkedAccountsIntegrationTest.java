@@ -35,7 +35,7 @@ class LinkedAccountsIntegrationTest {
 
     private String confirmed(AccountProfile profile, String fullName, String email) {
         AccountRegistration registration = accounts.register(new AccountSignUp(fullName, email,
-                "senha-de-teste-123", profile, AccountService.CURRENT_TERM_VERSION, true));
+                "senha-de-teste-123", profile, AccountService.CURRENT_TERM_VERSION, true, true));
         accounts.confirmEmail(registration.confirmationToken());
         return registration.code();
     }

@@ -131,6 +131,7 @@ class DefaultAccountService implements AccountService {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("termVersion", signUp.termVersion());
         payload.put("sensitiveDataAccepted", signUp.sensitiveDataAccepted());
+        payload.put("adultDeclared", signUp.adultDeclared());
         audit(AuditEventType.ACCOUNT_CREATED, account, payload);
         return new AccountRegistration(account.code(), profile, token, false);
     }
@@ -162,6 +163,10 @@ class DefaultAccountService implements AccountService {
             // E10, lock 6: consent is always on the current version of the term.
             throw new IllegalArgumentException(
                     "O termo mudou desde que você abriu a página. Leia a versão atual e aceite de novo.");
+        }
+        if (!signUp.adultDeclared()) {
+            // SPEC 0.26: adults only, by declaration; the birth date is never asked (P6).
+            throw new IllegalArgumentException("Para participar é preciso ter 18 anos ou mais.");
         }
         if (!signUp.sensitiveDataAccepted()) {
             throw new IllegalArgumentException(

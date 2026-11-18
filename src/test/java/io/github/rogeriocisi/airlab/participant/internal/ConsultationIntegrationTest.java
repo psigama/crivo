@@ -65,7 +65,7 @@ class ConsultationIntegrationTest {
     private String confirmedAccount(AccountProfile profile) {
         AccountRegistration registration = accounts.register(new AccountSignUp(TestNames.unique("Pessoa"),
                 "pedido-" + UUID.randomUUID() + "@exemplo.test", "senha-de-teste-123", profile,
-                AccountService.CURRENT_TERM_VERSION, true));
+                AccountService.CURRENT_TERM_VERSION, true, true));
         accounts.confirmEmail(registration.confirmationToken());
         return registration.code();
     }
@@ -179,7 +179,7 @@ class ConsultationIntegrationTest {
 
         AccountRegistration unconfirmed = accounts.register(new AccountSignUp("Sem Confirmar",
                 "pedido-" + UUID.randomUUID() + "@exemplo.test", "senha-de-teste-123", AccountProfile.SITTER,
-                AccountService.CURRENT_TERM_VERSION, true));
+                AccountService.CURRENT_TERM_VERSION, true, true));
         assertThatThrownBy(() -> consultations.submit(unconfirmed.code(), draft()))
                 .isInstanceOf(IllegalStateException.class);
     }

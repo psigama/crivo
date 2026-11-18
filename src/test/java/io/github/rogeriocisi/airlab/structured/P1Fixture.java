@@ -88,7 +88,7 @@ public final class P1Fixture {
     public String account(AccountProfile profile, String fullName) {
         AccountRegistration registration = accounts.register(new AccountSignUp(fullName,
                 "p4-" + UUID.randomUUID() + "@exemplo.test", PASSWORD, profile,
-                AccountService.CURRENT_TERM_VERSION, true));
+                AccountService.CURRENT_TERM_VERSION, true, true));
         accounts.confirmEmail(registration.confirmationToken());
         return registration.code();
     }

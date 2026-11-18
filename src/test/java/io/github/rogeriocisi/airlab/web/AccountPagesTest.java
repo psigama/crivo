@@ -55,6 +55,7 @@ class AccountPagesTest {
                         .param("confirmacao", PASSWORD)
                         .param("perfil", profile)
                         .param("termo", AccountService.CURRENT_TERM_VERSION)
+                        .param("maioridade", "true")
                         .param("aceite", "true"))
                 .andExpect(redirectedUrl("/conta/verifique-seu-email"));
 
@@ -195,6 +196,7 @@ class AccountPagesTest {
                         .param("confirmacao", PASSWORD)
                         .param("perfil", "medium")
                         .param("termo", AccountService.CURRENT_TERM_VERSION)
+                        .param("maioridade", "true")
                         .param("aceite", "true"))
                 .andExpect(redirectedUrl("/conta/verifique-seu-email"));
     }
@@ -209,10 +211,38 @@ class AccountPagesTest {
                         .param("confirmacao", "outra-senha-qualquer")
                         .param("perfil", "consulente")
                         .param("termo", AccountService.CURRENT_TERM_VERSION)
+                        .param("maioridade", "true")
                         .param("aceite", "true"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("A confirmação não é igual à senha.")))
                 .andExpect(content().string(org.hamcrest.Matchers.not(containsString(PASSWORD))));
+    }
+
+    @Test
+    @DisplayName("a pagina de cadastro pede a declaracao de 18 anos, sem data de nascimento (SPEC 0.26)")
+    void the_sign_up_page_asks_for_the_adult_declaration() throws Exception {
+        mvc.perform(get("/conta/criar"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("name=\"maioridade\"")))
+                .andExpect(content().string(containsString("Declaro ter 18 anos ou mais.")))
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("type=\"date\""))));
+    }
+
+    @Test
+    @DisplayName("sem a declaracao de 18 anos, o cadastro volta com a mensagem e nao envia e-mail")
+    void a_sign_up_without_the_adult_declaration_is_refused() throws Exception {
+        String email = uniqueEmail();
+        mvc.perform(post("/conta/criar").with(csrf())
+                        .param("nome", TestNames.unique("Pessoa"))
+                        .param("email", email)
+                        .param("senha", PASSWORD)
+                        .param("confirmacao", PASSWORD)
+                        .param("perfil", "consulente")
+                        .param("termo", AccountService.CURRENT_TERM_VERSION)
+                        .param("aceite", "true"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Para participar é preciso ter 18 anos ou mais.")));
+        assertThat(mailer.outbox()).noneMatch(message -> message.to().equals(email));
     }
 
     @Test

@@ -52,6 +52,7 @@ class AccountController {
         private String perfil = "";
         private String termo = "";
         private boolean aceite;
+        private boolean maioridade;
 
         public String getNome() { return nome; }
         public void setNome(String nome) { this.nome = nome; }
@@ -67,6 +68,8 @@ class AccountController {
         public void setTermo(String termo) { this.termo = termo; }
         public boolean isAceite() { return aceite; }
         public void setAceite(boolean aceite) { this.aceite = aceite; }
+        public boolean isMaioridade() { return maioridade; }
+        public void setMaioridade(boolean maioridade) { this.maioridade = maioridade; }
 
         AccountProfile profile() {
             return switch (perfil == null ? "" : perfil) {
@@ -104,7 +107,8 @@ class AccountController {
         AccountRegistration registration;
         try {
             registration = accounts.register(new AccountSignUp(form.getNome(), form.getEmail(),
-                    form.getSenha(), form.profile(), form.getTermo(), form.isAceite()));
+                    form.getSenha(), form.profile(), form.getTermo(), form.isAceite(),
+                    form.isMaioridade()));
         } catch (IllegalArgumentException e) {
             // The domain writes these messages for the person filling in the form.
             model.addAttribute("erro", e.getMessage());

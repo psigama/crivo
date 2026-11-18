@@ -12,13 +12,16 @@ package io.github.rogeriocisi.airlab.participant;
  * @param profile               consulente or medium, fixed from here on
  * @param termVersion           version of the consent term the person accepted
  * @param sensitiveDataAccepted explicit acceptance of the sensitive data clause (LGPD)
+ * @param adultDeclared         the person declares being 18 or older (SPEC 0.26). A declaration,
+ *                              not a birth date: the exact age is not collected (P6)
  */
 public record AccountSignUp(String fullName,
                             String email,
                             String password,
                             AccountProfile profile,
                             String termVersion,
-                            boolean sensitiveDataAccepted) {
+                            boolean sensitiveDataAccepted,
+                            boolean adultDeclared) {
 
     @Override
     public String toString() {

@@ -50,7 +50,7 @@ class ConsultationPagesTest {
     private MockHttpSession signedIn(AccountProfile profile) throws Exception {
         String email = "telas-" + UUID.randomUUID() + "@exemplo.test";
         AccountRegistration registration = accounts.register(new AccountSignUp(TestNames.unique("Pessoa"), email, PASSWORD,
-                profile, AccountService.CURRENT_TERM_VERSION, true));
+                profile, AccountService.CURRENT_TERM_VERSION, true, true));
         accounts.confirmEmail(registration.confirmationToken());
         return (MockHttpSession) mvc.perform(formLogin("/login").user(email).password(PASSWORD))
                 .andReturn().getRequest().getSession(false);

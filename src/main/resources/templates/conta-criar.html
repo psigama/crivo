@@ -114,6 +114,12 @@
               primeiro nome da pessoa falecida —, para que qualquer pessoa possa refazer a conferência.
               Depois de publicado, o pacote não muda, nem se você excluir a conta.
             </p>
+            <!--/* SPEC 0.26: só maiores de 18 anos, por declaração própria, fora do termo; sem data de nascimento. */-->
+            <p class="nota">Só participam pessoas com 18 anos ou mais. Não pedimos a sua data de nascimento.</p>
+            <label class="opcao">
+              <input type="checkbox" name="maioridade" value="true" required th:checked="*{maioridade}">
+              <span>Declaro ter 18 anos ou mais.</span>
+            </label>
             <label class="opcao">
               <input type="checkbox" name="aceite" value="true" required>
               <span>Li e aceito o termo, inclusive o tratamento de dados sensíveis.</span>

@@ -44,7 +44,7 @@ class LinkedAccountsPagesTest {
     private String confirmed(AccountProfile profile, String fullName) {
         AccountRegistration registration = accounts.register(new AccountSignUp(fullName,
                 "pagina-" + UUID.randomUUID() + "@exemplo.test", "senha-de-teste-123", profile,
-                AccountService.CURRENT_TERM_VERSION, true));
+                AccountService.CURRENT_TERM_VERSION, true, true));
         accounts.confirmEmail(registration.confirmationToken());
         return registration.code();
     }
