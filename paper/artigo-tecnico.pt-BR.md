@@ -2,8 +2,8 @@
 title: "Crivo: uma plataforma aberta de protocolos automatizados para o estudo da cognição anômala"
 subtitle: "Artigo de desenho, que descreve um método antes de qualquer dado"
 author:
-  - name: Rogerio Cisi
-    affiliation: "TODO: afiliação"
+  - name: Rogerio Rodrigues Lima Cisi
+    affiliation: "PsiGama, São Paulo, SP, Brasil. Pesquisador independente, sem vínculo com instituição de pesquisa."
 lang: pt-BR
 date: "Esboço — novembro de 2026"
 bibliography: referencias.bib
@@ -23,11 +23,17 @@ NOTAS DE REDAÇÃO (remover antes de submeter)
 PENDÊNCIAS ANTES DA SUBMISSÃO
 - Ler o texto integral das referências ainda conferidas só pelo resumo e conferir cada número citado.
 - Repetir o levantamento de ferramentas (seção 2.5) em bases indexadas, com protocolo registrado, e conferir no texto integral as descrições usadas.
-- Efeito esperado e cálculo de poder (seção 4.5).
-- Revisão do questionário, hoje em versão de rascunho.
-- Normas de ética em pesquisa aplicáveis (seção 7).
+- Questionário v2-rascunho: revisão por pesquisadores da área e entrevista cognitiva com consulentes (seção 4.1); frequências observadas das opções, por estrato, no lugar das supostas na simulação de poder (seção 4.6).
+- Normas de ética: conferir com o comitê a resolução aplicável (466 ou 510) e acompanhar as normas da instância nacional prevista na Lei 14.874/2024 (seção 7).
 - Ensaio completo e auditoria externa (seção 8).
-- Afiliação do autor, abstract em inglês e escolha do destino: preprint em português e, depois, revista da área ou de software de pesquisa.
+- ORCID e e-mail de correspondência do autor; afiliação institucional, se o estudo tiver instituição proponente.
+- Escolha do destino: preprint em português e, depois, revista da área ou de software de pesquisa.
+
+RESOLVIDO NESTA VERSÃO
+- Efeito esperado e cálculo de poder: seção 4.6, com a simulação em paper/poder/.
+- Questionário revisado para a v2-rascunho, com os critérios escritos: seção 4.1 e SPEC, anexo do E13.
+- Normas de ética em pesquisa aplicáveis: seção 7.
+- Afiliação do autor e abstract em inglês.
 -->
 
 # Resumo
@@ -36,9 +42,21 @@ Para que um estudo de mediunidade diga alguma coisa, é preciso mostrar que a in
 
 Este artigo apresenta o Crivo, uma plataforma de código aberto que executa um protocolo de AIR do início ao fim sem ninguém da equipe no circuito. O consulente, que é a pessoa enlutada, e o médium respondem ao mesmo questionário fechado sobre o falecido, de quem o médium conhece apenas o primeiro nome. O sistema confere as respostas campo a campo, contra o alvo e contra um chamariz, outra pessoa falecida de perfil semelhante que serve de controle. Ninguém precisa julgar se uma afirmação se ajusta. Os requisitos de método tornam-se propriedades do software: o que cada pessoa pode ver é limitado na camada de dados, e não na tela; as respostas são lacradas criptograficamente antes de qualquer informação chegar ao médium; o sorteio é lacrado antes da coleta e aberto no fim; o plano do estudo é registrado e congelado antes dos dados; o cegamento se desfaz sozinho quando a amostra declarada se completa; e cada passo entra numa trilha de auditoria encadeada, atestada por uma autoridade independente de carimbo do tempo.
 
-Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer pessoa confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o protocolo, a arquitetura, o que o sistema garante e o que não pode garantir, e as questões de ética e de proteção de dados.
+Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer pessoa confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o protocolo e o cálculo de poder, a arquitetura, o que o sistema garante e o que não pode garantir, e as questões de ética e de proteção de dados.
 
 **Palavras-chave:** mediunidade; recepção anômala de informação; protocolo cego; pré-registro; reprodutibilidade; auditoria; software livre.
+
+::: {lang=en}
+# Abstract {-}
+
+For a mediumship study to show anything, it must show that the information given by the medium did not reach them through ordinary channels: inadvertent cues, cold reading, prior research, the goodwill of whoever rates the reading, or fraud. The literature on anomalous information reception (AIR) already describes protocols that close these doors. Running them, however, depends on a research team and on manual procedures that readers of the published paper cannot check, and scoring remains subject to the judgement of whoever decides whether a statement fits the deceased person.
+
+This paper presents Crivo, an open-source platform that runs an AIR protocol from start to finish with no member of the research team in the loop. The sitter, who is the bereaved person, and the medium answer the same closed questionnaire about the deceased, of whom the medium knows only the first name. The system compares the answers field by field, against the target and against a decoy, another deceased person with a similar profile who serves as a control. Nobody has to judge whether a statement fits. Methodological requirements become properties of the software: what each person can see is restricted in the data layer, not on the screen; answers are cryptographically sealed before any information reaches the medium; the random draw is committed before data collection and revealed at the end; the study plan is preregistered and frozen before any data exist; blinding is lifted automatically when the declared sample is complete; and every step enters a hash-chained audit trail, attested by an independent time-stamping authority.
+
+Null and positive results produce the same report and the same verification package, which anyone can check from the file itself. The paper describes the requirements, derived in part from sceptical critiques, the protocol and its power analysis, the architecture, what the system guarantees and what it cannot guarantee, and the ethical and data protection issues.
+
+**Keywords:** mediumship; anomalous information reception; blinded protocol; preregistration; reproducibility; audit trail; open-source software.
+:::
 
 # 1. Introdução
 
@@ -135,7 +153,9 @@ O protocolo parte de uma ideia simples: o consulente e o médium respondem ao me
 
 A troca tem custo, e o protocolo o declara. Ganham-se a pontuação objetiva e a automação integral; perdem-se o consulente substituto e a resposta livre, justamente duas das condições que @silva2022 associaram a resultado positivo. Por isso, um resultado deste protocolo, positivo ou nulo, não vale como replicação dos estudos com consulente substituto da literatura.
 
-O questionário, ainda em versão de rascunho, tem 16 campos. Três deles — gênero, faixa etária no óbito e período do falecimento — servem para formar os pares e ficam fora da nota: são iguais dentro de cada par, por construção, e o gênero, o próprio nome costuma entregar. Os outros 13 entram na nota e tratam das circunstâncias da morte, da família, da ocupação, do lugar onde a pessoa viveu, do temperamento, da aparência, da religiosidade e de hábitos. Cada campo tem poucas opções, além de “não sei”, para o consulente, e de “não recebi”, para o médium, que responde só aos campos da nota. O questionário em vigor, com todas as opções, está publicado na [página do protocolo](https://app.crivo.psigama.com/protocolo/P1).
+O questionário em vigor, a versão `v2-rascunho`, tem 23 campos. Três deles — gênero, faixa etária no óbito e período do falecimento — servem para formar os pares e ficam fora da nota: são iguais dentro de cada par, por construção, e o gênero, o próprio nome costuma entregar. Os outros 20 entram na nota e se agrupam em seis temas: as circunstâncias da morte (como foi, a causa e o lugar); a família (estado civil, número de filhos, lugar entre os irmãos e o parentesco de quem fez o pedido); a trajetória (escolaridade, ocupação e o tipo de lugar onde a pessoa viveu); a personalidade (temperamento e traço mais marcante); a aparência (estatura, porte, cabelo e óculos); e crenças e hábitos (religião, passatempo, fumo e animal de estimação). Cada campo tem de duas a dez opções, além de “não sei”, para o consulente, e de “não recebi”, para o médium, que responde só aos campos da nota. O questionário completo, com todas as opções, está publicado na [página do protocolo](https://app.crivo.psigama.com/protocolo/P1).
+
+Os campos não foram escolhidos só pelo que parece relevante. Num questionário fechado, o sinal que um campo pode render depende de quanto ele distingue um falecido de outro do mesmo estrato: num campo em que quase todos dão a mesma resposta, alvo e chamariz coincidem quase sempre, e nem uma leitura perfeita se destaca (a seção 4.6 dá a fórmula). Daí os critérios. Cada campo pede um único fato que o consulente saiba responder; as opções se excluem e cobrem todos os casos; nenhuma delas domina; nada na nota pode ser deduzido do primeiro nome ou do estrato, como a região ou a geração; nenhum campo identifica a pessoa sozinho, porque as respostas vão ao pacote de verificação público; os temas são os que a literatura pergunta ao médium, como aparência, personalidade, passatempos e causa da morte [@beischel2015]; e nenhuma opção obriga a nomear uma morte violenta, que cabe em “outra causa externa”. A versão anterior, `v1-rascunho`, tinha 13 campos na nota, alguns com uma opção quase universal, como “tinha filhos”. A revisão reduz à metade o número de pares necessário para o mesmo efeito (seção 4.6). Ela ainda é um rascunho: faltam a revisão por pesquisadores da área e a entrevista cognitiva com consulentes, que verifica se cada pergunta é entendida como se pretende e quanto tempo o preenchimento leva.
 
 ## 4.2 Fluxo
 
@@ -177,7 +197,7 @@ Cada colchete pergunta se uma leitura se parece mais com a pessoa para quem foi 
 ::: {.quadro}
 **Um exemplo, com nomes fictícios**
 
-Suponha um par de homens que morreram entre os 60 e os 79 anos, há entre um e cinco anos: Antônio, pai de Ana, e Carlos, marido de Beatriz. Ana e Beatriz responderam aos 13 campos da nota, sem nenhum “não sei”, e todos são comparáveis. O médium sorteado recebe os dois nomes e preenche o questionário duas vezes, uma para cada nome. A leitura feita para Antônio coincide com as respostas de Ana em 7 campos e com as de Beatriz em 5; a feita para Carlos coincide com as de Beatriz em 6 e com as de Ana, também em 6. A diferença do par é *d* = (7 − 5) + (6 − 6) = +2.
+Suponha um par de homens que morreram entre os 60 e os 79 anos, há entre um e cinco anos: Antônio, pai de Ana, e Carlos, marido de Beatriz. Ana e Beatriz responderam aos 20 campos da nota, sem nenhum “não sei”, e todos são comparáveis. O médium sorteado recebe os dois nomes e preenche o questionário duas vezes, uma para cada nome. A leitura feita para Antônio coincide com as respostas de Ana em 7 campos e com as de Beatriz em 5; a feita para Carlos coincide com as de Beatriz em 5 e com as de Ana, também em 5. A diferença do par é *d* = (7 − 5) + (5 − 5) = +2.
 
 Sozinho, esse número nada significa: um par pode dar +2 por acaso, como outro pode dar −2. A análise pergunta se, somados todos os pares do estudo, os valores positivos predominam além do que o acaso explicaria.
 :::
@@ -196,7 +216,36 @@ O que a análise não faz também é declarado: multiplicar as probabilidades de
 
 A regra de parada é vinculante: a coleta termina no N declarado, sem análise intermediária. E não há como espiar, porque as notas não existem antes do desmascaramento — não há resultado parcial a consultar, nem para o pesquisador. Qualquer análise que não esteja no pré-registro aparece no relatório rotulada como exploratória.
 
-<!-- A FAZER: declarar o efeito esperado e o cálculo de poder, isto é, o tamanho de amostra que dá a um efeito real, se ele existir, boa chance de aparecer. Os efeitos publicados vêm de leituras livres pontuadas por consulentes, como os reunidos por @sarraf2021; não há estimativa prévia para um questionário fechado com conferência automática, e essa incerteza precisa estar escrita no artigo. -->
+## 4.6 Efeito esperado e tamanho da amostra
+
+Poder estatístico é a chance de um estudo detectar um efeito que de fato exista. Um estudo com pouco poder tende a dar nulo mesmo quando há efeito, e um nulo assim não distingue a ausência de efeito da falta de amostra. Por isso o pré-registro declara o efeito esperado; a plataforma calcula quantos pares esse efeito exige e escreve no documento congelado se o N declarado basta. Ela não recusa um estudo pequeno demais, porque um piloto é legítimo, mas o relatório repete o que o pré-registro disse.
+
+A dificuldade é que não existe estimativa prévia para este protocolo. Os efeitos publicados vêm de leituras livres pontuadas por consulentes. Em @beischel2015, os itens das leituras-alvo foram julgados corretos com mais frequência que os dos chamarizes: 52,8% contra 36,6% na seção de perguntas, com *d* = 0,75, e 37,0% contra 24,5% na fala livre, com *d* = 0,49. Na meta-análise de @sarraf2021, o efeito combinado é de 0,18 acima do acaso no índice de proporção, o que equivale a acertar 68% de escolhas entre duas opções, em que o acaso dá 50%. Esses valores de *d* não se transferem para cá: medem outra coisa, com outra variabilidade. O que se transfere é a forma do efeito, por meio de um modelo do próprio protocolo.
+
+O modelo é este. Em cada campo, o médium marca “não recebi” com probabilidade de 10%; nos demais casos, com probabilidade θ, dá a resposta verdadeira da pessoa cujo nome recebeu e, senão, chuta segundo a frequência das opções. θ é a taxa de informação da leitura: θ = 0 é a hipótese nula, e θ = 0,05 quer dizer que a leitura traz a resposta verdadeira, além do que o chute traria, em um de cada vinte campos. Cada consulente marca “não sei” com probabilidade de 8%. Nesse modelo, num campo comparável, a chance de a leitura coincidir com o alvo supera a de coincidir com o chamariz em
+
+$$\Delta = 0{,}9 \cdot \theta \cdot \left(1 - \textstyle\sum_k p_k^2\right),$$
+
+em que *p*~k~ é a frequência da opção *k* e Σ*p*~k~² é a chance de dois falecidos do mesmo estrato coincidirem naquele campo por acaso. É a fórmula que orienta a escolha dos campos (seção 4.1): com uma opção quase universal, o parêntese se aproxima de zero, e o campo não rende sinal, qualquer que seja a leitura. As frequências usadas são suposições para um estrato típico, o de quem morreu entre os 60 e os 79 anos, e serão trocadas pelas frequências observadas antes do congelamento de um estudo real.
+
+Uma simulação refaz, em milhares de estudos fictícios, a conferência e o teste de Wilcoxon da plataforma, com os empates e os zeros que um *d* inteiro produz. Sob a hipótese nula, ela rejeita em 5,0% das vezes, como deve. O código está no repositório (`paper/poder/SimulacaoPoder.java`), roda só com o JDK e usa uma semente fixa, para que qualquer pessoa obtenha os mesmos números. Os resultados para a versão `v2-rascunho` estão na Tabela 4. A coluna *d*~z~ é o efeito padronizado do par, a média de *d* dividida pelo seu desvio-padrão.
+
+**Tabela 4.** Poder do protocolo com o questionário `v2-rascunho`, por taxa de informação (Wilcoxon unilateral, α = 0,05; 4 mil estudos simulados por célula). Os pares para poder de 80% são o menor valor da grade 20, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300 e 400 que atinge esse poder.
+
+| θ | Δ por campo, em pontos percentuais | Pares com *d* > 0, entre os não nulos | *d*~z~ | Pares para poder de 80% | Poder com 30 pares | Poder com 120 pares |
+|---|---|---|---|---|---|---|
+| 0,02 | 1,2 | 56% | 0,13 | mais de 400 | 0,16 | 0,36 |
+| 0,04 | 2,4 | 61% | 0,24 | 120 | 0,38 | 0,84 |
+| 0,06 | 3,6 | 66% | 0,37 | 50 | 0,60 | 0,99 |
+| 0,08 | 4,9 | 70% | 0,48 | 30 | 0,83 | > 0,99 |
+| 0,10 | 6,1 | 75% | 0,60 | 20 ou menos | 0,94 | > 0,99 |
+| 0,20 | 12,1 | 90% | 1,16 | 20 ou menos | > 0,99 | > 0,99 |
+
+A tabela permite pôr os dois números da literatura na mesma escala. A proporção de 68% de acertos da meta-análise corresponde, aqui, à proporção de pares positivos, e cai entre θ = 0,06 e θ = 0,08: um *d*~z~ perto de 0,42, que pede uns 40 pares. A diferença de 12 a 16 pontos percentuais por item de @beischel2015 corresponde a θ entre 0,20 e 0,25, um efeito que 20 pares bastariam para detectar. Há três razões para esperar menos que isso neste protocolo. Os efeitos publicados tendem a superestimar os verdadeiros, mesmo quando passam nos testes de viés de publicação. Os dois estudos sem interação analisados por @silva2022 deram nulo, e aqui não há interação nenhuma. E o formato fechado descarta as afirmações livres e específicas, que costumam ser as mais informativas. A própria simulação é otimista num ponto: sorteia os campos de forma independente, quando, na vida real, causa da morte e modo da morte, por exemplo, andam juntos, e cada campo correlacionado acrescenta menos informação.
+
+A proposta, então, é planejar com metade do efeito da meta-análise: θ = 0,04, com 61% de pares positivos e *d*~z~ = 0,25. A fórmula da plataforma, que corrige a eficiência do Wilcoxon em relação ao teste *t*, pede 114 pares para esse *d*~z~; a simulação, com empates e zeros, chega a 120. **O estudo confirmatório declara, portanto, N = 120 pares**, o que significa 240 consulentes e, com o teto de 10 pares por médium, pelo menos 12 médiuns. Com esse N, o poder é de 84% para o efeito planejado e de 99% para o efeito equivalente ao da meta-análise. Para efeitos menores, como θ = 0,02, fica em 36%: um nulo com 120 pares tornaria improvável um efeito do tamanho do planejado ou maior, mas não diria nada sobre efeitos menores, e o relatório precisa dizer isso. A revisão do questionário pesa nessa conta: com a versão `v1-rascunho`, o mesmo θ = 0,04 exigiria cerca de 250 pares.
+
+Um estudo piloto de 30 pares, previsto antes do confirmatório (seção 8), tem poder de 38% para o efeito planejado e serve a outra coisa: testar o fluxo, medir a frequência de “não sei” e de “não recebi” e observar as frequências reais das opções, que entram na simulação no lugar das supostas. O valor-p do piloto não decide nada, e a estimativa de θ que ele produzir é imprecisa demais para, sozinha, reduzir o tamanho do estudo confirmatório. A escolha final do efeito e do N cabe a quem conduzir o estudo e é feita antes dos dados, no pré-registro; o que este artigo faz é declarar a proposta e o caminho para refazê-la.
 
 # 5. Arquitetura
 
@@ -277,13 +326,35 @@ A delimitação é intencional: um sistema que alega mais do que pode garantir c
 
 # 7. Considerações éticas e proteção de dados
 
-Os estudos envolvem pessoas enlutadas e informações delicadas: a vida e a morte de alguém próximo e, por tabela, a crença de quem participa. O simples cadastro como médium pode revelar convicção religiosa, que a Lei Geral de Proteção de Dados Pessoais classifica como dado pessoal sensível, ao lado dos dados de saúde [@brasil2018, art. 5º, II]. As respostas sobre a pessoa falecida, que incluem a causa da morte e a religiosidade, recebem o mesmo cuidado.
+Os estudos envolvem pessoas enlutadas e informações delicadas: a vida e a morte de alguém próximo e, por tabela, a crença de quem participa. O simples cadastro como médium pode revelar convicção religiosa, que a Lei Geral de Proteção de Dados Pessoais classifica como dado pessoal sensível, ao lado dos dados de saúde [@brasil2018, art. 5º, II]. As respostas sobre a pessoa falecida, que incluem a causa da morte e a religião, recebem o mesmo cuidado.
 
 As medidas são as de praxe em pesquisa com dados sensíveis, com a diferença de que o sistema as impõe: minimização, isto é, coletar só o necessário; pseudonimização; cifragem em repouso; consentimento versionado; desistência a qualquer momento, com apagamento dos dados identificáveis; e dados guardados no Brasil. O pacote de verificação é público, mas não traz primeiro nome nem dado de conta, e quem participa é informado, antes de aceitar o termo, de que uma desistência posterior ao desmascaramento não altera o pacote já publicado.
 
 A inscrição só abre com a aprovação de um comitê de ética em pesquisa, no sistema CEP/Conep, e com um contato humano alcançável, porque alguém pode se inscrever em luto agudo; o sistema impõe as duas condições. A página do protocolo diz o que ele não é: não é carta nem mensagem da pessoa falecida, nem resposta a perguntas do consulente. A devolutiva usa linguagem cuidadosa e lembra que um resultado individual não fala da pessoa falecida nem do médium, porque o que o estudo avalia é o conjunto. E nenhum modelo de inteligência artificial participa da avaliação ou da pontuação.
 
-<!-- A FAZER: citar as resoluções do Conselho Nacional de Saúde e as demais normas de ética em pesquisa aplicáveis, conferindo o texto vigente. -->
+## 7.1 Normas aplicáveis
+
+No Brasil, a pesquisa com seres humanos é regida pela Lei nº 14.874/2024, que instituiu o Sistema Nacional de Ética em Pesquisa com Seres Humanos, e pelo Decreto nº 12.651/2025, que a regulamenta [@brasil2024; @brasil2025]. Pelas regras de transição do decreto, as resoluções do Conselho Nacional de Saúde continuam valendo naquilo que não contrariam a lei, até que a nova instância nacional publique normas próprias, e os protocolos seguem sendo analisados pelo sistema CEP/Conep. Os textos foram conferidos em novembro de 2026, e um estudo real precisa conferi-los de novo na data da submissão. Aplicam-se ao Crivo:
+
+- a **Resolução CNS nº 466/2012**, com as diretrizes gerais: consentimento livre e esclarecido, avaliação de riscos e benefícios e proteção de participantes em situação de vulnerabilidade [@cns2012];
+- a **Resolução CNS nº 510/2016**, própria das pesquisas em ciências humanas e sociais que usam dados obtidos diretamente dos participantes, que admite formas de registro do consentimento adequadas ao meio, inclusive a eletrônica, e gradua as exigências pelo risco [@cns2016]. Um questionário on-line, sem intervenção, se aproxima do que ela descreve; cabe ao comitê, e à área da instituição proponente, dizer se o estudo segue esta resolução ou a 466;
+- a **Resolução CNS nº 674/2022**, que tipifica a pesquisa e define a tramitação dos protocolos de acordo com o risco [@cns2022];
+- o **Ofício Circular nº 2/2021 da Conep**, com as orientações para pesquisas com qualquer etapa em ambiente virtual: descrever cada etapa on-line, com as telas; apresentar o termo de consentimento antes de qualquer pergunta e permitir que o participante guarde uma cópia; garantir o direito de não responder e de retirar o consentimento; e declarar os riscos próprios do ambiente virtual e os limites da confidencialidade [@conep2021];
+- a **LGPD**, pela qual os dados sensíveis do estudo — a convicção religiosa de quem se cadastra como médium, a religião e a causa da morte do falecido — só podem ser tratados com consentimento específico e destacado [@brasil2018, art. 11, I]. A hipótese que dispensa o consentimento para estudos feitos por órgão de pesquisa [@brasil2018, art. 11, II, c] não se aplica enquanto o estudo não tiver uma instituição de pesquisa como responsável.
+
+## 7.2 O que as normas pedem e o que já existe
+
+Algumas exigências o Crivo já cumpre por construção. O consentimento é registrado na criação da conta, com a versão do termo aceita. O participante pode excluir a conta e retirar o pedido a qualquer momento, sem justificativa, e os dados identificáveis são apagados. Os campos da nota têm “não sei”. O questionário é público antes do cadastro, e os riscos do ambiente virtual têm resposta técnica: dados identificáveis cifrados, num esquema do banco lido por um único módulo, e nenhum dado pessoal em registros de sistema.
+
+Outras dependem de decisões a tomar com o comitê e com a instituição proponente:
+
+- **Termo de consentimento.** O termo atual resume o estudo, mas não é um termo de consentimento livre e esclarecido (TCLE) completo. O TCLE, no modelo do comitê, com riscos, benefícios e os contatos do pesquisador e do CEP, passa a ser exibido antes do questionário, no lugar do termo atual, e enviado por e-mail ao participante.
+- **Direito de não responder.** Os três campos de pareamento são obrigatórios, porque sem eles não há par. Ou o TCLE explica isso, ou entra uma opção “prefiro não responder”, que deixa o pedido fora do pareamento.
+- **Vulnerabilidade.** O consulente está de luto, às vezes recente. Além do contato humano e da indicação do Centro de Valorização da Vida (CVV), cabe decidir um tempo mínimo desde o óbito para a inscrição. O cadastro também precisa se restringir a maiores de 18 anos, o que hoje ele não pergunta.
+- **Reidentificação.** O pacote publica as respostas sem nome, mas quem conheceu o falecido pode reconhecer o conjunto. Os campos foram escolhidos para não identificar ninguém sozinhos (seção 4.1); combinados com o estrato, porém, podem identificar alguém para quem já conhece a família. O TCLE precisa dizer isso. A LGPD protege pessoas vivas, mas o Código Civil permite à família defender os direitos de personalidade de quem morreu [@brasil2002, art. 12, parágrafo único], e as respostas falam também de quem fez o pedido, cujo parentesco é um dos campos.
+- **Médiuns.** São participantes tanto quanto os consulentes, com termo próprio: o cadastro revela convicção religiosa, e um desempenho divulgado pode afetar a reputação de quem for identificado. No relatório, cada médium aparece só pelo código pseudônimo.
+- **Guarda dos dados.** O ofício da Conep recomenda transferir os dados coletados para um dispositivo local e apagá-los do ambiente virtual; a verificação pública pede que a trilha, o relatório e o pacote fiquem on-line. A proposta é apagar os dados identificáveis ao fim do estudo e manter on-line só o que é pseudonimizado e público, com essa justificativa escrita no projeto.
+- **Instituição proponente.** A submissão ao sistema CEP/Conep pede uma instituição e um pesquisador responsável vinculado a ela. O autor deste artigo não tem vínculo com instituição de pesquisa, e por isso um estudo real depende de um grupo da área que o conduza.
 
 # 8. Estado atual e avaliação planejada
 

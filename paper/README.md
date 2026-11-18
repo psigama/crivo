@@ -3,7 +3,9 @@
 | Arquivo | Conteúdo |
 |---|---|
 | `artigo-tecnico.pt-BR.md` | Artigo de desenho, em português, em Markdown do Pandoc (esboço) |
-| `referencias.bib` | As 27 referências citadas no artigo, em BibTeX |
+| `referencias.bib` | As 34 referências citadas no artigo, em BibTeX |
+| `poder/SimulacaoPoder.java` | Simulação de poder do P1 (seção 4.6), só com o JDK: `java paper/poder/SimulacaoPoder.java` |
+| `poder/resultados.txt` | A saída da simulação, com a semente fixa |
 
 ## Relação com a página publicada
 
@@ -35,9 +37,13 @@ pandoc artigo-tecnico.pt-BR.md --citeproc -s -o artigo-tecnico.pt-BR.html
 
 - [ ] Ler o texto integral das referências ainda conferidas só pelo resumo e conferir cada número citado
 - [ ] Levantamento sistemático de ferramentas existentes (seção 2.5), com protocolo registrado
-- [ ] Efeito esperado e cálculo de poder (seção 4.5)
-- [ ] Revisão do questionário, hoje em versão de rascunho
-- [ ] Normas de ética em pesquisa aplicáveis (seção 7)
+- [x] Efeito esperado e cálculo de poder (seção 4.6, com a simulação em `poder/`)
+- [x] Revisão do questionário: `v2-rascunho`, com os critérios escritos (seção 4.1; SPEC, anexo do E13)
+- [ ] Revisão do questionário por pesquisadores da área e entrevista cognitiva com consulentes
+- [ ] Frequências observadas das opções, por estrato, no lugar das supostas na simulação de poder
+- [x] Normas de ética em pesquisa aplicáveis (seção 7)
+- [ ] Conferir com o comitê a resolução aplicável (466 ou 510) e as normas novas da Lei 14.874/2024
 - [ ] Ensaio completo e auditoria externa (seção 8)
-- [ ] Afiliação do autor e abstract em inglês
+- [x] Afiliação do autor e abstract em inglês
+- [ ] ORCID e e-mail de correspondência do autor
 - [ ] Discussão (seção 9), depois do ensaio e da auditoria
