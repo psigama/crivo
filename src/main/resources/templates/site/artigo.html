@@ -1,859 +1,1010 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Artigo técnico (esboço) — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Artigo técnico (esboço) — Crivo', 'Esboço do artigo técnico do Crivo: requisitos, protocolo de leitura estruturada automatizada, arquitetura, garantias e limites.')}"></th:block>
+  <th:block
+    th:replace="~{fragments/site :: social('Artigo técnico (esboço) — Crivo', 'Esboço do artigo técnico do Crivo: requisitos, protocolo de leitura estruturada automatizada, arquitetura, garantias e limites.')}">
+  </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
+
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="faixa">
-  <header th:replace="~{fragments/site :: topo}"></header>
-</div>
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
 
-<main id="conteudo">
-  <section class="abertura">
-    <div class="faixa">
-      <p class="rotulo aparece">Artigo técnico · esboço, em preparação</p>
-      <h1 class="aparece">Crivo: uma plataforma aberta de protocolos automatizados para o estudo da cognição anômala</h1>
-      <p class="chamada aparece">
-        Artigo de desenho, que descreve um método antes de qualquer dado. Apresenta a plataforma pelo seu protocolo de
-        mediunidade: de onde vêm os requisitos, como o protocolo funciona, como o software o impõe, o que ele garante e
-        o que não garante. Não há resultado empírico, porque nenhum estudo com participantes reais foi conduzido.
-      </p>
-      <dl class="ficha aparece">
-        <div>
-          <dt>Autor</dt>
-          <dd>Rogerio Cisi</dd>
-        </div>
-        <div>
-          <dt>Tipo</dt>
-          <dd>Artigo de desenho</dd>
-        </div>
-        <div>
-          <dt>Versão</dt>
-          <dd>Esboço, novembro de 2026</dd>
-        </div>
-        <div>
-          <dt>Software</dt>
-          <dd>Código aberto, licença MIT</dd>
-        </div>
-      </dl>
-    </div>
-  </section>
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Artigo técnico · esboço, em preparação</p>
+        <h1 class="aparece">Crivo: uma plataforma aberta de protocolos automatizados para o estudo da cognição anômala
+        </h1>
+        <p class="chamada aparece">
+          Artigo de desenho, que descreve um método antes de qualquer dado. Apresenta a plataforma pelo seu protocolo de
+          mediunidade: de onde vêm os requisitos, como o protocolo funciona, como o software o impõe, o que ele garante
+          e
+          o que não garante. Não há ainda resultado empírico, porque nenhum estudo com participantes reais foi
+          conduzido.
+        </p>
+        <dl class="ficha aparece">
+          <div>
+            <dt>Autor</dt>
+            <dd>Rogerio Cisi</dd>
+          </div>
+          <div>
+            <dt>Tipo</dt>
+            <dd>Artigo de desenho</dd>
+          </div>
+          <div>
+            <dt>Versão</dt>
+            <dd>Esboço, novembro de 2026</dd>
+          </div>
+          <div>
+            <dt>Software</dt>
+            <dd>Código aberto, licença MIT</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
 
-  <section class="artigo">
-    <div class="faixa">
-      <p class="ressalva">Este é um esboço, escrito para dois públicos: pesquisadores, que encontram aqui o desenho
-        completo e as referências, e leitores de fora da área, para quem cada termo técnico é explicado na primeira vez
-        em que aparece no corpo do texto. Os trechos marcados como <strong>a fazer</strong> dependem da leitura integral
-        de referências, de decisões em aberto ou de etapas de avaliação que ainda não aconteceram. O texto pode mudar
-        até a submissão.</p>
+    <section class="artigo">
+      <div class="faixa">
+        <p class="ressalva">Este é um esboço, escrito para dois públicos: pesquisadores, que encontram aqui o desenho
+          completo e as referências, e leitores de fora da área, para quem cada termo técnico é explicado na primeira
+          vez
+          em que aparece no corpo do texto.</p>
 
-      <h2 id="resumo">Resumo provisório</h2>
-      <p>Para que um estudo de mediunidade diga alguma coisa, é preciso mostrar que a informação dada pelo médium não
-        chegou a ele por vias comuns: pistas involuntárias, leitura fria, pesquisa prévia, a boa vontade de quem avalia
-        ou fraude. A literatura de recepção anômala de informação (AIR, de <em lang="en">anomalous information
-        reception</em>) já descreve protocolos capazes de fechar essas portas. Executá-los, porém, depende de uma equipe
-        e de regras manuais que quem lê o artigo publicado não tem como conferir, e a avaliação continua sujeita ao
-        julgamento de quem decide se uma afirmação se ajusta à pessoa falecida.</p>
-      <p>Este artigo apresenta o Crivo, uma plataforma de código aberto que executa um protocolo de AIR do início ao fim
-        sem ninguém da equipe no circuito. O consulente, que é a pessoa enlutada, e o médium respondem ao mesmo
-        questionário fechado sobre o falecido, de quem o médium conhece apenas o primeiro nome. O sistema confere as
-        respostas campo a campo, contra o alvo e contra um chamariz, outra pessoa falecida de perfil semelhante que
-        serve de controle. Ninguém precisa julgar se uma afirmação se ajusta. Os requisitos de método tornam-se
-        propriedades do software: o que cada pessoa pode ver é limitado na camada de dados, e não na tela; as respostas são
-        lacradas criptograficamente antes de qualquer informação chegar ao médium; o sorteio é lacrado antes da coleta e
-        aberto no fim; o plano do estudo é registrado e congelado antes dos dados; o cegamento se desfaz sozinho quando a
-        amostra declarada se completa; e cada passo entra numa trilha de auditoria encadeada, atestada por uma autoridade
-        independente de carimbo do tempo.</p>
-      <p>Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer pessoa
-        confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o
-        protocolo, a arquitetura, o que o sistema garante e o que não pode garantir, e as questões de ética e de proteção
-        de dados.</p>
-      <p><strong>Palavras-chave:</strong> mediunidade; recepção anômala de informação; protocolo cego;
-        pré-registro; reprodutibilidade; auditoria; software livre.</p>
+        <h2 id="resumo">Resumo provisório</h2>
+        <p>Para que um estudo de mediunidade diga alguma coisa, é preciso mostrar que a informação dada pelo médium não
+          chegou a ele por vias comuns: pistas involuntárias, leitura fria, pesquisa prévia, a boa vontade de quem
+          avalia
+          ou fraude. A literatura de recepção anômala de informação (AIR, de <em lang="en">anomalous information
+            reception</em>) já descreve protocolos capazes de fechar essas portas. Executá-los, porém, depende de uma
+          equipe
+          e de regras manuais que quem lê o artigo publicado não tem como conferir, e a avaliação continua sujeita ao
+          julgamento de quem decide se uma afirmação se ajusta à pessoa falecida.</p>
+        <p>Este artigo apresenta o Crivo, uma plataforma de código aberto que executa um protocolo de AIR do início ao
+          fim
+          sem ninguém da equipe no circuito. O consulente, que é a pessoa enlutada, e o médium respondem ao mesmo
+          questionário fechado sobre o falecido, de quem o médium conhece apenas o primeiro nome. O sistema confere as
+          respostas campo a campo, contra o alvo e contra um chamariz, outra pessoa falecida de perfil semelhante que
+          serve de controle. Ninguém precisa julgar se uma afirmação se ajusta. Os requisitos de método tornam-se
+          propriedades do software: o que cada pessoa pode ver é limitado na camada de dados, e não na tela; as
+          respostas são
+          lacradas criptograficamente antes de qualquer informação chegar ao médium; o sorteio é lacrado antes da coleta
+          e
+          aberto no fim; o plano do estudo é registrado e congelado antes dos dados; o cegamento se desfaz sozinho
+          quando a
+          amostra declarada se completa; e cada passo entra numa trilha de auditoria encadeada, atestada por uma
+          autoridade
+          independente de carimbo do tempo.</p>
+        <p>Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer pessoa
+          confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o
+          protocolo, a arquitetura, o que o sistema garante e o que não pode garantir, e as questões de ética e de
+          proteção
+          de dados.</p>
+        <p><strong>Palavras-chave:</strong> mediunidade; recepção anômala de informação; protocolo cego;
+          pré-registro; reprodutibilidade; auditoria; software livre.</p>
 
-      <h2 id="secao-1">1. Introdução</h2>
-      <p>Quem procura um médium depois de perder alguém às vezes sai da consulta convencido de ter ouvido coisas que
-        ninguém ali poderia saber. A ciência não precisa confirmar nem desmentir essa impressão para levá-la a sério;
-        precisa perguntar de onde veio a informação. A questão, portanto, não é se existem relatos de médiuns que acertam
-        — eles são abundantes —, mas se, sob condições que excluam as explicações convencionais, a informação produzida
-        excede o que se esperaria por acaso.</p>
-      <p>Essas explicações são conhecidas e nada têm de exóticas. Quem está diante do médium reage, e as reações orientam
-        o que vem a seguir. Frases vagas soam certeiras para quem deseja reconhecê-las. O médium pode ter pesquisado
-        antes, ou simplesmente trapaceado. E quem avalia o que foi dito tende a guardar os acertos e a esquecer os erros.
-        Um estudo só diz alguma coisa se cada uma dessas portas estiver fechada — e se for possível mostrar, depois, que
-        estava.</p>
-      <p>A literatura experimental chama o fenômeno em questão de recepção anômala de informação, ou AIR: o relato de
-        informação precisa e específica sobre uma pessoa falecida, sem conhecimento prévio, sem retorno sensorial e sem
-        trapaça (Beischel e colaboradores, 2015). O termo é deliberadamente neutro quanto à origem. Não afirma que a
-        informação venha da pessoa falecida, nem de alguma capacidade dos vivos, como a telepatia (Beischel e Schwartz,
-        2007). O vocabulário da área segue a mesma cautela: o que o médium produz sobre um falecido chama-se leitura
-        (<em lang="en">reading</em>), e não mensagem ou comunicação, palavras que pressupõem de onde a informação vem.
-        Ao longo do texto, chamamos de consulente a pessoa enlutada que conheceu o falecido e cujo conhecimento sobre
-        ele serve de referência para conferir as leituras, o <em lang="en">sitter</em> da literatura em inglês. Este
-        artigo adota essa neutralidade: descreve um método para verificar se a informação existe, e não uma teoria sobre
-        de onde ela viria.</p>
-      <p>O quadro empírico é dividido. Estudos com cegamento em várias camadas relatam desempenho acima do acaso
-        (Beischel e Schwartz, 2007; Beischel e colaboradores, 2015); outros não encontram efeito algum (O'Keeffe e
-        Wiseman, 2005). Uma análise comparativa recente atribui parte da divergência a detalhes do desenho, como a
-        seleção dos médiuns e o tipo de interação permitido durante a leitura (Silva e Moreira-Almeida, 2022).</p>
-      <p>Este artigo defende que o gargalo da área está menos na teoria do que na execução verificável. Um estudo cego
-        depende do cumprimento de dezenas de pequenas regras — quem pode saber o quê, e a partir de quando —, e esse
-        cumprimento costuma ficar registrado, quando fica, em procedimentos manuais que o leitor do artigo publicado não
-        tem como auditar. Os autores de uma das principais séries de estudos positivos apontam, além disso, que todos os
-        seus dados vêm de um único laboratório (Beischel e colaboradores, 2015), o que torna a replicação independente
-        especialmente valiosa.</p>
-      <p>A proposta é tratar essas regras como propriedades de um sistema de software, implementadas e testadas com o
-        rigor com que se testam requisitos de segurança, e retirar da pontuação o julgamento subjetivo. O artigo faz
-        quatro contribuições: organiza os requisitos de método como um modelo de ameaças (<a href="#secao-3">seção
-        3</a>); descreve um protocolo pareado, fechado e integralmente automatizado (<a href="#secao-4">seção 4</a>);
-        apresenta a arquitetura que o impõe (<a href="#secao-5">seção 5</a>); e delimita o que essa arquitetura garante
-        e o que não garante (<a href="#secao-6">seção 6</a>). As seções seguintes tratam da ética, do estado atual do
-        projeto e do alcance do que ele poderá mostrar. Por ser um artigo de desenho, o texto não traz resultados:
-        nenhum estudo com participantes reais foi conduzido.</p>
+        <h2 id="secao-1">1. Introdução</h2>
+        <p>Quem procura um médium depois de perder alguém às vezes sai da consulta convencido de ter ouvido coisas que
+          ninguém ali poderia saber. A ciência não precisa confirmar nem desmentir essa impressão para levá-la a sério;
+          precisa perguntar de onde veio a informação. A questão, portanto, não é se existem relatos de médiuns que
+          acertam
+          — eles são abundantes —, mas se, sob condições que excluam as explicações convencionais, a informação
+          produzida
+          excede o que se esperaria por acaso.</p>
+        <p>Essas explicações são conhecidas e nada têm de exóticas. Quem está diante do médium reage, e as reações
+          orientam
+          o que vem a seguir. Frases vagas soam certeiras para quem deseja reconhecê-las. O médium pode ter pesquisado
+          antes, ou simplesmente trapaceado. E quem avalia o que foi dito tende a guardar os acertos e a esquecer os
+          erros.
+          Um estudo só diz alguma coisa se cada uma dessas portas estiver fechada — e se for possível mostrar, depois,
+          que
+          estava.</p>
+        <p>A literatura experimental chama o fenômeno em questão de recepção anômala de informação, ou AIR: o relato de
+          informação precisa e específica sobre uma pessoa falecida, sem conhecimento prévio, sem retorno sensorial e
+          sem
+          trapaça (Beischel e colaboradores, 2015). O termo é deliberadamente neutro quanto à origem. Não afirma que a
+          informação venha da pessoa falecida, nem de alguma capacidade dos vivos, como a telepatia (Beischel e
+          Schwartz,
+          2007). O vocabulário da área segue a mesma cautela: o que o médium produz sobre um falecido chama-se leitura
+          (<em lang="en">reading</em>), e não mensagem ou comunicação, palavras que pressupõem de onde a informação vem.
+          Ao longo do texto, chamamos de consulente a pessoa enlutada que conheceu o falecido e cujo conhecimento sobre
+          ele serve de referência para conferir as leituras, o <em lang="en">sitter</em> da literatura em inglês. Este
+          artigo adota essa neutralidade: descreve um método para verificar se a informação existe, e não uma teoria
+          sobre
+          de onde ela viria.</p>
+        <p>O quadro empírico é dividido. Estudos com cegamento em várias camadas relatam desempenho acima do acaso
+          (Beischel e Schwartz, 2007; Beischel e colaboradores, 2015); outros não encontram efeito algum (O'Keeffe e
+          Wiseman, 2005). Uma análise comparativa recente atribui parte da divergência a detalhes do desenho, como a
+          seleção dos médiuns e o tipo de interação permitido durante a leitura (Silva e Moreira-Almeida, 2022).</p>
+        <p>Este artigo defende que o gargalo da área está menos na teoria do que na execução verificável. Um estudo cego
+          depende do cumprimento de dezenas de pequenas regras — quem pode saber o quê, e a partir de quando —, e esse
+          cumprimento costuma ficar registrado, quando fica, em procedimentos manuais que o leitor do artigo publicado
+          não
+          tem como auditar. Os autores de uma das principais séries de estudos positivos apontam, além disso, que todos
+          os
+          seus dados vêm de um único laboratório (Beischel e colaboradores, 2015), o que torna a replicação independente
+          especialmente valiosa.</p>
+        <p>A proposta é tratar essas regras como propriedades de um sistema de software, implementadas e testadas com o
+          rigor com que se testam requisitos de segurança, e retirar da pontuação o julgamento subjetivo. O artigo faz
+          quatro contribuições: organiza os requisitos de método como um modelo de ameaças (<a href="#secao-3">seção
+            3</a>); descreve um protocolo pareado, fechado e integralmente automatizado (<a href="#secao-4">seção
+            4</a>);
+          apresenta a arquitetura que o impõe (<a href="#secao-5">seção 5</a>); e delimita o que essa arquitetura
+          garante
+          e o que não garante (<a href="#secao-6">seção 6</a>). As seções seguintes tratam da ética, do estado atual do
+          projeto e do alcance do que ele poderá mostrar. Por ser um artigo de desenho, o texto não traz resultados:
+          nenhum estudo com participantes reais foi conduzido.</p>
 
-      <h2 id="secao-2">2. Trabalhos relacionados</h2>
-      <h3 id="secao-2-1">2.1 Protocolos de AIR com cegamento</h3>
-      <p>Em pesquisa, cegar alguém é impedir que essa pessoa saiba algo que poderia, mesmo sem querer, influenciar o
-        resultado; desfazer o cegamento no fim do estudo, revelando o que estava oculto, é o desmascaramento. O protocolo
-        de referência para este trabalho, o de Beischel e Schwartz (2007), cegou três papéis ao mesmo tempo. O médium, que
-        fazia a leitura por telefone, recebia apenas o primeiro nome da pessoa falecida e, além de falar livremente,
-        respondia a perguntas sobre a aparência, a personalidade, os passatempos e a causa da morte dela. Os consulentes
-        não participavam: eram representados por um experimentador — o consulente substituto, ou
-        <em lang="en">proxy</em> — que também nada sabia sobre eles nem sobre os falecidos. Os falecidos eram pareados
-        dois a dois, com o mesmo gênero, e o mesmo médium lia os dois de cada par. No fim, cada consulente pontuava, sem
-        saber qual era qual, a leitura feita para o seu falecido, chamada de alvo, e a do outro falecido do par, que
-        servia de controle e é chamada de chamariz; depois, escolhia a que mais se ajustava.</p>
-      <p>A replicação e extensão de Beischel e colaboradores (2015), com 20 médiuns certificados pelo próprio grupo depois
-        de triagem e testes, manteve essa estrutura e voltou a relatar leituras-alvo mais bem avaliadas que os chamarizes.
-        Os autores apontam como principal limitação o fato de todos os dados virem de um único laboratório. Para a
-        descrição das técnicas de laboratório, usamos Beischel (2007), sem tomá-la como avaliação da evidência.</p>
+        <h2 id="secao-2">2. Trabalhos relacionados</h2>
+        <h3 id="secao-2-1">2.1 Protocolos de AIR com cegamento</h3>
+        <p>Em pesquisa, cegar alguém é impedir que essa pessoa saiba algo que poderia, mesmo sem querer, influenciar o
+          resultado; desfazer o cegamento no fim do estudo, revelando o que estava oculto, é o desmascaramento. O
+          protocolo
+          de referência para este trabalho, o de Beischel e Schwartz (2007), cegou três papéis ao mesmo tempo. O médium,
+          que
+          fazia a leitura por telefone, recebia apenas o primeiro nome da pessoa falecida e, além de falar livremente,
+          respondia a perguntas sobre a aparência, a personalidade, os passatempos e a causa da morte dela. Os
+          consulentes
+          não participavam: eram representados por um experimentador — o consulente substituto, ou
+          <em lang="en">proxy</em> — que também nada sabia sobre eles nem sobre os falecidos. Os falecidos eram pareados
+          dois a dois, com o mesmo gênero, e o mesmo médium lia os dois de cada par. No fim, cada consulente pontuava,
+          sem
+          saber qual era qual, a leitura feita para o seu falecido, chamada de alvo, e a do outro falecido do par, que
+          servia de controle e é chamada de chamariz; depois, escolhia a que mais se ajustava.
+        </p>
+        <p>A replicação e extensão de Beischel e colaboradores (2015), com 20 médiuns certificados pelo próprio grupo
+          depois
+          de triagem e testes, manteve essa estrutura e voltou a relatar leituras-alvo mais bem avaliadas que os
+          chamarizes.
+          Os autores apontam como principal limitação o fato de todos os dados virem de um único laboratório. Para a
+          descrição das técnicas de laboratório, usamos Beischel (2007), sem tomá-la como avaliação da evidência.</p>
 
-      <h3 id="secao-2-2">2.2 Críticas metodológicas e resultados nulos</h3>
-      <p>Nem todo estudo cego encontra efeito. O'Keeffe e Wiseman (2005) desenharam um método próprio, sem contato entre
-        médiuns e consulentes e com cada consulente avaliando, afirmação por afirmação, todas as leituras do estudo, e
-        obtiveram resultado nulo. O estudo foi criticado pela falta de triagem dos médiuns e pelo formato dos itens, que
-        reuniam várias afirmações num só. Em Kelly e Arcangel (2011), a primeira etapa não teve resultado
-        significativo. A segunda teve, mas mudou três coisas, entre elas o envio aos médiuns de
-        fotografias dos falecidos — e uma fotografia diz muito, da idade à época em que a pessoa viveu, o que deixa
-        incompleto o cegamento dessa etapa. Casos assim mostram que detalhes operacionais aparentemente pequenos decidem
-        a validade de um estudo.</p>
-      <p>As objeções que mais pesam no desenho do Crivo, no entanto, vêm da crítica cética (Hyman, 1977, 2003; Wiseman e
-        O'Keeffe, 2001). A leitura fria é a técnica, deliberada ou não, de produzir afirmações que soam específicas mas
-        servem para quase todo mundo, corrigindo o rumo pelas reações de quem ouve (Hyman, 1977). A validação subjetiva é
-        o outro lado da moeda: quem avalia encontra sentido no que ouve e reconhece como certeira uma frase vaga.
-        Somam-se a elas a pontuação enviesada e a ausência de uma regra de parada fixada antes da coleta, que permite
-        encerrar o estudo no momento em que o resultado parece favorável (Hyman, 2003).</p>
+        <h3 id="secao-2-2">2.2 Críticas metodológicas e resultados nulos</h3>
+        <p>Nem todo estudo cego encontra efeito. O'Keeffe e Wiseman (2005) desenharam um método próprio, sem contato
+          entre
+          médiuns e consulentes e com cada consulente avaliando, afirmação por afirmação, todas as leituras do estudo, e
+          obtiveram resultado nulo. O estudo foi criticado pela falta de triagem dos médiuns e pelo formato dos itens,
+          que
+          reuniam várias afirmações num só. Em Kelly e Arcangel (2011), a primeira etapa não teve resultado
+          significativo. A segunda teve, mas mudou três coisas, entre elas o envio aos médiuns de
+          fotografias dos falecidos — e uma fotografia diz muito, da idade à época em que a pessoa viveu, o que deixa
+          incompleto o cegamento dessa etapa. Casos assim mostram que detalhes operacionais aparentemente pequenos
+          decidem
+          a validade de um estudo.</p>
+        <p>As objeções que mais pesam no desenho do Crivo, no entanto, vêm da crítica cética (Hyman, 1977, 2003; Wiseman
+          e
+          O'Keeffe, 2001). A leitura fria é a técnica, deliberada ou não, de produzir afirmações que soam específicas
+          mas
+          servem para quase todo mundo, corrigindo o rumo pelas reações de quem ouve (Hyman, 1977). A validação
+          subjetiva é
+          o outro lado da moeda: quem avalia encontra sentido no que ouve e reconhece como certeira uma frase vaga.
+          Somam-se a elas a pontuação enviesada e a ausência de uma regra de parada fixada antes da coleta, que permite
+          encerrar o estudo no momento em que o resultado parece favorável (Hyman, 2003).</p>
 
-      <h3 id="secao-2-3">2.3 Revisões, meta-análises e contexto brasileiro</h3>
-      <p>Uma meta-análise combina estatisticamente os resultados de vários estudos para estimar um efeito comum. A de
-        Sarraf, Woodley of Menie e Tressoldi (2021) reuniu 18 experimentos, publicados em 14 artigos entre 2001 e 2019, e
-        estimou um efeito de 0,18 acima do nível do acaso, num índice padronizado de proporção (intervalo de confiança de
-        95%: 0,12 a 0,25). A estimativa resistiu a dois testes de viés de publicação, a tendência de os resultados
-        positivos chegarem às revistas com mais facilidade que os nulos. Milton e Wiseman (1999) lembram, porém, que
-        meta-análise não substitui replicação independente: o resultado depende de quais estudos entram e de como se
-        trata a diferença entre eles. A lição veio de outra literatura, a do ganzfeld, um experimento de telepatia sob
-        privação sensorial leve.</p>
-      <p>Silva e Moreira-Almeida (2022) compararam oito estudos recentes com cegamento ao menos triplo, cinco com
-        resultado significativo e três sem, à procura do que os distinguia. Sete condições coincidiram com resultado
-        positivo: selecionar médiuns com evidência prévia; recrutar consulentes motivados e enlutados por uma perda
-        significativa; permitir alguma interação com o médium, ainda que por um consulente substituto; dar ao médium
-        alguma informação sobre o falecido; combinar fala livre com perguntas objetivas; pontuar tanto a leitura inteira
-        quanto os itens; e evitar um número grande de leituras e de itens. Um dos achados é um ponto que este artigo
-        precisa enfrentar: nos dois estudos em que o médium não interagiu com ninguém, um deles o de O'Keeffe e Wiseman
-        (2005), o resultado foi nulo. Os próprios autores pedem cautela, porque a comparação é heurística e parte dos
-        estudos não descreve variáveis importantes.</p>
-      <p>No Brasil, Rocha e colaboradores (2014) examinaram 13 cartas psicografadas por Chico Xavier, isto é, escritas
-        pelo médium e atribuídas por ele a um mesmo falecido. Identificaram 99 itens de informação verificáveis e os
-        conferiram com documentos e com o depoimento da irmã e de amigos do falecido: 98% foram classificados como de
-        ajuste claro e preciso. O trabalho mostra o valor de afirmações verificáveis item a item. E, justamente por ser
-        um estudo de caso retrospectivo, que examina material produzido sem nenhum controle do vazamento, mostra também o
-        que um desenho prospectivo e cego acrescentaria.</p>
+        <h3 id="secao-2-3">2.3 Revisões, meta-análises e contexto brasileiro</h3>
+        <p>Uma meta-análise combina estatisticamente os resultados de vários estudos para estimar um efeito comum. A de
+          Sarraf, Woodley of Menie e Tressoldi (2021) reuniu 18 experimentos, publicados em 14 artigos entre 2001 e
+          2019, e
+          estimou um efeito de 0,18 acima do nível do acaso, num índice padronizado de proporção (intervalo de confiança
+          de
+          95%: 0,12 a 0,25). A estimativa resistiu a dois testes de viés de publicação, a tendência de os resultados
+          positivos chegarem às revistas com mais facilidade que os nulos. Milton e Wiseman (1999) lembram, porém, que
+          meta-análise não substitui replicação independente: o resultado depende de quais estudos entram e de como se
+          trata a diferença entre eles. A lição veio de outra literatura, a do ganzfeld, um experimento de telepatia sob
+          privação sensorial leve.</p>
+        <p>Silva e Moreira-Almeida (2022) compararam oito estudos recentes com cegamento ao menos triplo, cinco com
+          resultado significativo e três sem, à procura do que os distinguia. Sete condições coincidiram com resultado
+          positivo: selecionar médiuns com evidência prévia; recrutar consulentes motivados e enlutados por uma perda
+          significativa; permitir alguma interação com o médium, ainda que por um consulente substituto; dar ao médium
+          alguma informação sobre o falecido; combinar fala livre com perguntas objetivas; pontuar tanto a leitura
+          inteira
+          quanto os itens; e evitar um número grande de leituras e de itens. Um dos achados é um ponto que este artigo
+          precisa enfrentar: nos dois estudos em que o médium não interagiu com ninguém, um deles o de O'Keeffe e
+          Wiseman
+          (2005), o resultado foi nulo. Os próprios autores pedem cautela, porque a comparação é heurística e parte dos
+          estudos não descreve variáveis importantes.</p>
+        <p>No Brasil, Rocha e colaboradores (2014) examinaram 13 cartas psicografadas por Chico Xavier, isto é, escritas
+          pelo médium e atribuídas por ele a um mesmo falecido. Identificaram 99 itens de informação verificáveis e os
+          conferiram com documentos e com o depoimento da irmã e de amigos do falecido: 98% foram classificados como de
+          ajuste claro e preciso. O trabalho mostra o valor de afirmações verificáveis item a item. E, justamente por
+          ser
+          um estudo de caso retrospectivo, que examina material produzido sem nenhum controle do vazamento, mostra
+          também o
+          que um desenho prospectivo e cego acrescentaria.</p>
 
-      <h3 id="secao-2-4">2.4 Pré-registro e flexibilidade analítica</h3>
-      <p>Um estudo não erra apenas por vazamento. Escolhas não declaradas na coleta e na análise — parar de coletar
-        quando o resultado parece bom, decidir depois dos dados qual medida relatar, testar várias análises e mostrar a
-        que deu certo — bastam para fazer um efeito inexistente parecer estatisticamente significativo, isto é,
-        improvável de ter surgido por acaso (Simmons, Nelson e Simonsohn, 2011). O pré-registro responde a isso:
-        publicar, antes da coleta, as hipóteses, o tamanho da amostra e a análise que será feita. É o equivalente
-        científico de anunciar a aposta antes de a roleta girar, e torna verificável a distinção entre a pesquisa
-        confirmatória, que testa o que foi declarado, e a exploratória, que procura padrões em dados já vistos (Nosek e
-        colaboradores, 2018).</p>
+        <h3 id="secao-2-4">2.4 Pré-registro e flexibilidade analítica</h3>
+        <p>Um estudo não erra apenas por vazamento. Escolhas não declaradas na coleta e na análise — parar de coletar
+          quando o resultado parece bom, decidir depois dos dados qual medida relatar, testar várias análises e mostrar
+          a
+          que deu certo — bastam para fazer um efeito inexistente parecer estatisticamente significativo, isto é,
+          improvável de ter surgido por acaso (Simmons, Nelson e Simonsohn, 2011). O pré-registro responde a isso:
+          publicar, antes da coleta, as hipóteses, o tamanho da amostra e a análise que será feita. É o equivalente
+          científico de anunciar a aposta antes de a roleta girar, e torna verificável a distinção entre a pesquisa
+          confirmatória, que testa o que foi declarado, e a exploratória, que procura padrões em dados já vistos (Nosek
+          e
+          colaboradores, 2018).</p>
 
-      <h3 id="secao-2-5">2.5 Lacuna</h3>
-      <p>Para delimitar a lacuna, fizemos um levantamento exploratório do software usado em estudos de mediunidade e de
-        psi, termo genérico da parapsicologia para a percepção extrassensorial e fenômenos afins. A busca foi feita em
-        novembro de 2026, na web aberta e em repositórios de código, com termos em inglês e em português que combinavam
-        o domínio (mediunidade, AIR, parapsicologia, psi, ganzfeld, percepção extrassensorial) com a função procurada
-        (software, plataforma, código aberto, cegamento, sorteio, pré-registro, trilha de auditoria, pontuação
-        automática). O que apareceu se agrupa em cinco famílias (Tabela 1).</p>
-      <figure class="tabela">
-        <figcaption>Tabela 1. Famílias de software encontradas no levantamento exploratório.</figcaption>
-        <div class="tabela-rolavel">
-          <table>
-            <thead>
-              <tr>
-                <th>Família</th>
-                <th>Exemplos</th>
-                <th>O que cobre</th>
-                <th>O que não cobre</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Protocolos de mediunidade</td>
-                <td>Beischel e colaboradores, 2015; Tressoldi e colaboradores, 2022, 2025</td>
-                <td>Cegamento múltiplo, chamariz e avaliação cega, descritos como procedimento</td>
-                <td>Não localizamos software público que execute ou comprove o cegamento; a pontuação é feita por
-                  pessoas</td>
-              </tr>
-              <tr>
-                <td>Credibilidade verificável em psi</td>
-                <td>Transparent Psi Project (Kekecs e colaboradores, 2023)</td>
-                <td>Depósito direto dos dados em repositório de terceiros, dados abertos desde a origem, relatório em
-                  tempo real, software que evidencia adulterações, auditores externos</td>
-                <td>O domínio é outro, um experimento de precognição em laboratório: não há papéis a cegar entre si nem
-                  informação sobre pessoa falecida</td>
-              </tr>
-              <tr>
-                <td>Registro e dados abertos da área</td>
-                <td>Registro de estudos da Koestler Parapsychology Unit (Wiseman e Watt, 2026); repositório Psi Open
-                  Data</td>
-                <td>Pré-registro e publicação dos dados</td>
-                <td>Não executam o estudo: o vínculo entre o que foi registrado e o que foi coletado depende do
-                  pesquisador</td>
-              </tr>
-              <tr>
-                <td>Testes de psi automatizados</td>
-                <td>Autoganzfeld (Bem e Honorton, 1994); testes on-line GotPsi (Radin, 2019); validação do software de
-                  estudo (Pooley, 2024)</td>
-                <td>Sorteio e registro por computador; coleta em larga escala pela internet</td>
-                <td>Nada sobre mediunidade; os testes on-line sem supervisão ficam sujeitos a parada opcional, como
-                  apontam revisões da própria área</td>
-              </tr>
-              <tr>
-                <td>Plataformas genéricas</td>
-                <td>jsPsych (de Leeuw, 2015), psiTurk (Gureckis e colaboradores, 2016), REDCap (Harris e colaboradores,
-                  2009)</td>
-                <td>Construção de experimentos on-line; captura de dados com trilha de auditoria e randomização</td>
-                <td>Não trazem matriz de visibilidade por papel, compromisso e revelação nem desmascaramento automático;
-                  teriam de ser construídos por cima</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </figure>
-      <p>O vizinho mais próximo é o Transparent Psi Project (Kekecs e colaboradores, 2023). Ele parte da mesma tese deste
-        artigo — a de que a credibilidade de um resultado deve ser verificável por terceiros, e não pressuposta — e a
-        aplica a uma replicação multicêntrica de um experimento de precognição. O Crivo deve ser lido como extensão
-        dessa linha a um domínio em que há vários papéis humanos a manter cegos entre si, e não como ideia sem
-        precedente.</p>
-      <p>Também há antecedente para a ideia de provar a data de um protocolo registrando a sua impressão digital
-        criptográfica, ou hash, com a data atestada por terceiros — o carimbo do tempo, explicado na <a
-          href="#secao-5">seção 5</a>. Na pesquisa clínica, Irving e Holden (2016) propuseram ancorar esse registro numa
-        <em lang="en">blockchain</em>, um registro público e distribuído como o do Bitcoin; o artigo foi retratado pelos
-        próprios autores em 2017, depois que a revisão por pares aberta apontou problemas de método. Isso recomenda
-        cautela ao citá-lo e reforça a escolha, aqui, de um padrão estabelecido, o RFC 3161, que é o padrão da internet
-        para carimbos do tempo (Adams e colaboradores, 2001). Por fim, existe no SourceForge um projeto de código aberto
-        para experimentos de psi on-line, sem atualização desde 2013; não encontramos nele pré-registro, cegamento por
-        papel nem trilha de auditoria.</p>
-      <p><strong>A lacuna, na forma em que o artigo pode afirmá-la:</strong> nas fontes consultadas, não localizamos uma
-        plataforma aberta que execute um protocolo de mediunidade de ponta a ponta e que trate o cegamento entre papéis,
-        o sorteio, o pré-registro e a pontuação como propriedades conferíveis por terceiros a partir de artefatos
-        publicados. As peças existem, mas separadas: em outros domínios ou como procedimento manual.</p>
-      <p class="pendente"><strong>A fazer:</strong> este levantamento é exploratório, não uma revisão sistemática. As
-        descrições acima vêm de resumos e precisam ser conferidas no texto integral. Antes da submissão, repetir a busca
-        em bases indexadas com protocolo registrado (termos, datas, critérios de inclusão) e perguntar diretamente aos
-        grupos ativos na área se usam software próprio não publicado.</p>
+        <h3 id="secao-2-5">2.5 Lacuna</h3>
+        <p>Para delimitar a lacuna, fizemos um levantamento exploratório do software usado em estudos de mediunidade e
+          de
+          psi, termo genérico da parapsicologia para a percepção extrassensorial e fenômenos afins. A busca foi feita em
+          novembro de 2026, na web aberta e em repositórios de código, com termos em inglês e em português que
+          combinavam
+          o domínio (mediunidade, AIR, parapsicologia, psi, ganzfeld, percepção extrassensorial) com a função procurada
+          (software, plataforma, código aberto, cegamento, sorteio, pré-registro, trilha de auditoria, pontuação
+          automática). O que apareceu se agrupa em cinco famílias (Tabela 1).</p>
+        <figure class="tabela">
+          <figcaption>Tabela 1. Famílias de software encontradas no levantamento exploratório.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Família</th>
+                  <th>Exemplos</th>
+                  <th>O que cobre</th>
+                  <th>O que não cobre</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Protocolos de mediunidade</td>
+                  <td>Beischel e colaboradores, 2015; Tressoldi e colaboradores, 2022, 2025</td>
+                  <td>Cegamento múltiplo, chamariz e avaliação cega, descritos como procedimento</td>
+                  <td>Não localizamos software público que execute ou comprove o cegamento; a pontuação é feita por
+                    pessoas</td>
+                </tr>
+                <tr>
+                  <td>Credibilidade verificável em psi</td>
+                  <td>Transparent Psi Project (Kekecs e colaboradores, 2023)</td>
+                  <td>Depósito direto dos dados em repositório de terceiros, dados abertos desde a origem, relatório em
+                    tempo real, software que evidencia adulterações, auditores externos</td>
+                  <td>O domínio é outro, um experimento de precognição em laboratório: não há papéis a cegar entre si
+                    nem
+                    informação sobre pessoa falecida</td>
+                </tr>
+                <tr>
+                  <td>Registro e dados abertos da área</td>
+                  <td>Registro de estudos da Koestler Parapsychology Unit (Wiseman e Watt, 2026); repositório Psi Open
+                    Data</td>
+                  <td>Pré-registro e publicação dos dados</td>
+                  <td>Não executam o estudo: o vínculo entre o que foi registrado e o que foi coletado depende do
+                    pesquisador</td>
+                </tr>
+                <tr>
+                  <td>Testes de psi automatizados</td>
+                  <td>Autoganzfeld (Bem e Honorton, 1994); testes on-line GotPsi (Radin, 2019); validação do software de
+                    estudo (Pooley, 2024)</td>
+                  <td>Sorteio e registro por computador; coleta em larga escala pela internet</td>
+                  <td>Nada sobre mediunidade; os testes on-line sem supervisão ficam sujeitos a parada opcional, como
+                    apontam revisões da própria área</td>
+                </tr>
+                <tr>
+                  <td>Plataformas genéricas</td>
+                  <td>jsPsych (de Leeuw, 2015), psiTurk (Gureckis e colaboradores, 2016), REDCap (Harris e
+                    colaboradores,
+                    2009)</td>
+                  <td>Construção de experimentos on-line; captura de dados com trilha de auditoria e randomização</td>
+                  <td>Não trazem matriz de visibilidade por papel, compromisso e revelação nem desmascaramento
+                    automático;
+                    teriam de ser construídos por cima</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+        <p>O vizinho mais próximo é o Transparent Psi Project (Kekecs e colaboradores, 2023). Ele parte da mesma tese
+          deste
+          artigo — a de que a credibilidade de um resultado deve ser verificável por terceiros, e não pressuposta — e a
+          aplica a uma replicação multicêntrica de um experimento de precognição. O Crivo deve ser lido como extensão
+          dessa linha a um domínio em que há vários papéis humanos a manter cegos entre si, e não como ideia sem
+          precedente.</p>
+        <p>Também há antecedente para a ideia de provar a data de um protocolo registrando a sua impressão digital
+          criptográfica, ou hash, com a data atestada por terceiros — o carimbo do tempo, explicado na <a
+            href="#secao-5">seção 5</a>. Na pesquisa clínica, Irving e Holden (2016) propuseram ancorar esse registro
+          numa
+          <em lang="en">blockchain</em>, um registro público e distribuído como o do Bitcoin; o artigo foi retratado
+          pelos
+          próprios autores em 2017, depois que a revisão por pares aberta apontou problemas de método. Isso recomenda
+          cautela ao citá-lo e reforça a escolha, aqui, de um padrão estabelecido, o RFC 3161, que é o padrão da
+          internet
+          para carimbos do tempo (Adams e colaboradores, 2001). Por fim, existe no SourceForge um projeto de código
+          aberto
+          para experimentos de psi on-line, sem atualização desde 2013; não encontramos nele pré-registro, cegamento por
+          papel nem trilha de auditoria.
+        </p>
+        <p><strong>A lacuna, na forma em que o artigo pode afirmá-la:</strong> nas fontes consultadas, não localizamos
+          uma
+          plataforma aberta que execute um protocolo de mediunidade de ponta a ponta e que trate o cegamento entre
+          papéis,
+          o sorteio, o pré-registro e a pontuação como propriedades conferíveis por terceiros a partir de artefatos
+          publicados. As peças existem, mas separadas: em outros domínios ou como procedimento manual.</p>
 
-      <h2 id="secao-3">3. Requisitos: um modelo de ameaças</h2>
-      <p>Na engenharia de segurança, um modelo de ameaças lista tudo o que pode dar errado num sistema e associa a cada
-        risco a defesa correspondente. Aqui, cada explicação convencional para um acerto é tratada como uma ameaça: se
-        ela for capaz de produzir o resultado, o resultado nada prova. A Tabela 2 relaciona cada ameaça à fonte que a
-        descreve e ao controle que o Crivo lhe opõe; onde o controle é só parcial, a tabela diz. Vários controles usam
-        recursos de criptografia, como hashes, compromissos e carimbos do tempo, explicados em termos simples no início
-        da <a href="#secao-5">seção 5</a>.</p>
-      <figure class="tabela">
-        <figcaption>Tabela 2. Ameaças à validade de um estudo e os controles correspondentes no Crivo.</figcaption>
-        <div class="tabela-rolavel">
-          <table>
-            <thead>
-              <tr>
-                <th>Ameaça</th>
-                <th>Fonte</th>
-                <th>Controle no Crivo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Pista sensorial ou verbal ao médium</td>
-                <td>Wiseman e O'Keeffe, 2001</td>
-                <td>Não há sessão: o médium não interage com ninguém e recebe o pedido pelo sistema</td>
-              </tr>
-              <tr>
-                <td>Informação além do mínimo</td>
-                <td>Kelly e Arcangel, 2011</td>
-                <td>Só o primeiro nome, sem sobrenome nem lugar, por liberação única e registrada; sem saber quem pede, o
-                  médium não tem como pesquisar antes</td>
-              </tr>
-              <tr>
-                <td>Leitura fria e afirmações genéricas</td>
-                <td>Hyman, 1977</td>
-                <td>Chamariz de perfil semelhante; conta apenas a diferença entre alvo e chamariz</td>
-              </tr>
-              <tr>
-                <td>Validação subjetiva e viés de quem avalia</td>
-                <td>Hyman, 2003</td>
-                <td>Questionário fechado e conferência por igualdade de opções; ninguém julga o ajuste</td>
-              </tr>
-              <tr>
-                <td>Itens ambíguos ou compostos</td>
-                <td>Críticas a O'Keeffe e Wiseman, 2005</td>
-                <td>Campos com opções fixas, versionados e congelados no pré-registro</td>
-              </tr>
-              <tr>
-                <td>Tendência de resposta do médium</td>
-                <td>Decisão de desenho</td>
-                <td>O mesmo médium faz as duas leituras do par, e a tendência se cancela na diferença</td>
-              </tr>
-              <tr>
-                <td>Respostas alteradas depois de conhecida a leitura</td>
-                <td>Decisão de desenho</td>
-                <td>Respostas travadas, com compromisso criptográfico na trilha, antes da liberação do nome (seção
-                  5.3)</td>
-              </tr>
-              <tr>
-                <td>Sorteio manipulável</td>
-                <td>Decisão de desenho</td>
-                <td>Compromisso sobre a semente antes da coleta; revelação no fim (seção 5.4)</td>
-              </tr>
-              <tr>
-                <td>Parada oportunista da coleta</td>
-                <td>Hyman, 2003; Simmons e colaboradores, 2011</td>
-                <td>Tamanho de amostra (N) pré-registrado, desmascaramento automático (seção 4.2) e nenhuma nota antes
-                  dele</td>
-              </tr>
-              <tr>
-                <td>Análise escolhida depois dos dados</td>
-                <td>Nosek e colaboradores, 2018</td>
-                <td>Análise primária única no documento congelado por hash</td>
-              </tr>
-              <tr>
-                <td>Acertos tratados como independentes</td>
-                <td>O'Keeffe e Wiseman, 2005</td>
-                <td>Análise vedada; o teste de permutação não supõe independência (seção 4.5)</td>
-              </tr>
-              <tr>
-                <td>Reescrita da história</td>
-                <td>Decisão de desenho</td>
-                <td>Trilha somente de acréscimo, encadeada por hash e carimbada por autoridade externa (seção 5.6)</td>
-              </tr>
-              <tr>
-                <td>Viés de publicação</td>
-                <td>Sarraf e colaboradores, 2021</td>
-                <td>Mesmo relatório para qualquer resultado, em página pública</td>
-              </tr>
-              <tr>
-                <td>Conluio entre médium e consulente</td>
-                <td>Decisão de desenho</td>
-                <td>Parcial: perfil fixo, médium sorteado e sinalização de contas ligadas</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </figure>
-      <p>A maior parte desses controles não depende de alguém se lembrar de aplicá-los: eles estão no desenho do banco de
-        dados e nos testes, como mostra a <a href="#secao-5">seção 5</a>. A última linha, porém, não tem solução
-        completa. Com inscrição aberta, um médium e um consulente que se conheçam podem combinar respostas usando contas
-        que nada liga entre si; o sistema reduz esse risco, mas não o elimina, e a <a href="#secao-6">seção 6</a> o
-        registra entre os limites.</p>
+        <h2 id="secao-3">3. Requisitos: um modelo de ameaças</h2>
+        <p>Na engenharia de segurança, um modelo de ameaças lista tudo o que pode dar errado num sistema e associa a
+          cada
+          risco a defesa correspondente. Aqui, cada explicação convencional para um acerto é tratada como uma ameaça: se
+          ela for capaz de produzir o resultado, o resultado nada prova. A Tabela 2 relaciona cada ameaça à fonte que a
+          descreve e ao controle que o Crivo lhe opõe; onde o controle é só parcial, a tabela diz. Vários controles usam
+          recursos de criptografia, como hashes, compromissos e carimbos do tempo, explicados em termos simples no
+          início
+          da <a href="#secao-5">seção 5</a>.</p>
+        <figure class="tabela">
+          <figcaption>Tabela 2. Ameaças à validade de um estudo e os controles correspondentes no Crivo.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ameaça</th>
+                  <th>Fonte</th>
+                  <th>Controle no Crivo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Pista sensorial ou verbal ao médium</td>
+                  <td>Wiseman e O'Keeffe, 2001</td>
+                  <td>Não há sessão: o médium não interage com ninguém e recebe o pedido pelo sistema</td>
+                </tr>
+                <tr>
+                  <td>Informação além do mínimo</td>
+                  <td>Kelly e Arcangel, 2011</td>
+                  <td>Só o primeiro nome, sem sobrenome nem lugar, por liberação única e registrada; sem saber quem
+                    pede, o
+                    médium não tem como pesquisar antes</td>
+                </tr>
+                <tr>
+                  <td>Leitura fria e afirmações genéricas</td>
+                  <td>Hyman, 1977</td>
+                  <td>Chamariz de perfil semelhante; conta apenas a diferença entre alvo e chamariz</td>
+                </tr>
+                <tr>
+                  <td>Validação subjetiva e viés de quem avalia</td>
+                  <td>Hyman, 2003</td>
+                  <td>Questionário fechado e conferência por igualdade de opções; ninguém julga o ajuste</td>
+                </tr>
+                <tr>
+                  <td>Itens ambíguos ou compostos</td>
+                  <td>Críticas a O'Keeffe e Wiseman, 2005</td>
+                  <td>Campos com opções fixas, versionados e congelados no pré-registro</td>
+                </tr>
+                <tr>
+                  <td>Tendência de resposta do médium</td>
+                  <td>Decisão de desenho</td>
+                  <td>O mesmo médium faz as duas leituras do par, e a tendência se cancela na diferença</td>
+                </tr>
+                <tr>
+                  <td>Respostas alteradas depois de conhecida a leitura</td>
+                  <td>Decisão de desenho</td>
+                  <td>Respostas travadas, com compromisso criptográfico na trilha, antes da liberação do nome (seção
+                    5.3)</td>
+                </tr>
+                <tr>
+                  <td>Sorteio manipulável</td>
+                  <td>Decisão de desenho</td>
+                  <td>Compromisso sobre a semente antes da coleta; revelação no fim (seção 5.4)</td>
+                </tr>
+                <tr>
+                  <td>Parada oportunista da coleta</td>
+                  <td>Hyman, 2003; Simmons e colaboradores, 2011</td>
+                  <td>Tamanho de amostra (N) pré-registrado, desmascaramento automático (seção 4.2) e nenhuma nota antes
+                    dele</td>
+                </tr>
+                <tr>
+                  <td>Análise escolhida depois dos dados</td>
+                  <td>Nosek e colaboradores, 2018</td>
+                  <td>Análise primária única no documento congelado por hash</td>
+                </tr>
+                <tr>
+                  <td>Acertos tratados como independentes</td>
+                  <td>O'Keeffe e Wiseman, 2005</td>
+                  <td>Análise vedada; o teste de permutação não supõe independência (seção 4.5)</td>
+                </tr>
+                <tr>
+                  <td>Reescrita da história</td>
+                  <td>Decisão de desenho</td>
+                  <td>Trilha somente de acréscimo, encadeada por hash e carimbada por autoridade externa (seção 5.6)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Viés de publicação</td>
+                  <td>Sarraf e colaboradores, 2021</td>
+                  <td>Mesmo relatório para qualquer resultado, em página pública</td>
+                </tr>
+                <tr>
+                  <td>Conluio entre médium e consulente</td>
+                  <td>Decisão de desenho</td>
+                  <td>Parcial: perfil fixo, médium sorteado e sinalização de contas ligadas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+        <p>A maior parte desses controles não depende de alguém se lembrar de aplicá-los: eles estão no desenho do banco
+          de
+          dados e nos testes, como mostra a <a href="#secao-5">seção 5</a>. A última linha, porém, não tem solução
+          completa. Com inscrição aberta, um médium e um consulente que se conheçam podem combinar respostas usando
+          contas
+          que nada liga entre si; o sistema reduz esse risco, mas não o elimina, e a <a href="#secao-6">seção 6</a> o
+          registra entre os limites.</p>
 
-      <h2 id="secao-4">4. O protocolo: leitura estruturada automatizada</h2>
-      <h3 id="secao-4-1">4.1 Ideia central</h3>
-      <p>O protocolo parte de uma ideia simples: o consulente e o médium respondem ao mesmo questionário fechado sobre a
-        pessoa falecida. O consulente responde porque a conheceu; o médium, conhecendo apenas o primeiro nome. Como não
-        há texto livre, não há o que interpretar. A conferência é uma comparação de igualdade entre opções, feita pelo
-        sistema, e ninguém — nem o consulente — decide se uma afirmação “encaixa”. A ideia de perguntar ao médium sobre
-        aspectos específicos da vida do falecido já estava em Beischel e Schwartz (2007); o que muda é que as respostas
-        se fecham em opções.</p>
-      <p>A troca tem custo, e o protocolo o declara. Ganham-se a pontuação objetiva e a automação integral; perdem-se o
-        consulente substituto e a resposta livre, justamente duas das condições que Silva e Moreira-Almeida (2022)
-        associaram a resultado positivo. Por isso, um resultado deste protocolo, positivo ou nulo, não vale como
-        replicação dos estudos com consulente substituto da literatura.</p>
-      <p>O questionário, ainda em versão de rascunho, tem 16 campos. Três deles — gênero, faixa etária no óbito e período
-        do falecimento — servem para formar os pares e ficam fora da nota: são iguais dentro de cada par, por construção,
-        e o gênero, o próprio nome costuma entregar. Os outros 13 entram na nota e tratam das circunstâncias da morte, da
-        família, da ocupação, do lugar onde a pessoa viveu, do temperamento, da aparência, da religiosidade e de hábitos.
-        Cada campo tem poucas opções, além de “não sei”, para o consulente, e de “não recebi”, para o médium, que responde
-        só aos campos da nota. O questionário em vigor, com todas as opções, está publicado na <a
-          th:href="${aplicacao} + '/protocolo/P1'">página do protocolo</a>.</p>
+        <h2 id="secao-4">4. O protocolo: leitura estruturada automatizada</h2>
+        <h3 id="secao-4-1">4.1 Ideia central</h3>
+        <p>O protocolo parte de uma ideia simples: o consulente e o médium respondem ao mesmo questionário fechado sobre
+          a
+          pessoa falecida. O consulente responde porque a conheceu; o médium, conhecendo apenas o primeiro nome. Como
+          não
+          há texto livre, não há o que interpretar. A conferência é uma comparação de igualdade entre opções, feita pelo
+          sistema, e ninguém — nem o consulente — decide se uma afirmação “encaixa”. A ideia de perguntar ao médium
+          sobre
+          aspectos específicos da vida do falecido já estava em Beischel e Schwartz (2007); o que muda é que as
+          respostas
+          se fecham em opções.</p>
+        <p>A troca tem custo, e o protocolo o declara. Ganham-se a pontuação objetiva e a automação integral; perdem-se
+          o
+          consulente substituto e a resposta livre, justamente duas das condições que Silva e Moreira-Almeida (2022)
+          associaram a resultado positivo. Por isso, um resultado deste protocolo, positivo ou nulo, não vale como
+          replicação dos estudos com consulente substituto da literatura.</p>
+        <p>O questionário, ainda em versão de rascunho, tem 16 campos. Três deles — gênero, faixa etária no óbito e
+          período
+          do falecimento — servem para formar os pares e ficam fora da nota: são iguais dentro de cada par, por
+          construção,
+          e o gênero, o próprio nome costuma entregar. Os outros 13 entram na nota e tratam das circunstâncias da morte,
+          da
+          família, da ocupação, do lugar onde a pessoa viveu, do temperamento, da aparência, da religiosidade e de
+          hábitos.
+          Cada campo tem poucas opções, além de “não sei”, para o consulente, e de “não recebi”, para o médium, que
+          responde
+          só aos campos da nota. O questionário em vigor, com todas as opções, está publicado na <a
+            th:href="${aplicacao} + '/protocolo/P1'">página do protocolo</a>.</p>
 
-      <h3 id="secao-4-2">4.2 Fluxo</h3>
-      <p>Do pré-registro à devolutiva, um estudo percorre oito etapas. Fora o pré-registro, feito pelo pesquisador, e as
-        respostas dos participantes, tudo é feito pelo sistema.</p>
-      <ol>
-        <li><strong>Pré-registro.</strong> O pesquisador declara e congela as hipóteses, o número de pares (N), o
-          questionário, o critério de pareamento, o prazo do médium, os critérios de inclusão, a análise e as regras de
-          exclusão. No mesmo documento vai o compromisso sobre a semente do sorteio (<a href="#secao-5-4">seção
-          5.4</a>).</li>
-        <li><strong>Pedido.</strong> O consulente cria a conta, confirma o e-mail e faz o pedido: o primeiro nome do
-          falecido e as respostas ao questionário. As respostas são travadas, e a trilha de auditoria recebe o
-          compromisso correspondente (<a href="#secao-5-3">seção 5.3</a>). O pedido pode anteceder o congelamento, já que
-          ninguém vê as respostas antes do fim; só entra no estudo, porém, o pedido feito na versão do questionário que o
-          pré-registro declara.</li>
-        <li><strong>Pareamento e sorteio.</strong> O sistema forma pares de pedidos travados do mesmo estrato, isto é,
-          com o mesmo gênero, a mesma faixa etária no óbito e o mesmo período do falecimento, e sorteia um médium para
-          cada par.</li>
-        <li><strong>Envio.</strong> O médium recebe os dois primeiros nomes do par, em ordem sorteada, e o questionário
-          em branco. Não sabe quem são os consulentes nem tem contato com eles.</li>
-        <li><strong>Leitura.</strong> Para cada nome, o médium responde a cada campo ou marca “não recebi”. Ao enviar, a
-          leitura é travada, também com compromisso na trilha. Se o prazo declarado vence, o par vai a outro médium,
-          sorteado da mesma semente.</li>
-        <li><strong>Desmascaramento.</strong> Quando os N pares têm as duas leituras, o próprio sistema encerra a coleta
-          e desfaz o cegamento: mostra que médium leu cada par e abre os compromissos, divulgando os segredos que os
-          mantinham lacrados — os sais e a semente (seções <a href="#secao-5-3">5.3</a> e <a
-            href="#secao-5-4">5.4</a>).</li>
-        <li><strong>Conferência e análise.</strong> O sistema confere os compromissos, pontua as leituras, roda a análise
-          pré-registrada e publica o relatório e o pacote de verificação.</li>
-        <li><strong>Devolutiva.</strong> O consulente vê a leitura feita para o seu falecido ao lado das próprias
-          respostas; o médium vê as notas das próprias leituras.</li>
-      </ol>
+        <h3 id="secao-4-2">4.2 Fluxo</h3>
+        <p>Do pré-registro à devolutiva, um estudo percorre oito etapas. Fora o pré-registro, feito pelo pesquisador, e
+          as
+          respostas dos participantes, tudo é feito pelo sistema.</p>
+        <ol>
+          <li><strong>Pré-registro.</strong> O pesquisador declara e congela as hipóteses, o número de pares (N), o
+            questionário, o critério de pareamento, o prazo do médium, os critérios de inclusão, a análise e as regras
+            de
+            exclusão. No mesmo documento vai o compromisso sobre a semente do sorteio (<a href="#secao-5-4">seção
+              5.4</a>).</li>
+          <li><strong>Pedido.</strong> O consulente cria a conta, confirma o e-mail e faz o pedido: o primeiro nome do
+            falecido e as respostas ao questionário. As respostas são travadas, e a trilha de auditoria recebe o
+            compromisso correspondente (<a href="#secao-5-3">seção 5.3</a>). O pedido pode anteceder o congelamento, já
+            que
+            ninguém vê as respostas antes do fim; só entra no estudo, porém, o pedido feito na versão do questionário
+            que o
+            pré-registro declara.</li>
+          <li><strong>Pareamento e sorteio.</strong> O sistema forma pares de pedidos travados do mesmo estrato, isto é,
+            com o mesmo gênero, a mesma faixa etária no óbito e o mesmo período do falecimento, e sorteia um médium para
+            cada par.</li>
+          <li><strong>Envio.</strong> O médium recebe os dois primeiros nomes do par, em ordem sorteada, e o
+            questionário
+            em branco. Não sabe quem são os consulentes nem tem contato com eles.</li>
+          <li><strong>Leitura.</strong> Para cada nome, o médium responde a cada campo ou marca “não recebi”. Ao enviar,
+            a
+            leitura é travada, também com compromisso na trilha. Se o prazo declarado vence, o par vai a outro médium,
+            sorteado da mesma semente.</li>
+          <li><strong>Desmascaramento.</strong> Quando os N pares têm as duas leituras, o próprio sistema encerra a
+            coleta
+            e desfaz o cegamento: mostra que médium leu cada par e abre os compromissos, divulgando os segredos que os
+            mantinham lacrados — os sais e a semente (seções <a href="#secao-5-3">5.3</a> e <a
+              href="#secao-5-4">5.4</a>).</li>
+          <li><strong>Conferência e análise.</strong> O sistema confere os compromissos, pontua as leituras, roda a
+            análise
+            pré-registrada e publica o relatório e o pacote de verificação.</li>
+          <li><strong>Devolutiva.</strong> O consulente vê a leitura feita para o seu falecido ao lado das próprias
+            respostas; o médium vê as notas das próprias leituras.</li>
+        </ol>
 
-      <h3 id="secao-4-3">4.3 Matriz de visibilidade</h3>
-      <p>O cegamento é especificado como uma matriz: nas linhas, as informações do estudo; nas colunas, os papéis; em
-        cada célula, o que aquele papel pode ver e a partir de quando (Tabela 3). Cada célula proibida corresponde a um
-        teste automatizado que tenta violá-la contra um banco de dados real. Note-se que o administrador — o pesquisador
-        que conduz o estudo — sabe quem participa, mas fica cego para as respostas, as leituras e a ligação entre
-        pedidos e médiuns até o desmascaramento.</p>
-      <figure class="tabela">
-        <figcaption>Tabela 3. Matriz de visibilidade: o que cada papel pode ver, e a partir de quando.</figcaption>
-        <div class="tabela-rolavel">
-          <table>
-            <thead>
-              <tr>
-                <th>Informação</th>
-                <th>Administrador</th>
-                <th>Médium</th>
-                <th>Consulente</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Identidade das contas</td>
-                <td>Sim</td>
-                <td>Só a própria</td>
-                <td>Só a própria</td>
-              </tr>
-              <tr>
-                <td>Respostas do consulente</td>
-                <td>Só após desmascarar</td>
-                <td>Não</td>
-                <td>Só as próprias</td>
-              </tr>
-              <tr>
-                <td>Primeiro nome do falecido</td>
-                <td>Não</td>
-                <td>Só dos pedidos recebidos</td>
-                <td>Só o próprio</td>
-              </tr>
-              <tr>
-                <td>Ligação entre pedido e médium</td>
-                <td>Só após desmascarar</td>
-                <td>Só os próprios pedidos</td>
-                <td>Só após desmascarar</td>
-              </tr>
-              <tr>
-                <td>Leitura do médium</td>
-                <td>Só após desmascarar</td>
-                <td>Só as próprias</td>
-                <td>Só após desmascarar</td>
-              </tr>
-              <tr>
-                <td>Notas e diferenças</td>
-                <td colspan="3">Não existem antes do desmascaramento</td>
-              </tr>
-              <tr>
-                <td>Sais e semente</td>
-                <td>Só após a revelação</td>
-                <td>Não</td>
-                <td>Não</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </figure>
+        <h3 id="secao-4-3">4.3 Matriz de visibilidade</h3>
+        <p>O cegamento é especificado como uma matriz: nas linhas, as informações do estudo; nas colunas, os papéis; em
+          cada célula, o que aquele papel pode ver e a partir de quando (Tabela 3). Cada célula proibida corresponde a
+          um
+          teste automatizado que tenta violá-la contra um banco de dados real. Note-se que o administrador — o
+          pesquisador
+          que conduz o estudo — sabe quem participa, mas fica cego para as respostas, as leituras e a ligação entre
+          pedidos e médiuns até o desmascaramento.</p>
+        <figure class="tabela">
+          <figcaption>Tabela 3. Matriz de visibilidade: o que cada papel pode ver, e a partir de quando.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Informação</th>
+                  <th>Administrador</th>
+                  <th>Médium</th>
+                  <th>Consulente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Identidade das contas</td>
+                  <td>Sim</td>
+                  <td>Só a própria</td>
+                  <td>Só a própria</td>
+                </tr>
+                <tr>
+                  <td>Respostas do consulente</td>
+                  <td>Só após desmascarar</td>
+                  <td>Não</td>
+                  <td>Só as próprias</td>
+                </tr>
+                <tr>
+                  <td>Primeiro nome do falecido</td>
+                  <td>Não</td>
+                  <td>Só dos pedidos recebidos</td>
+                  <td>Só o próprio</td>
+                </tr>
+                <tr>
+                  <td>Ligação entre pedido e médium</td>
+                  <td>Só após desmascarar</td>
+                  <td>Só os próprios pedidos</td>
+                  <td>Só após desmascarar</td>
+                </tr>
+                <tr>
+                  <td>Leitura do médium</td>
+                  <td>Só após desmascarar</td>
+                  <td>Só as próprias</td>
+                  <td>Só após desmascarar</td>
+                </tr>
+                <tr>
+                  <td>Notas e diferenças</td>
+                  <td colspan="3">Não existem antes do desmascaramento</td>
+                </tr>
+                <tr>
+                  <td>Sais e semente</td>
+                  <td>Só após a revelação</td>
+                  <td>Não</td>
+                  <td>Não</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
 
-      <h3 id="secao-4-4">4.4 Conferência automática</h3>
-      <p>A regra de pontuação cabe em poucas linhas. Num par formado pelos falecidos A e B, chamamos de
-        <var>R</var><sub>A</sub> a leitura feita com o nome de A e de <var>R</var><sub>B</sub> a feita com o nome de B;
-        para simplificar, A e B designam também os consulentes de cada falecido. Contam apenas os campos comparáveis: os campos da nota que os dois consulentes responderam, sem “não sei”. O
-        conjunto é o mesmo para o alvo e para o chamariz, para que nenhum dos dois tenha mais chance de acerto. Para uma
-        leitura <var>R</var> e um consulente <var>X</var>, <var>s</var>(<var>R</var>, <var>X</var>) é o número de
-        campos comparáveis em que a resposta da leitura coincide com a de <var>X</var>; “não recebi” nunca coincide. A
-        diferença do par é</p>
-      <p class="formula"><code>d&nbsp;=&nbsp;[s(R<sub>A</sub>,&nbsp;A)&nbsp;−&nbsp;s(R<sub>A</sub>,&nbsp;B)] +
+        <h3 id="secao-4-4">4.4 Conferência automática</h3>
+        <p>A regra de pontuação cabe em poucas linhas. Num par formado pelos falecidos A e B, chamamos de
+          <var>R</var><sub>A</sub> a leitura feita com o nome de A e de <var>R</var><sub>B</sub> a feita com o nome de
+          B;
+          para simplificar, A e B designam também os consulentes de cada falecido. Contam apenas os campos comparáveis:
+          os campos da nota que os dois consulentes responderam, sem “não sei”. O
+          conjunto é o mesmo para o alvo e para o chamariz, para que nenhum dos dois tenha mais chance de acerto. Para
+          uma
+          leitura <var>R</var> e um consulente <var>X</var>, <var>s</var>(<var>R</var>, <var>X</var>) é o número de
+          campos comparáveis em que a resposta da leitura coincide com a de <var>X</var>; “não recebi” nunca coincide. A
+          diferença do par é
+        </p>
+        <p class="formula"><code>d&nbsp;=&nbsp;[s(R<sub>A</sub>,&nbsp;A)&nbsp;−&nbsp;s(R<sub>A</sub>,&nbsp;B)] +
           [s(R<sub>B</sub>,&nbsp;B)&nbsp;−&nbsp;s(R<sub>B</sub>,&nbsp;A)]</code></p>
-      <p>Cada colchete pergunta se uma leitura se parece mais com a pessoa para quem foi feita do que com a outra pessoa
-        do par. Se as leituras não carregam informação sobre os alvos, as duas comparações tendem a se equilibrar, e
-        <var>d</var> fica em torno de zero.</p>
-      <div class="definicao">
-        <p class="rotulo">Um exemplo, com nomes fictícios</p>
-        <p>Suponha um par de homens que morreram entre os 60 e os 79 anos, há entre um e cinco anos: Antônio, pai de Ana, e
-          Carlos, marido de Beatriz. Ana e Beatriz responderam aos 13 campos da nota, sem nenhum “não sei”, e todos são
-          comparáveis. O médium sorteado recebe os dois nomes e preenche o questionário duas vezes, uma para cada nome. A
-          leitura feita para Antônio coincide com as respostas de Ana em 7 campos e com as de Beatriz em 5; a feita para
-          Carlos coincide com as de Beatriz em 6 e com as de Ana, também em 6. A diferença do par é
-          <var>d</var> = (7 − 5) + (6 − 6) = +2.</p>
-        <p>Sozinho, esse número nada significa: um par pode dar +2 por acaso, como outro pode dar −2. A análise pergunta
-          se, somados todos os pares do estudo, os valores positivos predominam além do que o acaso explicaria.</p>
+        <p>Cada colchete pergunta se uma leitura se parece mais com a pessoa para quem foi feita do que com a outra
+          pessoa
+          do par. Se as leituras não carregam informação sobre os alvos, as duas comparações tendem a se equilibrar, e
+          <var>d</var> fica em torno de zero.
+        </p>
+        <div class="definicao">
+          <p class="rotulo">Um exemplo, com nomes fictícios</p>
+          <p>Suponha um par de homens que morreram entre os 60 e os 79 anos, há entre um e cinco anos: Antônio, pai de
+            Ana, e
+            Carlos, marido de Beatriz. Ana e Beatriz responderam aos 13 campos da nota, sem nenhum “não sei”, e todos
+            são
+            comparáveis. O médium sorteado recebe os dois nomes e preenche o questionário duas vezes, uma para cada
+            nome. A
+            leitura feita para Antônio coincide com as respostas de Ana em 7 campos e com as de Beatriz em 5; a feita
+            para
+            Carlos coincide com as de Beatriz em 6 e com as de Ana, também em 6. A diferença do par é
+            <var>d</var> = (7 − 5) + (6 − 6) = +2.
+          </p>
+          <p>Sozinho, esse número nada significa: um par pode dar +2 por acaso, como outro pode dar −2. A análise
+            pergunta
+            se, somados todos os pares do estudo, os valores positivos predominam além do que o acaso explicaria.</p>
+        </div>
+        <p>O chamariz é indispensável porque o número de acertos, sozinho, não diz nada. Respostas frequentes — “morreu
+          do
+          coração”, “era casado”, “tinha filhos” — coincidem com as de muita gente. Comparando a mesma leitura com o
+          alvo e
+          com um chamariz de perfil semelhante, a frequência de cada resposta se cancela, e o que sobra é o quanto a
+          leitura
+          se ajusta ao alvo mais do que ao chamariz. É por isso que a leitura fria, que vive de afirmações frequentes,
+          não
+          rende pontos neste protocolo. E, como o mesmo médium faz as duas leituras do par, a tendência dele a repetir
+          certas respostas entra dos dois lados da diferença e também se cancela.</p>
+        <p>Isso permite declarar o acaso antes da coleta, em vez de estimá-lo a partir dos dados. A hipótese nula, a que
+          o
+          estudo põe à prova, é a de que a leitura feita com o nome de A não traz sobre A nenhuma informação que não
+          traga
+          também sobre B. Se ela for verdadeira, trocar entre si as respostas dos dois consulentes apenas inverte o
+          sinal de
+          <var>d</var>. Logo, <var>d</var> é simétrico em torno de zero, e, entre os pares com <var>d</var> diferente de
+          zero, a chance de <var>d</var> ser positivo é de 50%. Como o primeiro nome pode carregar alguma informação
+          sobre a
+          pessoa, essa hipótese não vale de graça; a <a href="#secao-6">seção 6</a> discute o vazamento que resta.
+        </p>
+
+        <h3 id="secao-4-5">4.5 Análise</h3>
+        <p>A unidade de análise é o par: cada par contribui com um único <var>d</var>. A análise primária é o teste de
+          postos
+          sinalizados de Wilcoxon, unilateral, sobre os <var>d</var> de todos os pares. Em termos simples, o teste
+          ordena as
+          diferenças pelo tamanho e verifica se as positivas pesam mais do que as negativas além do que o acaso
+          permitiria;
+          é unilateral porque a hipótese só prevê diferenças positivas. Com até 20 pares em que <var>d</var> é diferente
+          de zero, o teste é exato; acima disso, usa a aproximação normal, uma fórmula que fica precisa com amostras
+          maiores, e o relatório diz qual das duas foi usada.</p>
+        <p>Duas análises secundárias olham os mesmos dados por outros ângulos. O teste binomial exato do sinal ignora o
+          tamanho de <var>d</var> e pergunta apenas se os pares positivos passam da metade. O teste de permutação
+          embaralha
+          as leituras entre os alvos do estudo, dentro de cada estrato, e verifica com que frequência uma atribuição
+          feita
+          ao acaso produz tantas coincidências quanto a verdadeira. Ele segue a lógica do procedimento de Pratt e Birge,
+          provavelmente o mais adotado na área, e não supõe que as respostas de uma mesma leitura sejam independentes
+          entre
+          si (O'Keeffe e Wiseman, 2005). A permutação é exata enquanto os arranjos possíveis cabem numa enumeração;
+          acima
+          disso, usa 100 mil arranjos sorteados da semente revelada, que qualquer pessoa pode refazer.</p>
+        <p>O que a análise não faz também é declarado: multiplicar as probabilidades de acerto de cada campo como se
+          fossem
+          independentes, como fez Hyslop em 1919. O procedimento infla a evidência, porque as respostas sobre uma mesma
+          pessoa se correlacionam (O'Keeffe e Wiseman, 2005).</p>
+        <p>A regra de parada é vinculante: a coleta termina no N declarado, sem análise intermediária. E não há como
+          espiar,
+          porque as notas não existem antes do desmascaramento — não há resultado parcial a consultar, nem para o
+          pesquisador. Qualquer análise que não esteja no pré-registro aparece no relatório rotulada como
+          exploratória.</p>
+        <p class="pendente"><strong>A fazer:</strong> declarar o efeito esperado e o cálculo de poder, isto é, o tamanho
+          de
+          amostra que dá a um efeito real, se ele existir, boa chance de aparecer. Os efeitos publicados vêm de leituras
+          livres pontuadas por consulentes, como os reunidos por Sarraf e colaboradores (2021); não há estimativa prévia
+          para um questionário fechado com conferência automática, e essa incerteza precisa estar escrita no artigo.</p>
+
+        <h2 id="secao-5">5. Arquitetura</h2>
+        <p>Esta seção descreve como o software impõe o protocolo. Três ideias de criptografia sustentam quase todas as
+          garantias, e vale apresentá-las antes.</p>
+        <div class="definicao">
+          <p class="rotulo">Em termos simples</p>
+          <p>Um <strong>hash</strong> é uma impressão digital de um conteúdo: uma sequência curta, calculada a partir
+            dele,
+            que muda por completo se uma única vírgula mudar. Do hash não se volta ao conteúdo, a não ser testando todas
+            as
+            possibilidades, o que só é viável quando elas são poucas (seção 5.3). O Crivo usa o SHA-256, um padrão.</p>
+          <p>Um <strong>compromisso</strong> funciona como um envelope lacrado: publica-se o hash de uma informação
+            mantida
+            em segredo e, quando o segredo é revelado, qualquer pessoa confere que ele é o mesmo de antes.</p>
+          <p>Um <strong>carimbo do tempo</strong> é o equivalente digital de um cartório: uma autoridade independente
+            assina que certo hash já existia num dado instante.</p>
+        </div>
+
+        <h3 id="secao-5-1">5.1 Visão geral</h3>
+        <p>O Crivo é um monólito modular, isto é, um único programa dividido em módulos cujas fronteiras são verificadas
+          por testes. É escrito em Java 21, com Spring Boot e Spring Modulith, guarda os dados no PostgreSQL, com as
+          migrações de esquema feitas pelo Flyway, e renderiza a interface no servidor com Thymeleaf. A escolha atende a
+          uma restrição de projeto: o sistema
+          precisa ser operável por um único mantenedor, e a complexidade operacional é, ela própria, fonte de erro. Pela
+          mesma razão, um auditor roda tudo na própria máquina só com o kit de desenvolvimento Java (JDK), sem
+          contêiner:
+          em desenvolvimento, a aplicação sobe sozinha uma instância embutida do PostgreSQL.</p>
+
+        <h3 id="secao-5-2">5.2 Cegamento como invariante de dados</h3>
+        <p>Em computação, uma invariante é uma condição que precisa valer em qualquer estado do sistema. No Crivo, o
+          cegamento é uma delas: ele não é aplicado na tela, e sim na camada de dados. Cada papel dispõe de consultas e
+          objetos próprios que, por construção, não contêm os campos proibidos para ele: o campo não é escondido na
+          interface, ele simplesmente não chega à resposta do servidor. Os dados que identificam as pessoas ficam
+          cifrados,
+          isto é, criptografados, num esquema separado do banco, que um único módulo pode ler; o restante do sistema
+          trabalha com códigos
+          pseudônimos, que não revelam quem é a pessoa. E as regras que não podem falhar são impostas pelo próprio banco
+          de dados, não só pelo código da aplicação: o perfil de uma conta, consulente ou médium, não muda; nenhum nome
+          é
+          liberado ao médium sem pedido travado; e nenhuma nota pode existir antes do desmascaramento.</p>
+
+        <h3 id="secao-5-3">5.3 Compromissos salgados</h3>
+        <p>Um compromisso feito com o hash puro das respostas seria frágil. Como cada campo tem poucas opções, o número
+          de
+          combinações possíveis é pequeno o bastante para que um computador as teste uma a uma até encontrar a que
+          reproduz o hash publicado — e a trilha de auditoria é pública. Por isso o compromisso mistura às respostas um
+          sal, um número aleatório de 32 bytes, guardado cifrado e revelado só no desmascaramento. Sem o sal, testar as
+          combinações não leva a nada. A regra vale tanto para o pedido do consulente quanto para a leitura do médium, e
+          o
+          modo de cálculo é público, para que um terceiro o reimplemente.</p>
+
+        <h3 id="secao-5-4">5.4 Sorteio com compromisso e revelação</h3>
+        <p>Todos os sorteios do estudo — o médium de cada par e a ordem em que os dois nomes lhe são apresentados —
+          derivam de uma semente, um número secreto de 32 bytes produzido por um gerador criptográfico e guardado
+          cifrado.
+          Cada sorteio é uma função pública da semente e de entradas registradas; a lista de médiuns elegíveis, por
+          exemplo, muda ao longo do estudo, e por isso é registrada a cada sorteio, com o hash na trilha. Como os pares
+          se
+          formam aos poucos, não há uma lista de sorteios para comprometer de antemão: o compromisso publicado no
+          pré-registro é sobre a própria semente. Revelada a semente no fim, qualquer pessoa refaz todos os sorteios e
+          confere que nenhum foi escolhido a dedo.</p>
+
+        <h3 id="secao-5-5">5.5 Pré-registro congelado</h3>
+        <p>O pré-registro é um documento canônico, escrito numa forma única para que o mesmo conteúdo produza sempre o
+          mesmo hash. Ele é resumido por SHA-256 e leva o questionário inteiro em anexo. Depois de congelado, o banco
+          recusa alterá-lo: emendas criam uma nova versão, datada e justificada, e a original continua visível.</p>
+
+        <h3 id="secao-5-6">5.6 Trilha de auditoria e ancoragem externa</h3>
+        <p>Todo evento do estudo entra numa tabela somente de acréscimo: nela se acrescentam registros, mas nenhum pode
+          ser alterado, e cada um carrega o hash do anterior. Funciona como um livro de atas em que cada página
+          traz a impressão digital da página anterior: alterar um registro antigo obriga a refazer todos os que vieram
+          depois. E não se trata de convenção: o próprio banco recusa alterar ou apagar registros dessa tabela.</p>
+        <p>A cadeia, sozinha, não impede que quem opera a instalação a reescreva inteira, recalculando todos os hashes.
+          Por
+          isso, a cabeça da trilha — o hash do último evento, que resume todos os anteriores — é carimbada por uma
+          autoridade independente de carimbo do tempo, segundo o RFC 3161. O carimbo vem logo depois de cada marco do
+          estudo, como o congelamento do pré-registro, a revelação da semente e a publicação do relatório, e uma vez por
+          dia, se a trilha tiver mudado. Hoje a autoridade é o FreeTSA, um serviço gratuito. Só o hash sai do servidor,
+          e os comprovantes
+          ficam públicos, para que qualquer pessoa os confira com ferramentas comuns, como o OpenSSL, sem depender do
+          Crivo.</p>
+
+        <h3 id="secao-5-7">5.7 Ciclo automático e desmascaramento</h3>
+        <p>Um ciclo periódico do servidor, executado a cada minuto, forma os pares, sorteia os médiuns, controla os
+          prazos,
+          reenvia os pedidos vencidos e, quando o N é atingido, desmascara o estudo. O ciclo é idempotente, isto é,
+          rodá-lo
+          duas vezes seguidas não muda nada. Ninguém escolhe o momento do desmascaramento, nem o pesquisador. Até lá, a
+          trilha não liga nenhum médium a nenhum par: o vínculo fica guardado no banco e só se torna público depois.</p>
+
+        <h3 id="secao-5-8">5.8 Verificação por terceiros</h3>
+        <p>A verificação acontece em dois níveis. Quem opera a instalação, ou um auditor com acesso a ela, usa uma
+          ferramenta de linha de comando, o <code>airlab verify</code>, que refaz a cadeia de hashes, confere o hash de
+          cada
+          pré-registro, reconfere os carimbos do tempo e, quando a semente já foi revelada, reproduz o sorteio
+          comprometido. Quem só tem acesso ao que é público conta com a <a th:href="${aplicacao} + '/estudos'">página
+            dos
+            estudos</a>, que mostra o pré-registro e contagens durante a coleta e o relatório inteiro depois do
+          desmascaramento, e com o pacote de verificação.</p>
+        <p>O pacote é escrito uma única vez, no desmascaramento, e o hash dele entra na trilha, que é então carimbada.
+          Traz
+          o pré-registro congelado, a semente revelada, as respostas de cada pedido e de cada leitura usada na
+          conferência,
+          o sal de cada leitura, os envios aos médiuns com a lista de elegíveis de cada sorteio, as notas por par, as
+          três
+          análises, o relatório e a trilha do estudo. Uma segunda ferramenta, o <code>airlab verificar-pacote</code>,
+          confere tudo isso a partir do arquivo, sem banco de dados e sem servidor: refaz a cadeia, confere o
+          pré-registro
+          e a semente, refaz cada sorteio e cada compromisso de leitura, recalcula a nota de cada par e as três análises
+          e
+          confere o hash do relatório.</p>
+        <p>Por proteção de dados, o pacote não traz o primeiro nome dos falecidos nem o sal dos pedidos (<a
+            href="#secao-7">seção 7</a>). O custo é declarado. Os compromissos dos pedidos não se refazem por fora e
+          ficam
+          atestados pela plataforma, que os confere no desmascaramento — e a ferramenta diz isso, em vez de passar
+          calada.
+          O pareamento também não se refaz por fora, porque depende das sinalizações de contas ligadas, que não são
+          públicas.</p>
+
+        <h2 id="secao-6">6. Garantias e limites</h2>
+        <p>Um software não torna um estudo válido por si só. Esta seção diz, com a precisão possível, o que o Crivo
+          garante
+          e o que não garante. Convém distinguir dois tipos de garantia. As garantias sobre o software, como a de que
+          nenhum papel recebe informação proibida, vêm do código aberto e dos testes, que qualquer pessoa pode ler e
+          rodar.
+          As garantias sobre um estudo em particular vêm dos artefatos que ele deixa: o pré-registro, os carimbos, a
+          trilha
+          e o pacote de verificação.</p>
+        <h3>O que o sistema garante, de forma verificável</h3>
+        <ul>
+          <li>O pré-registro e o compromisso do sorteio já existiam no instante atestado pelo carimbo do tempo do
+            congelamento.</li>
+          <li>As respostas do consulente estavam travadas antes de o nome chegar ao médium, e a leitura estava travada
+            antes
+            do desmascaramento. No caso da leitura, qualquer pessoa confere com o pacote. No caso do pedido, a ordem dos
+            eventos é pública e carimbada, mas a correspondência entre as respostas publicadas e o compromisso é
+            atestada
+            pela plataforma (<a href="#secao-5-8">seção 5.8</a>).</li>
+          <li>Nenhum papel recebeu, pelo sistema, informação proibida pela matriz de visibilidade; é o que sustentam os
+            testes que tentam violar cada célula.</li>
+          <li>A sequência de eventos registrada não foi alterada depois de carimbada.</li>
+          <li>Os sorteios foram os que a semente comprometida determina, e a pontuação e as análises são
+            determinísticas:
+            qualquer pessoa as refaz a partir do pacote.</li>
+        </ul>
+        <h3>O que o sistema não garante</h3>
+        <ul>
+          <li>Não distingue sobrevivência de telepatia com os vivos: as respostas existem na memória do consulente e no
+            banco de dados.</li>
+          <li>Não tem consulente substituto. Como os dois estudos sem interação analisados por Silva e Moreira-Almeida
+            (2022) deram nulo, um resultado nulo aqui não refuta os protocolos com <em lang="en">proxy</em>.</li>
+          <li>O questionário fechado só captura o que cabe nos campos. As afirmações livres e específicas, que costumam
+            ser
+            as mais marcantes de uma leitura, ficam fora da nota.</li>
+          <li>O primeiro nome carrega informação: o gênero e, às vezes, a geração e a região. O pareamento e os campos
+            fora
+            da nota reduzem esse vazamento, sem eliminá-lo, e um resultado positivo precisa ser lido à luz dele.</li>
+          <li>Vazamento fora do sistema, como uma conversa entre participantes, e conluio entre um médium e um
+            consulente
+            que se conhecem e usam contas sem ligação aparente não são detectáveis com certeza. O sorteio do médium e a
+            sinalização de contas ligadas reduzem o risco.</li>
+          <li>Uma reescrita da trilha entre um marco e o carimbo seguinte, numa janela de cerca de um minuto em operação
+            normal, não é detectada, e uma única autoridade de carimbo é um ponto único de confiança. A fase seguinte
+            prevê somar uma âncora que não depende de nenhum operador, o OpenTimestamps, ancorado no Bitcoin.</li>
+          <li>Os compromissos dos pedidos e o pareamento não se refazem por fora (<a href="#secao-5-8">seção
+              5.8</a>).</li>
+          <li>Validade de construto — se o questionário mede o que se pretende medir — e generalização para outros
+            médiuns
+            e outras condições são questões de método, não de software.</li>
+        </ul>
+        <p>A delimitação é intencional: um sistema que alega mais do que pode garantir compromete a credibilidade que
+          pretende produzir.</p>
+
+        <h2 id="secao-7">7. Considerações éticas e proteção de dados</h2>
+        <p>Os estudos envolvem pessoas enlutadas e informações delicadas: a vida e a morte de alguém próximo e, por
+          tabela,
+          a crença de quem participa. O simples cadastro como médium pode revelar convicção religiosa, que a Lei Geral
+          de
+          Proteção de Dados Pessoais classifica como dado pessoal sensível, ao lado dos dados de saúde (Brasil, 2018,
+          art.
+          5º, II). As respostas sobre a pessoa falecida, que incluem a causa da morte e a religiosidade, recebem o mesmo
+          cuidado.</p>
+        <p>As medidas são as de praxe em pesquisa com dados sensíveis, com a diferença de que o sistema as impõe:
+          minimização, isto é, coletar só o necessário; pseudonimização; cifragem em repouso; consentimento versionado;
+          desistência a qualquer momento, com apagamento dos dados identificáveis; e dados guardados no Brasil. O pacote
+          de verificação é público, mas não traz primeiro nome nem dado de conta, e quem participa é informado, antes de
+          aceitar o termo, de que uma desistência posterior ao desmascaramento não altera o pacote já publicado.</p>
+        <p>A inscrição só abre com a aprovação de um comitê de ética em pesquisa, no sistema CEP/Conep, e com um contato
+          humano alcançável, porque alguém pode se inscrever em luto agudo; o sistema impõe as duas condições. A página
+          do
+          protocolo diz o que ele não é: não é carta nem mensagem da pessoa falecida, nem resposta a perguntas do
+          consulente. A devolutiva usa linguagem cuidadosa e lembra que um resultado individual não fala da pessoa
+          falecida
+          nem do médium, porque o que o estudo avalia é o conjunto. E nenhum modelo de inteligência artificial participa
+          da
+          avaliação ou da pontuação.</p>
+        <p class="pendente"><strong>A fazer:</strong> citar as resoluções do Conselho Nacional de Saúde e as demais
+          normas
+          de ética em pesquisa aplicáveis, conferindo o texto vigente.</p>
+
+        <h2 id="secao-8">8. Estado atual e avaliação planejada</h2>
+        <p>O fluxo inteiro está implementado, do cadastro ao relatório e ao pacote de verificação, com testes de
+          cegamento
+          e de integridade que rodam contra um banco de dados real a cada mudança no código. Nenhum estudo com
+          participantes reais foi conduzido: em produção, a inscrição permanece fechada até a aprovação do comitê de
+          ética, e o questionário ainda está em revisão. A avaliação planejada tem três etapas, nesta ordem:</p>
+        <ol>
+          <li><strong>Testes de propriedade:</strong> testes automatizados que tentam, de forma sistemática, violar cada
+            célula da matriz de visibilidade e adulterar a trilha.</li>
+          <li><strong>Ensaio completo:</strong> o protocolo inteiro, com participantes fictícios e tentativas
+            deliberadas de
+            quebrar o cegamento.</li>
+          <li><strong>Auditoria externa:</strong> um pesquisador independente recebe só o material público e tenta
+            reproduzir a análise e confirmar a integridade do estudo.</li>
+        </ol>
+        <p>Só depois dessas etapas está previsto um estudo piloto.</p>
+
+        <h2 id="secao-9">9. Discussão e conclusão</h2>
+        <p>O Crivo troca validade ecológica por controle. Validade ecológica é a semelhança entre as condições do estudo
+          e
+          aquelas em que o fenômeno costuma ocorrer — aqui, uma consulta de verdade, com conversa e resposta livre. A
+          análise de Silva e Moreira-Almeida (2022) sugere que essa semelhança importa, e o protocolo abre mão de boa
+          parte
+          dela. As consequências precisam ser ditas com clareza. Um resultado nulo neste protocolo dirá apenas que,
+          nestas
+          condições e com este tamanho de amostra, não houve evidência de desempenho acima do acaso; não refutará a
+          mediunidade nem os protocolos com consulente substituto. Um resultado positivo terá a seu favor o fato de ter
+          sido obtido sem que ninguém julgasse o ajuste e com cada etapa conferível por quem duvida dele. Ainda assim,
+          precisará ser lido à luz do que o primeiro nome pode revelar, e não distinguirá entre as hipóteses sobre a
+          origem
+          da informação.</p>
+        <p>O desenho também abre caminhos. Vários grupos podem rodar o mesmo software e publicar no mesmo formato de
+          verificação, o que permite uma replicação multicêntrica em que nenhum laboratório precisa confiar no outro.
+          Pesquisadores céticos são usuários naturais do material de verificação, e o desenho foi pensado para eles.
+          Duas
+          extensões estão no horizonte: a qualificação cega de médiuns pelo mesmo mecanismo, antes da entrada num
+          estudo,
+          já que a seleção de médiuns com evidência prévia é uma das condições que a literatura associa a resultado
+          positivo (Sarraf e colaboradores, 2021; Silva e Moreira-Almeida, 2022); e protocolos de resposta livre com
+          juízes
+          externos.</p>
+        <p>Em resumo, o Crivo propõe transferir os detalhes operacionais de um estudo de mediunidade do domínio da
+          confiança para o da verificação: cada regra de cegamento vira um teste, cada sorteio vira um compromisso
+          público, e cada evento vira um elo numa cadeia carimbada. O objetivo não é favorecer uma conclusão, mas
+          permitir
+          que qualquer conclusão, positiva ou nula, seja conferida por quem duvida dela.</p>
+
+        <h2 id="disponibilidade">Disponibilidade</h2>
+        <p>Código-fonte e documentação, sob licença MIT: <a
+            href="https://github.com/rogeriocisi/crivo">github.com/rogeriocisi/crivo</a>. Plataforma: <a
+            href="/">crivo.psigama.com</a>. Pré-registros, relatórios e pacotes de verificação: <a
+            th:href="${aplicacao} + '/estudos'">página dos estudos</a>.</p>
+
+        <h2>Referências</h2>
+        <ul class="referencias-artigo">
+          <li>Adams C, Cain P, Pinkas D, Zuccherato R. Internet X.509 Public Key Infrastructure Time-Stamp Protocol
+            (TSP). RFC 3161. RFC Editor; 2001. <a href="https://doi.org/10.17487/RFC3161">DOI</a></li>
+          <li>Beischel J. Contemporary methods used in laboratory-based mediumship research. Journal of
+            Parapsychology. 2007;71(1):37–68.</li>
+          <li>Beischel J, Schwartz GE. Anomalous information reception by research mediums demonstrated using a novel
+            triple-blind protocol. Explore. 2007;3(1):23–27. <a
+              href="https://doi.org/10.1016/j.explore.2006.10.004">DOI</a></li>
+          <li>Beischel J, Boccuzzi M, Biuso M, Rock AJ. Anomalous information reception by research mediums under
+            blinded conditions II: replication and extension. Explore. 2015;11(2):136–142. <a
+              href="https://doi.org/10.1016/j.explore.2015.01.001">DOI</a></li>
+          <li>Bem DJ, Honorton C. Does psi exist? Replicable evidence for an anomalous process of information
+            transfer. Psychological Bulletin. 1994;115(1):4–18. <a
+              href="https://doi.org/10.1037/0033-2909.115.1.4">DOI</a></li>
+          <li>Brasil. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário
+            Oficial da União. 15 ago. 2018. <a
+              href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm">Texto</a></li>
+          <li>de Leeuw JR. jsPsych: a JavaScript library for creating behavioral experiments in a Web browser.
+            Behavior Research Methods. 2015;47(1):1–12. <a href="https://doi.org/10.3758/s13428-014-0458-y">DOI</a></li>
+          <li>Gureckis TM, Martin J, McDonnell J, e colaboradores. psiTurk: an open-source framework for conducting
+            replicable behavioral experiments online. Behavior Research Methods. 2016;48(3):829–842. <a
+              href="https://doi.org/10.3758/s13428-015-0642-8">DOI</a></li>
+          <li>Harris PA, Taylor R, Thielke R, Payne J, Gonzalez N, Conde JG. Research electronic data capture
+            (REDCap): a metadata-driven methodology and workflow process for providing translational research
+            informatics support. Journal of Biomedical Informatics. 2009;42(2):377–381. <a
+              href="https://doi.org/10.1016/j.jbi.2008.08.010">DOI</a></li>
+          <li>Hyman R. Cold reading: how to convince strangers that you know all about them. The Zetetic.
+            1977;1:18–37.</li>
+          <li>Hyman R. How not to test mediums: critiquing the afterlife experiments. Skeptical Inquirer. Janeiro e
+            fevereiro de 2003.</li>
+          <li>Irving G, Holden J. How blockchain-timestamped protocols could improve the trustworthiness of medical
+            science. F1000Research. 2016;5:222. Retratado pelos autores em 2017: F1000Research. 2017;6:805. <a
+              href="https://doi.org/10.12688/f1000research.11888.1">DOI da retratação</a></li>
+          <li>Kekecs Z, Palfi B, Szaszi B, e colaboradores. Raising the value of research studies in psychological
+            science by increasing the credibility of research reports: the transparent Psi project. Royal Society
+            Open Science. 2023;10(2):191375. <a href="https://doi.org/10.1098/rsos.191375">DOI</a></li>
+          <li>Kelly EW, Arcangel D. An investigation of mediums who claim to give information about deceased persons.
+            The Journal of Nervous and Mental Disease. 2011;199(1):11–17. <a
+              href="https://doi.org/10.1097/NMD.0b013e31820439da">DOI</a></li>
+          <li>Milton J, Wiseman R. Does psi exist? Lack of replication of an anomalous process of information
+            transfer. Psychological Bulletin. 1999;125(4):387–391. <a
+              href="https://doi.org/10.1037/0033-2909.125.4.387">DOI</a></li>
+          <li>Nosek BA, Ebersole CR, DeHaven AC, Mellor DT. The preregistration revolution. Proceedings of the
+            National Academy of Sciences. 2018;115(11):2600–2606. <a
+              href="https://doi.org/10.1073/pnas.1708274114">DOI</a></li>
+          <li>O'Keeffe C, Wiseman R. Testing alleged mediumship: methods and results. British Journal of Psychology.
+            2005;96(2):165–179. <a href="https://doi.org/10.1348/000712605X36361">DOI</a></li>
+          <li>Pooley AL. Optimising methodological practices within psychology: a parapsychology case-study. Tese de
+            doutorado. University of Edinburgh; 2024.</li>
+          <li>Radin D. Tricking the trickster: evidence for predicted sequential structure in a 19-year online psi
+            experiment. Journal of Scientific Exploration. 2019;33(4):549–568. <a
+              href="https://doi.org/10.31275/2019/1429">DOI</a></li>
+          <li>Rocha AC, Paraná D, Freire ES, Lotufo Neto F, Moreira-Almeida A. Investigating the fit and accuracy of
+            alleged mediumistic writing: a case study of Chico Xavier's letters. Explore. 2014;10(5):300–308. <a
+              href="https://doi.org/10.1016/j.explore.2014.06.002">DOI</a></li>
+          <li>Sarraf M, Woodley of Menie MA, Tressoldi P. Anomalous information reception by mediums: a meta-analysis
+            of the scientific evidence. Explore. 2021;17(5):396–402. <a
+              href="https://doi.org/10.1016/j.explore.2020.04.002">DOI</a></li>
+          <li>Silva J, Moreira-Almeida A. Controlled experiments involving anomalous information reception with
+            mediums: an analysis of recent studies. Journal of Scientific Exploration. 2022;36(4):749–759. <a
+              href="https://doi.org/10.31275/20222575">DOI</a></li>
+          <li>Simmons JP, Nelson LD, Simonsohn U. False-positive psychology: undisclosed flexibility in data
+            collection and analysis allows presenting anything as significant. Psychological Science.
+            2011;22(11):1359–1366. <a href="https://doi.org/10.1177/0956797611417632">DOI</a></li>
+          <li>Tressoldi P, Liberale L, Sinesio F, Bubba V, Pederzoli L, Testoni I. Mediumship accuracy: a
+            quantitative and qualitative study with a triple-blind protocol. Explore. 2022;18(4):411–415. <a
+              href="https://doi.org/10.1016/j.explore.2021.05.009">DOI</a></li>
+          <li>Tressoldi P, Liberale L, Sinesio F. Is there someone in the hereafter? Mediumship accuracy of 100
+            readings obtained with a triple level of blinding protocol. Omega: Journal of Death and Dying.
+            2025;91(2):955–963 (on-line em 2022). <a href="https://doi.org/10.1177/00302228221146376">DOI</a></li>
+          <li>Wiseman R, O'Keeffe C. A critique of Schwartz et al.'s after-death communication studies. Skeptical
+            Inquirer. Novembro e dezembro de 2001.</li>
+          <li>Wiseman R, Watt C. Study preregistration: an early example and analysis. PeerJ. 2026;14:e21360. <a
+              href="https://doi.org/10.7717/peerj.21360">DOI</a></li>
+        </ul>
+
+        <p class="nota nota-espacada">
+          Texto sob a licença <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.pt-br">Creative
+            Commons Atribuição 4.0 (CC BY 4.0)</a>. Versão de trabalho no repositório:
+          <a href="https://github.com/rogeriocisi/crivo/tree/main/paper">paper/</a>.
+        </p>
       </div>
-      <p>O chamariz é indispensável porque o número de acertos, sozinho, não diz nada. Respostas frequentes — “morreu do
-        coração”, “era casado”, “tinha filhos” — coincidem com as de muita gente. Comparando a mesma leitura com o alvo e
-        com um chamariz de perfil semelhante, a frequência de cada resposta se cancela, e o que sobra é o quanto a leitura
-        se ajusta ao alvo mais do que ao chamariz. É por isso que a leitura fria, que vive de afirmações frequentes, não
-        rende pontos neste protocolo. E, como o mesmo médium faz as duas leituras do par, a tendência dele a repetir
-        certas respostas entra dos dois lados da diferença e também se cancela.</p>
-      <p>Isso permite declarar o acaso antes da coleta, em vez de estimá-lo a partir dos dados. A hipótese nula, a que o
-        estudo põe à prova, é a de que a leitura feita com o nome de A não traz sobre A nenhuma informação que não traga
-        também sobre B. Se ela for verdadeira, trocar entre si as respostas dos dois consulentes apenas inverte o sinal de
-        <var>d</var>. Logo, <var>d</var> é simétrico em torno de zero, e, entre os pares com <var>d</var> diferente de
-        zero, a chance de <var>d</var> ser positivo é de 50%. Como o primeiro nome pode carregar alguma informação sobre a
-        pessoa, essa hipótese não vale de graça; a <a href="#secao-6">seção 6</a> discute o vazamento que resta.</p>
+    </section>
+  </main>
 
-      <h3 id="secao-4-5">4.5 Análise</h3>
-      <p>A unidade de análise é o par: cada par contribui com um único <var>d</var>. A análise primária é o teste de postos
-        sinalizados de Wilcoxon, unilateral, sobre os <var>d</var> de todos os pares. Em termos simples, o teste ordena as
-        diferenças pelo tamanho e verifica se as positivas pesam mais do que as negativas além do que o acaso permitiria;
-        é unilateral porque a hipótese só prevê diferenças positivas. Com até 20 pares em que <var>d</var> é diferente
-        de zero, o teste é exato; acima disso, usa a aproximação normal, uma fórmula que fica precisa com amostras
-        maiores, e o relatório diz qual das duas foi usada.</p>
-      <p>Duas análises secundárias olham os mesmos dados por outros ângulos. O teste binomial exato do sinal ignora o
-        tamanho de <var>d</var> e pergunta apenas se os pares positivos passam da metade. O teste de permutação embaralha
-        as leituras entre os alvos do estudo, dentro de cada estrato, e verifica com que frequência uma atribuição feita
-        ao acaso produz tantas coincidências quanto a verdadeira. Ele segue a lógica do procedimento de Pratt e Birge,
-        provavelmente o mais adotado na área, e não supõe que as respostas de uma mesma leitura sejam independentes entre
-        si (O'Keeffe e Wiseman, 2005). A permutação é exata enquanto os arranjos possíveis cabem numa enumeração; acima
-        disso, usa 100 mil arranjos sorteados da semente revelada, que qualquer pessoa pode refazer.</p>
-      <p>O que a análise não faz também é declarado: multiplicar as probabilidades de acerto de cada campo como se fossem
-        independentes, como fez Hyslop em 1919. O procedimento infla a evidência, porque as respostas sobre uma mesma
-        pessoa se correlacionam (O'Keeffe e Wiseman, 2005).</p>
-      <p>A regra de parada é vinculante: a coleta termina no N declarado, sem análise intermediária. E não há como espiar,
-        porque as notas não existem antes do desmascaramento — não há resultado parcial a consultar, nem para o
-        pesquisador. Qualquer análise que não esteja no pré-registro aparece no relatório rotulada como
-        exploratória.</p>
-      <p class="pendente"><strong>A fazer:</strong> declarar o efeito esperado e o cálculo de poder, isto é, o tamanho de
-        amostra que dá a um efeito real, se ele existir, boa chance de aparecer. Os efeitos publicados vêm de leituras
-        livres pontuadas por consulentes, como os reunidos por Sarraf e colaboradores (2021); não há estimativa prévia
-        para um questionário fechado com conferência automática, e essa incerteza precisa estar escrita no artigo.</p>
-
-      <h2 id="secao-5">5. Arquitetura</h2>
-      <p>Esta seção descreve como o software impõe o protocolo. Três ideias de criptografia sustentam quase todas as
-        garantias, e vale apresentá-las antes.</p>
-      <div class="definicao">
-        <p class="rotulo">Em termos simples</p>
-        <p>Um <strong>hash</strong> é uma impressão digital de um conteúdo: uma sequência curta, calculada a partir dele,
-          que muda por completo se uma única vírgula mudar. Do hash não se volta ao conteúdo, a não ser testando todas as
-          possibilidades, o que só é viável quando elas são poucas (seção 5.3). O Crivo usa o SHA-256, um padrão.</p>
-        <p>Um <strong>compromisso</strong> funciona como um envelope lacrado: publica-se o hash de uma informação mantida
-          em segredo e, quando o segredo é revelado, qualquer pessoa confere que ele é o mesmo de antes.</p>
-        <p>Um <strong>carimbo do tempo</strong> é o equivalente digital de um cartório: uma autoridade independente
-          assina que certo hash já existia num dado instante.</p>
-      </div>
-
-      <h3 id="secao-5-1">5.1 Visão geral</h3>
-      <p>O Crivo é um monólito modular, isto é, um único programa dividido em módulos cujas fronteiras são verificadas
-        por testes. É escrito em Java 21, com Spring Boot e Spring Modulith, guarda os dados no PostgreSQL, com as
-        migrações de esquema feitas pelo Flyway, e renderiza a interface no servidor com Thymeleaf. A escolha atende a uma restrição de projeto: o sistema
-        precisa ser operável por um único mantenedor, e a complexidade operacional é, ela própria, fonte de erro. Pela
-        mesma razão, um auditor roda tudo na própria máquina só com o kit de desenvolvimento Java (JDK), sem contêiner:
-        em desenvolvimento, a aplicação sobe sozinha uma instância embutida do PostgreSQL.</p>
-
-      <h3 id="secao-5-2">5.2 Cegamento como invariante de dados</h3>
-      <p>Em computação, uma invariante é uma condição que precisa valer em qualquer estado do sistema. No Crivo, o
-        cegamento é uma delas: ele não é aplicado na tela, e sim na camada de dados. Cada papel dispõe de consultas e
-        objetos próprios que, por construção, não contêm os campos proibidos para ele: o campo não é escondido na
-        interface, ele simplesmente não chega à resposta do servidor. Os dados que identificam as pessoas ficam cifrados,
-        isto é, criptografados, num esquema separado do banco, que um único módulo pode ler; o restante do sistema trabalha com códigos
-        pseudônimos, que não revelam quem é a pessoa. E as regras que não podem falhar são impostas pelo próprio banco
-        de dados, não só pelo código da aplicação: o perfil de uma conta, consulente ou médium, não muda; nenhum nome é
-        liberado ao médium sem pedido travado; e nenhuma nota pode existir antes do desmascaramento.</p>
-
-      <h3 id="secao-5-3">5.3 Compromissos salgados</h3>
-      <p>Um compromisso feito com o hash puro das respostas seria frágil. Como cada campo tem poucas opções, o número de
-        combinações possíveis é pequeno o bastante para que um computador as teste uma a uma até encontrar a que
-        reproduz o hash publicado — e a trilha de auditoria é pública. Por isso o compromisso mistura às respostas um
-        sal, um número aleatório de 32 bytes, guardado cifrado e revelado só no desmascaramento. Sem o sal, testar as
-        combinações não leva a nada. A regra vale tanto para o pedido do consulente quanto para a leitura do médium, e o
-        modo de cálculo é público, para que um terceiro o reimplemente.</p>
-
-      <h3 id="secao-5-4">5.4 Sorteio com compromisso e revelação</h3>
-      <p>Todos os sorteios do estudo — o médium de cada par e a ordem em que os dois nomes lhe são apresentados —
-        derivam de uma semente, um número secreto de 32 bytes produzido por um gerador criptográfico e guardado cifrado.
-        Cada sorteio é uma função pública da semente e de entradas registradas; a lista de médiuns elegíveis, por
-        exemplo, muda ao longo do estudo, e por isso é registrada a cada sorteio, com o hash na trilha. Como os pares se
-        formam aos poucos, não há uma lista de sorteios para comprometer de antemão: o compromisso publicado no
-        pré-registro é sobre a própria semente. Revelada a semente no fim, qualquer pessoa refaz todos os sorteios e
-        confere que nenhum foi escolhido a dedo.</p>
-
-      <h3 id="secao-5-5">5.5 Pré-registro congelado</h3>
-      <p>O pré-registro é um documento canônico, escrito numa forma única para que o mesmo conteúdo produza sempre o
-        mesmo hash. Ele é resumido por SHA-256 e leva o questionário inteiro em anexo. Depois de congelado, o banco
-        recusa alterá-lo: emendas criam uma nova versão, datada e justificada, e a original continua visível.</p>
-
-      <h3 id="secao-5-6">5.6 Trilha de auditoria e ancoragem externa</h3>
-      <p>Todo evento do estudo entra numa tabela somente de acréscimo: nela se acrescentam registros, mas nenhum pode
-        ser alterado, e cada um carrega o hash do anterior. Funciona como um livro de atas em que cada página
-        traz a impressão digital da página anterior: alterar um registro antigo obriga a refazer todos os que vieram
-        depois. E não se trata de convenção: o próprio banco recusa alterar ou apagar registros dessa tabela.</p>
-      <p>A cadeia, sozinha, não impede que quem opera a instalação a reescreva inteira, recalculando todos os hashes. Por
-        isso, a cabeça da trilha — o hash do último evento, que resume todos os anteriores — é carimbada por uma
-        autoridade independente de carimbo do tempo, segundo o RFC 3161. O carimbo vem logo depois de cada marco do
-        estudo, como o congelamento do pré-registro, a revelação da semente e a publicação do relatório, e uma vez por
-        dia, se a trilha tiver mudado. Hoje a autoridade é o FreeTSA, um serviço gratuito. Só o hash sai do servidor, e os comprovantes
-        ficam públicos, para que qualquer pessoa os confira com ferramentas comuns, como o OpenSSL, sem depender do
-        Crivo.</p>
-
-      <h3 id="secao-5-7">5.7 Ciclo automático e desmascaramento</h3>
-      <p>Um ciclo periódico do servidor, executado a cada minuto, forma os pares, sorteia os médiuns, controla os prazos,
-        reenvia os pedidos vencidos e, quando o N é atingido, desmascara o estudo. O ciclo é idempotente, isto é, rodá-lo
-        duas vezes seguidas não muda nada. Ninguém escolhe o momento do desmascaramento, nem o pesquisador. Até lá, a
-        trilha não liga nenhum médium a nenhum par: o vínculo fica guardado no banco e só se torna público depois.</p>
-
-      <h3 id="secao-5-8">5.8 Verificação por terceiros</h3>
-      <p>A verificação acontece em dois níveis. Quem opera a instalação, ou um auditor com acesso a ela, usa uma
-        ferramenta de linha de comando, o <code>airlab verify</code>, que refaz a cadeia de hashes, confere o hash de cada
-        pré-registro, reconfere os carimbos do tempo e, quando a semente já foi revelada, reproduz o sorteio
-        comprometido. Quem só tem acesso ao que é público conta com a <a th:href="${aplicacao} + '/estudos'">página dos
-        estudos</a>, que mostra o pré-registro e contagens durante a coleta e o relatório inteiro depois do
-        desmascaramento, e com o pacote de verificação.</p>
-      <p>O pacote é escrito uma única vez, no desmascaramento, e o hash dele entra na trilha, que é então carimbada. Traz
-        o pré-registro congelado, a semente revelada, as respostas de cada pedido e de cada leitura usada na conferência,
-        o sal de cada leitura, os envios aos médiuns com a lista de elegíveis de cada sorteio, as notas por par, as três
-        análises, o relatório e a trilha do estudo. Uma segunda ferramenta, o <code>airlab verificar-pacote</code>,
-        confere tudo isso a partir do arquivo, sem banco de dados e sem servidor: refaz a cadeia, confere o pré-registro
-        e a semente, refaz cada sorteio e cada compromisso de leitura, recalcula a nota de cada par e as três análises e
-        confere o hash do relatório.</p>
-      <p>Por proteção de dados, o pacote não traz o primeiro nome dos falecidos nem o sal dos pedidos (<a
-          href="#secao-7">seção 7</a>). O custo é declarado. Os compromissos dos pedidos não se refazem por fora e ficam
-        atestados pela plataforma, que os confere no desmascaramento — e a ferramenta diz isso, em vez de passar calada.
-        O pareamento também não se refaz por fora, porque depende das sinalizações de contas ligadas, que não são
-        públicas.</p>
-
-      <h2 id="secao-6">6. Garantias e limites</h2>
-      <p>Um software não torna um estudo válido por si só. Esta seção diz, com a precisão possível, o que o Crivo garante
-        e o que não garante. Convém distinguir dois tipos de garantia. As garantias sobre o software, como a de que
-        nenhum papel recebe informação proibida, vêm do código aberto e dos testes, que qualquer pessoa pode ler e rodar.
-        As garantias sobre um estudo em particular vêm dos artefatos que ele deixa: o pré-registro, os carimbos, a trilha
-        e o pacote de verificação.</p>
-      <h3>O que o sistema garante, de forma verificável</h3>
-      <ul>
-        <li>O pré-registro e o compromisso do sorteio já existiam no instante atestado pelo carimbo do tempo do
-          congelamento.</li>
-        <li>As respostas do consulente estavam travadas antes de o nome chegar ao médium, e a leitura estava travada antes
-          do desmascaramento. No caso da leitura, qualquer pessoa confere com o pacote. No caso do pedido, a ordem dos
-          eventos é pública e carimbada, mas a correspondência entre as respostas publicadas e o compromisso é atestada
-          pela plataforma (<a href="#secao-5-8">seção 5.8</a>).</li>
-        <li>Nenhum papel recebeu, pelo sistema, informação proibida pela matriz de visibilidade; é o que sustentam os
-          testes que tentam violar cada célula.</li>
-        <li>A sequência de eventos registrada não foi alterada depois de carimbada.</li>
-        <li>Os sorteios foram os que a semente comprometida determina, e a pontuação e as análises são determinísticas:
-          qualquer pessoa as refaz a partir do pacote.</li>
-      </ul>
-      <h3>O que o sistema não garante</h3>
-      <ul>
-        <li>Não distingue sobrevivência de telepatia com os vivos: as respostas existem na memória do consulente e no
-          banco de dados.</li>
-        <li>Não tem consulente substituto. Como os dois estudos sem interação analisados por Silva e Moreira-Almeida
-          (2022) deram nulo, um resultado nulo aqui não refuta os protocolos com <em lang="en">proxy</em>.</li>
-        <li>O questionário fechado só captura o que cabe nos campos. As afirmações livres e específicas, que costumam ser
-          as mais marcantes de uma leitura, ficam fora da nota.</li>
-        <li>O primeiro nome carrega informação: o gênero e, às vezes, a geração e a região. O pareamento e os campos fora
-          da nota reduzem esse vazamento, sem eliminá-lo, e um resultado positivo precisa ser lido à luz dele.</li>
-        <li>Vazamento fora do sistema, como uma conversa entre participantes, e conluio entre um médium e um consulente
-          que se conhecem e usam contas sem ligação aparente não são detectáveis com certeza. O sorteio do médium e a
-          sinalização de contas ligadas reduzem o risco.</li>
-        <li>Uma reescrita da trilha entre um marco e o carimbo seguinte, numa janela de cerca de um minuto em operação
-          normal, não é detectada, e uma única autoridade de carimbo é um ponto único de confiança. A fase seguinte
-          prevê somar uma âncora que não depende de nenhum operador, o OpenTimestamps, ancorado no Bitcoin.</li>
-        <li>Os compromissos dos pedidos e o pareamento não se refazem por fora (<a href="#secao-5-8">seção
-          5.8</a>).</li>
-        <li>Validade de construto — se o questionário mede o que se pretende medir — e generalização para outros médiuns
-          e outras condições são questões de método, não de software.</li>
-      </ul>
-      <p>A delimitação é intencional: um sistema que alega mais do que pode garantir compromete a credibilidade que
-        pretende produzir.</p>
-
-      <h2 id="secao-7">7. Considerações éticas e proteção de dados</h2>
-      <p>Os estudos envolvem pessoas enlutadas e informações delicadas: a vida e a morte de alguém próximo e, por tabela,
-        a crença de quem participa. O simples cadastro como médium pode revelar convicção religiosa, que a Lei Geral de
-        Proteção de Dados Pessoais classifica como dado pessoal sensível, ao lado dos dados de saúde (Brasil, 2018, art.
-        5º, II). As respostas sobre a pessoa falecida, que incluem a causa da morte e a religiosidade, recebem o mesmo
-        cuidado.</p>
-      <p>As medidas são as de praxe em pesquisa com dados sensíveis, com a diferença de que o sistema as impõe:
-        minimização, isto é, coletar só o necessário; pseudonimização; cifragem em repouso; consentimento versionado;
-        desistência a qualquer momento, com apagamento dos dados identificáveis; e dados guardados no Brasil. O pacote
-        de verificação é público, mas não traz primeiro nome nem dado de conta, e quem participa é informado, antes de
-        aceitar o termo, de que uma desistência posterior ao desmascaramento não altera o pacote já publicado.</p>
-      <p>A inscrição só abre com a aprovação de um comitê de ética em pesquisa, no sistema CEP/Conep, e com um contato
-        humano alcançável, porque alguém pode se inscrever em luto agudo; o sistema impõe as duas condições. A página do
-        protocolo diz o que ele não é: não é carta nem mensagem da pessoa falecida, nem resposta a perguntas do
-        consulente. A devolutiva usa linguagem cuidadosa e lembra que um resultado individual não fala da pessoa falecida
-        nem do médium, porque o que o estudo avalia é o conjunto. E nenhum modelo de inteligência artificial participa da
-        avaliação ou da pontuação.</p>
-      <p class="pendente"><strong>A fazer:</strong> citar as resoluções do Conselho Nacional de Saúde e as demais normas
-        de ética em pesquisa aplicáveis, conferindo o texto vigente.</p>
-
-      <h2 id="secao-8">8. Estado atual e avaliação planejada</h2>
-      <p>O fluxo inteiro está implementado, do cadastro ao relatório e ao pacote de verificação, com testes de cegamento
-        e de integridade que rodam contra um banco de dados real a cada mudança no código. Nenhum estudo com
-        participantes reais foi conduzido: em produção, a inscrição permanece fechada até a aprovação do comitê de
-        ética, e o questionário ainda está em revisão. A avaliação planejada tem três etapas, nesta ordem:</p>
-      <ol>
-        <li><strong>Testes de propriedade:</strong> testes automatizados que tentam, de forma sistemática, violar cada
-          célula da matriz de visibilidade e adulterar a trilha.</li>
-        <li><strong>Ensaio completo:</strong> o protocolo inteiro, com participantes fictícios e tentativas deliberadas de
-          quebrar o cegamento.</li>
-        <li><strong>Auditoria externa:</strong> um pesquisador independente recebe só o material público e tenta
-          reproduzir a análise e confirmar a integridade do estudo.</li>
-      </ol>
-      <p>Só depois dessas etapas está previsto um estudo piloto.</p>
-
-      <h2 id="secao-9">9. Discussão e conclusão</h2>
-      <p>O Crivo troca validade ecológica por controle. Validade ecológica é a semelhança entre as condições do estudo e
-        aquelas em que o fenômeno costuma ocorrer — aqui, uma consulta de verdade, com conversa e resposta livre. A
-        análise de Silva e Moreira-Almeida (2022) sugere que essa semelhança importa, e o protocolo abre mão de boa parte
-        dela. As consequências precisam ser ditas com clareza. Um resultado nulo neste protocolo dirá apenas que, nestas
-        condições e com este tamanho de amostra, não houve evidência de desempenho acima do acaso; não refutará a
-        mediunidade nem os protocolos com consulente substituto. Um resultado positivo terá a seu favor o fato de ter
-        sido obtido sem que ninguém julgasse o ajuste e com cada etapa conferível por quem duvida dele. Ainda assim,
-        precisará ser lido à luz do que o primeiro nome pode revelar, e não distinguirá entre as hipóteses sobre a origem
-        da informação.</p>
-      <p>O desenho também abre caminhos. Vários grupos podem rodar o mesmo software e publicar no mesmo formato de
-        verificação, o que permite uma replicação multicêntrica em que nenhum laboratório precisa confiar no outro.
-        Pesquisadores céticos são usuários naturais do material de verificação, e o desenho foi pensado para eles. Duas
-        extensões estão no horizonte: a qualificação cega de médiuns pelo mesmo mecanismo, antes da entrada num estudo,
-        já que a seleção de médiuns com evidência prévia é uma das condições que a literatura associa a resultado
-        positivo (Sarraf e colaboradores, 2021; Silva e Moreira-Almeida, 2022); e protocolos de resposta livre com juízes
-        externos.</p>
-      <p>Em resumo, o Crivo propõe transferir os detalhes operacionais de um estudo de mediunidade do domínio da
-        confiança para o da verificação: cada regra de cegamento vira um teste, cada sorteio vira um compromisso
-        público, e cada evento vira um elo numa cadeia carimbada. O objetivo não é favorecer uma conclusão, mas permitir
-        que qualquer conclusão, positiva ou nula, seja conferida por quem duvida dela.</p>
-      <p class="pendente"><strong>A fazer:</strong> desenvolver esta seção depois do ensaio completo e da auditoria
-        externa.</p>
-
-      <h2 id="disponibilidade">Disponibilidade</h2>
-      <p>Código-fonte e documentação, sob licença MIT: <a
-          href="https://github.com/rogeriocisi/crivo">github.com/rogeriocisi/crivo</a>. Plataforma: <a
-          href="/">crivo.psigama.com</a>. Pré-registros, relatórios e pacotes de verificação: <a
-          th:href="${aplicacao} + '/estudos'">página dos estudos</a>.</p>
-
-      <h2 id="pendencias">Pendências antes da submissão</h2>
-      <ul>
-        <li>Ler o texto integral das referências ainda conferidas só pelo resumo e conferir cada número citado.</li>
-        <li>Repetir o levantamento de ferramentas (seção 2.5) em bases indexadas, com protocolo registrado, e conferir no
-          texto integral as descrições usadas.</li>
-        <li>Efeito esperado e cálculo de poder (seção 4.5).</li>
-        <li>Revisão do questionário, hoje em versão de rascunho.</li>
-        <li>Normas de ética em pesquisa aplicáveis (seção 7).</li>
-        <li>Ensaio completo e auditoria externa (seção 8).</li>
-        <li>Afiliação do autor, abstract em inglês e escolha do destino: preprint em português e, depois, revista da área
-          ou de software de pesquisa.</li>
-      </ul>
-
-      <h2>Referências</h2>
-      <ul class="referencias-artigo">
-        <li>Adams C, Cain P, Pinkas D, Zuccherato R. Internet X.509 Public Key Infrastructure Time-Stamp Protocol
-          (TSP). RFC 3161. RFC Editor; 2001. <a href="https://doi.org/10.17487/RFC3161">DOI</a></li>
-        <li>Beischel J. Contemporary methods used in laboratory-based mediumship research. Journal of
-          Parapsychology. 2007;71(1):37–68.</li>
-        <li>Beischel J, Schwartz GE. Anomalous information reception by research mediums demonstrated using a novel
-          triple-blind protocol. Explore. 2007;3(1):23–27. <a
-            href="https://doi.org/10.1016/j.explore.2006.10.004">DOI</a></li>
-        <li>Beischel J, Boccuzzi M, Biuso M, Rock AJ. Anomalous information reception by research mediums under
-          blinded conditions II: replication and extension. Explore. 2015;11(2):136–142. <a
-            href="https://doi.org/10.1016/j.explore.2015.01.001">DOI</a></li>
-        <li>Bem DJ, Honorton C. Does psi exist? Replicable evidence for an anomalous process of information
-          transfer. Psychological Bulletin. 1994;115(1):4–18. <a
-            href="https://doi.org/10.1037/0033-2909.115.1.4">DOI</a></li>
-        <li>Brasil. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário
-          Oficial da União. 15 ago. 2018. <a
-            href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm">Texto</a></li>
-        <li>de Leeuw JR. jsPsych: a JavaScript library for creating behavioral experiments in a Web browser.
-          Behavior Research Methods. 2015;47(1):1–12. <a href="https://doi.org/10.3758/s13428-014-0458-y">DOI</a></li>
-        <li>Gureckis TM, Martin J, McDonnell J, e colaboradores. psiTurk: an open-source framework for conducting
-          replicable behavioral experiments online. Behavior Research Methods. 2016;48(3):829–842. <a
-            href="https://doi.org/10.3758/s13428-015-0642-8">DOI</a></li>
-        <li>Harris PA, Taylor R, Thielke R, Payne J, Gonzalez N, Conde JG. Research electronic data capture
-          (REDCap): a metadata-driven methodology and workflow process for providing translational research
-          informatics support. Journal of Biomedical Informatics. 2009;42(2):377–381. <a
-            href="https://doi.org/10.1016/j.jbi.2008.08.010">DOI</a></li>
-        <li>Hyman R. Cold reading: how to convince strangers that you know all about them. The Zetetic.
-          1977;1:18–37.</li>
-        <li>Hyman R. How not to test mediums: critiquing the afterlife experiments. Skeptical Inquirer. Janeiro e
-          fevereiro de 2003.</li>
-        <li>Irving G, Holden J. How blockchain-timestamped protocols could improve the trustworthiness of medical
-          science. F1000Research. 2016;5:222. Retratado pelos autores em 2017: F1000Research. 2017;6:805. <a
-            href="https://doi.org/10.12688/f1000research.11888.1">DOI da retratação</a></li>
-        <li>Kekecs Z, Palfi B, Szaszi B, e colaboradores. Raising the value of research studies in psychological
-          science by increasing the credibility of research reports: the transparent Psi project. Royal Society
-          Open Science. 2023;10(2):191375. <a href="https://doi.org/10.1098/rsos.191375">DOI</a></li>
-        <li>Kelly EW, Arcangel D. An investigation of mediums who claim to give information about deceased persons.
-          The Journal of Nervous and Mental Disease. 2011;199(1):11–17. <a
-            href="https://doi.org/10.1097/NMD.0b013e31820439da">DOI</a></li>
-        <li>Milton J, Wiseman R. Does psi exist? Lack of replication of an anomalous process of information
-          transfer. Psychological Bulletin. 1999;125(4):387–391. <a
-            href="https://doi.org/10.1037/0033-2909.125.4.387">DOI</a></li>
-        <li>Nosek BA, Ebersole CR, DeHaven AC, Mellor DT. The preregistration revolution. Proceedings of the
-          National Academy of Sciences. 2018;115(11):2600–2606. <a
-            href="https://doi.org/10.1073/pnas.1708274114">DOI</a></li>
-        <li>O'Keeffe C, Wiseman R. Testing alleged mediumship: methods and results. British Journal of Psychology.
-          2005;96(2):165–179. <a href="https://doi.org/10.1348/000712605X36361">DOI</a></li>
-        <li>Pooley AL. Optimising methodological practices within psychology: a parapsychology case-study. Tese de
-          doutorado. University of Edinburgh; 2024.</li>
-        <li>Radin D. Tricking the trickster: evidence for predicted sequential structure in a 19-year online psi
-          experiment. Journal of Scientific Exploration. 2019;33(4):549–568. <a
-            href="https://doi.org/10.31275/2019/1429">DOI</a></li>
-        <li>Rocha AC, Paraná D, Freire ES, Lotufo Neto F, Moreira-Almeida A. Investigating the fit and accuracy of
-          alleged mediumistic writing: a case study of Chico Xavier's letters. Explore. 2014;10(5):300–308. <a
-            href="https://doi.org/10.1016/j.explore.2014.06.002">DOI</a></li>
-        <li>Sarraf M, Woodley of Menie MA, Tressoldi P. Anomalous information reception by mediums: a meta-analysis
-          of the scientific evidence. Explore. 2021;17(5):396–402. <a
-            href="https://doi.org/10.1016/j.explore.2020.04.002">DOI</a></li>
-        <li>Silva J, Moreira-Almeida A. Controlled experiments involving anomalous information reception with
-          mediums: an analysis of recent studies. Journal of Scientific Exploration. 2022;36(4):749–759. <a
-            href="https://doi.org/10.31275/20222575">DOI</a></li>
-        <li>Simmons JP, Nelson LD, Simonsohn U. False-positive psychology: undisclosed flexibility in data
-          collection and analysis allows presenting anything as significant. Psychological Science.
-          2011;22(11):1359–1366. <a href="https://doi.org/10.1177/0956797611417632">DOI</a></li>
-        <li>Tressoldi P, Liberale L, Sinesio F, Bubba V, Pederzoli L, Testoni I. Mediumship accuracy: a
-          quantitative and qualitative study with a triple-blind protocol. Explore. 2022;18(4):411–415. <a
-            href="https://doi.org/10.1016/j.explore.2021.05.009">DOI</a></li>
-        <li>Tressoldi P, Liberale L, Sinesio F. Is there someone in the hereafter? Mediumship accuracy of 100
-          readings obtained with a triple level of blinding protocol. Omega: Journal of Death and Dying.
-          2025;91(2):955–963 (on-line em 2022). <a href="https://doi.org/10.1177/00302228221146376">DOI</a></li>
-        <li>Wiseman R, O'Keeffe C. A critique of Schwartz et al.'s after-death communication studies. Skeptical
-          Inquirer. Novembro e dezembro de 2001.</li>
-        <li>Wiseman R, Watt C. Study preregistration: an early example and analysis. PeerJ. 2026;14:e21360. <a
-            href="https://doi.org/10.7717/peerj.21360">DOI</a></li>
-      </ul>
-
-      <p class="nota nota-espacada">
-        Texto sob a licença <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.pt-br">Creative
-        Commons Atribuição 4.0 (CC BY 4.0)</a>. Versão de trabalho no repositório:
-        <a href="https://github.com/rogeriocisi/crivo/tree/main/paper">paper/</a>.
-      </p>
-    </div>
-  </section>
-</main>
-
-<footer th:replace="~{fragments/site :: rodape}"></footer>
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
 </body>
+
 </html>
