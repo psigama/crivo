@@ -107,6 +107,18 @@ class AudiencePagesTest {
     }
 
     @Test
+    @DisplayName("toda pagina tem Contato no menu, levando ao e-mail do projeto no rodape (SPEC 0.27)")
+    void every_page_has_the_contact_in_the_menu_and_the_footer() throws Exception {
+        for (String path : new String[] {"/", "/medium", "/pesquisa", "/garantias", "/login", "/protocolo/P1"}) {
+            page(path)
+                    .andExpect(content().string(containsString("<a class=\"contato\" href=\"#contato\">Contato</a>")))
+                    .andExpect(content().string(containsString("id=\"contato\"")))
+                    .andExpect(content().string(containsString(
+                            "href=\"mailto:crivo.psigama@gmail.com\">crivo.psigama@gmail.com</a>")));
+        }
+    }
+
+    @Test
     @DisplayName("garantias em camadas: frase simples e detalhe tecnico")
     void the_guarantees_come_in_layers() throws Exception {
         page("/garantias")

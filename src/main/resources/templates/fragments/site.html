@@ -129,6 +129,8 @@
             th:attr="aria-current=${secaoAtual == 'artigo'} ? 'page' : null">Artigo</a>
         </div>
       </details>
+      <!--/* SPEC 0.27: leva ao grupo Contato do rodapé, que toda página tem. */-->
+      <a class="contato" href="#contato">Contato</a>
       <a class="entrar" th:href="${aplicacao} + '/login'" th:unless="${logado}"
         th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
       <a class="entrar" th:href="${aplicacao} + '/painel'" th:if="${logado}"
@@ -176,6 +178,16 @@
             <li><a href="https://psigama.com/">PsiGama</a></li>
           </ul>
         </nav>
+        <!--/*
+          SPEC 0.27: o endereço público do projeto, escrito aqui porque as páginas do site não leem
+          configuração (seção 1.3). Não é o contato humano da inscrição (AIRLAB_CONTACT_EMAIL).
+        */-->
+        <div id="contato" role="group" aria-label="Contato">
+          <p class="rotulo">Contato</p>
+          <ul>
+            <li><a href="mailto:crivo.psigama@gmail.com">crivo.psigama@gmail.com</a></li>
+          </ul>
+        </div>
       </div>
       <p>
         O Crivo é software livre (licença MIT), desenvolvido por Rogerio Cisi e mantido pela
