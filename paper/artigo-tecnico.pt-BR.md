@@ -3,7 +3,7 @@ title: "Crivo: uma plataforma aberta de protocolos automatizados para o estudo d
 subtitle: "Artigo de desenho, que descreve um método antes de qualquer dado"
 author:
   - name: Rogerio Rodrigues Lima Cisi
-    affiliation: "PsiGama, São Paulo, SP, Brasil. Pesquisador independente, sem vínculo com instituição de pesquisa."
+    affiliation: "Pesquisador independente, sem vínculo com instituição de pesquisa."
 lang: pt-BR
 date: "Esboço — novembro de 2026"
 bibliography: referencias.bib
