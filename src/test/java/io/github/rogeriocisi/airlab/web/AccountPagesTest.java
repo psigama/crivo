@@ -72,6 +72,17 @@ class AccountPagesTest {
     }
 
     @Test
+    @DisplayName("a tela de entrada nao fala da credencial do administrador, que so esta na documentacao")
+    void the_login_page_says_nothing_about_the_administrator_credential() throws Exception {
+        mvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Entrar")))
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("AIRLAB_RESEARCHER"))))
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("Credencial do administrador"))))
+                .andExpect(content().string(org.hamcrest.Matchers.not(containsString("senha temporaria"))));
+    }
+
+    @Test
     @DisplayName("criar conta, as paginas de protocolo e a inicial sao publicas")
     void the_public_pages_are_public() throws Exception {
         mvc.perform(get("/conta/criar")).andExpect(status().isOk())

@@ -4,7 +4,6 @@ import io.github.rogeriocisi.airlab.audit.AuditTrail;
 import io.github.rogeriocisi.airlab.study.StudyService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,15 +28,13 @@ class HomeController {
 
     private final AuditTrail auditTrail;
     private final StudyService studies;
-    private final Environment environment;
     private final SignUpGate gate;
     private final String siteUrl;
 
-    HomeController(AuditTrail auditTrail, StudyService studies, Environment environment, SignUpGate gate,
+    HomeController(AuditTrail auditTrail, StudyService studies, SignUpGate gate,
                    @Value("${airlab.site-url:}") String siteUrl) {
         this.auditTrail = auditTrail;
         this.studies = studies;
-        this.environment = environment;
         this.gate = gate;
         this.siteUrl = SitePages.base(siteUrl, "airlab.site-url (AIRLAB_SITE_URL)");
     }
@@ -121,8 +118,7 @@ class HomeController {
      * like a locked door with a room behind it.
      */
     @GetMapping("/login")
-    String login(Model model) {
-        model.addAttribute("localProfile", environment.matchesProfiles("local", "test"));
+    String login() {
         return "login";
     }
 }

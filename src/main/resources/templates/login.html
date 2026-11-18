@@ -56,31 +56,6 @@
         <button class="botao botao-cheio" type="submit">Entrar</button>
       </form>
 
-      <div class="credencial" th:if="${localProfile}">
-        <p class="rotulo">Credencial do administrador, no perfil local</p>
-        <p>
-          O usuário é <code>pesquisador</code>. A senha é <strong>gerada a cada execução</strong> e
-          aparece uma vez no log da aplicação, numa linha de aviso como esta:
-        </p>
-        <code class="comando">Perfil local: usuario "pesquisador" com senha temporaria desta execucao: …</code>
-        <p class="nota">
-          Nenhuma senha vai para o repositório, e nenhuma fica salva entre execuções — por isso ela
-          muda toda vez que você sobe a aplicação. Para fixar a sua, defina
-          <code>AIRLAB_RESEARCHER_USER</code> e <code>AIRLAB_RESEARCHER_PASSWORD_HASH</code>
-          (um hash bcrypt) no arquivo <code>.env</code>, que não é versionado.
-        </p>
-      </div>
-
-      <div class="credencial" th:unless="${localProfile}">
-        <p class="rotulo">Credencial do administrador em produção</p>
-        <p class="nota">
-          O usuário e o hash bcrypt da senha vêm do ambiente
-          (<code>AIRLAB_RESEARCHER_USER</code> e <code>AIRLAB_RESEARCHER_PASSWORD_HASH</code>).
-          Sem eles a aplicação não inicia, de propósito: subir com credencial padrão seria pior do
-          que não subir.
-        </p>
-      </div>
-
       <p class="nota nota-espacada"><a th:href="${site} + '/'">Voltar ao início</a></p>
     </div>
   </section>
