@@ -45,5 +45,5 @@ pandoc artigo-tecnico.pt-BR.md --citeproc -s -o artigo-tecnico.pt-BR.html
 - [ ] Conferir com o comitê a resolução aplicável (466 ou 510) e as normas novas da Lei 14.874/2024
 - [ ] Ensaio completo e auditoria externa (seção 8)
 - [x] Afiliação do autor e abstract em inglês
-- [ ] ORCID e e-mail de correspondência do autor
+- [x] ORCID e e-mail de correspondência do autor
 - [ ] Discussão (seção 9), depois do ensaio e da auditoria

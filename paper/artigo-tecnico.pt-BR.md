@@ -3,6 +3,9 @@ title: "Crivo: uma plataforma aberta de protocolos automatizados para o estudo d
 subtitle: "Artigo de desenho, que descreve um método antes de qualquer dado"
 author:
   - name: Rogerio Rodrigues Lima Cisi
+    orcid: 0009-0003-8326-6962
+    email: crivo.psigama@gmail.com
+    correspondence: true
     affiliation: "Pesquisador independente, sem vínculo com instituição de pesquisa."
 lang: pt-BR
 date: "Esboço — novembro de 2026"
@@ -26,7 +29,7 @@ PENDÊNCIAS ANTES DA SUBMISSÃO
 - Questionário v2-rascunho: revisão por pesquisadores da área e entrevista cognitiva com consulentes (seção 4.1); frequências observadas das opções, por estrato, no lugar das supostas na simulação de poder (seção 4.6).
 - Normas de ética: conferir com o comitê a resolução aplicável (466 ou 510) e acompanhar as normas da instância nacional prevista na Lei 14.874/2024 (seção 7).
 - Ensaio completo e auditoria externa (seção 8).
-- ORCID e e-mail de correspondência do autor; afiliação institucional, se o estudo tiver instituição proponente.
+- Afiliação institucional, se o estudo tiver instituição proponente.
 - Escolha do destino: preprint em português e, depois, revista da área ou de software de pesquisa.
 
 RESOLVIDO NESTA VERSÃO
@@ -34,6 +37,7 @@ RESOLVIDO NESTA VERSÃO
 - Questionário revisado para a v2-rascunho, com os critérios escritos: seção 4.1 e SPEC, anexo do E13.
 - Normas de ética em pesquisa aplicáveis: seção 7.
 - Afiliação do autor e abstract em inglês.
+- ORCID e e-mail de correspondência do autor.
 -->
 
 # Resumo
