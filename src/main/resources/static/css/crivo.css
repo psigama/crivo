@@ -953,6 +953,11 @@ small {
     color: var(--verdete);
 }
 
+/* Obra que não fundamenta regra do protocolo (referências, seção 6): outro rótulo. */
+.informa.sobre::before {
+    content: "Sobre o livro: ";
+}
+
 /* ---------- repositório ---------- */
 
 .repositorio {
