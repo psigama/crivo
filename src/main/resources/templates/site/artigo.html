@@ -28,9 +28,9 @@
         </h1>
         <p class="chamada aparece">
           Artigo de desenho, que descreve um método antes de qualquer dado. Apresenta a plataforma pelo seu protocolo de
-          mediunidade: de onde vêm os requisitos, como o protocolo funciona, como o software o impõe, o que ele garante
-          e
-          o que não garante. Não há ainda resultado empírico, porque nenhum estudo com participantes reais foi
+          cognição anômala: de onde vêm os requisitos, como o protocolo funciona, como o software o impõe, o que ele
+          garante
+          e o que não garante. Não há ainda resultado empírico, porque nenhum estudo com participantes reais foi
           conduzido.
         </p>
         <dl class="ficha aparece">
@@ -99,7 +99,8 @@
           independente de carimbo do tempo.</p>
         <p>Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer pessoa
           confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o
-          protocolo e o cálculo de poder, a arquitetura, o que o sistema garante e o que não pode garantir, e as questões de ética e de
+          protocolo e o cálculo de poder, a arquitetura, o que o sistema garante e o que não pode garantir, e as
+          questões de ética e de
           proteção
           de dados.</p>
         <p><strong>Palavras-chave:</strong> mediunidade; recepção anômala de informação; protocolo cego;
@@ -501,7 +502,8 @@
           aparência (estatura, porte, cabelo e óculos); e crenças e hábitos (religião, passatempo, fumo e animal de
           estimação). Cada campo tem de duas a dez opções, além de “não sei”, para o consulente, e de “não recebi”, para
           o médium, que responde só aos campos da nota. O questionário completo, com todas as opções, está publicado na
-          <a th:href="${aplicacao} + '/protocolo/P1'">página do protocolo</a>.</p>
+          <a th:href="${aplicacao} + '/protocolo/P1'">página do protocolo</a>.
+        </p>
         <p>Os campos não foram escolhidos só pelo que parece relevante. Num questionário fechado, o sinal que um campo
           pode render depende de quanto ele distingue um falecido de outro do mesmo estrato: num campo em que quase
           todos dão a mesma resposta, alvo e chamariz coincidem quase sempre, e nem uma leitura perfeita se destaca (a
@@ -515,7 +517,8 @@
           “tinha filhos”. A revisão reduz à metade o número de pares necessário para o mesmo efeito (<a
             href="#secao-4-6">seção 4.6</a>). Ela ainda é um rascunho: faltam a revisão por pesquisadores da área e a
           entrevista cognitiva com consulentes, que verifica se cada pergunta é entendida como se pretende e quanto
-          tempo o preenchimento leva.</p>
+          tempo o preenchimento leva.
+        </p>
 
         <h3 id="secao-4-2">4.2 Fluxo</h3>
         <p>Do pré-registro à devolutiva, um estudo percorre oito etapas. Fora o pré-registro, feito pelo pesquisador, e
@@ -716,20 +719,23 @@
           exige e escreve no documento congelado se o N declarado basta. Ela não recusa um estudo pequeno demais, porque
           um piloto é legítimo, mas o relatório repete o que o pré-registro disse.</p>
         <p>A dificuldade é que não existe estimativa prévia para este protocolo. Os efeitos publicados vêm de leituras
-          livres pontuadas por consulentes. Em Beischel e colaboradores (2015), os itens das leituras-alvo foram julgados
+          livres pontuadas por consulentes. Em Beischel e colaboradores (2015), os itens das leituras-alvo foram
+          julgados
           corretos com mais frequência que os dos chamarizes: 52,8% contra 36,6% na seção de perguntas, com
           <var>d</var> = 0,75, e 37,0% contra 24,5% na fala livre, com <var>d</var> = 0,49. Na meta-análise de Sarraf e
           colaboradores (2021), o efeito combinado é de 0,18 acima do acaso no índice de proporção, o que equivale a
           acertar 68% de escolhas entre duas opções, em que o acaso dá 50%. Esses valores de <var>d</var> não se
           transferem para cá: medem outra coisa, com outra variabilidade. O que se transfere é a forma do efeito, por
-          meio de um modelo do próprio protocolo.</p>
+          meio de um modelo do próprio protocolo.
+        </p>
         <p>O modelo é este. Em cada campo, o médium marca “não recebi” com probabilidade de 10%; nos demais casos, com
           probabilidade θ, dá a resposta verdadeira da pessoa cujo nome recebeu e, senão, chuta segundo a frequência das
           opções. θ é a taxa de informação da leitura: θ = 0 é a hipótese nula, e θ = 0,05 quer dizer que a leitura
           traz a resposta verdadeira, além do que o chute traria, em um de cada vinte campos. Cada consulente marca “não
           sei” com probabilidade de 8%. Nesse modelo, num campo comparável, a chance de a leitura coincidir com o alvo
           supera a de coincidir com o chamariz em</p>
-        <p class="formula"><code>Δ&nbsp;=&nbsp;0,9&nbsp;·&nbsp;θ&nbsp;·&nbsp;(1&nbsp;−&nbsp;Σ&nbsp;p<sub>k</sub><sup>2</sup>)</code></p>
+        <p class="formula">
+          <code>Δ&nbsp;=&nbsp;0,9&nbsp;·&nbsp;θ&nbsp;·&nbsp;(1&nbsp;−&nbsp;Σ&nbsp;p<sub>k</sub><sup>2</sup>)</code></p>
         <p>em que <var>p</var><sub>k</sub> é a frequência da opção <var>k</var> e Σ <var>p</var><sub>k</sub><sup>2</sup>
           é a chance de dois falecidos do mesmo estrato coincidirem naquele campo por acaso. É a fórmula que orienta a
           escolha dos campos (<a href="#secao-4-1">seção 4.1</a>): com uma opção quase universal, o parêntese se
@@ -741,7 +747,8 @@
           vezes, como deve. O código está no repositório (<code>paper/poder/SimulacaoPoder.java</code>), roda só com o
           JDK e usa uma semente fixa, para que qualquer pessoa obtenha os mesmos números. Os resultados para a versão
           <code>v2-rascunho</code> estão na Tabela 4. A coluna <var>d</var><sub>z</sub> é o efeito padronizado do par,
-          a média de <var>d</var> dividida pelo seu desvio-padrão.</p>
+          a média de <var>d</var> dividida pelo seu desvio-padrão.
+        </p>
         <figure class="tabela">
           <figcaption>Tabela 4. Poder do protocolo com o questionário <code>v2-rascunho</code>, por taxa de informação
             (Wilcoxon unilateral, α = 0,05; 4 mil estudos simulados por célula). Os pares para poder de 80% são o
@@ -828,7 +835,8 @@
           interação analisados por Silva e Moreira-Almeida (2022) deram nulo, e aqui não há interação nenhuma. E o
           formato fechado descarta as afirmações livres e específicas, que costumam ser as mais informativas. A própria
           simulação é otimista num ponto: sorteia os campos de forma independente, quando, na vida real, causa da morte
-          e modo da morte, por exemplo, andam juntos, e cada campo correlacionado acrescenta menos informação.</p>
+          e modo da morte, por exemplo, andam juntos, e cada campo correlacionado acrescenta menos informação.
+        </p>
         <p>A proposta, então, é planejar com metade do efeito da meta-análise: θ = 0,04, com 61% de pares positivos e
           <var>d</var><sub>z</sub> = 0,25. A fórmula da plataforma, que corrige a eficiência do Wilcoxon em relação ao
           teste <var>t</var>, pede 114 pares para esse <var>d</var><sub>z</sub>; a simulação, com empates e zeros,
@@ -837,7 +845,8 @@
           efeito planejado e de 99% para o efeito equivalente ao da meta-análise. Para efeitos menores, como θ = 0,02,
           fica em 36%: um nulo com 120 pares tornaria improvável um efeito do tamanho do planejado ou maior, mas não
           diria nada sobre efeitos menores, e o relatório precisa dizer isso. A revisão do questionário pesa nessa
-          conta: com a versão <code>v1-rascunho</code>, o mesmo θ = 0,04 exigiria cerca de 250 pares.</p>
+          conta: com a versão <code>v1-rascunho</code>, o mesmo θ = 0,04 exigiria cerca de 250 pares.
+        </p>
         <p>Um estudo piloto de 30 pares, previsto antes do confirmatório (<a href="#secao-8">seção 8</a>), tem poder de
           38% para o efeito planejado e serve a outra coisa: testar o fluxo, medir a frequência de “não sei” e de “não
           recebi” e observar as frequências reais das opções, que entram na simulação no lugar das supostas. O valor-p
@@ -1042,7 +1051,8 @@
           avaliação ou da pontuação.</p>
         <h3 id="secao-7-1">7.1 Normas aplicáveis</h3>
         <p>No Brasil, a pesquisa com seres humanos é regida pela Lei nº 14.874/2024, que instituiu o Sistema Nacional
-          de Ética em Pesquisa com Seres Humanos, e pelo Decreto nº 12.651/2025, que a regulamenta (Brasil, 2024; Brasil,
+          de Ética em Pesquisa com Seres Humanos, e pelo Decreto nº 12.651/2025, que a regulamenta (Brasil, 2024;
+          Brasil,
           2025). Pelas regras de transição do decreto, as resoluções do Conselho Nacional de Saúde continuam valendo
           naquilo que não contrariam a lei, até que a nova instância nacional publique normas próprias, e os protocolos
           seguem sendo analisados pelo sistema CEP/Conep. Os textos foram conferidos em novembro de 2026, e um estudo
@@ -1058,12 +1068,15 @@
             instituição proponente, dizer se o estudo segue esta resolução ou a 466;</li>
           <li>a <strong>Resolução CNS nº 674/2022</strong>, que tipifica a pesquisa e define a tramitação dos protocolos
             de acordo com o risco (Conselho Nacional de Saúde, 2022);</li>
-          <li>o <strong>Ofício Circular nº 2/2021 da Conep</strong>, com as orientações para pesquisas com qualquer etapa
-            em ambiente virtual: descrever cada etapa on-line, com as telas; apresentar o termo de consentimento antes de
+          <li>o <strong>Ofício Circular nº 2/2021 da Conep</strong>, com as orientações para pesquisas com qualquer
+            etapa
+            em ambiente virtual: descrever cada etapa on-line, com as telas; apresentar o termo de consentimento antes
+            de
             qualquer pergunta e permitir que o participante guarde uma cópia; garantir o direito de não responder e de
             retirar o consentimento; e declarar os riscos próprios do ambiente virtual e os limites da confidencialidade
             (Comissão Nacional de Ética em Pesquisa, 2021);</li>
-          <li>a <strong>LGPD</strong>, pela qual os dados sensíveis do estudo — a convicção religiosa de quem se cadastra
+          <li>a <strong>LGPD</strong>, pela qual os dados sensíveis do estudo — a convicção religiosa de quem se
+            cadastra
             como médium, a religião e a causa da morte do falecido — só podem ser tratados com consentimento específico
             e destacado (Brasil, 2018, art. 11, I). A hipótese que dispensa o consentimento para estudos feitos por
             órgão de pesquisa (Brasil, 2018, art. 11, II, c) não se aplica enquanto o estudo não tiver uma instituição
@@ -1090,7 +1103,8 @@
             inscrição. O cadastro só aceita maiores de 18 anos, por uma
             declaração obrigatória, separada do aceite do termo; a plataforma não pede a data de nascimento, que a
             pesquisa não usa, e não confere a declaração contra documento.</li>
-          <li><strong>Reidentificação.</strong> O pacote publica as respostas sem nome, mas quem conheceu o falecido pode
+          <li><strong>Reidentificação.</strong> O pacote publica as respostas sem nome, mas quem conheceu o falecido
+            pode
             reconhecer o conjunto. Os campos foram escolhidos para não identificar ninguém sozinhos (<a
               href="#secao-4-1">seção 4.1</a>); combinados com o estrato, porém, podem identificar alguém para quem já
             conhece a família. O TCLE precisa dizer isso. A LGPD protege pessoas vivas, mas o Código Civil permite à
@@ -1177,7 +1191,8 @@
             transfer. Psychological Bulletin. 1994;115(1):4–18. <a
               href="https://doi.org/10.1037/0033-2909.115.1.4">DOI</a></li>
           <li>Brasil. Lei nº 10.406, de 10 de janeiro de 2002. Código Civil. Diário Oficial da União. 11 jan. 2002.
-            <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm">Texto</a></li>
+            <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm">Texto</a>
+          </li>
           <li>Brasil. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário
             Oficial da União. 15 ago. 2018. <a
               href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm">Texto</a></li>
@@ -1186,7 +1201,8 @@
               href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l14874.htm">Texto</a></li>
           <li>Brasil. Decreto nº 12.651, de 7 de outubro de 2025. Regulamenta a Lei nº 14.874, de 28 de maio de 2024.
             Diário Oficial da União. 8 out. 2025. <a
-              href="https://www2.camara.leg.br/legin/fed/decret/2025/decreto-12651-7-outubro-2025-798105-norma-pe.html">Texto</a></li>
+              href="https://www2.camara.leg.br/legin/fed/decret/2025/decreto-12651-7-outubro-2025-798105-norma-pe.html">Texto</a>
+          </li>
           <li>Comissão Nacional de Ética em Pesquisa. Ofício Circular nº 2/2021/CONEP/SECNS/MS: orientações para
             procedimentos em pesquisas com qualquer etapa em ambiente virtual. Brasília; 24 fev. 2021.</li>
           <li>Conselho Nacional de Saúde. Resolução nº 466, de 12 de dezembro de 2012. Diretrizes e normas
