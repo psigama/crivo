@@ -4,8 +4,6 @@
 
 O Crivo é uma plataforma para conduzir estudos de **cognição anômala** com **cegamento múltiplo, sorteio verificável, pré-registro imutável e trilha de auditoria encadeada por hash**. Tudo foi pensado para que qualquer pessoa, inclusive um auditor cético, consiga conferir que o protocolo foi seguido.
 
-A mediunidade é um ramo da plataforma — na literatura, *recepção anômala de informação*, ou AIR. Os testes de percepção extrassensorial são outro. A distinção é mantida de propósito: AIR designa informação sobre pessoa falecida, e chamar um teste de precognição de AIR seria impreciso.
-
 ## Catálogo de protocolos
 
 A aplicação do Crivo lista os quatro protocolos em [`/protocolos`](https://app.crivo.psigama.com/protocolos), cada um com a sua página em `/protocolo/P1` a `/protocolo/P4`. Desde a [SPEC 0.17](docs/SPEC.md#11-catálogo-de-protocolos), a numeração segue a ordem de importância: o protocolo ativo vem primeiro. A renumeração foi feita antes de qualquer dado real; a correspondência com a numeração anterior está na SPEC.
