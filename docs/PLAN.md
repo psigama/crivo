@@ -362,6 +362,16 @@ Windows e Linux sem Docker e sem banco instalado.
    encaminha um caminho que é página do site: com `AIRLAB_SITE_URL`, a aplicação o mandaria de
    volta com 301, e as duas pontas ficariam mandando a pessoa uma para a outra.
 
+9. **O cache de templates só liga em produção, e um nome de template vale por dois** (SPEC 1.5):
+   `templates/en/<mesmo caminho>` é sobreposição, então `protocolos` é um template em português
+   e outro em inglês. O Thymeleaf guarda o template processado pelo nome, e com o cache padrão o
+   primeiro idioma que pedia uma página depois de cada início ficava valendo nos dois endereços.
+   Foi o que aconteceu no primeiro deploy da versão bilíngue, em 23/11/2026, e a suíte não viu,
+   porque `spring.thymeleaf.cache` só é `true` em `application-prod.yml`. Por isso
+   `WebI18nConfiguration` dá ao motor um cache por idioma, que pergunta o idioma ao mesmo método
+   que a sobreposição usa, e o `TemplateCacheLanguageTest` roda com o cache ligado. Ao mudar a
+   forma de escolher o template, mantenha esse teste: ele é o único que roda como a produção.
+
 
 ## 10. Próximos cortes
 

@@ -3,19 +3,30 @@ package io.github.rogeriocisi.airlab.web;
 import io.github.rogeriocisi.airlab.support.Language;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.IEngineConfiguration;
+import org.thymeleaf.cache.AbstractCacheManager;
+import org.thymeleaf.cache.ExpressionCacheKey;
+import org.thymeleaf.cache.ICache;
+import org.thymeleaf.cache.ICacheEntryValidityChecker;
+import org.thymeleaf.cache.StandardCacheManager;
+import org.thymeleaf.cache.TemplateCacheKey;
+import org.thymeleaf.engine.TemplateModel;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolution;
@@ -23,13 +34,14 @@ import org.thymeleaf.templateresolver.TemplateResolution;
 /**
  * The two languages of the interface, wired into Spring (SPEC 0.28, section 1.5).
  *
- * <p>Three pieces, and no more than three. The <strong>locale</strong> of a request is the language
+ * <p>Four pieces, and no more than four. The <strong>locale</strong> of a request is the language
  * its address says it is, decided by {@link LanguageFilter} and never negotiated again further down.
  * The <strong>English templates are an overlay</strong>: {@code templates/en/<same path>} answers
  * when the request is English, and when that file does not exist the Portuguese template answers —
  * which is rule 5, and what lets the translation be published page by page without a broken link or
- * a blank page. The <strong>interceptor</strong> tells the page which of the two happened, so one
- * that fell back can say so in a line instead of passing for translated.
+ * a blank page. The <strong>template cache is one per language</strong>, because the overlay gives
+ * one template name two templates. The <strong>interceptor</strong> tells the page which of the two
+ * happened, so one that fell back can say so in a line instead of passing for translated.
  *
  * <p>The shared text — header, footer, buttons, validation messages — comes from the message
  * bundle: {@code messages.properties} is Portuguese, the language of origin and the default, and
@@ -65,6 +77,30 @@ class WebI18nConfiguration implements WebMvcConfigurer {
         // letting the Portuguese one answer.
         english.setCheckExistence(true);
         return new EnglishOverlay(english);
+    }
+
+    /**
+     * Gives the template engine a cache that keeps the two languages apart. Thymeleaf caches a
+     * parsed template under its name, and with the overlay one name means two templates: with the
+     * standard cache, whichever language asked for a page first after a start answered at both
+     * addresses from then on. Only production runs with the cache on, so only production showed
+     * it; {@code TemplateCacheLanguageTest} runs with the cache on for that reason.
+     *
+     * <p>Spring Boot builds the engine and offers no setting for its cache manager, and the manager
+     * can only be replaced before the engine is first used: hence a post-processor, which is
+     * static so that it exists before the beans it is meant to see.
+     */
+    @Bean
+    static BeanPostProcessor templateCachePerLanguage() {
+        return new BeanPostProcessor() {
+            @Override
+            public Object postProcessBeforeInitialization(Object bean, String beanName) {
+                if (bean instanceof SpringTemplateEngine engine) {
+                    engine.setCacheManager(new CachePerLanguage());
+                }
+                return bean;
+            }
+        };
     }
 
     @Override
@@ -113,11 +149,89 @@ class WebI18nConfiguration implements WebMvcConfigurer {
         @Override
         public TemplateResolution resolveTemplate(IEngineConfiguration configuration, String ownerTemplate,
                                                   String template, Map<String, Object> attributes) {
-            Locale locale = LocaleContextHolder.getLocale();
-            if (!Language.EN.locale().getLanguage().equals(locale.getLanguage())) {
+            // The same question the cache asks, answered by the same method: the two must never
+            // disagree about the language of a request.
+            if (LanguagePages.current() != Language.EN) {
                 return null;
             }
             return english.resolveTemplate(configuration, ownerTemplate, template, attributes);
+        }
+    }
+
+    /**
+     * The standard caches of Thymeleaf, with the template cache split by the language of the
+     * request. Parsed expressions are the same text in either language, so one cache serves both.
+     */
+    private static final class CachePerLanguage extends AbstractCacheManager {
+
+        private final Map<Language, StandardCacheManager> standard = new EnumMap<>(Language.class);
+
+        private CachePerLanguage() {
+            for (Language language : Language.values()) {
+                standard.put(language, new StandardCacheManager());
+            }
+        }
+
+        @Override
+        protected ICache<TemplateCacheKey, TemplateModel> initializeTemplateCache() {
+            Map<Language, ICache<TemplateCacheKey, TemplateModel>> templates = new EnumMap<>(Language.class);
+            standard.forEach((language, manager) -> templates.put(language, manager.getTemplateCache()));
+            return new ByLanguage<>(templates);
+        }
+
+        @Override
+        protected ICache<ExpressionCacheKey, Object> initializeExpressionCache() {
+            return standard.get(Language.PT).getExpressionCache();
+        }
+    }
+
+    /**
+     * One cache per language behind the interface of one. Reading and writing go to the cache of
+     * the language of the request being handled, which is the language {@link EnglishOverlay}
+     * resolved the template in; clearing reaches every language.
+     */
+    private static final class ByLanguage<K, V> implements ICache<K, V> {
+
+        private final Map<Language, ICache<K, V>> caches;
+
+        private ByLanguage(Map<Language, ICache<K, V>> caches) {
+            this.caches = caches;
+        }
+
+        @Override
+        public void put(K key, V value) {
+            current().put(key, value);
+        }
+
+        @Override
+        public V get(K key) {
+            return current().get(key);
+        }
+
+        @Override
+        public V get(K key, ICacheEntryValidityChecker<? super K, ? super V> validityChecker) {
+            return current().get(key, validityChecker);
+        }
+
+        @Override
+        public void clear() {
+            caches.values().forEach(ICache::clear);
+        }
+
+        @Override
+        public void clearKey(K key) {
+            caches.values().forEach(cache -> cache.clearKey(key));
+        }
+
+        @Override
+        public Set<K> keySet() {
+            Set<K> keys = new HashSet<>();
+            caches.values().forEach(cache -> keys.addAll(cache.keySet()));
+            return keys;
+        }
+
+        private ICache<K, V> current() {
+            return caches.get(LanguagePages.current());
         }
     }
 
