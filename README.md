@@ -4,6 +4,8 @@
 
 O Crivo é uma plataforma para conduzir estudos de **cognição anômala** com **cegamento múltiplo, sorteio verificável, pré-registro imutável e trilha de auditoria encadeada por hash**. Tudo foi pensado para que qualquer pessoa, inclusive um auditor cético, consiga conferir que o protocolo foi seguido.
 
+A interface é **bilíngue** desde a [SPEC 0.28](docs/SPEC.md#15-dois-idiomas): cada página existe em português, nos endereços de sempre, e em inglês com o prefixo `/en` — `/garantias` e `/en/garantias`. Quem chega pela primeira vez cai no idioma do navegador, e o seletor `PT · EN` no cabeçalho leva à mesma página na outra língua. O português é o idioma de origem e o inglês é tradução dele; a documentação (`docs/`) fica em português e o código, em inglês. Como escrever e revisar a tradução está em [`docs/IDIOMAS.md`](docs/IDIOMAS.md).
+
 ## Catálogo de protocolos
 
 A aplicação do Crivo lista os quatro protocolos em [`/protocolos`](https://app.crivo.psigama.com/protocolos), cada um com a sua página em `/protocolo/P1` a `/protocolo/P4`. Desde a [SPEC 0.17](docs/SPEC.md#11-catálogo-de-protocolos), a numeração segue a ordem de importância: o protocolo ativo vem primeiro. A renumeração foi feita antes de qualquer dado real; a correspondência com a numeração anterior está na SPEC.

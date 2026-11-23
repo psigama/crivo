@@ -133,6 +133,8 @@ O mesmo comando roda na sua máquina, pelos scripts da CLI, para ver o site ante
 
 O gerador não sobe o Spring nem o banco. Ele só escreve as páginas listadas em `web.SitePages`, o CSS, o favicon, o `js/encaminhar.js` e o `404.html`, que leva qualquer endereço desconhecido para a aplicação com o mesmo caminho e a mesma consulta.
 
+Desde a SPEC 0.28 (seção 1.5) ele escreve cada página **duas vezes**: em português no endereço de sempre e em inglês sob `en/` — `garantias.html` e `en/garantias.html`. Vai junto o `js/idioma.js`, que leva ao inglês quem chega pela primeira vez com o navegador noutra língua, porque o GitHub Pages não negocia idioma. Uma página que ainda não tem tradução revisada sai em português com um aviso de uma linha, e não falta no site. O `404.html` é um só, e o script dele nunca encaminha para a aplicação um endereço do próprio site, em nenhum dos dois idiomas.
+
 Uma vez, no GitHub:
 
 1. *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.

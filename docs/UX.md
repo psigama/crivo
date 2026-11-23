@@ -246,3 +246,23 @@ A Fase 1 veio antes da Fase 0 porque não depende de escuta: são correções de
 - O `/medium` fica na aplicação, como o `/consulente`, porque descreve etapas do P1. As páginas do site estático não podem repetir etapas e só leem `site`, `aplicacao`, `secaoAtual` e `logado`, o que o `StaticSiteTest` verifica.
 - Nada do plano fere os princípios da Constitution: o vocabulário continua neutro (P3), nenhum resultado parcial aparece (E10, trava 1) e nenhuma IA avalia nada (P10).
 - Na PsiGama (repositório `psique`), a página `psigama.com/crivo` também está na faixa difícil, com Flesch 42. Ela pode virar um resumo curto que aponta para as três portas.
+
+## Os dois idiomas (SPEC 0.28, seção 1.5)
+
+O plano acima trata de **como** o Crivo fala: em camadas, em palavras de quem participa, no celular. A
+partir da SPEC 0.28 ele fala em **duas línguas**, e as duas coisas se somam sem se confundir:
+
+- O português é o idioma de origem. A camada simples, o vocabulário de participante e as três
+  profundidades são decididos nele, e o inglês traduz o resultado. Uma frase que não existe em
+  português não entra em inglês.
+- A camada simples é a mais difícil de traduzir, porque é a que foi escrita com mais cuidado. O
+  glossário de `docs/IDIOMAS.md` fixa as escolhas que importam: *sitter* para consulente, *person for
+  comparison* para chamariz nas telas de participante, *the opening of the results* para
+  desmascaramento, *digital seal* para lacre digital.
+- Prazos e datas continuam no horário de Brasília nos dois idiomas, cada um na sua convenção
+  (`support.BrasiliaTime`), porque o estudo corre no Brasil e o instante é o mesmo para quem lê.
+- O seletor de idioma é alvo de toque como qualquer outro (2,75rem) e cabe na primeira tela do
+  celular, ao lado de Entrar.
+- Uma página sem tradução revisada aparece em português com um aviso de uma linha. Tradução
+  automática em produção não existe: numa página que fala com quem está de luto, uma frase mal
+  traduzida é pior do que uma frase em outra língua.
