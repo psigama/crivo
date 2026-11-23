@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>New P1 study — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator · P1 study</p>
+      <h1>Preregistration of the study</h1>
+      <p class="chamada">
+        Before any pairing, the study is declared and frozen. You write what is
+        below; the rest — questionnaire, pairing rule, scoring rule, analysis and exclusion
+        rules — comes from the protocol and goes into the document as it is (SPEC, E13).
+      </p>
+      <p class="nota">
+        Nothing is recorded while you fill this in. On freezing, the document receives a hash and the seed of the
+        draw receives a commitment, and neither of them ever changes again.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <div class="ressalva" th:if="${rascunhoBloqueado}">
+        <p>
+          <strong>The questionnaire in force is a draft</strong>
+          (<code th:text="${questionario.version}">v1-rascunho</code>). In production, a study only freezes the
+          version reviewed by the researcher.
+        </p>
+      </div>
+
+      <form class="formulario formulario-largo" method="post" th:action="@{/painel/adm/estudo-p1/revisar}">
+        <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Error</p>
+
+        <label for="titulo">Title</label>
+        <input id="titulo" name="titulo" type="text" required maxlength="200" th:value="${termos.title}">
+
+        <label for="pares">Number of pairs (N)</label>
+        <input id="pares" name="pares" type="number" min="1" required
+               th:attr="max=${paresMaximo}" th:value="${termos.targetPairs}">
+        <p class="nota">The pairing stops at N active pairs; the unblinding comes when all of them have both readings.</p>
+
+        <label for="teto">Cap on pairs per medium</label>
+        <input id="teto" name="teto" type="number" min="1" required th:value="${termos.maxPairsPerMedium}">
+        <p class="nota">No medium receives more pairs than this in the study, so that the result is not that of a single person. Between 1 and N.</p>
+
+        <label for="prazo">Deadline for the medium, in days</label>
+        <input id="prazo" name="prazo" type="number" min="1" required
+               th:attr="max=${prazoMaximo}" th:value="${termos.deadlineDays}">
+
+        <label for="efeito">Expected effect (d)</label>
+        <input id="efeito" name="efeito" type="number" min="0.05" max="3" step="0.05" required
+               th:value="${termos.expectedEffect}">
+        <p class="nota">Basis of the power calculation, which the frozen document declares.</p>
+
+        <label for="hipotese">Hypothesis</label>
+        <textarea id="hipotese" name="hipotese" rows="3" required maxlength="2000"
+                  th:text="${termos.hypothesis}">Hypothesis</textarea>
+
+        <label for="criterios">Inclusion criteria for mediums</label>
+        <textarea id="criterios" name="criterios" rows="3" required maxlength="2000"
+                  th:text="${termos.mediumInclusionCriteria}">Criteria</textarea>
+        <p class="nota">Declared beforehand because selecting mediums by previous performance inflates the effect.</p>
+
+        <button class="botao botao-cheio" type="submit">Review before freezing</button>
+      </form>
+
+      <th:block th:unless="${#lists.isEmpty(concluidos)}">
+        <h2>Completed studies</h2>
+        <ul>
+          <li th:each="concluido : ${concluidos}">
+            <a th:href="@{/painel/adm/estudo-p1/{c}(c=${concluido.studyCode})}">
+              <code th:text="${concluido.studyCode}">STD-0000</code></a> ·
+            <span th:text="${concluido.title}">Title</span> · report ready
+          </li>
+        </ul>
+      </th:block>
+
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/adm'">Back to the dashboard</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

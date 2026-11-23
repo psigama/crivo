@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Remote viewing with four targets — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Remote viewing with four targets — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">P4 · before you begin</p>
+      <h1 class="aparece">Remote viewing with four targets</h1>
+      <p class="chamada aparece">
+        In each trial you write your impression <strong>before</strong> seeing any
+        figure. Only then do four appear — one is the target, three are decoys — for you to
+        rank from the one most like your impression to the one least like it.
+      </p>
+
+      <ul class="niveis">
+        <li>
+          <strong>The impression is locked before the figures appear.</strong> The system stores
+          its hash. Without that, anyone could rewrite the impression after seeing the
+          images — it is the standard objection to anyone judging their own hit.
+        </li>
+        <li>
+          <strong>A hit is the target ranked first.</strong> Chance level: 25%.
+        </li>
+        <li>
+          <strong>The figure pool is versioned</strong>, and the version used is recorded in the
+          session. Changing the figures later does not change what was analyzed.
+        </li>
+        <li>
+          <strong>No results along the way</strong>, and the seed is revealed at the end.
+        </li>
+      </ul>
+
+      <p class="nota">
+        The limit of this protocol, stated plainly: the person judging the similarity is you. That
+        reintroduces the "how is it scored" criticism, which forced choice does not have. It is the
+        price of the free-response format, and it is why this test exists alongside the other one,
+        not instead of it.
+      </p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/comecar'">
+        <p>
+          <label for="tentativas">How many trials in this session</label>
+          <select id="tentativas" name="tentativas">
+            <option value="3">3 trials</option>
+            <option value="6" selected>6 trials (default)</option>
+            <option value="12">12 trials</option>
+          </select>
+        </p>
+        <p class="acoes">
+          <button class="botao botao-cheio" type="submit">Start the session</button>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/P4'">How it works</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -126,8 +126,13 @@ class BlindingMatrixTest {
     void p4_request_states_carry_no_outcome() {
         for (io.github.rogeriocisi.airlab.participant.ConsultationState state
                 : io.github.rogeriocisi.airlab.participant.ConsultationState.values()) {
-            assertThat(state.label().toLowerCase(Locale.ROOT))
-                    .doesNotContain("acert").doesNotContain("nota").doesNotContain("encaix");
+            // SPEC 0.28: o rotulo existe nos dois idiomas, e nenhum dos dois pode vazar desempenho.
+            for (io.github.rogeriocisi.airlab.support.Language language
+                    : io.github.rogeriocisi.airlab.support.Language.values()) {
+                assertThat(state.label().in(language).toLowerCase(Locale.ROOT))
+                        .doesNotContain("acert").doesNotContain("nota").doesNotContain("encaix")
+                        .doesNotContain("hit").doesNotContain("score").doesNotContain("match");
+            }
         }
     }
 
@@ -255,8 +260,13 @@ class BlindingMatrixTest {
     void p4_assignment_states_carry_no_outcome() {
         for (io.github.rogeriocisi.airlab.structured.AssignmentState state
                 : io.github.rogeriocisi.airlab.structured.AssignmentState.values()) {
-            assertThat(state.label().toLowerCase(Locale.ROOT))
-                    .doesNotContain("acert").doesNotContain("nota").doesNotContain("encaix");
+            // SPEC 0.28: o rotulo existe nos dois idiomas, e nenhum dos dois pode vazar desempenho.
+            for (io.github.rogeriocisi.airlab.support.Language language
+                    : io.github.rogeriocisi.airlab.support.Language.values()) {
+                assertThat(state.label().in(language).toLowerCase(Locale.ROOT))
+                        .doesNotContain("acert").doesNotContain("nota").doesNotContain("encaix")
+                        .doesNotContain("hit").doesNotContain("score").doesNotContain("match");
+            }
         }
     }
 

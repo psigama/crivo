@@ -5,6 +5,7 @@ import io.github.rogeriocisi.airlab.participant.AccountProfile;
 import io.github.rogeriocisi.airlab.participant.AccountRegistration;
 import io.github.rogeriocisi.airlab.participant.AccountService;
 import io.github.rogeriocisi.airlab.participant.AccountSignUp;
+import io.github.rogeriocisi.airlab.support.Language;
 import io.github.rogeriocisi.airlab.participant.AccountView;
 import io.github.rogeriocisi.airlab.participant.EmailConfirmationResult;
 import jakarta.servlet.ServletException;
@@ -108,10 +109,10 @@ class AccountController {
         try {
             registration = accounts.register(new AccountSignUp(form.getNome(), form.getEmail(),
                     form.getSenha(), form.profile(), form.getTermo(), form.isAceite(),
-                    form.isMaioridade()));
+                    form.isMaioridade(), LanguagePages.current().code()));
         } catch (IllegalArgumentException e) {
             // The domain writes these messages for the person filling in the form.
-            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("erro", LanguagePages.reason(e));
             form.clearPasswords();
             return signUpPage(model);
         }
@@ -130,13 +131,31 @@ class AccountController {
         return "conta-criar";
     }
 
+    /**
+      * The confirmation message, in the language of the page the form was filled in on (SPEC 0.28,
+      * section 1.5, rule 8). This one leaves inside a request, so the language is at hand; the
+      * messages the P1 cycle sends later take it from the account.
+      */
     private void sendSignUpMail(String email, String fullName, AccountRegistration registration) {
         String firstName = fullName.contains(" ") ? fullName.substring(0, fullName.indexOf(' ')) : fullName;
-        String profile = registration.profile().label().toLowerCase();
+        Language language = LanguagePages.current();
+        String profile = registration.profile().label().in(language).toLowerCase();
+        boolean english = language == Language.EN;
 
         if (registration.confirmationToken() == null) {
             String login = ServletUriComponentsBuilder.fromCurrentContextPath().path("/login").toUriString();
-            mailer.send(email, "Crivo: você já tem uma conta", """
+            mailer.send(email,
+                    english ? "Crivo: you already have an account" : "Crivo: você já tem uma conta",
+                    english ? """
+                    Hello.
+
+                    Someone, perhaps you, tried to create an account on Crivo with this e-mail address. It
+                    already has an active %s account, so nothing was created.
+
+                    To sign in: %s
+
+                    The profile of an account never changes. If this was not you, ignore this message.
+                    """.formatted(profile, login) : """
                     Olá.
 
                     Alguém, talvez você, tentou criar uma conta no Crivo com este e-mail. Ele já tem
@@ -153,11 +172,30 @@ class AccountController {
                 .path("/conta/confirmar")
                 .queryParam("token", registration.confirmationToken())
                 .toUriString();
-        String already = registration.alreadyExisted()
-                ? "Este e-mail já tinha uma conta de " + profile + " aguardando confirmação; vale o perfil "
-                        + "escolhido da primeira vez, porque o perfil não muda.\n\n"
-                : "";
-        mailer.send(email, "Crivo: confirme o seu e-mail", """
+        String already;
+        if (!registration.alreadyExisted()) {
+            already = "";
+        } else if (english) {
+            already = "This e-mail address already had a " + profile + " account waiting for confirmation; "
+                    + "the profile chosen the first time is the one that counts, because the profile never "
+                    + "changes.\n\n";
+        } else {
+            already = "Este e-mail já tinha uma conta de " + profile + " aguardando confirmação; vale o perfil "
+                    + "escolhido da primeira vez, porque o perfil não muda.\n\n";
+        }
+        mailer.send(email,
+                english ? "Crivo: confirm your e-mail address" : "Crivo: confirme o seu e-mail",
+                english ? """
+                Hello, %s.
+
+                You created a %s account on Crivo. %sTo activate it, open the link below within %d hours:
+
+                %s
+
+                Without that confirmation the account does not count. If this was not you, ignore this message.
+
+                Crivo — blind protocols for anomalous cognition research.
+                """.formatted(firstName, profile, already, AccountService.CONFIRMATION_HOURS, link) : """
                 Olá, %s.
 
                 Você criou uma conta de %s no Crivo. %sPara ativá-la, abra o link abaixo em até %d horas:

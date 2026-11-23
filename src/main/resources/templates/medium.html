@@ -196,8 +196,8 @@
         feito, qualquer que seja o resultado, vale mais do que mil relatos que ninguém pode conferir.
       </p>
       <p class="nota nota-espacada">
-        Para entender o protocolo por inteiro, veja a <a href="/protocolo/P1">página do protocolo</a>,
-        as <a href="/perguntas">perguntas frequentes</a> e o
+        Para entender o protocolo por inteiro, veja a <a th:href="${aplicacao} + '/protocolo/P1'">página do protocolo</a>,
+        as <a th:href="${aplicacao} + '/perguntas'">perguntas frequentes</a> e o
         <a th:href="${site} + '/sobre'">vocabulário</a>. Esta página pode ser impressa e entregue em papel.
       </p>
     </div>
@@ -212,8 +212,8 @@
           Se quiser participar, crie a sua conta com o perfil de médium. Você pode parar quando quiser.
         </p>
         <p class="acoes">
-          <a class="botao botao-cheio" href="/conta/criar">Criar minha conta</a>
-          <a class="botao botao-vazio" href="/login">Já tenho conta</a>
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/conta/criar'">Criar minha conta</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/login'">Já tenho conta</a>
         </p>
       </th:block>
       <th:block th:unless="${inscricaoAberta}">
@@ -225,7 +225,7 @@
           <strong>As inscrições estão fechadas nesta instalação.</strong>
         </p>
         <p class="acoes">
-          <a class="botao botao-vazio" href="/protocolo/P1">Ver como o estudo funciona</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/P1'">Ver como o estudo funciona</a>
         </p>
       </th:block>
       <p th:if="${contato}">

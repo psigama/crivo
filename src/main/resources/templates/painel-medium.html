@@ -73,7 +73,7 @@
         </p>
         <ul class="pedidos">
           <li th:each="pedido : ${enviados}">
-            <p class="prazo">Pedido <code th:text="${pedido.code}">ENV-0000</code> · <span th:text="${pedido.state.label()}">Leituras enviadas</span></p>
+            <p class="prazo">Pedido <code th:text="${pedido.code}">ENV-0000</code> · <span th:text="${pedido.state.label().in(idioma)}">Leituras enviadas</span></p>
             <ol>
               <li th:each="vaga : ${pedido.slots}">
                 <span class="nome" th:text="${vaga.firstName}">Nome</span>
@@ -132,7 +132,7 @@
   <section>
     <div class="faixa">
       <p class="acoes">
-        <a class="botao botao-vazio" href="/conta">Minha conta</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/conta'">Minha conta</a>
       </p>
       <form method="post" th:action="@{/logout}">
         <button class="botao botao-vazio" type="submit">Sair</button>

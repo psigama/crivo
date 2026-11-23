@@ -27,7 +27,7 @@
         servidor.
       </p>
       <p class="nota">
-        Ainda não tem conta? <a href="/conta/criar">Crie uma</a>.
+        Ainda não tem conta? <a th:href="${aplicacao} + '/conta/criar'">Crie uma</a>.
       </p>
 
       <form class="formulario" method="post" th:action="@{/login}">
@@ -36,7 +36,7 @@
         </p>
         <p class="erro" th:if="${param.naoConfirmada}" role="alert">
           A conta ainda não foi confirmada. Abra o link que enviamos por e-mail; se ele expirou,
-          <a href="/conta/criar">crie a conta de novo</a> para receber outro.
+          <a th:href="${aplicacao} + '/conta/criar'">crie a conta de novo</a> para receber outro.
         </p>
         <p class="aviso" th:if="${param.logout}" role="status">
           Sessão encerrada.

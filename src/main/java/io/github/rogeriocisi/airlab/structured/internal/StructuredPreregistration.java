@@ -71,12 +71,21 @@ final class StructuredPreregistration {
         for (Questionnaire.Field field : questionnaire.fields()) {
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("key", field.key());
-            row.put("label", field.label());
+            // Both languages, because the annex is the frozen record of what each participant read
+            // (SPEC 0.28, section 1.5, rules 9 and 10). The keys do not change with the language,
+            // which is why an answer given in one language compares with one given in the other.
+            row.put("label", field.label().pt());
+            row.put("labelEn", field.label().en());
             row.put("use", field.use().name());
-            row.put("outOfScoreReason", field.outOfScoreReason());
+            row.put("outOfScoreReason", field.outOfScoreReason() == null ? null : field.outOfScoreReason().pt());
+            row.put("outOfScoreReasonEn", field.outOfScoreReason() == null ? null : field.outOfScoreReason().en());
             List<Object> options = new ArrayList<>();
             for (Questionnaire.Option option : field.options()) {
-                options.add(Map.of("key", option.key(), "label", option.label()));
+                Map<String, Object> entry = new LinkedHashMap<>();
+                entry.put("key", option.key());
+                entry.put("label", option.label().pt());
+                entry.put("labelEn", option.label().en());
+                options.add(entry);
             }
             row.put("options", options);
             fields.add(row);

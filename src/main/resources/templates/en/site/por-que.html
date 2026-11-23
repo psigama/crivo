@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Why Crivo exists — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Why Crivo exists — Crivo', 'What research on mediumship is, exactly, why what is missing is not reports but a method that holds up under doubt, and the two audiences the project has to serve at the same time.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Why</p>
+        <h1 class="aparece">Why Crivo exists</h1>
+        <p class="chamada aparece">
+          Reports of mediums who get things right are not what is missing. What is missing is a
+          method that holds up under doubt — and what makes that method hard is logistics,
+          record-keeping and cryptography: a software problem.
+        </p>
+      </div>
+    </section>
+
+    <section id="o-que-e">
+      <div class="faixa">
+        <p class="rotulo">First of all</p>
+        <h2>What research on mediumship is, exactly</h2>
+
+        <p>
+          In the scientific literature, mediumship is described as the phenomenon in which someone —
+          the <strong>medium</strong> — reports information about a deceased person to someone who
+          knew them in life, called here the <strong>sitter</strong> —
+          <em lang="pt-BR">consulente</em>, in the Portuguese of the project. That episode is the
+          <strong>reading</strong>. The question research asks is narrower than the subject
+          suggests, and it is precisely that narrowness that makes it answerable.
+        </p>
+
+        <div class="definicao">
+          <p>
+            The question is: <strong>does the medium report accurate and specific information about
+              the deceased person with no prior knowledge, with no sensory feedback from the person
+              evaluating, and with no deceptive means?</strong>
+          </p>
+        </div>
+
+        <p>
+          That is all an experiment measures. So that the word itself does not already answer the
+          question, the field calls the phenomenon <strong>anomalous information reception</strong> —
+          AIR, for short. “Anomalous” here means only <em>with no known explanation</em>, not
+          supernatural. The term describes what was observed — someone spoke, and what was said
+          checks out — without asserting where the information came from.
+        </p>
+
+        <h3>Not a new field</h3>
+        <p>
+          Systematic investigation began in the nineteenth century: William Crookes published his
+          sessions in 1874, and the <em>Society for Psychical Research</em>, founded in London in
+          1882, studied the medium Leonora Piper for decades, with Richard Hodgson and the
+          psychologist William James among the researchers. That work is criticized today for the
+          weakness of its controls, and several celebrated cases of the period were exposed as
+          fraud. The modern phase is far more recent: blind, quantitative protocols only appeared
+          <strong>from the end of the 1990s on</strong>, and levels of blinding have been rising ever
+          since, largely as a direct response to skeptical criticism.
+          <a th:href="${site} + '/historia'">The full timeline is here</a>, and it is worth reading
+          for one reason: every control that looks obvious today came out of a study that did not
+          hold up under criticism.
+        </p>
+
+        <h3>Two branches that are often confused</h3>
+        <p>
+          One part of the research studies <strong>who the medium is</strong>: psychological
+          profile, phenomenology of the experience, neuroimaging during trance. Brazilian work
+          carries weight here — the comparison between Spiritist mediums and dissociative
+          conditions, which found them generally well adjusted and socially functional, and the
+          SPECT scans during psychography. That branch does not ask whether the information checks
+          out.
+        </p>
+        <p>
+          The other part studies <strong>the accuracy of the information reported</strong>, under
+          conditions that rule out the ordinary channels. Crivo deals only with this second branch.
+          A blind protocol says nothing about anyone's mental health, and a neuroimaging scan says
+          nothing about the deceased person.
+        </p>
+
+        <h3>What has to be ruled out</h3>
+        <p>
+          A hit is only of interest if the ordinary channels are closed. The literature names three,
+          and a serious protocol is, in large part, the set of measures against them:
+        </p>
+
+        <dl class="vocabulario">
+          <div>
+            <dt>Cold reading</dt>
+            <dd>
+              Inferring things about the deceased person from the appearance, clothing, behavior and
+              reactions of the person sitting there — plus generic statements that fit almost
+              everybody.
+            </dd>
+          </div>
+          <div>
+            <dt>Warm reading</dt>
+            <dd>
+              Obtaining information about the life of the person evaluating — an earlier
+              conversation, social media — and deducing things about the deceased person from it.
+            </dd>
+          </div>
+          <div>
+            <dt>Hot reading</dt>
+            <dd>
+              Arriving at the session already knowing: prior research, obituaries, someone who told
+              you beforehand.
+            </dd>
+          </div>
+        </dl>
+
+        <p>
+          To these are added two problems on the side of the person judging: <strong>evaluator
+            bias</strong>, which tends to find matches when the person knows the reading is theirs,
+          and <strong>after-the-fact selection of hits</strong>, which turns any long reading into
+          proof. That is why the standard design hands over <em>two</em> unlabeled readings and asks
+          for a choice: a generic statement fits both equally well.
+        </p>
+
+        <h3>What a result can and cannot say</h3>
+        <p>
+          Even a result above chance <strong>does not settle</strong> where the information came
+          from. The authors of the favorable studies themselves record that the design does not
+          distinguish survival of consciousness from other hypotheses, such as so-called
+          <em>super-psi</em>. And the prevailing scientific consensus remains that there is no
+          reliable evidence of the phenomenon — in good measure because of methodological flaws
+          pointed out in the existing studies.
+        </p>
+
+        <div class="definicao definicao-papel">
+          <p class="rotulo">Where Crivo comes in</p>
+          <p>
+            Crivo does not produce evidence and does not evaluate readings: it is the <strong>tool
+              that makes those conditions executable and checkable</strong>. Controlling who knows
+            what and when, randomizing with no way to cheat, freezing the analysis before the data,
+            and proving afterwards that the order of events was indeed that — that is logistics,
+            record-keeping and cryptography. It is a software problem, and it is the problem this
+            project solves.
+          </p>
+        </div>
+
+        <p class="nota">
+          The definitions in this section come from Beischel &amp; Schwartz (2007), Beischel et al.
+          (2015) and Sarraf, Woodley of Menie &amp; Tressoldi (2021); the criticisms, from O'Keeffe
+          &amp; Wiseman (2005) and Hyman (2003); the historical overview and the distinction between
+          the two branches follow the Wikipedia entry
+          <a href="https://pt.wikipedia.org/wiki/Estudos_sobre_mediunidade"><em lang="pt-BR">Estudos
+              sobre mediunidade</em></a>, checked against the original papers where they overlap.
+          All of it is in <a th:href="${site} + '/referencias'">References</a>.
+        </p>
+      </div>
+    </section>
+
+    <section id="problema">
+      <div class="faixa">
+        <p class="rotulo">The problem</p>
+        <h2>What is missing is not reports. It is a method that holds up under doubt.</h2>
+        <p>
+          Reports of mediums who get information about deceased people right are numerous, and they
+          are almost never produced under conditions that rule out the conventional explanations:
+          visual and verbal cues, cold reading, prior research on the participant, bias on the part
+          of the person evaluating, fraud, and after-the-fact selection of hits. The literature
+          shows that this can be studied rigorously — what makes these protocols hard is logistics
+          and discipline: controlling who knows what, when, and <em>proving it afterwards</em>. That
+          is a software problem.
+        </p>
+
+        <div class="confronto">
+          <div class="hoje">
+            <p>Blinding depends on people's good will and memory.</p>
+          </div>
+          <div class="crivo">
+            <p>Blinding is enforced by the system: each role sees only what it is allowed to see, in the data layer,
+              not just on the screen.</p>
+          </div>
+
+          <div class="hoje">
+            <p>Draws done by hand, with no record.</p>
+          </div>
+          <div class="crivo">
+            <p>A draw by cryptographic generator, with the commitment published beforehand and the seed revealed at
+              the end.</p>
+          </div>
+
+          <div class="hoje">
+            <p>Hypotheses and analysis adjusted after seeing the data.</p>
+          </div>
+          <div class="crivo">
+            <p>Preregistration frozen and hashed before the first session. An amendment creates a new version; the
+              previous one stays visible.</p>
+          </div>
+
+          <div class="hoje">
+            <p>No way to prove the order of events.</p>
+          </div>
+          <div class="crivo">
+            <p>An event trail chained by hash, which the database refuses to alter or delete.</p>
+          </div>
+
+          <div class="hoje">
+            <p>Null results do not get published.</p>
+          </div>
+          <div class="crivo">
+            <p>The same report, with the same prominence, whatever the result.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="publicos">
+      <div class="faixa">
+        <p class="rotulo">Who it is for</p>
+        <h2>Two audiences that tend to avoid each other</h2>
+        <p>
+          The project only makes sense if it serves both at the same time. The rigor that convinces
+          one is what gives the other's result its value.
+        </p>
+
+        <div class="publicos">
+          <article class="publico">
+            <h3>Researchers, skeptics and committees</h3>
+            <p>What you get:</p>
+            <ul>
+              <li>A preregistration with a hash and a timestamp, predating the first datum.</li>
+              <li>A draw reproducible on your own machine, from the revealed seed.</li>
+              <li>An event trail the database prevents from being altered, verifiable from the command line.</li>
+              <li>An exact, deterministic analysis, validated against reference values.</li>
+              <li>A hashed report, published under Studies and reports, and each study's verification package,
+                without names, which you check on your own machine with one command, with no access to the server.
+              </li>
+            </ul>
+          </article>
+
+          <article class="publico espiritual">
+            <h3>Spiritist groups, mediums and families</h3>
+            <p>What the protocol protects:</p>
+            <ul>
+              <li>Neutral vocabulary: <em>reading</em>, <em>item</em>, <em>target</em>. Nothing is presented as a
+                message from a spirit.</li>
+              <li>Privacy by design: sensitive data encrypted, pseudonymization, Brazilian data protection law
+                (LGPD).</li>
+              <li>Withdrawal at any time, with no need to give a reason.</li>
+              <li>Care for bereaved people, from the language to the feedback at the end of the study.</li>
+              <li>A result nobody will be able to dismiss by saying the method was loose.</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="${site} + '/garantias'">What the system guarantees</a>
+          <a class="botao botao-vazio" th:href="${site} + '/participar'">How to take part</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

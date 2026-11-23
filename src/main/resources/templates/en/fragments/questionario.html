@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>P1 questionnaire fragment</title>
+</head>
+<body>
+
+<!--/*
+    The questionnaire of P1-automático, field by field (SPEC, E13, annex; section 1.1, rule 7).
+    Public by design: it goes frozen into every preregistration and is part of every commitment.
+    The questionnaire only, never an answer and never a count by option.
+*/-->
+<div th:fragment="questionario(q)">
+  <p class="rotulo">P1-automático · questionnaire</p>
+  <h2>
+    The questionnaire, version <code th:text="${q.version()}">v1-rascunho</code>
+  </h2>
+  <p>
+    The sitter and the medium answer the same fields, and the comparison is field by field, between
+    closed options, with nobody judging free text. There are
+    <span th:text="${#lists.size(q.fields())}">16</span> fields:
+    <span th:text="${#lists.size(q.scoredFields())}">13</span> go into the score and
+    <span th:text="${#lists.size(q.fields()) - #lists.size(q.scoredFields())}">3</span>
+    serve only to form the pairs.
+  </p>
+  <div class="ressalva" th:if="${q.draft()}">
+    <p>
+      <strong>This version is a draft</strong>, awaiting the researcher's review. No study is frozen
+      with it in production, and it may change before the first study.
+    </p>
+  </div>
+  <div class="tabela">
+    <table class="tentativas">
+      <thead>
+        <tr><th scope="col">Field</th><th scope="col">Options</th><th scope="col">In the score?</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="campo : ${q.fields()}">
+          <td>
+            <span th:text="${campo.label().in(idioma)}">Gender</span><br>
+            <code th:text="${campo.key()}">genero</code>
+          </td>
+          <td>
+            <ul>
+              <li th:each="opcao : ${campo.options()}" th:text="${opcao.label().in(idioma)}">Female</li>
+            </ul>
+          </td>
+          <td>
+            <th:block th:if="${campo.scored()}">Yes</th:block>
+            <th:block th:unless="${campo.scored()}">
+              No, it is for pairing. <span th:text="${campo.outOfScoreReason()?.in(idioma)}">Why.</span>
+            </th:block>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="nota">
+    In the fields that go into the score, the sitter may answer "I don't know" and the medium, "I
+    received nothing". Those answers never match anything. The pairing fields are required for the
+    sitter and are not asked of the medium.
+  </p>
+  <p class="nota">
+    The questionnaire only changes with a new version, published here and in the annex of the
+    <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>. The old version
+    remains valid for the requests answered under it, which have to stay verifiable.
+  </p>
+</div>
+
+</body>
+</html>

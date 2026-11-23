@@ -72,7 +72,7 @@
           casos célebres da época foram desmascarados como fraude. A fase moderna é bem mais recente:
           só <strong>a partir do fim dos anos 1990</strong> surgiram protocolos cegos e quantitativos,
           e os níveis de cegamento foram aumentando desde então, em grande parte como resposta direta
-          às críticas céticas. <a href="/historia">A linha do tempo completa está aqui</a>, e vale
+          às críticas céticas. <a th:href="${site} + '/historia'">A linha do tempo completa está aqui</a>, e vale
           a leitura por um motivo: cada controle que hoje parece óbvio nasceu de um estudo que não
           resistiu à crítica.
         </p>
@@ -155,7 +155,7 @@
           (2005) e Hyman (2003); o panorama histórico e a distinção entre os dois ramos seguem o
           verbete <a href="https://pt.wikipedia.org/wiki/Estudos_sobre_mediunidade"><em>Estudos sobre
               mediunidade</em></a> da Wikipédia, conferido contra os artigos originais onde eles se
-          sobrepõem. Tudo está em <a href="/referencias">Referências</a>.
+          sobrepõem. Tudo está em <a th:href="${site} + '/referencias'">Referências</a>.
         </p>
       </div>
     </section>
@@ -252,8 +252,8 @@
         </div>
 
         <p class="acoes">
-          <a class="botao botao-cheio" href="/garantias">O que o sistema garante</a>
-          <a class="botao botao-vazio" href="/participar">Como participar</a>
+          <a class="botao botao-cheio" th:href="${site} + '/garantias'">O que o sistema garante</a>
+          <a class="botao botao-vazio" th:href="${site} + '/participar'">Como participar</a>
         </p>
       </div>
     </section>

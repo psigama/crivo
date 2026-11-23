@@ -17,6 +17,14 @@ spring:
     locations: classpath:db/migration
   thymeleaf:
     cache: false
+  # Texto compartilhado pelo cabecalho, pelo rodape e pelas validacoes, nos dois idiomas da
+  # interface (SPEC 0.28, secao 1.5, regra 6). O pacote padrao, messages.properties, e o portugues,
+  # idioma de origem; messages_en.properties e a traducao. Sem o fallback para o locale do sistema,
+  # o idioma de um pedido nunca depende da maquina onde a aplicacao roda.
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
   threads:
     virtual:
       enabled: true

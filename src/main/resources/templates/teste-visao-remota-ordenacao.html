@@ -40,7 +40,7 @@
         </li>
       </ul>
 
-      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/ordenacao'"
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/ordenacao'"
             data-envio-unico>
         <ul class="ordenacao" data-ordenacao>
           <li th:each="lugar : ${#numbers.sequence(1, candidatas.candidates().size())}">

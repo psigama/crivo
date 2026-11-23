@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Timestamps — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Timestamps — Crivo', 'The RFC 3161 timestamps that an independent authority has issued over the Crivo audit trail, with the token of each one for checking from the outside.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">External anchoring</p>
+      <h1>Timestamps of the trail</h1>
+      <p class="chamada">
+        The audit trail is chained by hash: altering one event breaks the chain. But whoever operates the
+        installation could, in theory, rewrite the whole chain. To close that door, the head of the
+        trail is timestamped by an <strong>independent authority</strong>, which attests that that hash
+        already existed at that instant. Since each event contains the hash of the previous one, one timestamp holds for
+        the whole trail up to that point — including the preregistration and the commitment to the seed of each study.
+      </p>
+      <p class="tese">
+        Only the hash leaves the server: 32 bytes that reveal no content and no personal data.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Timestamps granted</h2>
+      <p class="nota">
+        Authority: <strong th:text="${situacao.authority}">FreeTSA</strong>
+        (<code th:text="${situacao.authorityUrl}">https://freetsa.org/tsr</code>). Timestamped right after
+        each freezing, amendment, seed revelation and report, and once a day if the trail has changed.
+      </p>
+      <p th:if="${#lists.isEmpty(carimbos)}">No timestamp granted yet.</p>
+      <div class="tabela" th:unless="${#lists.isEmpty(carimbos)}">
+      <table class="tentativas">
+        <thead>
+          <tr><th scope="col">Timestamp</th><th scope="col">Position in the trail</th><th scope="col">Hash timestamped</th>
+            <th scope="col">Attested time (UTC)</th><th scope="col">Token</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="c : ${carimbos}">
+            <td><code th:text="${c.code}">ANC-0000</code></td>
+            <td th:text="${c.anchoredPosition}">1</td>
+            <td><code class="hash" th:text="${c.anchoredHash}">hash</code></td>
+            <td><time th:datetime="${c.attestedAt}" th:text="${@datas.utc(c.attestedAt)}">2026-11-14</time></td>
+            <td><a th:href="@{'/carimbos/' + ${c.code} + '.tsr'}" th:text="${c.code} + '.tsr'">download</a></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="conferir">
+    <div class="faixa">
+      <h2>How to check without trusting Crivo</h2>
+      <p>
+        Download the authority's certificate and the root certificate <strong>straight from its own site</strong>, not from here, and
+        check the SHA-256 of each file against what it publishes. These are the values this
+        installation uses:
+      </p>
+      <dl class="leituras">
+        <div class="largo"><dt>tsa.crt</dt><dd><code class="hash" th:text="${situacao.tsaCertificateSha256}">hash</code></dd></div>
+        <div class="largo"><dt>cacert.pem</dt><dd><code class="hash" th:text="${situacao.caCertificateSha256}">hash</code></dd></div>
+      </dl>
+      <pre class="documento">curl -O https://freetsa.org/files/tsa.crt
+curl -O https://freetsa.org/files/cacert.pem
+sha256sum tsa.crt cacert.pem
+
+openssl ts -verify -digest HASH_CARIMBADO -in ANC-XXXXXXXX.tsr \
+    -CAfile cacert.pem -untrusted tsa.crt</pre>
+      <p class="nota">
+        On Windows, <code>Get-FileHash</code> in PowerShell gives the SHA-256, and <code>openssl</code> comes with
+        Git for Windows. The expected result is <code>Verification: OK</code>.
+      </p>
+      <p>
+        The token proves that the hash existed at the attested time. To know that this hash is the one of the
+        published trail — and not just any number — recompute the chain: <code>airlab verify</code> does
+        both checks, and the verification package of each completed study carries the trail up to the
+        report, for anyone who wants to redo them from the outside with <code>airlab verificar-pacote</code>.
+      </p>
+      <div class="ressalva">
+        <p>
+          <strong>What this timestamp does not prove.</strong> It does not prevent a rewrite made before the
+          first timestamp after a milestone — in normal operation, about a minute. And it is worth
+          as much as the authority that signs it: there is only one, for now.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

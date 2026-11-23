@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Outbox — Crivo</title>
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator · local profile</p>
+      <h1>Outbox</h1>
+      <p class="chamada" th:if="${caixaLocal}">
+        In the local profile no e-mail leaves this machine. The messages stay here, in memory, and vanish
+        when the application restarts. Up to 50, from the newest to the oldest.
+      </p>
+      <p class="chamada" th:unless="${caixaLocal}">
+        This installation sends real e-mail, or sends none at all; there is no local outbox.
+      </p>
+
+      <p th:if="${caixaLocal and #lists.isEmpty(mensagens)}">No message yet.</p>
+
+      <article class="credencial" th:each="m : ${mensagens}">
+        <p class="rotulo">
+          <span th:text="${@datas.utc(m.at)}">when</span> UTC ·
+          to <span th:text="${m.to}">recipient</span>
+        </p>
+        <h3 th:text="${m.subject}">Subject</h3>
+        <pre class="comando" th:text="${m.body}">Body</pre>
+      </article>
+
+      <p class="acoes nota-espacada"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/adm'">Back to the dashboard</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

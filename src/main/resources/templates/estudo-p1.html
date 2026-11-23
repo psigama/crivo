@@ -138,7 +138,7 @@
       <pre class="documento" th:text="${estudo.document}">documento</pre>
       <p class="nota nota-espacada">
         <a th:href="@{/estudos/{c}(c=${estudo.studyCode})}">Página pública deste estudo</a> ·
-        <a href="/painel/adm">Voltar ao painel</a>
+        <a th:href="${aplicacao} + '/painel/adm'">Voltar ao painel</a>
       </p>
     </div>
   </section>

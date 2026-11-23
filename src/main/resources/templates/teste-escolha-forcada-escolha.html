@@ -32,7 +32,7 @@
       </p>
       <p class="nota">Pelo teclado: as teclas <kbd>1</kbd> a <kbd>4</kbd> escolhem a porta.</p>
 
-      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/escolha'"
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/escolha'"
             data-envio-unico>
         <ul class="portas" data-portas>
           <li th:each="n : ${#numbers.sequence(1, alternativas)}">
@@ -60,7 +60,7 @@
         semente é revelada, e o hash dela tem de bater com o que está aí.
       </p>
 
-      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/desistir'" data-envio-unico>
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/desistir'" data-envio-unico>
         <p class="acoes">
           <button class="botao botao-vazio" type="submit">Desistir desta sessão</button>
         </p>

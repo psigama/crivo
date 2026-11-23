@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Your part of the seed — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Your part of the seed — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo" th:text="${protocolo.catalogCode()} + ' · before the first trial'">
+        P3</p>
+      <h1>Half of the seed is yours</h1>
+      <p class="chamada">
+        The system has already committed to its half — the hash below was recorded before this
+        page existed. Now your browser draws the other half. The seed that decides every target is
+        the two joined together.
+      </p>
+
+      <dl class="cadeia">
+        <dt>Commitment to the server's half</dt>
+        <dd><code data-compromisso th:text="${progresso.seedCommitment}">hash</code></dd>
+        <dt>Session</dt>
+        <dd><code data-sessao th:text="${progresso.sessionCode}">codigo</code></dd>
+      </dl>
+
+      <p>
+        Why this settles the matter of trust: to make you miss, the server would have to choose its
+        half <strong>after</strong> knowing yours — and it has already published the hash of its
+        own part. Finding another half that fits your draw and yields the desired result is a
+        preimage attack on SHA-256. Nobody knows how to do that.
+      </p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/entropia'"
+            data-gerador-nonce>
+        <p>
+          <label for="campo-nonce">Your half, drawn in this browser</label>
+          <input id="campo-nonce" name="nonce" data-campo="nonce" readonly
+                 autocomplete="off" spellcheck="false" size="40">
+        </p>
+        <p class="acoes">
+          <button class="botao botao-vazio" type="button" data-campo="sortear">Draw again</button>
+          <button class="botao botao-cheio" type="submit">Continue with this seed</button>
+        </p>
+      </form>
+
+      <noscript>
+        <p class="nota">
+          This step needs JavaScript: it is your browser that draws your half of the seed, not the
+          server. Without it, the guarantee this page describes would not exist, and we prefer not
+          to offer a weakened version without saying so.
+        </p>
+      </noscript>
+
+      <p class="nota">
+        Your browser also stores the commitment above, so it can check at the end whether the half
+        that is revealed really is this one. None of this leaves your computer.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+<script src="/js/gerador-nonce.js" defer></script>
+</body>
+</html>

@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
-<a class="pular" href="#conteudo" lang="pt-BR">Pular para o conteúdo</a>
-<div class="faixa" lang="pt-BR">
+<a class="pular" href="#conteudo">Skip to content</a>
+<div class="faixa">
   <header th:replace="~{fragments/site :: topo}"></header>
 </div>
 
@@ -22,7 +22,7 @@
 <main id="conteudo">
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo aparece">For researchers · <a href="/pesquisa" hreflang="pt-BR" lang="pt-BR">Português</a></p>
+      <p class="rotulo aparece">For researchers</p>
       <h1 class="aparece">A protocol that defends itself</h1>
       <p class="chamada aparece">
         The design of Crivo's mediumship experiment, P1-automated, on one page: what is blind, what is
@@ -58,7 +58,7 @@
           <span th:text="${#lists.size(questionario.fields())}">16</span> fields, of which
           <span th:text="${#lists.size(questionario.scoredFields())}">13</span> are scored; the others only
           serve the pairing. "Don't know" and "nothing received" never match anything.
-          <a href="/protocolo/P1#questionario">The questionnaire, field by field</a> (in Portuguese).
+          <a th:href="${aplicacao} + '/protocolo/P1#questionario'">The questionnaire, field by field</a> (in Portuguese).
         </li>
         <li>Scoring is equality between closed options under a published rule. For each pair,
           <code>d</code> is, over both readings, the number of matches with the target minus the number of
@@ -128,12 +128,12 @@
           code enters the trail before unblinding.</li>
         <li>The trail is append-only, chained with SHA-256, with update and delete blocked in the database.
           Its head is timestamped by FreeTSA (RFC 3161) after every milestone and every 24 hours if it
-          changed; the tokens are at <a href="/carimbos">Carimbos de tempo</a>, and <code>airlab verify</code>
+          changed; the tokens are at <a th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a>, and <code>airlab verify</code>
           rechecks them.</li>
         <li>At unblinding, each study's verification package, public and without names, lets anyone redo
           the trail, the draw, the scoring and the analysis; <code>airlab verificar-pacote</code> checks the
-          file with no server and no database. Studies and reports are at <a href="/estudos">Estudos</a>, and
-          the state of the trail at <a href="/verificar">Verificar</a>.</li>
+          file with no server and no database. Studies and reports are at <a th:href="${aplicacao} + '/estudos'">Estudos</a>, and
+          the state of the trail at <a th:href="${aplicacao} + '/verificar'">Verificar</a>.</li>
       </ul>
     </div>
   </section>
@@ -143,11 +143,11 @@
       <p class="rotulo">Declared limits</p>
       <h2>What a P1 result does not support</h2>
       <p>
-        Quoted from the protocol catalog, which states them in Portuguese and requires a non-empty list
-        from every protocol, so this page never drifts from the code:
+        Straight from the protocol catalog, which requires a non-empty list from every protocol, so
+        this page never drifts from the code:
       </p>
-      <ul lang="pt-BR">
-        <li th:each="limite : ${protocolo.limits()}" th:text="${limite}">Limite</li>
+      <ul>
+        <li th:each="limite : ${protocolo.limits()}" th:text="${limite.in(idioma)}">Limite</li>
       </ul>
       <p class="nota">
         In short: an above-chance result shows that information was there, not where it came from; there
@@ -187,7 +187,7 @@
   </section>
 </main>
 
-<div lang="pt-BR">
+<div>
   <footer th:replace="~{fragments/site :: rodape}"></footer>
 </div>
 </body>

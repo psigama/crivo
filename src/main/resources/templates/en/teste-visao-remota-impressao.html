@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Impression — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Impression — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">
+        Trial <span th:text="${progresso.nextTrialIndex}">1</span>
+        of <span th:text="${progresso.declaredTrials}">6</span>
+      </p>
+      <progress class="progresso-sessao" th:value="${progresso.lockedTrials}"
+                th:max="${progresso.declaredTrials}" value="0" max="24"
+                th:attr="aria-label='Trials completed: ' + ${progresso.lockedTrials} + ' of ' + ${progresso.declaredTrials}"></progress>
+      <h1>Write your impression</h1>
+      <p class="chamada">
+        A figure has already been drawn for this trial. Before seeing it, write down what comes to
+        you: shapes, colors, movement, a sense of place. Describe, do not try to guess the name of
+        a thing.
+      </p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/impressao'" data-envio-unico>
+        <p>
+          <label for="impressao">Impression for this trial</label>
+          <textarea id="impressao" name="impressao" rows="7" required
+                    placeholder="For example: something tall and narrow, vertical, light at the top and dark at the bottom; a sense of cold and of wind."></textarea>
+        </p>
+        <p class="acoes">
+          <button class="botao botao-cheio" type="submit">Lock the impression and see the figures</button>
+        </p>
+        <p class="enviando-aviso" data-enviando hidden role="status">Locking the impression…</p>
+      </form>
+
+      <p class="nota">
+        Once submitted, the impression is locked: the system stores its hash and does not accept a
+        rewrite. That is what makes it possible to state afterwards that you did not adjust the
+        text after seeing the images.
+      </p>
+
+      <dl class="cadeia">
+        <dt>Seed commitment</dt>
+        <dd><code th:text="${progresso.seedCommitment}">hash</code></dd>
+        <dt>Session</dt>
+        <dd><code th:text="${progresso.sessionCode}">codigo</code></dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+<script src="/js/sessao-teste.js" defer></script>
+</body>
+</html>

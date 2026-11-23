@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Create account — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Create account — Crivo', 'Create a sitter or medium account to take part in the mediumship study that runs entirely on the website.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo">Automated structured reading · P1</p>
+        <h1>Create account</h1>
+        <p class="chamada">
+          The account is for taking part in the mediumship study that runs entirely on the website. You
+          choose your profile now — <strong>sitter</strong> or <strong>medium</strong> — and it does not
+          change afterwards. <a th:href="${aplicacao} + '/protocolo/P1'">See first how the study works</a>.
+        </p>
+
+        <div class="ressalva" th:unless="${inscricaoAberta}">
+          <p th:if="${aguardaCep}">
+            <strong>Sign-up is not open yet.</strong> It opens after the study is approved by the
+            research ethics committee (CEP).
+          </p>
+          <p th:unless="${aguardaCep}">
+            <strong>Sign-up is closed on this installation.</strong>
+          </p>
+        </div>
+
+        <form class="formulario formulario-largo" method="post" th:action="@{/conta/criar}" th:object="${form}"
+          th:if="${inscricaoAberta}">
+          <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Error</p>
+
+          <fieldset>
+            <legend>Profile — choose once</legend>
+            <label class="opcao">
+              <input type="radio" name="perfil" value="consulente" th:checked="*{perfil == 'consulente'}" required>
+              <span>
+                Sitter
+                <small>I lost someone and want to make a reading request: I give the first name and
+                  answer a questionnaire about the person.</small>
+              </span>
+            </label>
+            <label class="opcao">
+              <input type="radio" name="perfil" value="medium" th:checked="*{perfil == 'medium'}">
+              <span>
+                Medium
+                <small>I want to receive requests: I see only the first name and answer the same
+                  questionnaire.</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <label for="nome">Name</label>
+          <input id="nome" type="text" th:field="*{nome}" autocomplete="name" required maxlength="200">
+
+          <label for="email">E-mail</label>
+          <input id="email" type="email" th:field="*{email}" autocomplete="email" required autocapitalize="none"
+            spellcheck="false" maxlength="254">
+
+          <label for="senha">Password</label>
+          <input id="senha" type="password" name="senha" autocomplete="new-password" required
+            th:attr="minlength=${senhaMinima}" maxlength="72">
+
+          <label for="confirmacao">Repeat the password</label>
+          <input id="confirmacao" type="password" name="confirmacao" autocomplete="new-password" required
+            th:attr="minlength=${senhaMinima}" maxlength="72">
+          <p class="nota" th:text="'At least ' + ${senhaMinima} + ' characters.'">At least 10 characters.</p>
+
+          <fieldset>
+            <legend th:text="'Participation agreement · version ' + ${versaoTermo}">Agreement</legend>
+            <!--/*
+              SPEC 0.24, seção 1.4, regra 14: o resumo em seis pontos vem antes do texto completo, que
+              continua igual ao da conta-v2 e à vista. O resumo não diz nada que o texto completo não diga.
+            */-->
+            <p><strong>In six points</strong></p>
+            <ol class="resumo-termo">
+              <li><strong>What we ask for:</strong> your name and your e-mail. If you are a sitter, also
+                information about the person who died, which Brazilian data protection law (LGPD) treats
+                as sensitive data.</li>
+              <li><strong>What we store:</strong> your name and your e-mail are stored encrypted,
+                separate from the research data, which use only a code.</li>
+              <li><strong>Who sees it:</strong> no one on the team reads your answers before the end of the
+                study, and no artificial intelligence scores anything.</li>
+              <li><strong>What becomes public:</strong> at the end, the answers and the readings, with codes
+                only — without your name, without your e-mail and without the first name of the person who
+                died. Once published, they do not change, not even if you leave.</li>
+              <li><strong>How to leave:</strong> delete the account whenever you want, without giving a
+                reason. The data that identify you are erased, and only the code remains.</li>
+              <li><strong>Who to talk to:</strong> a person answers at the contact address just below this
+                form.</li>
+            </ol>
+            <p><strong>Full text</strong></p>
+            <p class="nota">
+              Your registration data — name and e-mail — are encrypted, in a database schema separate from
+              the research data, which use only a code. Information about the deceased person is treated
+              as sensitive data (LGPD). You can delete the account at any time, without giving a reason:
+              the identifiable data are erased and only the code remains. No one on the team reads your
+              answers before the end of the study, and there is no artificial intelligence in the
+              scoring. At the end of the study, the verification package makes the questionnaire answers
+              and the readings public, with codes only — without your name, without your e-mail and
+              without the first name of the deceased person —, so that anyone can redo the check. Once
+              published, the package does not change, not even if you delete the account.
+            </p>
+            <!--/* SPEC 0.26: só maiores de 18 anos, por declaração própria, fora do termo; sem data de nascimento. */-->
+            <p class="nota">Only people aged 18 or over take part. We do not ask for your date of birth.</p>
+            <label class="opcao">
+              <input type="checkbox" name="maioridade" value="true" required th:checked="*{maioridade}">
+              <span>I declare that I am 18 years of age or older.</span>
+            </label>
+            <label class="opcao">
+              <input type="checkbox" name="aceite" value="true" required>
+              <span>I have read and accept the agreement, including the processing of sensitive data.</span>
+            </label>
+            <input type="hidden" name="termo" th:value="${versaoTermo}">
+          </fieldset>
+
+          <button class="botao botao-cheio" type="submit">Create account</button>
+        </form>
+
+        <div class="credencial">
+          <p class="rotulo">Talk to a person</p>
+          <p th:if="${contato}">
+            If anything here weighs on you, or if you have any question, write to
+            <a th:href="'mailto:' + ${contato}" th:text="${contato}">contact</a>. The person who answers is a
+            person, not a robot.
+          </p>
+          <p class="nota" th:unless="${contato}">
+            No human contact configured. On the local profile this is acceptable; in production, without
+            <code>AIRLAB_CONTACT_EMAIL</code>, sign-up stays closed.
+          </p>
+          <p class="nota" th:if="${perfilLocal}">
+            Local profile: no e-mail leaves this machine. The confirmation link appears in the
+            application log and in the administrator's outbox.
+          </p>
+        </div>
+
+        <p class="nota nota-espacada">Already have an account? <a th:href="${aplicacao} + '/login'">Sign in</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

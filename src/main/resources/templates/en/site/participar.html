@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Take part — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Take part — Crivo', 'How to come into Crivo: as a sitter or a medium in the automated experiment, in an extrasensory perception test, by running a study, by auditing or by contributing code.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Take part</p>
+        <h1 class="aparece">Five ways to take part</h1>
+        <p class="chamada aparece">
+          As a sitter or a medium, in a quick test, by running a study, by auditing or by
+          contributing code.
+        </p>
+      </div>
+    </section>
+
+    <section id="participar">
+      <div class="faixa">
+        <div class="caminhos">
+          <article class="caminho">
+            <h3>Take part as a sitter or a medium</h3>
+            <p>
+              In the automated structured reading, everything happens on the website: create an
+              account, choose your role and follow it on your dashboard. The steps, what each role
+              sees and the questionnaire in force are on the protocol page.
+            </p>
+            <p class="acoes">
+              <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">How it works</a>
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Create an account</a>
+            </p>
+            <p class="nota">
+              There is a page <a th:href="${aplicacao} + '/consulente'">for sitters</a> and another
+              <a th:href="${aplicacao} + '/medium'">for mediums</a>, with the steps, what is asked
+              of you and your rights. Quick questions are answered in the
+              <a th:href="${aplicacao} + '/perguntas'">frequently asked questions</a>.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3>Take an extrasensory perception test</h3>
+            <p>
+              Crivo's two tests are anonymous, need no account and give the result right away. Each
+              one states, on its own page, what its result does not support.
+            </p>
+            <p><a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos#pes'">See the tests</a></p>
+          </article>
+          <article class="caminho">
+            <h3>Run a study</h3>
+            <p>
+              Research groups, spiritist centers and universities can run the platform on their own
+              infrastructure: it is free software and starts with a single command, with no container
+              and no cloud service. Before it begins, a study needs:
+            </p>
+            <ul>
+              <li>a research question and an analysis plan, written down;</li>
+              <li>screening criteria for mediums and for sitters, defined beforehand;</li>
+              <li>approval by a Brazilian research ethics committee (CEP/Plataforma Brasil), if academic publication is intended;</li>
+              <li>clarity about the funding, declared along with the study.</li>
+            </ul>
+          </article>
+          <article class="caminho">
+            <h3>Audit it</h3>
+            <p>
+              Skeptics are welcome, and not out of politeness: a protocol nobody has tried to break is
+              not worth much. The timestamps and the revealed seed can be checked by anyone, and the
+              verification package of each completed study makes it possible to redo the audit trail,
+              the draw, the scoring and the analysis from outside. <a th:href="${site} + '/auditar'">See how to audit it</a>.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3>Contribute code</h3>
+            <p>
+              The repository is public, with the specification, the technical plan and the scientific
+              grounding versioned alongside it. Methodological criticism counts as much as code:
+              <a th:href="${site} + '/auditar#codigo'">see how to clone it and send a contribution</a>.
+            </p>
+          </article>
+        </div>
+
+        <div class="ressalva">
+          <p>
+            <strong>Honest status of protocol P1-automatizado.</strong> The AIR experiment is not released for use.
+            It still awaits review by a Brazilian research ethics committee (CEP).
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

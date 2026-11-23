@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>P1 study — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('P1 study — Crivo', 'One study of the automated structured reading: the frozen preregistration, the commitment to the seed and, once it ends, the report and the verification package.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">P1 study · <code th:text="${estudo.studyCode}">STD-0000</code></p>
+      <h1 th:text="${estudo.title}">Title</h1>
+      <p class="chamada" th:unless="${relatorio}">
+        Under way. Below, what was declared before the first pair and how much of the collection has been done
+        — in counts, never in scores.
+      </p>
+      <p class="chamada" th:if="${relatorio}">
+        Completed. The report was written by the system itself when the declared pairs had both
+        readings, and its hash is in the public audit trail.
+      </p>
+    </div>
+  </section>
+
+  <section th:if="${progresso}">
+    <div class="faixa">
+      <h2>Collection</h2>
+      <dl class="contagens">
+        <div><dt>Pairs with both readings</dt>
+          <dd th:text="${progresso.completedPairs} + ' / ' + ${progresso.targetPairs}">0 / 30</dd></div>
+        <div><dt>Pairs formed</dt><dd th:text="${progresso.activePairs}">0</dd></div>
+        <div><dt>Locked readings</dt><dd th:text="${progresso.lockedReadings}">0</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section th:if="${relatorio}">
+    <div class="faixa">
+      <h2>Result</h2>
+      <dl class="contagens">
+        <div><dt>Pairs analyzed</dt><dd th:text="${relatorio.pairs}">2</dd></div>
+        <div><dt>Wilcoxon (primary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.primaryPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+        <div><dt>Sign (secondary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.signPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+        <div><dt>Permutation (secondary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.permutationPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+      </dl>
+      <p th:text="${relatorio.primaryBelowAlpha()} ? 'The p of the primary analysis is below 0.05, the declared threshold. It is a statement about the test, not about the origin of the information.' : 'The p of the primary analysis is not below 0.05, the declared threshold. This study did not detect the effect; that does not prove it does not exist.'">Reading</p>
+      <div class="ressalva" th:unless="${relatorio.integrityHolds()}">
+        <p><strong>Attention:</strong> some commitment did not check out at the unblinding. The report says how many.</p>
+      </div>
+      <dl class="leituras">
+        <div class="largo"><dt>Seed revealed</dt><dd><code class="hash" th:text="${relatorio.seedHex}">seed</code></dd></div>
+        <div class="largo"><dt>Hash of the report (SHA-256)</dt><dd><code class="hash" th:text="${relatorio.documentSha256}">hash</code></dd></div>
+      </dl>
+      <h3>Verification package</h3>
+      <div th:if="${pacote}">
+        <p>
+          Everything needed to redo this study from the outside, without asking anyone for anything: the trail up to the
+          report, the seed, each assignment with the list of eligible mediums, the answers of each sitter and of
+          each reading, the scores and the analyses. With no names at all: neither the first name of the deceased person, nor
+          that of anyone who took part.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="@{/estudos/{code}/pacote.json(code=${estudo.studyCode})}">Download the package (JSON)</a>
+        </p>
+        <dl class="leituras">
+          <div class="largo"><dt>Hash of the package (SHA-256)</dt><dd><code class="hash" th:text="${pacote.sha256}">hash</code></dd></div>
+        </dl>
+        <p class="nota">
+          To check it on your own machine, with the artifact from the public repository and no access to this server:
+          <code th:text="'./scripts/airlab.sh verificar-pacote ' + ${pacote.fileName()}">./scripts/airlab.sh verificar-pacote pacote.json</code>.
+          The command redoes the trail, the draw of the medium for each pair, the commitment of each reading, the scoring
+          and the three analyses. The commitments of the requests cannot be redone from the outside: they cover the first name, which
+          is not published.
+        </p>
+      </div>
+      <p th:unless="${pacote}">
+        The verification package of this study was not published: the privacy check held it back, and the trail
+        records the reason.
+      </p>
+      <h3>Report</h3>
+      <pre class="documento" th:text="${relatorio.document}">report</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>What was declared beforehand</h2>
+      <dl class="leituras">
+        <div><dt>Frozen on</dt><dd><time th:if="${estudo.frozenAt}" th:text="${@datas.utc(estudo.frozenAt)}">2026-11-13</time> (UTC)</dd></div>
+        <div><dt>Questionnaire</dt><dd><code th:text="${estudo.questionnaireVersion}">v1</code></dd></div>
+        <div><dt>Number of pairs (N)</dt><dd th:text="${estudo.targetPairs}">30</dd></div>
+        <div><dt>Cap on pairs per medium</dt><dd th:text="${estudo.maxPairsPerMedium} ?: 'no cap'">10</dd></div>
+        <div class="largo"><dt>Hash of the preregistration (SHA-256)</dt><dd><code class="hash" th:text="${estudo.documentSha256}">hash</code></dd></div>
+        <div class="largo"><dt>Commitment to the seed</dt><dd><code class="hash" th:text="${estudo.seedCommitment}">hash</code></dd></div>
+      </dl>
+      <p class="nota">
+        The freezing is in the audit trail, and the trail is timestamped by an independent timestamping
+        authority right after it: see the <a th:href="${aplicacao} + '/carimbos'">timestamps</a>.
+      </p>
+      <h3>Preregistration document</h3>
+      <pre class="documento" th:text="${estudo.document}">document</pre>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/estudos'">All studies</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

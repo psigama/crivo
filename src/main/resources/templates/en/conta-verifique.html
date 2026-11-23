@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Confirm your e-mail — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Create account</p>
+      <h1>One step left: confirm your e-mail</h1>
+      <p class="chamada">
+        We sent a message to the address you gave. Open the link in it within
+        <strong th:text="${horas} + ' hours'">48 hours</strong> to activate the account. Without that
+        confirmation, the account is not valid.
+      </p>
+      <p>
+        If the e-mail already had an account, the message says so, and nothing new is created. This page is
+        the same in both cases, so that no one can find out from here who takes part.
+      </p>
+      <p class="nota">Did not arrive? Check the spam folder. Once the deadline has passed, create the account again to receive another link.</p>
+
+      <div class="ressalva" th:if="${perfilLocal}">
+        <p>
+          <strong>Local profile.</strong> No e-mail leaves this machine. The confirmation link is
+          in the application log, on a line that starts with <code>Perfil local: link de confirmacao</code>,
+          and in the <a th:href="${aplicacao} + '/caixa-de-saida'">outbox</a>, which only the administrator opens.
+        </p>
+      </div>
+      <div class="ressalva" th:if="${smtpLocal}">
+        <p>
+          <strong>Local profile with SMTP.</strong> The e-mail was delivered to the configured SMTP server — with
+          Mailpit, it shows up at <a href="http://localhost:8025">localhost:8025</a> and does not leave the machine.
+          The link is also in the application log, on a line that starts with
+          <code>Perfil local: link de confirmacao</code>.
+        </p>
+      </div>
+
+      <p class="acoes">
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/login'">Go to the sign-in page</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>My account — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">My account</p>
+      <h1 th:text="${conta.firstName}">Name</h1>
+
+      <dl class="leituras">
+        <div><dt>Profile</dt><dd th:text="${conta.profile.label().in(idioma)} + ' (fixed)'">Sitter</dd></div>
+        <div><dt>Code in the research</dt><dd><code th:text="${conta.code}">CON-0000</code></dd></div>
+        <div><dt>Agreement accepted</dt><dd th:text="${conta.termVersion}">conta-v2</dd></div>
+        <div><dt>Account created on</dt><dd th:text="${@datas.data(conta.createdAt)}">13 November 2026</dd></div>
+        <div><dt>E-mail confirmed on</dt><dd th:text="${@datas.data(conta.emailConfirmedAt)}">13 November 2026</dd></div>
+      </dl>
+      <p class="nota">
+        The research data use only the code above, without your name. Your name and your e-mail are
+        stored encrypted, in a separate part of the database.
+      </p>
+
+      <p class="acoes">
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/painel'">Back to the dashboard</a>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Delete the account</h2>
+      <p>
+        You can leave at any time, without giving a reason. Name, e-mail and password are erased right
+        away. Only the code remains, without your name, marked as closed, so that the public record of
+        the study stays complete. There is no way to undo this.
+      </p>
+      <p class="erro" th:if="${param.confirmeExclusao}" role="alert">
+        Check the confirmation box to delete the account.
+      </p>
+      <form class="formulario" method="post" th:action="@{/conta/excluir}">
+        <label class="opcao">
+          <input type="checkbox" name="confirmo" value="true">
+          <span>I understand that the deletion is permanent.</span>
+        </label>
+        <button class="botao botao-vazio" type="submit">Delete my account</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

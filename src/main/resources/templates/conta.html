@@ -22,7 +22,7 @@
       <h1 th:text="${conta.firstName}">Nome</h1>
 
       <dl class="leituras">
-        <div><dt>Perfil</dt><dd th:text="${conta.profile.label()} + ' (fixo)'">Consulente</dd></div>
+        <div><dt>Perfil</dt><dd th:text="${conta.profile.label().in(idioma)} + ' (fixo)'">Consulente</dd></div>
         <div><dt>Código na pesquisa</dt><dd><code th:text="${conta.code}">CON-0000</code></dd></div>
         <div><dt>Termo aceito</dt><dd th:text="${conta.termVersion}">conta-v2</dd></div>
         <div><dt>Conta criada em</dt><dd th:text="${@datas.data(conta.createdAt)}">13 de novembro de 2026</dd></div>
@@ -34,7 +34,7 @@
       </p>
 
       <p class="acoes">
-        <a class="botao botao-vazio" href="/painel">Voltar ao painel</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/painel'">Voltar ao painel</a>
       </p>
     </div>
   </section>

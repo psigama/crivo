@@ -49,7 +49,9 @@ class HomeController {
         if (siteUrl.isEmpty()) {
             return new ModelAndView(page.template());
         }
-        RedirectView redirect = new RedirectView(siteUrl + page.path());
+        // The language of the page goes with it (SPEC 0.28, section 1.5, rule 1): the site has the
+        // same page at the same address under /en.
+        RedirectView redirect = new RedirectView(siteUrl + LanguagePages.of(request).prefix() + page.path());
         redirect.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         redirect.setPropagateQueryParams(true);
         return new ModelAndView(redirect);

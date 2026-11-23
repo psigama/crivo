@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Confirm e-mail — Crivo</title>
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Confirm e-mail</p>
+
+      <th:block th:unless="${resultado}">
+        <h1>Confirm your account</h1>
+        <p class="chamada">
+          Just press the button. The confirmation is done by a button, and not on opening the link, because
+          some e-mail services open links by themselves to check whether they are safe.
+        </p>
+        <form class="formulario" method="post" th:action="@{/conta/confirmar}">
+          <input type="hidden" name="token" th:value="${token}">
+          <button class="botao botao-cheio" type="submit">Confirm my e-mail</button>
+        </form>
+      </th:block>
+
+      <th:block th:if="${resultado == 'CONFIRMED'}">
+        <h1>Account confirmed</h1>
+        <p class="chamada">Done. Now just sign in with your e-mail and your password.</p>
+        <p class="acoes"><a class="botao botao-cheio" th:href="${aplicacao} + '/login'">Sign in</a></p>
+      </th:block>
+
+      <th:block th:if="${resultado == 'ALREADY_USED'}">
+        <h1>This link has already been used</h1>
+        <p class="chamada">The account is already confirmed. Just sign in.</p>
+        <p class="acoes"><a class="botao botao-cheio" th:href="${aplicacao} + '/login'">Sign in</a></p>
+      </th:block>
+
+      <th:block th:if="${resultado == 'EXPIRED'}">
+        <h1>This link has expired</h1>
+        <p class="chamada">
+          Create the account again, with the same e-mail, to receive a new link. The profile chosen the
+          first time still holds.
+        </p>
+        <p class="acoes"><a class="botao botao-cheio" th:href="${aplicacao} + '/conta/criar'">Receive another link</a></p>
+      </th:block>
+
+      <th:block th:if="${resultado == 'UNKNOWN'}">
+        <h1>Link not recognized</h1>
+        <p class="chamada">
+          Check whether the address was copied in full. If the account was deleted, the link stops being valid.
+        </p>
+        <p class="acoes"><a class="botao botao-vazio" th:href="${aplicacao} + '/conta/criar'">Create account</a></p>
+      </th:block>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

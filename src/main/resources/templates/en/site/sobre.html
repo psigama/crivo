@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Vocabulary and protocol — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Vocabulary and protocol — Crivo', 'What a reading is, why the decoy exists, who sees what, and why the vocabulary of Crivo is deliberately neutral.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">Vocabulary and protocol</p>
+      <h1 class="aparece">Words that do not presume the answer</h1>
+      <p class="chamada aparece">
+        Much of the discussion about mediumship gets lost in the vocabulary. Here, each term is
+        chosen to describe what happened, without asserting where the information came from.
+      </p>
+    </div>
+  </section>
+
+  <section class="leitura">
+    <div class="faixa">
+      <p class="rotulo">Terms</p>
+      <h2>The vocabulary of the study</h2>
+
+      <dl class="vocabulario">
+        <div>
+          <dt><em lang="pt-BR">Leitura</em> · reading</dt>
+          <dd>
+            The medium's answers to the questionnaire about one target, knowing only the first
+            name. The Portuguese word renders <em>reading</em>, the term used in the scientific
+            literature. In spiritist vocabulary the closest word would be
+            <em lang="pt-BR">comunicação</em>, “communication” — the swap is deliberate:
+            “communication” already presupposes that someone is communicating, whereas “reading”
+            describes only what was observed.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Questionário</em> · questionnaire</dt>
+          <dd>
+            The versioned list of multiple-choice fields about the deceased person, the same one for
+            the sitter and for the medium, frozen in the preregistration. Each field is a single
+            closed question: there is no free text to interpret, and so nobody judges whether an
+            answer “fits”.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Consulente</em> · sitter</dt>
+          <dd>
+            The person who knew the deceased in life and sends the request: the first name and the
+            answers to the questionnaire. In the English-language literature the term is
+            <em>sitter</em>, and that is what to search for in the papers; in Portuguese the project
+            uses <strong lang="pt-BR">consulente</strong>, which describes the role without sounding
+            like translated jargon. In the code the identifier stays <code>sitter</code>, under the
+            rule that code is written in English.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Alvo</em> · target</dt>
+          <dd>The deceased person named by the sitter. The medium receives only the first name.</dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Chamariz</em> · decoy</dt>
+          <dd>
+            The answers of the other sitter in the pair, against which the same reading is also
+            checked. It is what separates a hit from a common answer: “died of a heart problem”
+            matches a great many people, and it matches the decoy too.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Par</em> · pair</dt>
+          <dd>
+            Two requests with a similar profile — same gender, age band and period of death —, by the
+            criteria declared before collection. Each one is the decoy of the other, and the same
+            drawn medium produces both readings.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Compromisso</em> · cryptographic commitment</dt>
+          <dd>
+            A cryptographic fingerprint, published beforehand, of something that is revealed only
+            later — the sitter's answers, the medium's reading, the seed of the draw. Whoever checks
+            at the end knows that nothing was swapped in between.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Desmascaramento</em> · unblinding</dt>
+          <dd>
+            The revelation of which reading was about which target. It happens on its own when the
+            declared number of pairs is complete — nobody chooses the moment — and it is single and
+            irreversible.
+          </dd>
+        </div>
+        <div>
+          <dt><em lang="pt-BR">Pacote de verificação</em> · verification package</dt>
+          <dd>
+            The exported set that lets a third party audit the study and re-run the analysis:
+            preregistration, seeds, allocations, anonymized assessments and audit trail.
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="leitura">
+    <div class="faixa">
+      <p class="rotulo">Life cycle</p>
+      <h2>What happens to a reading</h2>
+      <ol>
+        <li>
+          <strong>Request.</strong> The sitter gives the first name of the deceased person and answers
+          a closed questionnaire about them. The answers lock with a salted commitment on the
+          trail, before any medium receives the request.
+        </li>
+        <li>
+          <strong>Structured reading.</strong> The drawn medium receives only the two first names of
+          the pair and answers the same questionnaire for each one. On submission, the reading locks
+          with a hash on the trail.
+        </li>
+        <li>
+          <strong>Scoring.</strong> At the end of collection, each reading is compared field by field
+          with the answers of the target's sitter and with those of the other sitter in the pair, the
+          decoy. What counts is the difference between the two comparisons.
+        </li>
+        <li>
+          <strong>Feedback.</strong> Each sitter sees the medium's answers for their own target
+          alongside their own; each medium sees the counts for their own readings.
+        </li>
+      </ol>
+
+      <h2>Who sees what</h2>
+      <p>
+        This is the project's central security specification, and every forbidden cell becomes an
+        automated test that tries to violate it.
+      </p>
+      <ul>
+        <li>The medium sees only the first names in the requests they received — never the sitter, never the sitter's answers.</li>
+        <li>The sitter does not know which medium received their request, and does not see the reading before the end.</li>
+        <li>
+          The administrator does not see answers, first names, readings or the link between a request
+          and a medium before unblinding, and has no way to read the seed of the draw: it is held in
+          encrypted custody.
+        </li>
+        <li>The scores are not hidden: they simply do not exist before unblinding, and the database refuses to record them.</li>
+      </ul>
+
+      <div class="ressalva">
+        <p>
+          No artificial intelligence model takes part in evaluating the readings, in the scoring or in
+          deciding a hit. Scoring is an equality comparison between closed options, under a published
+          rule.
+        </p>
+      </div>
+
+      <p class="nota nota-espacada">
+        <a th:href="${site} + '/'">Back to the home page</a> ·
+        <a href="https://github.com/rogeriocisi/crivo">See the full specification in the repository</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

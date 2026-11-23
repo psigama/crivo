@@ -2,6 +2,7 @@ package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.catalog.Questionnaire;
 import io.github.rogeriocisi.airlab.catalog.Questionnaires;
+import io.github.rogeriocisi.airlab.support.Language;
 import io.github.rogeriocisi.airlab.structured.MediumAssignment;
 import io.github.rogeriocisi.airlab.structured.MediumReadingDraft;
 import io.github.rogeriocisi.airlab.structured.MediumReadingService;
@@ -64,7 +65,7 @@ class MediumReadingController {
         try {
             readings.check(assignment.get().questionnaireVersion(), draft.answers());
         } catch (IllegalArgumentException e) {
-            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("erro", LanguagePages.reason(e));
             return formPage(model, assignment.get(), position, draft);
         }
         Questionnaire questionnaire = questionnaireOf(assignment.get());
@@ -132,11 +133,12 @@ class MediumReadingController {
 
     /** Question label to answer label, in questionnaire order. */
     private static Map<String, String> labelled(Questionnaire questionnaire, Map<String, String> answers) {
+        Language language = LanguagePages.current();
         Map<String, String> out = new LinkedHashMap<>();
         for (Questionnaire.Field field : questionnaire.scoredFields()) {
             String answer = answers.get(field.key());
             if (answer != null) {
-                out.put(field.label(), questionnaire.labelOf(field.key(), answer));
+                out.put(field.label().in(language), questionnaire.labelOf(field.key(), answer, language));
             }
         }
         return out;

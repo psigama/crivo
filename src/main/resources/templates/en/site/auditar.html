@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Audit — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Audit — Crivo', 'How to check the audit trail, the timestamps and the draw of Crivo without asking anyone for permission, and how to clone, fork and contest the code.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Audit</p>
+        <h1 class="aparece">Check it without asking permission</h1>
+        <p class="chamada aparece">
+          Skeptics are welcome, and not out of politeness: a protocol nobody has tried to break is
+          not worth much.
+        </p>
+      </div>
+    </section>
+
+    <section id="verificar">
+      <div class="faixa">
+        <p class="rotulo">The audit trail</p>
+        <h2>How to check the integrity of the chain</h2>
+        <p>
+          Anyone can check the integrity of the chain without asking anyone for permission and
+          without trusting a page: the verification runs outside the application, from the same artifact.
+        </p>
+
+        <div class="painel">
+          <p class="nota">Command-line verification:</p>
+          <code class="comando">./scripts/airlab.sh verify</code>
+          <code class="comando">.\scripts\airlab.ps1 verify</code>
+          <p class="nota">
+            The command checks the hash chain, the hash of each version of the preregistration and,
+            in studies already unblinded, replays the draw from the seed. It exits with a
+            non-zero code if anything does not check out.
+          </p>
+        </div>
+
+        <p>
+          The timestamps, the preregistration and the revealed seed can be checked by anyone.
+          At the end of each study, the verification package carries the rest: the trail up to the report,
+          each submission with the list of eligible mediums, the responses and the readings, with no names
+          at all. With it, <code>airlab verificar-pacote</code> replays, with no database and no server, the
+          chain of the trail, the draw of the medium for each pair, the commitment of each reading, the
+          scoring and the analysis — and arrives at the same number, or shows that it does not. Only the
+          commitments of the requests remain attested by the platform: they cover the first name of the
+          deceased person, which is not published.
+        </p>
+
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/verificar'">The state of the trail, right now</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/carimbos'">Timestamps</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/estudos'">Studies and reports</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="codigo">
+      <div class="faixa">
+        <p class="rotulo">Open source</p>
+        <h2>Download it, fork it, propose changes</h2>
+        <p>
+          The whole project lives in a public repository — code, specification, technical plan,
+          bibliography and the database migrations. There is no internal version different from this one.
+        </p>
+
+        <p class="repositorio">
+          <a href="https://github.com/rogeriocisi/crivo">github.com/rogeriocisi/crivo</a>
+        </p>
+
+        <div class="passos">
+          <article>
+            <h3>Clone and run</h3>
+            <p class="nota">Single prerequisite: a JDK 21 or newer.</p>
+            <code class="comando">git clone https://github.com/rogeriocisi/crivo.git</code>
+            <code class="comando">cd crivo &amp;&amp; ./scripts/start.sh</code>
+            <p class="nota">
+              On Windows, <code>scripts\start.cmd</code> — it is the path that works on a
+              freshly installed machine, because PowerShell refuses unsigned scripts by default. The script
+              builds the project, starts the embedded PostgreSQL and runs the application at
+              <code>127.0.0.1:8080</code>.
+            </p>
+          </article>
+
+          <article>
+            <h3>Fork and propose</h3>
+            <p class="nota">Contributions come in through a <em>pull request</em>.</p>
+            <code class="comando">git switch -c minha-contribuicao</code>
+            <code class="comando">./mvnw test</code>
+            <p class="nota">
+              Make the <em>fork</em> on GitHub, work on a branch, run the suite and open the
+              <em>pull request</em>. Small commits, messages in the
+              <em>Conventional Commits</em> style, and no feature without the corresponding
+              specification — the rule is in the repository's <code>CLAUDE.md</code>.
+            </p>
+          </article>
+
+          <article>
+            <h3>Disagree</h3>
+            <p class="nota">A methodological objection is a contribution.</p>
+            <p>
+              Found a hole in the blinding, a bias in the analysis or a reference that contradicts a
+              design decision? Open an
+              <a href="https://github.com/rogeriocisi/crivo/issues">issue</a>. The map of
+              <em>published criticism → control in the system</em> is in <code>docs/REFERENCES.md</code>,
+              including the lines where nothing in the software answers.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package io.github.rogeriocisi.airlab.participant;
 
+import io.github.rogeriocisi.airlab.support.Text;
 /**
  * Profile of a P1 account (SPEC E13). Chosen once, at sign-up, and never changed: the database
  * refuses the change too (V17).
@@ -9,21 +10,21 @@ package io.github.rogeriocisi.airlab.participant;
  */
 public enum AccountProfile {
 
-    SITTER("Consulente", "CON", ParticipantRole.SITTER),
-    MEDIUM("Médium", "MED", ParticipantRole.MEDIUM);
+    SITTER(Text.of("Consulente", "Sitter"), "CON", ParticipantRole.SITTER),
+    MEDIUM(Text.of("Médium", "Medium"), "MED", ParticipantRole.MEDIUM);
 
-    private final String label;
+    private final Text label;
     private final String codePrefix;
     private final ParticipantRole role;
 
-    AccountProfile(String label, String codePrefix, ParticipantRole role) {
+    AccountProfile(Text label, String codePrefix, ParticipantRole role) {
         this.label = label;
         this.codePrefix = codePrefix;
         this.role = role;
     }
 
-    /** Name shown to people, in Portuguese. */
-    public String label() {
+    /** Name shown to people, in both languages of the interface. */
+    public Text label() {
         return label;
     }
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>My request — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Sitter · <code th:text="${pedido.code}">PED-0000</code></p>
+      <h1>Your request</h1>
+      <p class="aviso" th:if="${param.travado}" role="status">
+        Request locked. Thank you. You will be told when there is news.
+      </p>
+
+      <dl class="leituras">
+        <div><dt>State</dt><dd th:text="${situacao.state.label().in(idioma)}">Locked</dd></div>
+        <div><dt>Locked on</dt><dd><time th:datetime="${pedido.lockedAt}"
+          th:text="${@datas.momento(pedido.lockedAt)}">13 November 2026, at 7 a.m.</time> (Brasília time)</dd></div>
+        <div><dt>Questionnaire</dt><dd th:text="${pedido.questionnaireVersion}">v1</dd></div>
+      </dl>
+      <p class="nota">
+        Your answers are sealed: nobody can change them. At the end of the study, anyone can check
+        that they are the same as they are today.
+      </p>
+      <details class="detalhe-tecnico">
+        <summary>Technical detail</summary>
+        <dl class="leituras">
+          <div class="largo"><dt>Published commitment</dt><dd><code class="hash" th:text="${pedido.commitment}">hash</code></dd></div>
+          <div><dt>Locked on, in the trail (UTC)</dt><dd th:text="${@datas.utc(pedido.lockedAt)}">2026-11-13 10:00</dd></div>
+        </dl>
+        <p>
+          The commitment has been in the public audit trail since the moment the request locked. At the
+          end of the study, the secret salt that went into the calculation is revealed, and anyone can
+          redo the arithmetic and check that the answers below are the same as they are today.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>What you answered</h2>
+      <p class="nota">Only you see this page. Neither the medium nor whoever administers the platform has access to it.</p>
+      <dl class="leituras lista">
+        <div><dt>First name</dt><dd th:text="${pedido.firstName}">Name</dd></div>
+        <div th:each="item : ${respostas}"><dt th:text="${item.key}">Question</dt><dd th:text="${item.value}">Answer</dd></div>
+      </dl>
+      <p class="acoes nota-espacada"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Back to the dashboard</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

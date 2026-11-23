@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Technical paper (draft) — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Technical paper (draft) — Crivo', 'Draft of the Crivo technical paper: requirements, the automated structured reading protocol, architecture, guarantees and limits.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Technical paper · draft, in preparation</p>
+        <h1 class="aparece">Crivo: an open platform of automated protocols for the study of anomalous cognition
+        </h1>
+        <p class="chamada aparece">
+          A design paper, which describes a method before any data. It presents the platform through its anomalous
+          cognition protocol: where the requirements come from, how the protocol works, how the software enforces it,
+          what it guarantees
+          and what it does not guarantee. There is no empirical result yet, because no study with real participants has
+          been
+          conducted.
+        </p>
+        <dl class="ficha aparece">
+          <div>
+            <dt>Author</dt>
+            <dd>Rogerio Rodrigues Lima Cisi</dd>
+          </div>
+          <div>
+            <dt>ORCID</dt>
+            <dd><a href="https://orcid.org/0009-0003-8326-6962">0009-0003-8326-6962</a></dd>
+          </div>
+          <div>
+            <dt>Correspondence</dt>
+            <dd><a href="mailto:crivo.psigama@gmail.com">crivo.psigama@gmail.com</a></dd>
+          </div>
+          <div>
+            <dt>Affiliation</dt>
+            <dd>Independent researcher, with no affiliation to a research institution</dd>
+          </div>
+          <div>
+            <dt>Type</dt>
+            <dd>Design paper</dd>
+          </div>
+          <div>
+            <dt>Version</dt>
+            <dd>Draft, November 2026</dd>
+          </div>
+          <div>
+            <dt>Software</dt>
+            <dd>Open source, MIT license</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="artigo">
+      <div class="faixa">
+        <p class="ressalva">This is a draft, written for two audiences: researchers, who find here the complete design
+          and the references, and readers from outside the field, for whom every technical term is explained the first
+          time
+          it appears in the body of the text.</p>
+
+        <h2 id="resumo">Provisional abstract</h2>
+        <p>For a mediumship study to show anything, it must show that the information given by the medium did not
+          reach them through ordinary channels: inadvertent cues, cold reading, prior research, the goodwill of
+          whoever rates the reading, or fraud. The literature on anomalous information reception (AIR) already
+          describes protocols that close these doors. Running them, however, depends on a research team and on
+          manual procedures that readers of the published paper cannot check, and scoring remains subject to the
+          judgement of whoever decides whether a statement fits the deceased person.</p>
+        <p>This paper presents Crivo, an open-source platform that runs an AIR protocol from start to finish with no
+          member of the research team in the loop. The sitter, who is the bereaved person, and the medium answer the
+          same closed questionnaire about the deceased, of whom the medium knows only the first name. The system
+          compares the answers field by field, against the target and against a decoy, another deceased person with
+          a similar profile who serves as a control. Nobody has to judge whether a statement fits. Methodological
+          requirements become properties of the software: what each person can see is restricted in the data layer,
+          not on the screen; answers are cryptographically sealed before any information reaches the medium; the
+          random draw is committed before data collection and revealed at the end; the study plan is preregistered
+          and frozen before any data exist; blinding is lifted automatically when the declared sample is complete;
+          and every step enters a hash-chained audit trail, attested by an independent time-stamping authority.</p>
+        <p>Null and positive results produce the same report and the same verification package, which anyone can
+          check from the file itself. The paper describes the requirements, derived in part from sceptical critiques,
+          the protocol and its power analysis, the architecture, what the system guarantees and what it cannot
+          guarantee, and the ethical and data protection issues.</p>
+        <p><strong>Keywords:</strong> mediumship; anomalous information reception; blinded protocol;
+          preregistration; reproducibility; audit trail; open-source software.</p>
+
+        <div lang="pt-BR">
+          <h2 id="abstract">Resumo</h2>
+          <p>Para que um estudo de mediunidade diga alguma coisa, é preciso mostrar que a informação dada pelo médium
+            não
+            chegou a ele por vias comuns: pistas involuntárias, leitura fria, pesquisa prévia, a boa vontade de quem
+            avalia
+            ou fraude. A literatura de recepção anômala de informação (AIR, de <em lang="en">anomalous information
+              reception</em>) já descreve protocolos capazes de fechar essas portas. Executá-los, porém, depende de uma
+            equipe
+            e de regras manuais que quem lê o artigo publicado não tem como conferir, e a avaliação continua sujeita ao
+            julgamento de quem decide se uma afirmação se ajusta à pessoa falecida.</p>
+          <p>Este artigo apresenta o Crivo, uma plataforma de código aberto que executa um protocolo de AIR do início ao
+            fim
+            sem ninguém da equipe no circuito. O consulente, que é a pessoa enlutada, e o médium respondem ao mesmo
+            questionário fechado sobre o falecido, de quem o médium conhece apenas o primeiro nome. O sistema confere as
+            respostas campo a campo, contra o alvo e contra um chamariz, outra pessoa falecida de perfil semelhante que
+            serve de controle. Ninguém precisa julgar se uma afirmação se ajusta. Os requisitos de método tornam-se
+            propriedades do software: o que cada pessoa pode ver é limitado na camada de dados, e não na tela; as
+            respostas são
+            lacradas criptograficamente antes de qualquer informação chegar ao médium; o sorteio é lacrado antes da
+            coleta
+            e
+            aberto no fim; o plano do estudo é registrado e congelado antes dos dados; o cegamento se desfaz sozinho
+            quando a
+            amostra declarada se completa; e cada passo entra numa trilha de auditoria encadeada, atestada por uma
+            autoridade
+            independente de carimbo do tempo.</p>
+          <p>Resultados nulos e positivos produzem o mesmo relatório e o mesmo pacote de verificação, que qualquer
+            pessoa
+            confere a partir do próprio arquivo. O artigo descreve os requisitos, derivados também da crítica cética, o
+            protocolo e o cálculo de poder, a arquitetura, o que o sistema garante e o que não pode garantir, e as
+            questões de ética e de
+            proteção
+            de dados.</p>
+          <p><strong>Palavras-chave:</strong> mediunidade; recepção anômala de informação; protocolo cego;
+            pré-registro; reprodutibilidade; auditoria; software livre.</p>
+        </div>
+
+        <h2 id="secao-1">1. Introduction</h2>
+        <p>People who consult a medium after losing someone sometimes leave convinced that they heard things nobody
+          there could have known. Science does not have to confirm or deny that impression in order to take it
+          seriously; it has to ask where the information came from. The question, therefore, is not whether there are
+          reports of mediums who get things right
+          — they are abundant — but whether, under conditions that rule out the conventional explanations, the
+          information
+          produced exceeds what would be expected by chance.</p>
+        <p>Those explanations are well known and nothing exotic. A person sitting in front of the medium reacts, and the
+          reactions guide
+          what comes next. Vague statements sound exact to someone who wants to recognize them. The medium may have
+          done research
+          beforehand, or simply cheated. And whoever rates what was said tends to keep the hits and forget the misses.
+          A study says something only if each of these doors is closed — and only if it is possible to show, afterwards,
+          that
+          it was.</p>
+        <p>The experimental literature calls the phenomenon in question anomalous information reception, or AIR: the
+          report of
+          accurate and specific information about a deceased person, without prior knowledge, without sensory feedback
+          and
+          without
+          cheating (Beischel et al., 2015). The term is deliberately neutral as to origin. It does not claim that the
+          information comes from the deceased person, nor from some capacity of the living, such as telepathy (Beischel
+          and Schwartz,
+          2007). The field's vocabulary follows the same caution: what the medium produces about a deceased person is
+          called a reading,
+          not a message or a communication, words that presuppose where the information comes from.
+          Throughout the text, the sitter is the bereaved person who knew the deceased and whose knowledge about
+          them serves as the reference for checking the readings — the <em lang="pt-BR">consulente</em> of the
+          Portuguese version of this platform. This
+          paper adopts that neutrality: it describes a method for checking whether the information exists, not a theory
+          about
+          where it would come from.</p>
+        <p>The empirical picture is divided. Studies with blinding at several layers report above-chance performance
+          (Beischel and Schwartz, 2007; Beischel et al., 2015); others find no effect at all (O'Keeffe and
+          Wiseman, 2005). A recent comparative analysis attributes part of the divergence to details of the design, such
+          as the
+          selection of the mediums and the kind of interaction allowed during the reading (Silva and Moreira-Almeida,
+          2022).</p>
+        <p>This paper argues that the bottleneck in the field lies less in theory than in verifiable execution. A
+          blinded study
+          depends on compliance with dozens of small rules — who may know what, and from when on — and that
+          compliance is usually recorded, when it is recorded at all, in manual procedures that the reader of the
+          published paper
+          has no way to audit. The authors of one of the main series of positive studies also point out that all of
+          their
+          data come from a single laboratory (Beischel et al., 2015), which makes independent replication
+          especially valuable.</p>
+        <p>The proposal is to treat those rules as properties of a software system, implemented and tested with the
+          rigor with which security requirements are tested, and to remove subjective judgement from the scoring. The
+          paper makes
+          four contributions: it organizes the methodological requirements as a threat model (<a href="#secao-3">section
+            3</a>); it describes a paired, closed and fully automated protocol (<a href="#secao-4">section
+            4</a>);
+          it presents the architecture that enforces it (<a href="#secao-5">section 5</a>); and it delimits what that
+          architecture
+          guarantees
+          and what it does not (<a href="#secao-6">section 6</a>). The following sections deal with ethics, the current
+          state of the
+          project and the reach of what it will be able to show. Being a design paper, the text brings no results:
+          no study with real participants has been conducted.</p>
+
+        <h2 id="secao-2">2. Related work</h2>
+        <h3 id="secao-2-1">2.1 Blinded AIR protocols</h3>
+        <p>In research, to blind someone is to prevent that person from knowing something that could, even
+          unintentionally, influence the
+          result; undoing the blinding at the end of the study, revealing what was hidden, is the unblinding. The
+          reference protocol
+          for this work, that of Beischel and Schwartz (2007), blinded three roles at the same time. The medium,
+          who
+          did the reading by telephone, received only the first name of the deceased person and, besides speaking
+          freely,
+          answered questions about their appearance, personality, hobbies and cause of death. The
+          sitters
+          did not take part: they were represented by an experimenter — the proxy sitter — who also knew nothing about
+          them or about the deceased. The deceased were paired
+          two by two, of the same gender, and the same medium read both members of each pair. At the end, each sitter
+          scored, without
+          knowing which was which, the reading made for their own deceased person, called the target, and the reading
+          for the other deceased person of the pair, which
+          served as a control and is called the decoy; then they chose the one that fitted better.
+        </p>
+        <p>The replication and extension of Beischel et al. (2015), with 20 mediums certified by the group itself
+          after
+          screening and testing, kept that structure and again reported target readings rated better than the
+          decoys.
+          The authors point to the fact that all the data come from a single laboratory as the main limitation. For the
+          description of the laboratory techniques, we use Beischel (2007), without taking it as an assessment of the
+          evidence.</p>
+
+        <h3 id="secao-2-2">2.2 Methodological criticism and null results</h3>
+        <p>Not every blinded study finds an effect. O'Keeffe and Wiseman (2005) designed a method of their own, with no
+          contact
+          between
+          mediums and sitters and with each sitter rating, statement by statement, every reading in the study, and
+          obtained a null result. The study was criticized for the lack of screening of the mediums and for the format
+          of the items,
+          which
+          combined several statements into one. In Kelly and Arcangel (2011), the first stage had no significant
+          result. The second did, but it changed three things, among them sending the mediums
+          photographs of the deceased — and a photograph says a great deal, from age to the period in which the person
+          lived, which leaves
+          the blinding of that stage incomplete. Cases like these show that apparently small operational details decide
+          the validity of a study.</p>
+        <p>The objections that weigh most on the design of Crivo, however, come from the sceptical critique (Hyman,
+          1977, 2003; Wiseman
+          and
+          O'Keeffe, 2001). Cold reading is the technique, deliberate or not, of producing statements that sound specific
+          but
+          fit almost everybody, correcting course from the reactions of the listener (Hyman, 1977). Subjective
+          validation is
+          the other side of the coin: whoever rates the reading finds meaning in what they hear and recognizes a vague
+          statement as exact.
+          To these are added biased scoring and the absence of a stopping rule fixed before data collection, which
+          allows
+          a study to be ended at the moment when the result looks favorable (Hyman, 2003).</p>
+
+        <h3 id="secao-2-3">2.3 Reviews, meta-analyses and the Brazilian context</h3>
+        <p>A meta-analysis statistically combines the results of several studies to estimate a common effect. The one by
+          Sarraf, Woodley of Menie and Tressoldi (2021) brought together 18 experiments, published in 14 papers between
+          2001 and
+          2019, and
+          estimated an effect of 0.18 above chance level, on a standardized proportion index (95% confidence
+          interval:
+          0.12 to 0.25). The estimate withstood two tests for publication bias, the tendency for positive
+          results to reach the journals more easily than null ones. Milton and Wiseman (1999) recall, however, that
+          a meta-analysis does not replace independent replication: the result depends on which studies go in and on how
+          the differences between them are handled. The lesson came from another literature, that of the ganzfeld, a
+          telepathy experiment under
+          mild sensory deprivation.</p>
+        <p>Silva and Moreira-Almeida (2022) compared eight recent studies with at least triple blinding, five with a
+          significant result and three without, looking for what distinguished them. Seven conditions coincided with a
+          positive result: selecting mediums with prior evidence; recruiting motivated sitters bereaved by a
+          significant loss; allowing some interaction with the medium, even if through a proxy sitter; giving the medium
+          some information about the deceased; combining free speech with objective questions; scoring both the whole
+          reading
+          and the items; and avoiding a large number of readings and of items. One of the findings is a point that this
+          paper
+          has to face: in the two studies in which the medium interacted with nobody, one of them that of O'Keeffe and
+          Wiseman
+          (2005), the result was null. The authors themselves ask for caution, because the comparison is heuristic and
+          some of the
+          studies do not describe important variables.</p>
+        <p>In Brazil, Rocha et al. (2014) examined 13 letters psychographed by Chico Xavier
+          (<em lang="pt-BR">cartas psicografadas</em>), that is, written
+          by the medium and attributed by him to a single deceased person. They identified 99 verifiable items of
+          information and
+          checked them against documents and against the testimony of the deceased person's sister and friends: 98% were
+          classified as a
+          clear and precise fit. The work shows the value of statements that are verifiable item by item. And, precisely
+          because it is
+          a retrospective case study, which examines material produced with no control of leakage whatsoever, it also
+          shows what
+          a prospective and blinded design would add.</p>
+
+        <h3 id="secao-2-4">2.4 Preregistration and analytical flexibility</h3>
+        <p>A study does not go wrong only through leakage. Choices not declared in data collection and analysis —
+          stopping collection
+          when the result looks good, deciding after the data which measure to report, trying several analyses and
+          showing
+          the
+          one that worked — are enough to make a non-existent effect look statistically significant, that is,
+          unlikely to have arisen by chance (Simmons, Nelson and Simonsohn, 2011). Preregistration answers that:
+          publishing, before data collection, the hypotheses, the sample size and the analysis that will be run. It is
+          the scientific
+          equivalent of announcing the bet before the roulette wheel spins, and it makes verifiable the distinction
+          between confirmatory
+          research, which tests what was declared, and exploratory research, which looks for patterns in data already
+          seen (Nosek
+          et
+          al., 2018).</p>
+
+        <h3 id="secao-2-5">2.5 The gap</h3>
+        <p>To delimit the gap, we carried out an exploratory survey of the software used in studies of mediumship and
+          of
+          psi, the generic term in parapsychology for extrasensory perception and related phenomena. The search was made
+          in
+          November 2026, on the open web and in code repositories, with terms in English and in Portuguese that
+          combined
+          the domain (mediumship, AIR, parapsychology, psi, ganzfeld, extrasensory perception) with the function sought
+          (software, platform, open source, blinding, randomization, preregistration, audit trail, automatic
+          scoring). What turned up falls into five families (Table 1).</p>
+        <figure class="tabela">
+          <figcaption>Table 1. Families of software found in the exploratory survey.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Family</th>
+                  <th>Examples</th>
+                  <th>What it covers</th>
+                  <th>What it does not cover</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mediumship protocols</td>
+                  <td>Beischel et al., 2015; Tressoldi et al., 2022, 2025</td>
+                  <td>Multiple blinding, decoy and blind rating, described as a procedure</td>
+                  <td>We did not find public software that runs or demonstrates the blinding; the scoring is done by
+                    people</td>
+                </tr>
+                <tr>
+                  <td>Verifiable credibility in psi</td>
+                  <td>Transparent Psi Project (Kekecs et al., 2023)</td>
+                  <td>Direct deposit of the data in a third-party repository, open data from the outset, real-time
+                    reporting, tamper-evident software, external auditors</td>
+                  <td>The domain is a different one, a precognition experiment in the laboratory: there are no roles to
+                    blind from one another
+                    nor
+                    information about a deceased person</td>
+                </tr>
+                <tr>
+                  <td>Registries and open data in the field</td>
+                  <td>Study registry of the Koestler Parapsychology Unit (Wiseman and Watt, 2026); Psi Open
+                    Data repository</td>
+                  <td>Preregistration and publication of the data</td>
+                  <td>They do not run the study: the link between what was registered and what was collected depends on
+                    the
+                    researcher</td>
+                </tr>
+                <tr>
+                  <td>Automated psi tests</td>
+                  <td>Autoganzfeld (Bem and Honorton, 1994); GotPsi online tests (Radin, 2019); validation of study
+                    software (Pooley, 2024)</td>
+                  <td>Randomization and recording by computer; large-scale collection over the internet</td>
+                  <td>Nothing about mediumship; unsupervised online tests are subject to optional stopping, as
+                    reviews from the field itself point out</td>
+                </tr>
+                <tr>
+                  <td>Generic platforms</td>
+                  <td>jsPsych (de Leeuw, 2015), psiTurk (Gureckis et al., 2016), REDCap (Harris et
+                    al.,
+                    2009)</td>
+                  <td>Building online experiments; data capture with an audit trail and randomization</td>
+                  <td>They do not provide a per-role visibility matrix, commitment and reveal, or automatic unblinding;
+                    they
+                    would have to be built on top</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+        <p>The closest neighbor is the Transparent Psi Project (Kekecs et al., 2023). It starts from the same thesis as
+          this
+          paper — that the credibility of a result should be verifiable by third parties, and not presupposed — and
+          applies it to a multicenter replication of a precognition experiment. Crivo should be read as an extension
+          of that line to a domain in which there are several human roles to keep blind from one another, and not as an
+          idea without
+          precedent.</p>
+        <p>There is also a precedent for the idea of proving the date of a protocol by recording its cryptographic
+          fingerprint, or hash, with the date attested by third parties — the timestamp, explained in <a
+            href="#secao-5">section 5</a>. In clinical research, Irving and Holden (2016) proposed anchoring that
+          record
+          in a
+          blockchain, a public and distributed record like that of Bitcoin; the paper was retracted by the
+          authors themselves in 2017, after open peer review pointed out methodological problems. That recommends
+          caution in citing it and reinforces the choice, here, of an established standard, RFC 3161, which is the
+          internet
+          standard
+          for timestamps (Adams et al., 2001). Finally, there is an open-source project on SourceForge
+          for online psi experiments, not updated since 2013; we found in it no preregistration, no blinding by
+          role and no audit trail.
+        </p>
+        <p><strong>The gap, in the form in which the paper can state it:</strong> in the sources consulted, we did not
+          find
+          an
+          open platform that runs a mediumship protocol end to end and that treats the blinding between
+          roles,
+          the randomization, the preregistration and the scoring as properties verifiable by third parties from
+          published artifacts. The pieces exist, but separately: in other domains or as a manual procedure.</p>
+
+        <h2 id="secao-3">3. Requirements: a threat model</h2>
+        <p>In security engineering, a threat model lists everything that can go wrong in a system and associates with
+          each
+          risk the corresponding defense. Here, each conventional explanation for a hit is treated as a threat: if
+          it is capable of producing the result, the result proves nothing. Table 2 relates each threat to the source
+          that
+          describes it and to the control that Crivo sets against it; where the control is only partial, the table says
+          so. Several controls use
+          cryptographic devices, such as hashes, commitments and timestamps, explained in simple terms at the beginning
+          of <a href="#secao-5">section 5</a>.</p>
+        <figure class="tabela">
+          <figcaption>Table 2. Threats to the validity of a study and the corresponding controls in Crivo.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Threat</th>
+                  <th>Source</th>
+                  <th>Control in Crivo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sensory or verbal cue to the medium</td>
+                  <td>Wiseman and O'Keeffe, 2001</td>
+                  <td>There is no session: the medium interacts with nobody and receives the request through the system
+                  </td>
+                </tr>
+                <tr>
+                  <td>Information beyond the minimum</td>
+                  <td>Kelly and Arcangel, 2011</td>
+                  <td>Only the first name, with no surname and no place, by a single, recorded release; not knowing who
+                    is requesting, the
+                    medium has no way to do research beforehand</td>
+                </tr>
+                <tr>
+                  <td>Cold reading and generic statements</td>
+                  <td>Hyman, 1977</td>
+                  <td>Decoy with a similar profile; only the difference between target and decoy counts</td>
+                </tr>
+                <tr>
+                  <td>Subjective validation and rater bias</td>
+                  <td>Hyman, 2003</td>
+                  <td>Closed questionnaire and checking by equality of options; nobody judges the fit</td>
+                </tr>
+                <tr>
+                  <td>Ambiguous or compound items</td>
+                  <td>Criticism of O'Keeffe and Wiseman, 2005</td>
+                  <td>Fields with fixed options, versioned and frozen in the preregistration</td>
+                </tr>
+                <tr>
+                  <td>Response bias of the medium</td>
+                  <td>Design decision</td>
+                  <td>The same medium does both readings of the pair, and the bias cancels out in the difference</td>
+                </tr>
+                <tr>
+                  <td>Answers altered after the reading is known</td>
+                  <td>Design decision</td>
+                  <td>Answers locked, with a cryptographic commitment in the trail, before the release of the name
+                    (section
+                    5.3)</td>
+                </tr>
+                <tr>
+                  <td>Manipulable randomization</td>
+                  <td>Design decision</td>
+                  <td>Commitment to the seed before data collection; reveal at the end (section 5.4)</td>
+                </tr>
+                <tr>
+                  <td>Opportunistic stopping of data collection</td>
+                  <td>Hyman, 2003; Simmons et al., 2011</td>
+                  <td>Preregistered sample size (N), automatic unblinding (section 4.2) and no score before
+                    it</td>
+                </tr>
+                <tr>
+                  <td>Analysis chosen after the data</td>
+                  <td>Nosek et al., 2018</td>
+                  <td>A single primary analysis in the document frozen by hash</td>
+                </tr>
+                <tr>
+                  <td>Hits treated as independent</td>
+                  <td>O'Keeffe and Wiseman, 2005</td>
+                  <td>The analysis is forbidden; the permutation test does not assume independence (section 4.5)</td>
+                </tr>
+                <tr>
+                  <td>Rewriting of history</td>
+                  <td>Design decision</td>
+                  <td>Append-only trail, hash-chained and timestamped by an external authority (section 5.6)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Publication bias</td>
+                  <td>Sarraf et al., 2021</td>
+                  <td>The same report for any result, on a public page</td>
+                </tr>
+                <tr>
+                  <td>Collusion between medium and sitter</td>
+                  <td>Design decision</td>
+                  <td>Partial: fixed role, medium drawn at random and flagging of linked accounts</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+        <p>Most of these controls do not depend on anyone remembering to apply them: they are in the design of the
+          database
+          and in the tests, as <a href="#secao-5">section 5</a> shows. The last row, however, has no complete
+          solution. With sign-up open, a medium and a sitter who know each other can arrange their answers using
+          accounts
+          that nothing links together; the system reduces that risk, but does not eliminate it, and <a
+            href="#secao-6">section 6</a>
+          records it among the limits.</p>
+
+        <h2 id="secao-4">4. The protocol: automated structured reading</h2>
+        <h3 id="secao-4-1">4.1 Core idea</h3>
+        <p>The protocol starts from a simple idea: the sitter and the medium answer the same closed questionnaire about
+          the
+          deceased person. The sitter answers because they knew the person; the medium, knowing only the first name.
+          Since there
+          is
+          no free text, there is nothing to interpret. The checking is a comparison of equality between options, done by
+          the
+          system, and nobody — not even the sitter — decides whether a statement “fits”. The idea of asking the medium
+          about
+          specific aspects of the deceased person's life was already in Beischel and Schwartz (2007); what changes is
+          that the
+          answers
+          are closed into options.</p>
+        <p>The trade-off has a cost, and the protocol declares it. Objective scoring and full automation are gained;
+          the
+          proxy sitter and free response are lost, precisely two of the conditions that Silva and Moreira-Almeida (2022)
+          associated with a positive result. For that reason, a result from this protocol, positive or null, does not
+          count as a
+          replication of the studies with a proxy sitter in the literature.</p>
+        <p>The questionnaire in force, version <code>v2-rascunho</code>, has 23 fields. Three of them — gender, age
+          range at death and period of death — serve to form the pairs and stay out of the score: they are equal
+          within each pair, by construction, and gender is usually given away by the name itself. The other 20 enter the
+          score
+          and fall into six themes: the circumstances of the death (how it happened, the cause and the place); the
+          family (marital status,
+          number of children, position among siblings and the kinship of the person who made the request); the life
+          course (education,
+          occupation and the kind of place where the person lived); personality (temperament and most striking trait);
+          appearance (height, build, hair and glasses); and beliefs and habits (religion, pastime, smoking and
+          pet). Each field has from two to ten options, plus “I don't know”, for the sitter, and “Nothing came”, for
+          the medium, who answers only the scored fields. The complete questionnaire, with all the options, is published
+          on the
+          <a th:href="${aplicacao} + '/protocolo/P1'">protocol page</a>.
+        </p>
+        <p>The fields were not chosen only for what seems relevant. In a closed questionnaire, the signal a field
+          can yield depends on how far it distinguishes one deceased person from another in the same stratum: in a field
+          in which almost
+          everybody gives the same answer, target and decoy coincide almost always, and not even a perfect reading
+          stands out (<a href="#secao-4-6">section 4.6</a> gives the formula). Hence the criteria. Each field asks for a
+          single fact that the
+          sitter can answer; the options are mutually exclusive and cover all cases; none of them dominates; nothing in
+          the score
+          can be deduced from the first name or from the stratum, such as the region or the generation; no field
+          identifies the
+          person on its own, because the answers go into the public verification package; the themes are the ones the
+          literature
+          asks the medium about, such as appearance, personality, hobbies and cause of death (Beischel et al.,
+          2015); and no option forces anyone to name a violent death, which fits under “another external cause”. The
+          previous
+          version, <code>v1-rascunho</code>, had 13 scored fields, some with an almost universal option, such as
+          “had children”. The revision halves the number of pairs needed for the same effect (<a
+            href="#secao-4-6">section 4.6</a>). It is still a draft: it lacks review by researchers in the field and
+          cognitive interviewing with sitters, which checks whether each question is understood as intended and how much
+          time filling it in takes.
+        </p>
+
+        <h3 id="secao-4-2">4.2 Flow</h3>
+        <p>From preregistration to feedback, a study goes through eight stages. Apart from the preregistration, done by
+          the researcher, and
+          the participants' answers, everything is done by the system.</p>
+        <ol>
+          <li><strong>Preregistration.</strong> The researcher declares and freezes the hypotheses, the number of pairs
+            (N), the
+            questionnaire, the pairing criterion, the medium's deadline, the inclusion criteria, the analysis and the
+            exclusion
+            rules. The commitment to the randomization seed goes in the same document (<a href="#secao-5-4">section
+              5.4</a>).</li>
+          <li><strong>Request.</strong> The sitter creates the account, confirms the e-mail address and makes the
+            request: the first name of the
+            deceased person and the answers to the questionnaire. The answers are locked, and the audit trail receives
+            the
+            corresponding commitment (<a href="#secao-5-3">section 5.3</a>). The request may precede the freeze, since
+            nobody sees the answers before the end; only a request made in the questionnaire version that the
+            preregistration declares, however, enters the study.</li>
+          <li><strong>Pairing and randomization.</strong> The system forms pairs of locked requests from the same
+            stratum, that is,
+            with the same gender, the same age range at death and the same period of death, and draws a medium for
+            each pair.</li>
+          <li><strong>Dispatch.</strong> The medium receives the two first names of the pair, in a randomized order, and
+            the blank
+            questionnaire. The medium does not know who the sitters are and has no contact with them.</li>
+          <li><strong>Reading.</strong> For each name, the medium answers every field or marks “Nothing came”. On
+            submission,
+            the
+            reading is locked, also with a commitment in the trail. If the declared deadline expires, the pair goes to
+            another medium,
+            drawn from the same seed.</li>
+          <li><strong>Unblinding.</strong> When the N pairs have both readings, the system itself closes data
+            collection
+            and undoes the blinding: it shows which medium read each pair and opens the commitments, disclosing the
+            secrets that
+            kept them sealed — the salts and the seed (sections <a href="#secao-5-3">5.3</a> and <a
+              href="#secao-5-4">5.4</a>).</li>
+          <li><strong>Scoring and analysis.</strong> The system checks the commitments, scores the readings, runs the
+            preregistered analysis
+            and publishes the report and the verification package.</li>
+          <li><strong>Feedback.</strong> The sitter sees the reading made for their own deceased person next to their
+            own
+            answers; the medium sees the scores of their own readings.</li>
+        </ol>
+
+        <h3 id="secao-4-3">4.3 Visibility matrix</h3>
+        <p>The blinding is specified as a matrix: in the rows, the study's information; in the columns, the roles; in
+          each cell, what that role may see and from when on (Table 3). Each forbidden cell corresponds to an
+          automated test that tries to violate it against a real database. Note that the administrator — the
+          researcher
+          who runs the study — knows who takes part, but is blind to the answers, the readings and the link between
+          requests and mediums until the unblinding.</p>
+        <figure class="tabela">
+          <figcaption>Table 3. Visibility matrix: what each role may see, and from when on.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Information</th>
+                  <th>Administrator</th>
+                  <th>Medium</th>
+                  <th>Sitter</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Identity of the accounts</td>
+                  <td>Yes</td>
+                  <td>Only their own</td>
+                  <td>Only their own</td>
+                </tr>
+                <tr>
+                  <td>Sitter's answers</td>
+                  <td>Only after unblinding</td>
+                  <td>No</td>
+                  <td>Only their own</td>
+                </tr>
+                <tr>
+                  <td>First name of the deceased person</td>
+                  <td>No</td>
+                  <td>Only of the requests received</td>
+                  <td>Only their own</td>
+                </tr>
+                <tr>
+                  <td>Link between request and medium</td>
+                  <td>Only after unblinding</td>
+                  <td>Only their own requests</td>
+                  <td>Only after unblinding</td>
+                </tr>
+                <tr>
+                  <td>Medium's reading</td>
+                  <td>Only after unblinding</td>
+                  <td>Only their own</td>
+                  <td>Only after unblinding</td>
+                </tr>
+                <tr>
+                  <td>Scores and differences</td>
+                  <td colspan="3">They do not exist before the unblinding</td>
+                </tr>
+                <tr>
+                  <td>Salts and seed</td>
+                  <td>Only after the reveal</td>
+                  <td>No</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <h3 id="secao-4-4">4.4 Automatic scoring</h3>
+        <p>The scoring rule fits in a few lines. In a pair formed by the deceased persons A and B, we call
+          <var>R</var><sub>A</sub> the reading made with A's name and <var>R</var><sub>B</sub> the one made with B's
+          name;
+          for simplicity, A and B also designate the sitters of each deceased person. Only the comparable fields count:
+          the scored fields that both sitters answered, without “I don't know”. The
+          set is the same for the target and for the decoy, so that neither of the two has a greater chance of a hit.
+          For a
+          reading <var>R</var> and a sitter <var>X</var>, <var>s</var>(<var>R</var>, <var>X</var>) is the number of
+          comparable fields in which the reading's answer coincides with <var>X</var>'s; “Nothing came” never coincides.
+          The
+          pair's difference is
+        </p>
+        <p class="formula"><code>d&nbsp;=&nbsp;[s(R<sub>A</sub>,&nbsp;A)&nbsp;−&nbsp;s(R<sub>A</sub>,&nbsp;B)] +
+          [s(R<sub>B</sub>,&nbsp;B)&nbsp;−&nbsp;s(R<sub>B</sub>,&nbsp;A)]</code></p>
+        <p>Each bracket asks whether a reading looks more like the person for whom it was made than like the other
+          person
+          of the pair. If the readings carry no information about the targets, the two comparisons tend to balance out,
+          and
+          <var>d</var> stays around zero.
+        </p>
+        <div class="definicao">
+          <p class="rotulo">An example, with fictitious names</p>
+          <p>Suppose a pair of men who died between the ages of 60 and 79, between one and five years ago: Antônio,
+            Ana's father, and
+            Carlos, Beatriz's husband. Ana and Beatriz answered the 20 scored fields, with no “I don't know” at all, and
+            all
+            are
+            comparable. The medium drawn receives the two names and fills in the questionnaire twice, once for each
+            name. The
+            reading made for Antônio coincides with Ana's answers in 7 fields and with Beatriz's in 5; the one made
+            for Carlos coincides with Beatriz's in 5 and with Ana's, also in 5. The pair's difference is
+            <var>d</var> = (7 − 5) + (5 − 5) = +2.
+          </p>
+          <p>On its own, that number means nothing: one pair may give +2 by chance, just as another may give −2. The
+            analysis asks
+            whether, summed over all the pairs in the study, the positive values predominate beyond what chance would
+            explain.</p>
+        </div>
+        <p>The decoy is indispensable because the number of hits, on its own, says nothing. Frequent answers — “died of
+          a
+          heart condition”, “was married”, “had children” — coincide with those of a great many people. By comparing the
+          same reading with the
+          target and
+          with a decoy of a similar profile, the frequency of each answer cancels out, and what is left is how far the
+          reading
+          fits the target more than the decoy. That is why cold reading, which lives off frequent statements,
+          earns
+          no points in this protocol. And, since the same medium does both readings of the pair, that medium's tendency
+          to repeat
+          certain answers enters on both sides of the difference and also cancels out.</p>
+        <p>This makes it possible to declare the chance level before data collection, instead of estimating it from the
+          data. The null hypothesis, the one
+          the
+          study puts to the test, is that the reading made with A's name carries no information about A that it does not
+          also carry
+          about B. If it is true, swapping the two sitters' answers with each other merely reverses the sign of
+          <var>d</var>. Hence <var>d</var> is symmetric around zero, and, among the pairs with <var>d</var> different
+          from
+          zero, the chance of <var>d</var> being positive is 50%. Since the first name may carry some information about
+          the
+          person, that hypothesis does not come for free; <a href="#secao-6">section 6</a> discusses the leakage that
+          remains.
+        </p>
+
+        <h3 id="secao-4-5">4.5 Analysis</h3>
+        <p>The unit of analysis is the pair: each pair contributes a single <var>d</var>. The primary analysis is the
+          one-sided
+          Wilcoxon signed-rank test on the <var>d</var> values of all the pairs. In simple terms, the test
+          ranks the
+          differences by size and checks whether the positive ones weigh more than the negative ones beyond what chance
+          would allow;
+          it is one-sided because the hypothesis predicts only positive differences. With up to 20 pairs in which
+          <var>d</var> is different
+          from zero, the test is exact; above that, it uses the normal approximation, a formula that becomes accurate
+          with larger samples, and the report says which of the two was used.</p>
+        <p>Two secondary analyses look at the same data from other angles. The exact binomial sign test ignores the
+          size of <var>d</var> and asks only whether the positive pairs exceed half. The permutation test shuffles
+          the readings among the targets of the study, within each stratum, and checks how often an assignment made
+          at random produces as many coincidences as the true one. It follows the logic of the Pratt and Birge
+          procedure,
+          probably the most widely adopted in the field, and does not assume that the answers of one and the same
+          reading are independent of
+          one another (O'Keeffe and Wiseman, 2005). The permutation is exact as long as the possible arrangements fit in
+          an enumeration; above
+          that, it uses 100,000 arrangements drawn from the revealed seed, which anyone can redo.</p>
+        <p>What the analysis does not do is also declared: multiplying the probability of a hit in each field as if they
+          were
+          independent, as Hyslop did in 1919. That procedure inflates the evidence, because answers about one and the
+          same
+          person are correlated (O'Keeffe and Wiseman, 2005).</p>
+        <p>The stopping rule is binding: data collection ends at the declared N, with no interim analysis. And there is
+          no way to peek,
+          because the scores do not exist before the unblinding — there is no partial result to consult, not even for
+          the
+          researcher. Any analysis that is not in the preregistration appears in the report labeled as
+          exploratory.</p>
+        <h3 id="secao-4-6">4.6 Expected effect and sample size</h3>
+        <p>Statistical power is the chance that a study will detect an effect that does in fact exist. A study with low
+          power tends to come out null even when there is an effect, and a null result of that kind does not distinguish
+          the absence of an effect from the lack of
+          sample. That is why the preregistration declares the expected effect; the platform computes how many pairs
+          that effect
+          requires and writes in the frozen document whether the declared N is enough. It does not refuse a study that
+          is too small, because
+          a pilot is legitimate, but the report repeats what the preregistration said.</p>
+        <p>The difficulty is that there is no prior estimate for this protocol. The published effects come from free
+          readings scored by sitters. In Beischel et al. (2015), the items of the target readings were
+          judged
+          correct more often than those of the decoys: 52.8% versus 36.6% in the question section, with
+          <var>d</var> = 0.75, and 37.0% versus 24.5% in the free speech, with <var>d</var> = 0.49. In the meta-analysis
+          of Sarraf et
+          al. (2021), the combined effect is 0.18 above chance on the proportion index, which is equivalent to
+          being correct on 68% of choices between two options, where chance gives 50%. Those values of <var>d</var> do
+          not
+          transfer to this protocol: they measure something else, with a different variability. What does transfer is
+          the shape of the effect, by
+          means of a model of the protocol itself.
+        </p>
+        <p>The model is this. In each field, the medium marks “Nothing came” with probability 10%; in the remaining
+          cases, with
+          probability θ, it gives the true answer of the person whose name it received and, failing that, guesses
+          according to the frequency of the
+          options. θ is the information rate of the reading: θ = 0 is the null hypothesis, and θ = 0.05 means that the
+          reading
+          brings the true answer, beyond what guessing would bring, in one field out of twenty. Each sitter marks “I
+          don't
+          know” with probability 8%. In this model, in a comparable field, the chance that the reading coincides with
+          the target
+          exceeds the chance that it coincides with the decoy by</p>
+        <p class="formula">
+          <code>Δ&nbsp;=&nbsp;0.9&nbsp;·&nbsp;θ&nbsp;·&nbsp;(1&nbsp;−&nbsp;Σ&nbsp;p<sub>k</sub><sup>2</sup>)</code></p>
+        <p>in which <var>p</var><sub>k</sub> is the frequency of option <var>k</var> and Σ
+          <var>p</var><sub>k</sub><sup>2</sup>
+          is the chance that two deceased persons from the same stratum coincide in that field by chance. It is the
+          formula that guides the
+          choice of the fields (<a href="#secao-4-1">section 4.1</a>): with an almost universal option, the parenthesis
+          approaches zero, and the field yields no signal, whatever the reading. The frequencies used are assumptions
+          for a typical stratum, that of people who died between the ages of 60 and 79, and will be replaced by the
+          observed frequencies before the freeze of a real study.</p>
+        <p>A simulation redoes, over thousands of fictitious studies, the platform's scoring and Wilcoxon test,
+          with the ties and the zeros that an integer <var>d</var> produces. Under the null hypothesis, it rejects 5.0%
+          of the
+          time, as it should. The code is in the repository (<code>paper/poder/SimulacaoPoder.java</code>), runs with
+          the
+          JDK alone and uses a fixed seed, so that anyone obtains the same numbers. The results for version
+          <code>v2-rascunho</code> are in Table 4. The <var>d</var><sub>z</sub> column is the standardized effect of the
+          pair,
+          the mean of <var>d</var> divided by its standard deviation.
+        </p>
+        <figure class="tabela">
+          <figcaption>Table 4. Power of the protocol with the <code>v2-rascunho</code> questionnaire, by information
+            rate
+            (one-sided Wilcoxon, α = 0,05; 4 thousand simulated studies per cell). The pairs for 80% power are the
+            smallest value in the grid 20, 30, 40, 50, 60, 80, 100, 120, 150, 200, 250, 300 and 400 that reaches that
+            power.</figcaption>
+          <div class="tabela-rolavel">
+            <table>
+              <thead>
+                <tr>
+                  <th>θ</th>
+                  <th>Δ per field, in percentage points</th>
+                  <th>Pairs with <var>d</var> &gt; 0, among the non-zero ones</th>
+                  <th><var>d</var><sub>z</sub></th>
+                  <th>Pairs for 80% power</th>
+                  <th>Power with 30 pairs</th>
+                  <th>Power with 120 pairs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>0,02</td>
+                  <td>1,2</td>
+                  <td>56%</td>
+                  <td>0,13</td>
+                  <td>more than 400</td>
+                  <td>0,16</td>
+                  <td>0,36</td>
+                </tr>
+                <tr>
+                  <td>0,04</td>
+                  <td>2,4</td>
+                  <td>61%</td>
+                  <td>0,24</td>
+                  <td>120</td>
+                  <td>0,38</td>
+                  <td>0,84</td>
+                </tr>
+                <tr>
+                  <td>0,06</td>
+                  <td>3,6</td>
+                  <td>66%</td>
+                  <td>0,37</td>
+                  <td>50</td>
+                  <td>0,60</td>
+                  <td>0,99</td>
+                </tr>
+                <tr>
+                  <td>0,08</td>
+                  <td>4,9</td>
+                  <td>70%</td>
+                  <td>0,48</td>
+                  <td>30</td>
+                  <td>0,83</td>
+                  <td>&gt; 0,99</td>
+                </tr>
+                <tr>
+                  <td>0,10</td>
+                  <td>6,1</td>
+                  <td>75%</td>
+                  <td>0,60</td>
+                  <td>20 or fewer</td>
+                  <td>0,94</td>
+                  <td>&gt; 0,99</td>
+                </tr>
+                <tr>
+                  <td>0,20</td>
+                  <td>12,1</td>
+                  <td>90%</td>
+                  <td>1,16</td>
+                  <td>20 or fewer</td>
+                  <td>&gt; 0,99</td>
+                  <td>&gt; 0,99</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+        <p>The table makes it possible to put the two numbers from the literature on the same scale. The meta-analysis's
+          proportion of 68% correct corresponds, here, to the proportion of positive pairs, and falls between θ = 0.06
+          and θ = 0.08: a
+          <var>d</var><sub>z</sub> close to 0.42, which calls for some 40 pairs. The difference of 12 to 16 percentage
+          points per
+          item in Beischel et al. (2015) corresponds to θ between 0.20 and 0.25, an effect that 20 pairs would be enough
+          to detect. There are three reasons to expect less than that in this protocol. Published effects tend to
+          overestimate the true ones, even when they pass the tests for publication bias. The two studies without
+          interaction analyzed by Silva and Moreira-Almeida (2022) came out null, and here there is no interaction at
+          all. And the
+          closed format discards the free and specific statements, which tend to be the most informative. The
+          simulation itself is optimistic on one point: it draws the fields independently, when, in real life, cause of
+          death
+          and mode of death, for example, go together, and each correlated field adds less information.
+        </p>
+        <p>The proposal, then, is to plan for half the effect of the meta-analysis: θ = 0.04, with 61% positive pairs
+          and
+          <var>d</var><sub>z</sub> = 0.25. The platform's formula, which corrects for the efficiency of the Wilcoxon
+          test relative to the
+          <var>t</var> test, calls for 114 pairs for that <var>d</var><sub>z</sub>; the simulation, with ties and zeros,
+          arrives at 120. <strong>The confirmatory study therefore declares N = 120 pairs</strong>, which means 240
+          sitters and, with the ceiling of 10 pairs per medium, at least 12 mediums. With that N, power is 84% for the
+          planned effect and 99% for the effect equivalent to that of the meta-analysis. For smaller effects, such as θ
+          = 0.02,
+          it falls to 36%: a null result with 120 pairs would make an effect of the planned size or larger unlikely, but
+          would not
+          say anything about smaller effects, and the report has to say so. The revision of the questionnaire weighs in
+          that
+          calculation: with version <code>v1-rascunho</code>, the same θ = 0.04 would require about 250 pairs.
+        </p>
+        <p>A pilot study of 30 pairs, planned before the confirmatory one (<a href="#secao-8">section 8</a>), has power
+          of
+          38% for the planned effect and serves another purpose: testing the flow, measuring the frequency of “I don't
+          know” and of “Nothing
+          came” and observing the real frequencies of the options, which enter the simulation in place of the assumed
+          ones. The p-value
+          of the pilot decides nothing, and the estimate of θ it produces is too imprecise, on its own, to reduce the
+          size of the confirmatory study. The final choice of the effect and of N is up to whoever runs the study and is
+          made
+          before the data, in the preregistration; what this paper does is declare the proposal and the way to redo
+          it.</p>
+
+        <h2 id="secao-5">5. Architecture</h2>
+        <p>This section describes how the software enforces the protocol. Three cryptographic ideas support almost all
+          the
+          guarantees, and it is worth presenting them first.</p>
+        <div class="definicao">
+          <p class="rotulo">In simple terms</p>
+          <p>A <strong>hash</strong> is a fingerprint of a piece of content: a short sequence, computed from it,
+            which changes completely if a single comma changes. From the hash there is no way back to the content,
+            except by trying all
+            the
+            possibilities, which is feasible only when they are few (section 5.3). Crivo uses SHA-256, a standard.</p>
+          <p>A <strong>commitment</strong> works like a sealed envelope: the hash of a piece of information kept
+            secret is published and, when the secret is revealed, anyone can check that it is the same as before.</p>
+          <p>A <strong>timestamp</strong> is the digital equivalent of a notary: an independent authority
+            signs that a certain hash already existed at a given instant.</p>
+        </div>
+
+        <h3 id="secao-5-1">5.1 Overview</h3>
+        <p>Crivo is a modular monolith, that is, a single program divided into modules whose boundaries are verified
+          by tests. It is written in Java 21, with Spring Boot and Spring Modulith, keeps the data in PostgreSQL, with
+          the
+          schema migrations done by Flyway, and renders the interface on the server with Thymeleaf. The choice meets a
+          project constraint: the system
+          has to be operable by a single maintainer, and operational complexity is itself a source of error. For the
+          same reason, an auditor runs everything on their own machine with the Java development kit (JDK) alone,
+          without a container:
+          in development, the application starts an embedded instance of PostgreSQL by itself.</p>
+
+        <h3 id="secao-5-2">5.2 Blinding as a data invariant</h3>
+        <p>In computing, an invariant is a condition that has to hold in any state of the system. In Crivo, the
+          blinding is one of them: it is not applied on the screen, but in the data layer. Each role has its own queries
+          and
+          objects which, by construction, do not contain the fields forbidden to it: the field is not hidden in the
+          interface, it simply does not reach the server's response. The data that identify people are kept encrypted,
+          that is, enciphered, in a separate schema of the database, which a single module may read; the rest of the
+          system
+          works with pseudonymous
+          codes, which do not reveal who the person is. And the rules that cannot fail are enforced by the database
+          itself, not only by the application code: the role of an account, sitter or medium, does not change; no name
+          is
+          released to the medium without a locked request; and no score may exist before the unblinding.</p>
+
+        <h3 id="secao-5-3">5.3 Salted commitments</h3>
+        <p>A commitment made with the plain hash of the answers would be fragile. Since each field has few options, the
+          number
+          of possible combinations is small enough for a computer to test them one by one until it finds the one that
+          reproduces the published hash — and the audit trail is public. That is why the commitment mixes into the
+          answers a
+          salt, a random 32-byte number, kept encrypted and revealed only at the unblinding. Without the salt, testing
+          the
+          combinations leads nowhere. The rule holds both for the sitter's request and for the medium's reading, and
+          the
+          way it is computed is public, so that a third party can reimplement it.</p>
+
+        <h3 id="secao-5-4">5.4 Randomization with commitment and reveal</h3>
+        <p>All the draws in the study — the medium of each pair and the order in which the two names are presented to
+          them —
+          derive from a seed, a secret 32-byte number produced by a cryptographic generator and kept encrypted.
+          Each draw is a public function of the seed and of recorded inputs; the list of eligible mediums, for
+          example, changes over the course of the study, and for that reason it is recorded at each draw, with the hash
+          in the trail. Since the pairs
+          are
+          formed little by little, there is no list of draws to commit to in advance: the commitment published in the
+          preregistration is to the seed itself. Once the seed is revealed at the end, anyone can redo all the draws and
+          check that none was hand-picked.</p>
+
+        <h3 id="secao-5-5">5.5 Frozen preregistration</h3>
+        <p>The preregistration is a canonical document, written in a single form so that the same content always
+          produces the
+          same hash. It is digested by SHA-256 and carries the whole questionnaire as an annex. Once frozen, the
+          database
+          refuses to alter it: amendments create a new version, dated and justified, and the original remains
+          visible.</p>
+
+        <h3 id="secao-5-6">5.6 Audit trail and external anchoring</h3>
+        <p>Every event of the study enters an append-only table: records are added to it, but none can
+          be altered, and each one carries the hash of the previous one. It works like a minute book in which each page
+          carries the fingerprint of the previous page: altering an old record forces all the ones that came
+          afterwards to be redone. And this is not a matter of convention: the database itself refuses to alter or
+          delete records of that table.</p>
+        <p>The chain alone does not prevent whoever operates the installation from rewriting it entirely, recomputing
+          all the hashes.
+          That
+          is why the head of the trail — the hash of the last event, which summarizes all the previous ones — is
+          timestamped by an
+          independent time-stamping authority, under RFC 3161. The timestamp comes right after each milestone of the
+          study, such as the freeze of the preregistration, the reveal of the seed and the publication of the report,
+          and once a
+          day, if the trail has changed. Today the authority is FreeTSA, a free service. Only the hash leaves the
+          server,
+          and the tokens
+          are public, so that anyone can check them with common tools, such as OpenSSL, without depending on
+          Crivo.</p>
+
+        <h3 id="secao-5-7">5.7 Automatic cycle and unblinding</h3>
+        <p>A periodic cycle on the server, run every minute, forms the pairs, draws the mediums, controls the
+          deadlines,
+          resends expired requests and, when N is reached, unblinds the study. The cycle is idempotent, that is, running
+          it
+          twice in a row changes nothing. Nobody chooses the moment of the unblinding, not even the researcher. Until
+          then, the
+          trail links no medium to any pair: the link is kept in the database and only becomes public afterwards.</p>
+
+        <h3 id="secao-5-8">5.8 Third-party verification</h3>
+        <p>Verification happens at two levels. Whoever operates the installation, or an auditor with access to it, uses
+          a
+          command-line tool, <code>airlab verify</code>, which redoes the hash chain, checks the hash of
+          each
+          preregistration, re-checks the timestamps and, once the seed has been revealed, reproduces the committed
+          draw. Whoever has access only to what is public has the <a th:href="${aplicacao} + '/estudos'">studies
+            page</a>, which shows the preregistration and counts during data collection and the whole report after the
+          unblinding, and the verification package.</p>
+        <p>The package is written once only, at the unblinding, and its hash enters the trail, which is then
+          timestamped. It
+          brings
+          the frozen preregistration, the revealed seed, the answers of each request and of each reading used in the
+          scoring,
+          the salt of each reading, the dispatches to the mediums with the list of eligible mediums for each draw, the
+          scores per pair, the
+          three
+          analyses, the report and the study's trail. A second tool, <code>airlab verificar-pacote</code>,
+          checks all of that from the file, with no database and no server: it redoes the chain, checks the
+          preregistration
+          and the seed, redoes each draw and each reading commitment, recomputes the score of each pair and the three
+          analyses
+          and
+          checks the hash of the report.</p>
+        <p>For data protection reasons, the package does not bring the first name of the deceased persons or the salt of
+          the requests (<a
+            href="#secao-7">section 7</a>). The cost is declared. The commitments of the requests cannot be redone from
+          outside and
+          are
+          attested by the platform, which checks them at the unblinding — and the tool says so, instead of staying
+          silent.
+          The pairing cannot be redone from outside either, because it depends on the flags for linked accounts, which
+          are not
+          public.</p>
+
+        <h2 id="secao-6">6. Guarantees and limits</h2>
+        <p>Software does not make a study valid by itself. This section says, as precisely as possible, what Crivo
+          guarantees
+          and what it does not guarantee. It is worth distinguishing two kinds of guarantee. The guarantees about the
+          software, such as that
+          no role receives forbidden information, come from the open source code and from the tests, which anyone can
+          read and run.
+          The guarantees about one particular study come from the artifacts it leaves behind: the preregistration, the
+          timestamps, the trail
+          and the verification package.</p>
+        <h3>What the system guarantees, verifiably</h3>
+        <ul>
+          <li>The preregistration and the commitment to the randomization already existed at the instant attested by the
+            timestamp of the
+            freeze.</li>
+          <li>The sitter's answers were locked before the name reached the medium, and the reading was locked
+            before
+            the unblinding. In the case of the reading, anyone can check this with the package. In the case of the
+            request, the order of the
+            events is public and timestamped, but the correspondence between the published answers and the commitment is
+            attested
+            by the platform (<a href="#secao-5-8">section 5.8</a>).</li>
+          <li>No role received, through the system, information forbidden by the visibility matrix; this is what the
+            tests that try to violate each cell support.</li>
+          <li>The recorded sequence of events was not altered after being timestamped.</li>
+          <li>The draws were the ones that the committed seed determines, and the scoring and the analyses are
+            deterministic:
+            anyone can redo them from the package.</li>
+        </ul>
+        <h3>What the system does not guarantee</h3>
+        <ul>
+          <li>It does not distinguish survival from telepathy with the living: the answers exist in the sitter's memory
+            and in the
+            database.</li>
+          <li>It has no proxy sitter. Since the two studies without interaction analyzed by Silva and Moreira-Almeida
+            (2022) came out null, a null result here does not refute the protocols with a proxy.</li>
+          <li>The closed questionnaire captures only what fits in the fields. The free and specific statements, which
+            tend to
+            be the most striking in a reading, stay out of the score.</li>
+          <li>The first name carries information: the gender and, sometimes, the generation and the region. The pairing
+            and the fields
+            outside
+            the score reduce that leakage, without eliminating it, and a positive result has to be read in the light of
+            it.</li>
+          <li>Leakage outside the system, such as a conversation between participants, and collusion between a medium
+            and a
+            sitter
+            who know each other and use accounts with no apparent link are not detectable with certainty. The draw of
+            the medium and the
+            flagging of linked accounts reduce the risk.</li>
+          <li>A rewriting of the trail between a milestone and the next timestamp, in a window of about one minute in
+            normal operation, is not detected, and a single timestamping authority is a single point of trust. The next
+            phase
+            plans to add an anchor that depends on no operator, OpenTimestamps, anchored in Bitcoin.</li>
+          <li>The commitments of the requests and the pairing cannot be redone from outside (<a href="#secao-5-8">section
+              5.8</a>).</li>
+          <li>Construct validity — whether the questionnaire measures what it is intended to measure — and
+            generalization to other mediums
+            and other conditions are questions of method, not of software.</li>
+        </ul>
+        <p>The delimitation is deliberate: a system that claims more than it can guarantee undermines the credibility it
+          sets out to produce.</p>
+
+        <h2 id="secao-7">7. Ethical considerations and data protection</h2>
+        <p>The studies involve bereaved people and sensitive information: the life and death of someone close and, by
+          extension,
+          the beliefs of those who take part. Merely signing up as a medium may reveal religious conviction, which the
+          Brazilian data protection law (LGPD)
+          classifies as sensitive personal data, alongside health data (Brasil, 2018,
+          art.
+          5º, II). The answers about the deceased person, which include the cause of death and religion, receive the
+          same
+          care.</p>
+        <p>The measures are the usual ones in research with sensitive data, with the difference that the system enforces
+          them:
+          minimization, that is, collecting only what is necessary; pseudonymization; encryption at rest; versioned
+          consent;
+          withdrawal at any moment, with deletion of the identifiable data; and data kept in Brazil. The verification
+          package is public, but it brings no first name and no account data, and participants are informed, before
+          accepting the agreement, that a withdrawal after the unblinding does not alter the package already
+          published.</p>
+        <p>Sign-up opens only with the approval of a Brazilian research ethics committee (CEP), in the CEP/Conep system,
+          and with a reachable
+          human contact, because someone may sign up in acute grief; the system enforces both conditions. The
+          protocol
+          page says what the protocol is not: it is not a letter or a message from the deceased person, nor an answer to
+          questions from the
+          sitter. The feedback uses careful language and recalls that an individual result says nothing about the
+          deceased person
+          or about the medium, because what the study assesses is the set as a whole. And no artificial intelligence
+          model takes part
+          in the
+          rating or in the scoring.</p>
+        <h3 id="secao-7-1">7.1 Applicable regulations</h3>
+        <p>In Brazil, research with human beings is governed by Lei nº 14.874/2024, which established the National
+          System of Ethics in Research with Human Beings (<em lang="pt-BR">Sistema Nacional de Ética em Pesquisa com
+            Seres Humanos</em>), and by Decreto nº 12.651/2025, which regulates it (Brasil, 2024;
+          Brasil,
+          2025). Under the decree's transitional rules, the resolutions of the National Health Council remain in force
+          in whatever does not conflict with the law, until the new national body publishes rules of its own, and
+          protocols
+          continue to be analyzed by the CEP/Conep system. The texts were checked in November 2026, and a real
+          study has to check them again on the date of submission. The following apply to Crivo:</p>
+        <ul>
+          <li><strong>Resolução CNS nº 466/2012</strong>, with the general guidelines: free and informed consent,
+            assessment of risks and benefits and protection of participants in situations of vulnerability (Conselho
+            Nacional de Saúde, 2012);</li>
+          <li><strong>Resolução CNS nº 510/2016</strong>, specific to research in the human and social sciences that
+            uses
+            data obtained directly from participants, which admits forms of recording consent suited to the
+            medium, including the electronic one, and grades the requirements by risk (Conselho Nacional de Saúde,
+            2016). An
+            online questionnaire, with no intervention, comes close to what that resolution describes; it is up to the
+            committee, and to the field of the
+            proposing institution, to say whether the study follows this resolution or 466;</li>
+          <li><strong>Resolução CNS nº 674/2022</strong>, which classifies research and defines the processing of
+            protocols
+            according to risk (Conselho Nacional de Saúde, 2022);</li>
+          <li><strong>Ofício Circular nº 2/2021</strong> of Conep, the circular letter with the guidance for research
+            with any stage
+            in a virtual environment: describing each online stage, with the screens; presenting the consent form before
+            any question and allowing the participant to keep a copy; guaranteeing the right not to answer and to
+            withdraw consent; and declaring the risks specific to the virtual environment and the limits of
+            confidentiality
+            (Comissão Nacional de Ética em Pesquisa, 2021);</li>
+          <li>the <strong>LGPD</strong>, under which the study's sensitive data — the religious conviction of whoever
+            signs up
+            as a medium, and the religion and the cause of death of the deceased person — may be processed only with
+            specific
+            and prominent consent (Brasil, 2018, art. 11, I). The provision that waives consent for studies carried out
+            by a research body (Brasil, 2018, art. 11, II, c) does not apply as long as the study does not have a
+            research institution as the responsible party.</li>
+        </ul>
+
+        <h3 id="secao-7-2">7.2 What the regulations require and what already exists</h3>
+        <p>Some requirements Crivo already meets by construction. Consent is recorded at the creation of the account,
+          with the
+          version of the agreement accepted. Participants can delete the account and withdraw the request at any
+          moment, without
+          justification, and the identifiable data are deleted. The scored fields have “I don't know”. The questionnaire
+          is
+          public before sign-up, and the risks of the virtual environment have a technical answer: identifiable data
+          encrypted, in a database schema read by a single module, and no personal data in system logs.</p>
+        <p>Others depend on decisions to be taken with the committee and with the proposing institution:</p>
+        <ul>
+          <li><strong>Consent form.</strong> The current agreement summarizes the study, but it is not a complete free
+            and informed consent form (<em lang="pt-BR">termo de consentimento livre e esclarecido</em>, TCLE). The
+            TCLE, in the committee's template, with risks, benefits and the
+            contacts of the researcher and of the CEP, will be shown before the questionnaire, in place of the current
+            agreement, and
+            sent by e-mail to the participant.</li>
+          <li><strong>Right not to answer.</strong> The three pairing fields are mandatory, because without them
+            there is no pair. Either the TCLE explains this, or an “I prefer not to answer” option is added, which
+            leaves the request out of the pairing.</li>
+          <li><strong>Vulnerability.</strong> The sitter is in mourning, sometimes recent. Besides the human contact and
+            the
+            pointer to the Centro de Valorização da Vida (CVV), Brazil's emotional support helpline, a minimum time
+            since the death for
+            sign-up remains to be decided. Sign-up accepts only people aged 18 or over, by a
+            mandatory declaration, separate from acceptance of the agreement; the platform does not ask for the date of
+            birth, which the
+            research does not use, and does not check the declaration against a document.</li>
+          <li><strong>Re-identification.</strong> The package publishes the answers without a name, but someone who knew
+            the deceased person
+            may recognize the set. The fields were chosen so as not to identify anyone on their own (<a
+              href="#secao-4-1">section 4.1</a>); combined with the stratum, however, they may identify someone to a
+            person who already
+            knows the family. The TCLE has to say so. The LGPD protects living people, but the Civil Code allows the
+            family to defend the personality rights of someone who has died (Brasil, 2002, art. 12, parágrafo único),
+            and the
+            answers also speak of the person who made the request, whose kinship is one of the fields.</li>
+          <li><strong>Mediums.</strong> They are participants just as much as the sitters, with an agreement of their
+            own: signing up
+            reveals religious conviction, and published performance may affect the reputation of anyone who is
+            identified. In the
+            report, each medium appears only by their pseudonymous code.</li>
+          <li><strong>Custody of the data.</strong> The Conep circular letter recommends transferring the collected data
+            to a local
+            device and deleting them from the virtual environment; public verification requires that the trail, the
+            report and the
+            package stay online. The proposal is to delete the identifiable data at the end of the study and keep online
+            only
+            what is pseudonymized and public, with that justification written into the project.</li>
+          <li><strong>Proposing institution.</strong> Submission to the CEP/Conep system requires an institution and a
+            responsible researcher affiliated with it. The author of this paper has no affiliation to a research
+            institution, and
+            for that reason a real study depends on a group in the field to run it.</li>
+        </ul>
+
+        <h2 id="secao-8">8. Current status and planned evaluation</h2>
+        <p>The whole flow is implemented, from sign-up to the report and the verification package, with blinding
+          and integrity tests that run against a real database at every change to the code. No study with
+          real participants has been conducted: in production, sign-up remains closed until the approval of the ethics
+          committee, and the questionnaire is still under revision. The planned evaluation has three stages, in this
+          order:</p>
+        <ol>
+          <li><strong>Property tests:</strong> automated tests that try, systematically, to violate each
+            cell of the visibility matrix and to tamper with the trail.</li>
+          <li><strong>Full dry run:</strong> the whole protocol, with fictitious participants and deliberate attempts
+            to
+            break the blinding.</li>
+          <li><strong>External audit:</strong> an independent researcher receives only the public material and tries to
+            reproduce the analysis and confirm the integrity of the study.</li>
+        </ol>
+        <p>Only after those stages is a pilot study planned.</p>
+
+        <h2 id="secao-9">9. Discussion and conclusion</h2>
+        <p>Crivo trades ecological validity for control. Ecological validity is the similarity between the conditions of
+          the study
+          and
+          those in which the phenomenon usually occurs — here, a real consultation, with conversation and free
+          response. The
+          analysis of Silva and Moreira-Almeida (2022) suggests that this similarity matters, and the protocol gives up
+          a good
+          part
+          of it. The consequences have to be stated clearly. A null result in this protocol will say only that, under
+          these
+          conditions and with this sample size, there was no evidence of above-chance performance; it will not refute
+          mediumship or the protocols with a proxy sitter. A positive result will have in its favor the fact that it was
+          obtained without anyone judging the fit and with every stage checkable by those who doubt it. Even so,
+          it will have to be read in the light of what the first name may reveal, and it will not distinguish between
+          the hypotheses about the origin
+          of the information.</p>
+        <p>The design also opens paths. Several groups can run the same software and publish in the same verification
+          format, which allows a multicenter replication in which no laboratory has to trust another.
+          Sceptical researchers are natural users of the verification material, and the design was conceived with them
+          in mind.
+          Two
+          extensions are on the horizon: the blind qualification of mediums by the same mechanism, before entry into a
+          study,
+          since the selection of mediums with prior evidence is one of the conditions that the literature associates
+          with a positive
+          result (Sarraf et al., 2021; Silva and Moreira-Almeida, 2022); and free-response protocols with external
+          judges.</p>
+        <p>In short, Crivo proposes to move the operational details of a mediumship study from the domain of
+          trust to that of verification: each blinding rule becomes a test, each draw becomes a public
+          commitment, and each event becomes a link in a timestamped chain. The aim is not to favor one conclusion, but
+          to allow
+          any conclusion, positive or null, to be checked by those who doubt it.</p>
+
+        <h2 id="disponibilidade">Availability</h2>
+        <p>Source code and documentation, under the MIT license: <a
+            href="https://github.com/rogeriocisi/crivo">github.com/rogeriocisi/crivo</a>. Platform: <a
+            th:href="${site} + '/'">crivo.psigama.com</a>. Preregistrations, reports and verification packages: <a
+            th:href="${aplicacao} + '/estudos'">studies page</a>.</p>
+
+        <h2>References</h2>
+        <ul class="referencias-artigo">
+          <li>Adams C, Cain P, Pinkas D, Zuccherato R. Internet X.509 Public Key Infrastructure Time-Stamp Protocol
+            (TSP). RFC 3161. RFC Editor; 2001. <a href="https://doi.org/10.17487/RFC3161">DOI</a></li>
+          <li>Beischel J. Contemporary methods used in laboratory-based mediumship research. Journal of
+            Parapsychology. 2007;71(1):37–68.</li>
+          <li>Beischel J, Schwartz GE. Anomalous information reception by research mediums demonstrated using a novel
+            triple-blind protocol. Explore. 2007;3(1):23–27. <a
+              href="https://doi.org/10.1016/j.explore.2006.10.004">DOI</a></li>
+          <li>Beischel J, Boccuzzi M, Biuso M, Rock AJ. Anomalous information reception by research mediums under
+            blinded conditions II: replication and extension. Explore. 2015;11(2):136–142. <a
+              href="https://doi.org/10.1016/j.explore.2015.01.001">DOI</a></li>
+          <li>Bem DJ, Honorton C. Does psi exist? Replicable evidence for an anomalous process of information
+            transfer. Psychological Bulletin. 1994;115(1):4–18. <a
+              href="https://doi.org/10.1037/0033-2909.115.1.4">DOI</a></li>
+          <li>Brasil. Lei nº 10.406, de 10 de janeiro de 2002. Código Civil. Diário Oficial da União. 11 jan. 2002.
+            <a href="https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm">Text</a>
+          </li>
+          <li>Brasil. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Diário
+            Oficial da União. 15 ago. 2018. <a
+              href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm">Text</a></li>
+          <li>Brasil. Lei nº 14.874, de 28 de maio de 2024. Dispõe sobre a pesquisa com seres humanos e institui o
+            Sistema Nacional de Ética em Pesquisa com Seres Humanos. Diário Oficial da União. 29 maio 2024. <a
+              href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l14874.htm">Text</a></li>
+          <li>Brasil. Decreto nº 12.651, de 7 de outubro de 2025. Regulamenta a Lei nº 14.874, de 28 de maio de 2024.
+            Diário Oficial da União. 8 out. 2025. <a
+              href="https://www2.camara.leg.br/legin/fed/decret/2025/decreto-12651-7-outubro-2025-798105-norma-pe.html">Text</a>
+          </li>
+          <li>Comissão Nacional de Ética em Pesquisa. Ofício Circular nº 2/2021/CONEP/SECNS/MS: orientações para
+            procedimentos em pesquisas com qualquer etapa em ambiente virtual. Brasília; 24 fev. 2021.</li>
+          <li>Conselho Nacional de Saúde. Resolução nº 466, de 12 de dezembro de 2012. Diretrizes e normas
+            regulamentadoras de pesquisas envolvendo seres humanos. Diário Oficial da União. 13 jun. 2013. <a
+              href="https://conselho.saude.gov.br/resolucoes/2012/Reso466.pdf">Text</a></li>
+          <li>Conselho Nacional de Saúde. Resolução nº 510, de 7 de abril de 2016. Normas aplicáveis a pesquisas em
+            Ciências Humanas e Sociais. Diário Oficial da União. 24 maio 2016. <a
+              href="https://conselho.saude.gov.br/resolucoes/2016/Reso510.pdf">Text</a></li>
+          <li>Conselho Nacional de Saúde. Resolução nº 674, de 6 de maio de 2022. Dispõe sobre a tipificação da pesquisa
+            e a tramitação dos protocolos de pesquisa no Sistema CEP/Conep.</li>
+          <li>de Leeuw JR. jsPsych: a JavaScript library for creating behavioral experiments in a Web browser.
+            Behavior Research Methods. 2015;47(1):1–12. <a href="https://doi.org/10.3758/s13428-014-0458-y">DOI</a></li>
+          <li>Gureckis TM, Martin J, McDonnell J, et al. psiTurk: an open-source framework for conducting
+            replicable behavioral experiments online. Behavior Research Methods. 2016;48(3):829–842. <a
+              href="https://doi.org/10.3758/s13428-015-0642-8">DOI</a></li>
+          <li>Harris PA, Taylor R, Thielke R, Payne J, Gonzalez N, Conde JG. Research electronic data capture
+            (REDCap): a metadata-driven methodology and workflow process for providing translational research
+            informatics support. Journal of Biomedical Informatics. 2009;42(2):377–381. <a
+              href="https://doi.org/10.1016/j.jbi.2008.08.010">DOI</a></li>
+          <li>Hyman R. Cold reading: how to convince strangers that you know all about them. The Zetetic.
+            1977;1:18–37.</li>
+          <li>Hyman R. How not to test mediums: critiquing the afterlife experiments. Skeptical Inquirer. January and
+            February 2003.</li>
+          <li>Irving G, Holden J. How blockchain-timestamped protocols could improve the trustworthiness of medical
+            science. F1000Research. 2016;5:222. Retracted by the authors in 2017: F1000Research. 2017;6:805. <a
+              href="https://doi.org/10.12688/f1000research.11888.1">Retraction DOI</a></li>
+          <li>Kekecs Z, Palfi B, Szaszi B, et al. Raising the value of research studies in psychological
+            science by increasing the credibility of research reports: the transparent Psi project. Royal Society
+            Open Science. 2023;10(2):191375. <a href="https://doi.org/10.1098/rsos.191375">DOI</a></li>
+          <li>Kelly EW, Arcangel D. An investigation of mediums who claim to give information about deceased persons.
+            The Journal of Nervous and Mental Disease. 2011;199(1):11–17. <a
+              href="https://doi.org/10.1097/NMD.0b013e31820439da">DOI</a></li>
+          <li>Milton J, Wiseman R. Does psi exist? Lack of replication of an anomalous process of information
+            transfer. Psychological Bulletin. 1999;125(4):387–391. <a
+              href="https://doi.org/10.1037/0033-2909.125.4.387">DOI</a></li>
+          <li>Nosek BA, Ebersole CR, DeHaven AC, Mellor DT. The preregistration revolution. Proceedings of the
+            National Academy of Sciences. 2018;115(11):2600–2606. <a
+              href="https://doi.org/10.1073/pnas.1708274114">DOI</a></li>
+          <li>O'Keeffe C, Wiseman R. Testing alleged mediumship: methods and results. British Journal of Psychology.
+            2005;96(2):165–179. <a href="https://doi.org/10.1348/000712605X36361">DOI</a></li>
+          <li>Pooley AL. Optimising methodological practices within psychology: a parapsychology case-study. Doctoral
+            thesis. University of Edinburgh; 2024.</li>
+          <li>Radin D. Tricking the trickster: evidence for predicted sequential structure in a 19-year online psi
+            experiment. Journal of Scientific Exploration. 2019;33(4):549–568. <a
+              href="https://doi.org/10.31275/2019/1429">DOI</a></li>
+          <li>Rocha AC, Paraná D, Freire ES, Lotufo Neto F, Moreira-Almeida A. Investigating the fit and accuracy of
+            alleged mediumistic writing: a case study of Chico Xavier's letters. Explore. 2014;10(5):300–308. <a
+              href="https://doi.org/10.1016/j.explore.2014.06.002">DOI</a></li>
+          <li>Sarraf M, Woodley of Menie MA, Tressoldi P. Anomalous information reception by mediums: a meta-analysis
+            of the scientific evidence. Explore. 2021;17(5):396–402. <a
+              href="https://doi.org/10.1016/j.explore.2020.04.002">DOI</a></li>
+          <li>Silva J, Moreira-Almeida A. Controlled experiments involving anomalous information reception with
+            mediums: an analysis of recent studies. Journal of Scientific Exploration. 2022;36(4):749–759. <a
+              href="https://doi.org/10.31275/20222575">DOI</a></li>
+          <li>Simmons JP, Nelson LD, Simonsohn U. False-positive psychology: undisclosed flexibility in data
+            collection and analysis allows presenting anything as significant. Psychological Science.
+            2011;22(11):1359–1366. <a href="https://doi.org/10.1177/0956797611417632">DOI</a></li>
+          <li>Tressoldi P, Liberale L, Sinesio F, Bubba V, Pederzoli L, Testoni I. Mediumship accuracy: a
+            quantitative and qualitative study with a triple-blind protocol. Explore. 2022;18(4):411–415. <a
+              href="https://doi.org/10.1016/j.explore.2021.05.009">DOI</a></li>
+          <li>Tressoldi P, Liberale L, Sinesio F. Is there someone in the hereafter? Mediumship accuracy of 100
+            readings obtained with a triple level of blinding protocol. Omega: Journal of Death and Dying.
+            2025;91(2):955–963 (online in 2022). <a href="https://doi.org/10.1177/00302228221146376">DOI</a></li>
+          <li>Wiseman R, O'Keeffe C. A critique of Schwartz et al.'s after-death communication studies. Skeptical
+            Inquirer. November and December 2001.</li>
+          <li>Wiseman R, Watt C. Study preregistration: an early example and analysis. PeerJ. 2026;14:e21360. <a
+              href="https://doi.org/10.7717/peerj.21360">DOI</a></li>
+        </ul>
+
+        <p class="nota nota-espacada">
+          Text under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.pt-br">Creative
+            Commons Attribution 4.0 (CC BY 4.0)</a> license. Working version in the repository:
+          <a href="https://github.com/rogeriocisi/crivo/tree/main/paper">paper/</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

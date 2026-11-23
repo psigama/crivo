@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Session result — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Session result — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo" th:text="${protocolo.catalogCode()} + ' · session closed'">Session</p>
+        <h1>Result</h1>
+
+        <dl class="leituras">
+          <div>
+            <dt>Hits</dt>
+            <dd>
+              <strong th:text="${desfecho.hits()}">0</strong>
+              in <span th:text="${desfecho.lockedTrials()}">24</span> trial(s)
+            </dd>
+          </div>
+          <div>
+            <dt>Expected by chance</dt>
+            <dd th:text="${#numbers.formatDecimal(desfecho.expectedByChance(), 1, 2)} + ' (chance level of '
+                     + ${desfecho.chanceNumerator()} + '/' + ${desfecho.chanceDenominator()} + ')'">6</dd>
+          </div>
+          <div>
+            <dt>Exact one-sided p value</dt>
+            <dd><code th:text="${#numbers.formatDecimal(desfecho.pValue(), 1, 4)}">0.5000</code></dd>
+          </div>
+          <div>
+            <dt>Session status</dt>
+            <dd th:text="${desfecho.state().name() == 'FINISHED'}
+                     ? 'complete' : 'abandoned before the end'">complete</dd>
+          </div>
+        </dl>
+
+        <p class="nota" th:text="${desfecho.exploratoryReason()}">Exploratory</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="faixa">
+        <h2>Check it for yourself</h2>
+        <p>
+          This is the part that matters, and it no longer depends on trusting us. The seed has
+          two halves: the server's, whose hash was published <strong>before</strong> you drew
+          yours, and yours, drawn in your browser. With both, anyone recomputes the target of each
+          trial.
+        </p>
+
+        <dl class="cadeia" data-copiavel>
+          <dt>Session</dt>
+          <dd><code th:text="${desfecho.sessionCode()}">codigo</code></dd>
+          <dt>Commitment published at the start</dt>
+          <dd><code th:text="${desfecho.seedCommitment()}">hash</code></dd>
+          <dt>The server's half, revealed now</dt>
+          <dd><code th:text="${desfecho.serverSeedHex()}">metade</code></dd>
+          <dt th:if="${desfecho.participantNonce() != null}">Your half, drawn in your browser</dt>
+          <dd th:if="${desfecho.participantNonce() != null}">
+            <code th:text="${desfecho.participantNonce()}">nonce</code>
+          </dd>
+          <dt>Effective seed, the two together</dt>
+          <dd><code th:text="${desfecho.seedHex()}">semente</code></dd>
+          <dt>Figure pool</dt>
+          <dd><code th:text="${desfecho.targetPoolVersion()}">v1</code></dd>
+        </dl>
+
+        <p class="acoes">
+          <button class="botao botao-vazio" type="button" data-baixar-comprovante hidden>
+            Download the session receipt (JSON)</button>
+        </p>
+        <script type="application/json" id="comprovante-sessao" th:utext="${comprovante}">{}</script>
+
+        <p>The derivation rule is this, and it is the whole rule:</p>
+        <pre class="comando">seed = SHA-256(server half || your half)
+target(n) = SHA-256(seed || "trial:" || n || counter) mod 4</pre>
+
+        <p class="nota" th:if="${desfecho.participantNonce() == null}">
+          This session predates participant entropy: the seed came entirely from the
+          server. The automatic check here only applies to sessions run after that
+          change; this one can be checked by hand, by the rule above, with the revealed seed.
+        </p>
+
+        <div class="verificador" data-verificador th:if="${desfecho.participantNonce() != null}" th:attr="data-alvos=${#strings.listJoin(desfecho.recordedTargets(), ',')},
+                    data-alternativas=${desfecho.chanceDenominator()},
+                    data-compromisso=${desfecho.seedCommitment()},
+                    data-protocolo=${desfecho.protocol().name()},
+                    data-sessao=${desfecho.sessionCode()},
+                    data-semente-efetiva=${desfecho.seedHex()},
+                    data-tentativas-declaradas=${desfecho.declaredTrials()},
+                    data-banco-figuras=${desfecho.targetPoolVersion()}">
+          <h3>Recompute it here, now</h3>
+          <p class="nota">
+            The button below runs the rule in your browser, without talking to the server, and
+            compares the result with what this session recorded. The code is in
+            <a href="/js/verificador-alvos.js"><code>/js/verificador-alvos.js</code></a> — you can
+            read it before clicking.
+          </p>
+
+          <p>
+            <label for="campo-semente-servidor">The server's half (revealed now)</label>
+            <textarea id="campo-semente-servidor" data-campo="semente-servidor" rows="2" spellcheck="false"
+              th:text="${desfecho.serverSeedHex()}"></textarea>
+          </p>
+          <p>
+            <label for="campo-nonce">Your half (drawn in your browser at the start)</label>
+            <textarea id="campo-nonce" data-campo="nonce" rows="1" spellcheck="false"
+              th:text="${desfecho.participantNonce()}"></textarea>
+          </p>
+          <p>
+            <label for="campo-tentativas">How many trials to recompute</label>
+            <input id="campo-tentativas" data-campo="tentativas" type="number" min="1" max="200"
+              th:value="${desfecho.lockedTrials()}">
+          </p>
+          <p class="acoes">
+            <button class="botao botao-cheio" type="button" data-campo="gerar">Generate the targets</button>
+          </p>
+
+          <div data-campo="saida" hidden>
+            <p class="resumo-verificacao" data-campo="compromisso" role="status"></p>
+            <p class="resumo-verificacao" data-campo="semente-efetiva" role="status"></p>
+            <p class="resumo-verificacao" data-campo="resumo" role="status"></p>
+            <table class="tentativas">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Target recomputed here</th>
+                  <th scope="col">Target recorded in the session</th>
+                  <th scope="col">Matches</th>
+                </tr>
+              </thead>
+              <tbody data-campo="corpo"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <h3>How to know this is the same seed as at the start</h3>
+
+        <p>
+          That is the question that decides everything. Recomputing the targets from a seed is only
+          worth something if the seed was already fixed <strong>before</strong> your answers —
+          otherwise it would be enough to pick, at the end, a seed that made you miss.
+        </p>
+
+        <p>
+          The system published <code th:text="${desfecho.seedCommitment()}">hash</code> before you
+          drew your half. It is the SHA-256 of:
+        </p>
+
+        <pre class="comando">server half | protocol | trials | alternatives | figure pool</pre>
+
+        <p>
+          Hence the numbers do not work out for a dishonest server: to choose targets that made you
+          miss, it would need a half that, combined with <strong>yours</strong>, gave the desired
+          result — and it had already published the hash of its own half before seeing yours.
+          That is a preimage attack on SHA-256.
+        </p>
+
+        <p class="nota">
+          The button above checks both things: that the revealed half matches the commitment, and
+          that the two halves together give the seed that generated the targets. It also checks,
+          where possible, against the commitment that <em>your</em> browser stored at the start of
+          the session.
+        </p>
+
+        <div class="atestado">
+          <div class="nao">
+            <h3>What this verification still does not prove</h3>
+            <ul>
+              <li>
+                If the session began <strong>in another browser</strong>, in a private window, or
+                with local storage blocked, the commitment from the start was not stored. Then the
+                check of the order of events again depends on the platform's record — and anyone
+                who wants the complete proof copies the commitment on the first screen and compares
+                it at the end.
+              </li>
+              <li>
+                The order of events is recorded in the audit trail, chained by hash: the opening of
+                the session, with the commitment, is entered before each answer. But the trail is
+                kept by this same application — it proves internal consistency, not the honesty
+                of whoever operates it.
+              </li>
+              <li>
+                The proof that does not depend on trusting us is someone else reimplementing the
+                rule from outside. That is why it fits in eight lines, is written out here in full
+                and has a public test vector: a seed of 64 zeros, 12 trials, 4 alternatives, targets
+                1, 1, 3, 3, 2, 3, 2, 1, 1, 4, 1, 3.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="nota">
+          The reference implementation is in
+          <a
+            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/support/SeedStream.java"><code>support/SeedStream.java</code></a>
+          and in
+          <a
+            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/trials/TargetDerivation.java"><code>trials/TargetDerivation.java</code></a>.
+          The commitment ties the seed to the session parameters: protocol, number of trials,
+          number of alternatives and version of the figure pool.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="faixa">
+        <h2>Trial by trial</h2>
+        <table class="tentativas">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Your answer</th>
+              <th scope="col">Target</th>
+              <th scope="col">Hit</th>
+              <th scope="col" th:if="${desfecho.usesFigures()}">Figures shown</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="t : ${desfecho.trials()}">
+              <td th:text="${t.index()}">1</td>
+              <td th:text="${t.chosenIndex()}">1</td>
+              <td th:text="${t.targetIndex()}">1</td>
+              <td th:text="${t.hit()} ? 'yes' : 'no'">no</td>
+              <td th:if="${desfecho.usesFigures()}" th:text="${#strings.listJoin(t.candidateSlugs(), ', ')}">figuras
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/rodar'">
+            Run another session</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos#pes'">Other ESP tests</a>
+        </p>
+        <p class="nota">
+          A new session draws another seed. Repeating the test is free, and that is precisely why
+          the public set of this data is exploratory: there is no way to know who took the test,
+          how many times or under what conditions.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+  <script src="/js/verificador-alvos.js" defer></script>
+  <script src="/js/sessao-teste.js" defer></script>
+</body>
+
+</html>

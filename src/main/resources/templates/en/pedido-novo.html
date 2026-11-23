@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>New request — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Sitter · consultation request</p>
+      <h1>About the person who died</h1>
+      <p class="chamada">
+        Answer calmly, the way you remember. There is no right answer, and you can mark
+        "I don't know" whenever you are not sure. Before locking, you review everything.
+      </p>
+      <p class="nota">
+        You do not ask the medium questions and you will not receive a message from the person who
+        died. Your answers serve as the answer key for an experiment: the medium answers the same
+        questionnaire, and the system checks whether the medium's answers match yours more than they
+        match those of another person.
+      </p>
+      <p class="nota">
+        Nothing is saved while you fill this in. Once confirmed, the request locks and changes no more —
+        that is what guarantees that nobody, not even the platform, adjusted the answers after the
+        medium's reading. The medium receives only the first name; nobody sees the answers before the
+        end of the study.
+      </p>
+      <p class="nota" th:text="'Questionnaire, version ' + ${questionario.version}">Questionnaire, version v1</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <form class="formulario formulario-largo" method="post" th:action="@{/painel/consulente/pedido/revisar}">
+        <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Error</p>
+
+        <label for="primeiroNome">First name of the person who died</label>
+        <input id="primeiroNome" name="primeiroNome" type="text" required autocomplete="off"
+               th:value="${rascunho.firstName}" th:attr="maxlength=${nomeMaximo}">
+        <p class="nota">Only the first name, as the person was called. It is the one thing the medium receives.</p>
+
+        <fieldset th:each="campo : ${questionario.fields}">
+          <legend th:text="${campo.label.in(idioma)}">Question</legend>
+          <p class="nota" th:if="${campo.outOfScoreReason?.in(idioma)}" th:text="${campo.outOfScoreReason?.in(idioma)}">Out of the score</p>
+          <label class="opcao" th:each="opcao : ${campo.options}">
+            <input type="radio" th:name="'r.' + ${campo.key}" th:value="${opcao.key}" required
+                   th:checked="${rascunho.answers.get(campo.key) == opcao.key}">
+            <span th:text="${opcao.label.in(idioma)}">Option</span>
+          </label>
+          <label class="opcao" th:if="${campo.unknownAllowed()}">
+            <input type="radio" th:name="'r.' + ${campo.key}" th:value="${naoSei}"
+                   th:checked="${rascunho.answers.get(campo.key) == naoSei}">
+            <span>I don't know</span>
+          </label>
+        </fieldset>
+
+        <button class="botao botao-cheio" type="submit">Review before locking</button>
+      </form>
+
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/consulente'">Back to the dashboard without sending</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

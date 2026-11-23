@@ -55,7 +55,7 @@
             th:unless="${rascunhoBloqueado}">
         <button class="botao botao-cheio" type="submit">Congelar o pré-registro</button>
       </form>
-      <p class="nota nota-espacada"><a href="/painel/adm/estudo-p1">Voltar e corrigir</a></p>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/adm/estudo-p1'">Voltar e corrigir</a></p>
     </div>
   </section>
 </main>

@@ -40,11 +40,11 @@
         <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Erro</p>
 
         <fieldset th:each="campo : ${campos}">
-          <legend th:text="${campo.label}">Pergunta</legend>
+          <legend th:text="${campo.label.in(idioma)}">Pergunta</legend>
           <label class="opcao" th:each="opcao : ${campo.options}">
             <input type="radio" th:name="'r.' + ${campo.key}" th:value="${opcao.key}" required
                    th:checked="${rascunho.answers.get(campo.key) == opcao.key}">
-            <span th:text="${opcao.label}">Opção</span>
+            <span th:text="${opcao.label.in(idioma)}">Opção</span>
           </label>
           <label class="opcao">
             <input type="radio" th:name="'r.' + ${campo.key}" th:value="${naoRecebi}"
@@ -56,7 +56,7 @@
         <button class="botao botao-cheio" type="submit">Rever antes de travar</button>
       </form>
 
-      <p class="nota nota-espacada"><a href="/painel/medium">Voltar ao painel sem enviar</a></p>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/medium'">Voltar ao painel sem enviar</a></p>
     </div>
   </section>
 </main>

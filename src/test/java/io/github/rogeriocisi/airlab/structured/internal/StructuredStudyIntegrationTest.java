@@ -100,7 +100,11 @@ class StructuredStudyIntegrationTest {
                 .contains("PAIRED_FIELD_MATCHES")
                 .contains("\"version\":\"" + study.questionnaireVersion() + "\"")
                 .contains(study.seedCommitment())
-                .contains("p4-medium:");
+                .contains("p4-medium:")
+                // SPEC 0.28, secao 1.5, regras 9 e 10: o anexo congelado e o registro do que cada
+                // pessoa leu, e por isso publica o rotulo nos dois idiomas, com as chaves iguais.
+                .contains("\"labelEn\":\"Gender\"")
+                .contains("\"labelEn\":\"Female\"");
         assertThat(jdbc.queryForObject("SELECT count(*) FROM audit.event WHERE event_type = 'ALLOCATION_SEED_COMMITTED' "
                 + "AND subject_ref = ?", Long.class, "study:" + study.studyId())).isEqualTo(1L);
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--
+  404 page of the static site (SPEC 0.21, section 1.3, rule 5). Only the generator uses it: GitHub Pages
+  returns it for every address that does not exist in the site, and encaminhar.js takes the person to the
+  application, with the same path, the same query and the same fragment. It is what keeps the old
+  addresses of crivo.psigama.com standing (/protocolo/..., /testes/..., the links in e-mails), because
+  GitHub Pages does no 301 redirection. The script lives in a separate file because of the CSP.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:attr="data-aplicacao=${aplicacao},data-paginas-do-site=${paginasDoSite}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Taking you to the application — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo">An address that does not exist in this site</p>
+        <h1>Taking you to the application</h1>
+        <p class="chamada">
+          The protocol pages, the accounts, the tests and the studies live in the Crivo application,
+          at an address of its own. If nothing happens in a few seconds, follow the button.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" id="destino" th:href="${aplicacao} + '/'">Go to the application</a>
+          <a class="botao botao-vazio" th:href="${site} + '/'">Home page of the site</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+  <script src="/js/encaminhar.js"></script>
+</body>
+
+</html>

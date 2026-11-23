@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title th:text="${status == 404} ? 'Page not found — Crivo'
+      : (${status == 403} ? 'Restricted access — Crivo'
+      : (${status == 400} ? 'Request not understood — Crivo' : 'Something went wrong — Crivo'))">Something went wrong — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/* Spring Boot error page (BasicErrorController). It shows only the response code:
+       no exception message reaches the screen, because it may carry personal data (P6). */-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo" th:text="${status != null} ? 'Error ' + ${status} : 'Error'">Error</p>
+
+      <th:block th:switch="${status}">
+        <th:block th:case="404">
+          <h1>Page not found</h1>
+          <p class="chamada">
+            This address does not exist in Crivo. It may have been mistyped, or the link came from an
+            earlier version of the site.
+          </p>
+        </th:block>
+        <th:block th:case="403">
+          <h1>This page is not for your profile</h1>
+          <p class="chamada">
+            Each profile — sitter, medium or administrator — sees only its own screens. The rule
+            is enforced on the server, and not by hiding buttons.
+          </p>
+        </th:block>
+        <th:block th:case="400">
+          <h1>The request could not be understood</h1>
+          <p class="chamada">
+            The form arrived incomplete or with a value that Crivo does not recognize. Go back, check
+            the fields and send it again.
+          </p>
+        </th:block>
+        <th:block th:case="*">
+          <h1>Something went wrong</h1>
+          <p class="chamada">
+            Crivo could not serve this request right now. Nothing you had already locked is
+            lost: requests, readings and the audit trail only change through complete operations.
+            Try again in a few minutes.
+          </p>
+        </th:block>
+      </th:block>
+
+      <p class="acoes">
+        <a class="botao botao-cheio" th:href="${site} + '/'">Go to the home page</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos'">See the protocols</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

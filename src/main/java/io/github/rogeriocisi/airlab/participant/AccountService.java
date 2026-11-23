@@ -1,6 +1,7 @@
 package io.github.rogeriocisi.airlab.participant;
 
 import java.util.List;
+import io.github.rogeriocisi.airlab.support.Language;
 import java.util.Optional;
 
 /**
@@ -13,8 +14,16 @@ import java.util.Optional;
  */
 public interface AccountService {
 
-    /** Version of the account consent term currently in force (E10, lock 6). */
-    String CURRENT_TERM_VERSION = "conta-v3";
+    /**
+     * Version of the account consent term currently in force (E10, lock 6).
+     *
+     * <p>{@code conta-v4} since SPEC 0.28 (section 1.5, rule 9): the Portuguese text did not change
+     * one word from the {@code conta-v3}, and the English translation came in beside it. A new
+     * version because what the person accepted is the text they read, and from now on that text
+     * exists in two languages; the translation goes to the ethics committee with the protocol
+     * (rule 11).
+     */
+    String CURRENT_TERM_VERSION = "conta-v4";
 
     int MINIMUM_PASSWORD_LENGTH = 10;
 
@@ -56,6 +65,13 @@ public interface AccountService {
      * medium is told by e-mail that a request arrived (SPEC E13). Never logged, never shown.
      */
     Optional<String> mailAddress(String code);
+
+    /**
+     * The language of an account (SPEC 0.28, section 1.5, rule 8), for the e-mails that leave
+     * outside a request and so have no page to take it from. Empty when there is no such account;
+     * the language of origin when the account predates the two languages.
+     */
+    Optional<Language> mailLanguage(String code);
 
     // --- Phase E: linked accounts ---------------------------------------------------------------
 

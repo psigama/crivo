@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title th:text="${protocolo.label()} + ' · ' + ${protocolo.name.in(idioma)} + ' — Crivo'">Protocol — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social(${protocolo.name.in(idioma)} + ' — Crivo', ${protocolo.summary.in(idioma)})}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">
+        <span th:text="${protocolo.label()}">P1-automático</span> ·
+        <span th:text="${protocolo.branch.kindLabel().in(idioma)}">Mediumship experiment (AIR)</span> ·
+        Crivo platform
+      </p>
+      <h1 class="aparece" th:text="${protocolo.name.in(idioma)}">Name</h1>
+      <p class="chamada aparece" th:text="${protocolo.summary.in(idioma)}">Summary</p>
+      <!--/* SPEC 0.24, section 1.4, rule 13: "in a few words" before the full design of P1. */-->
+      <div class="definicao" id="em-poucas-palavras" th:if="${protocolo.code() == 'P1'}">
+        <p><strong>In a few words.</strong></p>
+        <ul>
+          <li>Someone who has lost a person gives that person's first name and answers multiple-choice
+            questions about them.</li>
+          <li>A medium drawn at random receives only the first name, without knowing who asked, and
+            answers the same questions.</li>
+          <li>The system compares those answers with the answers about the right person and with the
+            answers about another, similar person, to measure how much chance explains.</li>
+          <li>Nobody sees a score before the end, and the rules were sealed before the start.</li>
+          <li>The result belongs to the whole study, and it is published, for or against.</li>
+        </ul>
+        <p class="nota">
+          Simpler still: the page <a th:href="${aplicacao} + '/consulente'">for sitters</a>, the page
+          <a th:href="${aplicacao} + '/medium'">for mediums</a> and the <a th:href="${aplicacao} + '/perguntas'">frequently asked questions</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <dl class="leituras">
+        <div><dt>Declared chance level</dt><dd th:text="${protocolo.chanceNumerator} + '/' + ${protocolo.chanceDenominator}
+                     + ' (' + ${protocolo.chancePercent()} + '%)'">1/2</dd></div>
+        <div><dt>Automation</dt><dd th:text="${protocolo.automation.label().in(idioma)}">Partial</dd></div>
+        <div><dt>Status</dt><dd th:text="${protocolo.status.label().in(idioma)}">Available</dd></div>
+        <div><dt>Specification</dt><dd>
+          Epics <span th:text="${protocolo.epics}">E1</span> of the
+          <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>
+        </dd></div>
+      </dl>
+
+      <p class="nota">
+        The chance level is a property of the design, declared before collection. It is never estimated
+        from the data.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <div class="atestado">
+        <div class="nao">
+          <h3>What a result from this protocol does not support</h3>
+          <ul>
+            <li th:each="limite : ${protocolo.limits}" th:text="${limite.in(idioma)}">Limit</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="acoes">
+        <a class="botao botao-cheio"
+           th:if="${protocolo.quickTest()}"
+           th:href="${aplicacao} + '/protocolo/' + ${protocolo.code} + '/rodar'">Take the test now</a>
+        <a class="botao botao-cheio"
+           th:if="${protocolo.code == 'P1'}" th:href="${aplicacao} + '/conta/criar'">Create an account</a>
+        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" href="#questionario">See the questionnaire</a>
+        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" th:href="${aplicacao} + '/estudos'">Studies and reports</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos'">All protocols</a>
+      </p>
+
+      <p class="nota" th:if="${protocolo.quickTest()}">
+        An anonymous test, with no account: the seed is committed before the first answer, the target of
+        each trial is only revealed after the answer locks, and everything goes to the audit trail. It
+        says nothing about mediumship.
+      </p>
+    </div>
+  </section>
+
+  <th:block th:if="${protocolo.code == 'P1'}">
+    <section>
+      <div class="faixa">
+        <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
+      </div>
+    </section>
+    <!-- The eight steps, which up to SPEC 0.20 were on the home page (SPEC 0.21, section 1.3). -->
+    <section id="etapas">
+      <div class="faixa">
+        <p class="rotulo">How it works</p>
+        <h2>The automated structured reading: eight steps, each one tied to the one before</h2>
+        <p>
+          Crivo's AIR protocol runs entirely through the site. The sitter and the medium answer the
+          <strong>same closed questionnaire</strong> about the deceased person — the sitter because they
+          knew them, the medium knowing only the first name. Two requests with a similar profile form a
+          pair, and each one serves as the <em>decoy</em> for the other. Only what fits the true target
+          better than it fits the decoy, consistently and above chance, counts as evidence.
+        </p>
+
+        <ol class="corrente">
+          <li>
+            <h3>Preregistration</h3>
+            <p>
+              The researcher declares hypotheses, inclusion criteria for mediums, the questionnaire, the
+              number of pairs and the deadline — and the document is frozen with a hash before the first
+              pair.
+            </p>
+            <span class="selo">the statistical power of the design is declared in the document itself</span>
+          </li>
+          <li>
+            <h3>Account and consent</h3>
+            <p>
+              Each person creates an account with a fixed role — sitter or medium, never both — and
+              confirms their e-mail. Identifiable data is kept encrypted, in a separate database schema.
+            </p>
+          </li>
+          <li>
+            <h3>Locked request</h3>
+            <p>
+              The sitter gives the first name and answers the questionnaire. The answers lock right
+              away, and the trail receives a salted commitment to them, before any medium sees the request.
+            </p>
+            <span class="selo">commitment → revelation: the answers cannot change afterwards</span>
+          </li>
+          <li>
+            <h3>Pairing and draw</h3>
+            <p>
+              Requests of the same gender, age band and period form pairs, and the medium for each pair
+              is drawn from a seed whose commitment was published in the preregistration.
+            </p>
+          </li>
+          <li>
+            <h3>Reading</h3>
+            <p>
+              The medium receives only the two first names of the pair, in a drawn order, and answers the
+              questionnaire for each one. On submission, the reading locks with a hash on the trail.
+            </p>
+          </li>
+          <li>
+            <h3>Automatic unblinding</h3>
+            <p>
+              When the declared number of pairs is complete, the system itself closes collection and
+              reveals the seed and the salts. Nobody chooses the moment — not even the administrator.
+            </p>
+          </li>
+          <li>
+            <h3>Scoring and analysis</h3>
+            <p>
+              The answers are compared field by field, against the target and against the decoy, by a
+              deterministic, published rule. The preregistered analysis runs, and the report comes out in
+              the same format for any result.
+            </p>
+            <span class="selo">no score exists before unblinding, not even in the database</span>
+          </li>
+          <li>
+            <h3>Feedback</h3>
+            <p>
+              Each sitter sees the medium's answers for their own target alongside their own answers;
+              each medium sees the counts for their own readings. Everything leaves a trace on the
+              hash-chained trail.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+    <section th:replace="~{fragments/p1 :: como-participar}"></section>
+    <section th:replace="~{fragments/p1 :: telas}"></section>
+    <section id="questionario" th:if="${questionario}">
+      <div class="faixa" th:insert="~{fragments/questionario :: questionario(${questionario})}"></div>
+    </section>
+  </th:block>
+
+  <section th:if="${protocolo.code == 'P2'}">
+    <div class="faixa">
+      <h2>Reference only</h2>
+      <p>
+        This page describes a design that Crivo <strong>does not implement</strong>: the paired reading
+        depends on a team — an experimenter and a redactor — and takes no participants. It stays here as
+        a reference, because it is the protocol closest to the literature and it is against it that what
+        the automated version gains and loses is measured. To take part, see
+        <a th:href="${aplicacao} + '/protocolo/P1'">P1-automático, the automated structured reading</a>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

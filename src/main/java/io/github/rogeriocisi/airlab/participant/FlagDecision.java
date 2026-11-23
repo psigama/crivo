@@ -1,21 +1,22 @@
 package io.github.rogeriocisi.airlab.participant;
 
+import io.github.rogeriocisi.airlab.support.Text;
 /** The administrator's review of a linked-accounts flag (SPEC E13, phase E). Made once. */
 public enum FlagDecision {
 
     /** The same person: the two accounts keep apart in every pair, for good. */
-    LINKED("Mesma pessoa"),
+    LINKED(Text.of("Mesma pessoa", "The same person")),
 
     /** No relation: the restriction falls. */
-    UNRELATED("Sem relação");
+    UNRELATED(Text.of("Sem relação", "Unrelated"));
 
-    private final String label;
+    private final Text label;
 
-    FlagDecision(String label) {
+    FlagDecision(Text label) {
         this.label = label;
     }
 
-    public String label() {
+    public Text label() {
         return label;
     }
 }

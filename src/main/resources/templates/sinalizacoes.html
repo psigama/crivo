@@ -47,14 +47,14 @@
               <td><code th:text="${sinal.code}">SIN-0000</code></td>
               <td>
                 <code th:text="${sinal.accountA}">CON-0000</code>
-                (<span th:text="${sinal.profileA} ? ${sinal.profileA.label()} : 'encerrada'">Consulente</span>)
+                (<span th:text="${sinal.profileA} ? ${sinal.profileA.label().in(idioma)} : 'encerrada'">Consulente</span>)
                 e <code th:text="${sinal.accountB}">MED-0000</code>
-                (<span th:text="${sinal.profileB} ? ${sinal.profileB.label()} : 'encerrada'">Médium</span>)
+                (<span th:text="${sinal.profileB} ? ${sinal.profileB.label().in(idioma)} : 'encerrada'">Médium</span>)
               </td>
-              <td th:text="${sinal.signal.label()}">Mesmo nome completo</td>
+              <td th:text="${sinal.signal.label().in(idioma)}">Mesmo nome completo</td>
               <td><time th:text="${@datas.utc(sinal.createdAt)}">2026-11-13</time></td>
               <td>
-                <span th:unless="${sinal.pending()}" th:text="${sinal.decision.label()}">Sem relação</span>
+                <span th:unless="${sinal.pending()}" th:text="${sinal.decision.label().in(idioma)}">Sem relação</span>
                 <form th:if="${sinal.pending()}" class="decisao" method="post"
                       th:action="@{/painel/adm/sinalizacoes/{c}(c=${sinal.code})}">
                   <button class="botao botao-vazio" type="submit" name="decisao" value="UNRELATED">Sem relação</button>
@@ -65,7 +65,7 @@
           </tbody>
         </table>
       </div>
-      <p class="nota nota-espacada"><a href="/painel/adm">Voltar ao painel</a></p>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/adm'">Voltar ao painel</a></p>
     </div>
   </section>
 </main>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Protocols — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Protocols — Crivo', 'The four protocols of the Crivo platform: two mediumship (AIR) experiments, P1-automático and P2-supervisionado, and two extrasensory perception (ESP) tests, P3-precognição and P4-visão-remota, all with a frozen preregistration, a verifiable draw and an audit trail.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Protocols</p>
+        <h1 class="aparece">Four protocols: two experiments and two tests</h1>
+        <p class="chamada aparece">
+          Crivo is a platform of blind protocols for research into <strong>anomalous
+            cognition</strong>, of two kinds. The <strong>experiments</strong> are about mediumship — in
+          the literature, <em>anomalous information reception</em>, or AIR —: they involve a sitter and a
+          medium, require an account, and only have a result at the end of a preregistered study. The
+          <strong>tests</strong> are about <em>extrasensory perception</em>: the target is drawn by the
+          system itself, no deceased person is involved, and the result comes out right away.
+        </p>
+        <p class="tese aparece">
+          What every protocol here has in common: <strong>a draw with a commitment published beforehand
+            and revealed afterwards, a target out of reach of whoever answers, and an audit trail chained
+            by hash and timestamped</strong>. A protocol that cannot offer this does not enter the
+          catalog. The experiments add a frozen preregistration and automatic unblinding at the end of
+          the study; the tests are anonymous, exploratory sessions, with the result at the end of the
+          session.
+        </p>
+      </div>
+    </section>
+
+    <section id="air">
+      <div class="faixa">
+        <p class="rotulo">Mediumship · P1 and P2</p>
+        <h2>Mediumship experiments (AIR)</h2>
+
+        <ul class="protocolos">
+          <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
+            <p class="selo">
+              <span th:text="${p.label()}">P1-automático</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind().in(idioma))}">experiment</span> ·
+              <span th:text="'automation ' + ${#strings.toLowerCase(p.automation.label().in(idioma))}">Automation</span> ·
+              <span th:text="'chance ' + ${p.chancePercent()} + '%'">chance</span> ·
+              <span th:text="${#strings.toLowerCase(p.status.label().in(idioma))}">status</span>
+            </p>
+            <h3><a th:href="${aplicacao} + '/protocolo/' + ${p.code}" th:text="${p.name.in(idioma)}">Name</a></h3>
+            <p th:text="${p.summary.in(idioma)}">Summary</p>
+            <p class="acoes">
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/' + ${p.code}">How it works</a>
+              <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}" th:href="${aplicacao} + '/conta/criar'">Create an
+                account</a>
+              <span class="nota" th:if="${p.discontinued()}">
+                Reference only: this protocol needs a team — an experimenter and a redactor — and does
+                not run by itself through the site.
+              </span>
+            </p>
+          </li>
+        </ul>
+
+        <p class="nota nota-espacada">
+          A null result in the automated reading does not refute the studies with an intermediary in the
+          literature: each design pays a different price, and each protocol's page says what its own
+          price is.
+        </p>
+      </div>
+    </section>
+
+    <section id="pes">
+      <div class="faixa">
+        <p class="rotulo">Extrasensory perception · P3 and P4</p>
+        <h2>Extrasensory perception tests (ESP)</h2>
+        <p>
+          Quick, anonymous tests, with no account. They <strong>say nothing about mediumship</strong>:
+          they serve to show the method working, and anyone can check afterwards that their own test was
+          run fairly.
+        </p>
+
+        <ul class="protocolos">
+          <li th:each="p : ${esp}">
+            <p class="selo">
+              <span th:text="${p.label()}">P3-precognição</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind().in(idioma))}">test</span> ·
+              <span th:text="'automation ' + ${#strings.toLowerCase(p.automation.label().in(idioma))}">Automation</span> ·
+              <span th:text="'chance ' + ${p.chancePercent()} + '%'">chance</span>
+            </p>
+            <h3><a th:href="${aplicacao} + '/protocolo/' + ${p.code}" th:text="${p.name.in(idioma)}">Name</a></h3>
+            <p th:text="${p.summary.in(idioma)}">Summary</p>
+            <p class="acoes">
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/' + ${p.code}">How it works</a>
+              <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/' + ${p.code} + '/rodar'">Take the test</a>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

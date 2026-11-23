@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>The state of the trail — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('The state of the trail — Crivo', 'Events in the audit trail, registered studies and the hash of the last event of this Crivo installation, read from the database at the moment of the request.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">This installation</p>
+        <h1 class="aparece">The state of this instance, right now</h1>
+        <p class="chamada aparece">
+          Numbers read from the database at the moment this page was requested.
+        </p>
+      </div>
+    </section>
+
+    <section id="verificar">
+      <div class="faixa">
+        <p>
+          Anyone can check the integrity of the chain without asking anyone for permission and without
+          trusting this page: the verification runs outside the application, from the same artifact.
+        </p>
+
+        <div class="painel">
+          <dl class="leituras">
+            <div>
+              <dt>Events in the trail</dt>
+              <dd th:text="${auditEvents}">0</dd>
+            </div>
+            <div>
+              <dt>Registered studies</dt>
+              <dd th:text="${studyCount}">0</dd>
+            </div>
+          </dl>
+          <dl class="cadeia">
+            <dt>Hash of the last event</dt>
+            <dd><code th:text="${auditHead}">0</code></dd>
+          </dl>
+          <p class="nota nota-espacada">Verification from the command line:</p>
+          <code class="comando">./scripts/airlab.sh verify</code>
+          <code class="comando">.\scripts\airlab.ps1 verify</code>
+          <p class="nota">
+            The command checks the hash chain, the hash of each version of the preregistration and,
+            in studies that have already been unblinded, redoes the draw from the seed. It exits with a
+            non-zero code if anything does not check out.
+          </p>
+        </div>
+
+        <p class="acoes">
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/carimbos'">Timestamps</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/estudos'">Studies and reports</a>
+          <a class="botao botao-vazio" th:href="${site} + '/auditar'">How to audit</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

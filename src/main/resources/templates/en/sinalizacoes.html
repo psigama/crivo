@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Flags — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator · flags</p>
+      <h1>Accounts that look linked</h1>
+      <p class="aviso" th:if="${param.revisada}" role="status">Decision recorded.</p>
+      <p class="chamada">
+        Two accounts that have the same full name, or the same e-mail written another way. Flagging
+        is not blocking: nobody is turned down. While the flag is pending, or if you
+        confirm that it is the same person, the draw only keeps the two from meeting in a pair.
+      </p>
+      <p class="nota">
+        You see the codes and the kind of signal, not the names or the e-mails. The decision holds once and does not
+        change; the trail records the flag and the decision without the codes of the accounts.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p th:if="${#lists.isEmpty(sinalizacoes)}">No flags.</p>
+      <div class="tabela" th:unless="${#lists.isEmpty(sinalizacoes)}">
+        <table class="tentativas">
+          <thead>
+            <tr><th scope="col">Flag</th><th scope="col">Accounts</th><th scope="col">Signal</th>
+              <th scope="col">When (UTC)</th><th scope="col">Decision</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="sinal : ${sinalizacoes}">
+              <td><code th:text="${sinal.code}">SIN-0000</code></td>
+              <td>
+                <code th:text="${sinal.accountA}">CON-0000</code>
+                (<span th:text="${sinal.profileA} ? ${sinal.profileA.label().in(idioma)} : 'closed'">Sitter</span>)
+                and <code th:text="${sinal.accountB}">MED-0000</code>
+                (<span th:text="${sinal.profileB} ? ${sinal.profileB.label().in(idioma)} : 'closed'">Medium</span>)
+              </td>
+              <td th:text="${sinal.signal.label().in(idioma)}">Same full name</td>
+              <td><time th:text="${@datas.utc(sinal.createdAt)}">2026-11-13</time></td>
+              <td>
+                <span th:unless="${sinal.pending()}" th:text="${sinal.decision.label().in(idioma)}">Unrelated</span>
+                <form th:if="${sinal.pending()}" class="decisao" method="post"
+                      th:action="@{/painel/adm/sinalizacoes/{c}(c=${sinal.code})}">
+                  <button class="botao botao-vazio" type="submit" name="decisao" value="UNRELATED">Unrelated</button>
+                  <button class="botao botao-cheio" type="submit" name="decisao" value="LINKED">Same person</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/adm'">Back to the dashboard</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

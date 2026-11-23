@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Review the P1 study — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator · P1 study · review before freezing</p>
+      <h1 th:text="${termos.title}">Title</h1>
+      <p class="chamada">
+        Check it. <strong>Once frozen, the preregistration never changes again</strong>, and the requests that are
+        already locked are paired right away.
+      </p>
+
+      <dl class="leituras lista">
+        <div><dt>Number of pairs (N)</dt><dd th:text="${termos.targetPairs}">30</dd></div>
+        <div><dt>Cap on pairs per medium</dt><dd th:text="${termos.maxPairsPerMedium}">10</dd></div>
+        <div><dt>Deadline for the medium</dt><dd th:text="${termos.deadlineDays} + ' days'">14 days</dd></div>
+        <div><dt>Expected effect (d)</dt><dd th:text="${termos.expectedEffect}">0.5</dd></div>
+        <div><dt>Declared power</dt><dd th:text="${poder.detail}">Detail</dd></div>
+        <div><dt>Hypothesis</dt><dd th:text="${termos.hypothesis}">Hypothesis</dd></div>
+        <div><dt>Inclusion criteria for mediums</dt><dd th:text="${termos.mediumInclusionCriteria}">Criteria</dd></div>
+        <div><dt>Questionnaire</dt><dd>
+          <code th:text="${questionario.version}">v1-rascunho</code>:
+          <span th:text="${#lists.size(questionario.scoredFields())}">13</span> fields in the score and
+          <span th:text="${#lists.size(questionario.fields) - #lists.size(questionario.scoredFields())}">3</span>
+          for pairing, all of them in the annex to the document.
+        </dd></div>
+        <div><dt>Pairing</dt><dd>Same gender, age range at death and period of the death, in order of locking.</dd></div>
+        <div><dt>Medium</dt><dd>One per pair, drawn among the confirmed medium accounts, who does both readings.</dd></div>
+      </dl>
+
+      <div class="ressalva" th:if="${rascunhoBloqueado}">
+        <p>
+          <strong>Freezing is not possible here:</strong> the questionnaire
+          <code th:text="${questionario.version}">v1-rascunho</code> is still a draft, and in production a study
+          only freezes the reviewed version.
+        </p>
+      </div>
+
+      <form class="formulario" method="post" th:action="@{/painel/adm/estudo-p1/congelar}"
+            th:unless="${rascunhoBloqueado}">
+        <button class="botao botao-cheio" type="submit">Freeze the preregistration</button>
+      </form>
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/adm/estudo-p1'">Go back and correct</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

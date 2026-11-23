@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Feedback — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Sitter · feedback · study <code th:text="${devolutiva.studyCode}">STD-0000</code></p>
+      <h1 th:text="'About ' + ${pedido.firstName}">About the person</h1>
+      <p class="chamada">
+        The study has ended. Below are your answers alongside the answers the medium gave, knowing only
+        the first name. Thank you for taking part.
+      </p>
+      <div class="ressalva">
+        <p>
+          <strong>Before you read.</strong> This comparison is not a message from the person who died, and
+          an individual result says nothing about them nor about the medium. Coincidences happen by
+          chance — "died of a heart problem" is right for a great many people. What the study evaluates
+          is the whole set of pairs, at the end of the page.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Field by field</h2>
+      <dl class="contagens">
+        <div><dt>Matched your answers</dt>
+          <dd th:text="${devolutiva.targetMatches} + ' of ' + ${#lists.size(devolutiva.comparableFields)}">0 of 0</dd></div>
+        <div><dt>Matched those of the other sitter in the pair</dt>
+          <dd th:text="${devolutiva.decoyMatches} + ' of ' + ${#lists.size(devolutiva.comparableFields)}">0 of 0</dd></div>
+      </dl>
+      <p class="nota">
+        The same text from the medium was compared with your answers and with those of another person
+        with a similar profile, who serves as a comparison. What counts is the difference between the two
+        counts, not the number of matches on its own. The other person's answers do not appear here.
+      </p>
+
+      <div class="tabela">
+      <table class="tentativas comparacao">
+        <thead>
+          <tr><th scope="col">Question</th><th scope="col">You</th><th scope="col">Medium</th><th scope="col">Counts?</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="linha : ${linhas}" th:classappend="${linha.match} ? 'coincide'">
+            <th scope="row" th:text="${linha.question}">Question</th>
+            <td th:text="${linha.mine}">Your answer</td>
+            <td th:text="${linha.reading}">The medium's answer</td>
+            <td th:text="${!linha.comparable} ? 'Out of the comparison' : (${linha.match} ? 'Matched' : 'Did not match')">Matched</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="nota">
+        "Out of the comparison": you or the other person in the pair marked "I don't know" in that field,
+        and it counts for nobody in the pair.
+      </p>
+    </div>
+  </section>
+
+  <section th:if="${relatorio}">
+    <div class="faixa">
+      <h2>The result of the whole study</h2>
+      <p>
+        The study gathered <strong th:text="${relatorio.pairs}">2</strong> pairs. The analysis declared
+        before the collection — the Wilcoxon test over the difference of each pair — gave
+        <strong th:text="'p = ' + ${#numbers.formatDecimal(relatorio.primaryPValue, 1, 4, 'POINT')}">p = 0.25</strong>.
+      </p>
+      <p th:if="${relatorio.primaryBelowAlpha()}">
+        That value is below 0.05, the declared limit: the readings matched the targets more than chance
+        would explain easily. It is a statement about the test, not about the origin of the information,
+        and the protocol has declared limits — for instance, it does not distinguish communication with
+        the person who died from other explanations.
+      </p>
+      <p th:unless="${relatorio.primaryBelowAlpha()}">
+        That value is not below 0.05, the declared limit: taken as a whole, the readings did not match the
+        targets more than chance explains. A result like this does not prove that the phenomenon does not
+        exist; it says that this study did not detect it.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <div th:replace="~{fragments/p1 :: apoio}"></div>
+      <p class="acoes"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Back to the dashboard</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

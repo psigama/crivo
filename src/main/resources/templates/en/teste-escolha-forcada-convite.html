@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Precognitive forced choice — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Precognitive forced choice — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">P3 · before you begin</p>
+      <h1 class="aparece">Precognitive forced choice</h1>
+      <p class="chamada aparece">
+        In each trial you pick one of four doors. The target for that trial
+        <strong>is only computed after your answer is locked</strong> — at the moment of the
+        choice it does not yet exist anywhere.
+      </p>
+
+      <ul class="niveis">
+        <li>
+          <strong>No results along the way.</strong> During the session you see how many
+          trials are left, never how many you got right. If you could see that, you could stop at
+          a good moment — and then the final number would be worth nothing.
+        </li>
+        <li>
+          <strong>The number of trials is fixed now</strong> and does not change afterwards.
+        </li>
+        <li>
+          <strong>At the end, the seed is revealed.</strong> With it you recompute every target
+          on your own and check that none was chosen after your answer.
+        </li>
+        <li>
+          <strong>No personal data.</strong> The session is anonymous: no account, no e-mail.
+        </li>
+      </ul>
+
+      <p class="nota">
+        An honest expectation: the large replications of Bem's precognition findings came out null
+        (Ritchie, Wiseman and French, 2012; Galak et al., 2012). Chance level here is 25%. This test
+        exists to demonstrate the verification method, not to promise an effect.
+      </p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/comecar'">
+        <p>
+          <label for="tentativas">How many trials in this session</label>
+          <select id="tentativas" name="tentativas">
+            <option value="12">12 trials</option>
+            <option value="24" selected>24 trials (default)</option>
+            <option value="48">48 trials</option>
+          </select>
+        </p>
+        <p class="acoes">
+          <button class="botao botao-cheio" type="submit">Start the session</button>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/P3'">How it works</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -33,7 +33,7 @@ class QuestionnaireTest {
         assertThat(pairing).containsExactlyInAnyOrder(
                 Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD);
         current.fields().stream().filter(field -> !field.scored())
-                .forEach(field -> assertThat(field.outOfScoreReason()).contains("fora da nota"));
+                .forEach(field -> assertThat(field.outOfScoreReason().pt()).contains("fora da nota"));
     }
 
     @Test
@@ -91,27 +91,66 @@ class QuestionnaireTest {
     }
 
     @Test
-    @DisplayName("a v2 e a vigente, e a v1 continua legivel para os pedidos feitos nela")
-    void v2_is_current_and_v1_stays_readable() {
-        assertThat(current.version()).isEqualTo("v2-rascunho");
+    @DisplayName("a v3 e a vigente, e as versoes anteriores continuam legiveis para os pedidos feitos nelas")
+    void v3_is_current_and_the_older_ones_stay_readable() {
+        assertThat(current.version()).isEqualTo("v3-rascunho");
         assertThat(current.scoredFields()).hasSize(20);
         Questionnaire v1 = Questionnaires.byVersion("v1-rascunho").orElseThrow();
+        Questionnaire v2 = Questionnaires.byVersion("v2-rascunho").orElseThrow();
         assertThat(v1.scoredFields()).hasSize(13);
+        assertThat(v2.scoredFields()).hasSize(20);
         assertThat(Questionnaires.all()).first().isEqualTo(current);
-        assertThat(Questionnaires.all()).contains(v1);
+        assertThat(Questionnaires.all()).contains(v1, v2);
         // O pareamento nao muda entre as versoes: mesmos campos, mesmas faixas, mesmas chaves.
         for (String key : List.of(Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD)) {
-            assertThat(current.field(key).orElseThrow().options())
-                    .isEqualTo(v1.field(key).orElseThrow().options());
+            assertThat(keysOf(current.field(key).orElseThrow()))
+                    .isEqualTo(keysOf(v1.field(key).orElseThrow()));
         }
+    }
+
+    @Test
+    @DisplayName("SPEC 0.28: a v3 e a v2 com os rotulos nos dois idiomas, e as chaves nao mudam")
+    void v3_is_v2_in_two_languages() {
+        Questionnaire v2 = Questionnaires.byVersion("v2-rascunho").orElseThrow();
+        assertThat(current.fields()).hasSameSizeAs(v2.fields());
+        for (int i = 0; i < current.fields().size(); i++) {
+            Questionnaire.Field now = current.fields().get(i);
+            Questionnaire.Field before = v2.fields().get(i);
+            // A chave e a mesma, e por isso uma resposta dada numa versao compara com a da outra.
+            assertThat(now.key()).isEqualTo(before.key());
+            assertThat(now.use()).isEqualTo(before.use());
+            assertThat(keysOf(now)).isEqualTo(keysOf(before));
+            // O portugues nao mudou uma palavra; o ingles existe e nao e o portugues repetido.
+            assertThat(now.label().pt()).isEqualTo(before.label().pt());
+            assertThat(now.label().en()).isNotBlank().isNotEqualTo(now.label().pt());
+            for (Questionnaire.Option option : now.options()) {
+                Questionnaire.Option same = before.option(option.key()).orElseThrow();
+                assertThat(option.label().pt()).isEqualTo(same.label().pt());
+                assertThat(option.label().en()).isNotBlank();
+            }
+            if (!now.scored()) {
+                assertThat(now.outOfScoreReason().pt()).isEqualTo(before.outOfScoreReason().pt());
+                assertThat(now.outOfScoreReason().en()).isNotBlank()
+                        .isNotEqualTo(now.outOfScoreReason().pt());
+            }
+        }
+    }
+
+    /** As chaves das opcoes de um campo, que sao o que nao muda de uma versao para a outra. */
+    private static List<String> keysOf(Questionnaire.Field field) {
+        return field.options().stream().map(Questionnaire.Option::key).toList();
     }
 
     @Test
     @DisplayName("os rotulos de nao sei e nao recebi sao fixos")
     void labels() {
-        assertThat(current.labelOf("causa", Questionnaire.UNKNOWN)).isEqualTo("Não sei");
-        assertThat(current.labelOf("causa", Questionnaire.NOT_RECEIVED)).isEqualTo("Não recebi");
-        assertThat(current.labelOf("causa", "cancer")).isEqualTo("Câncer");
+        assertThat(current.labelOf("causa", Questionnaire.UNKNOWN).pt()).isEqualTo("Não sei");
+        assertThat(current.labelOf("causa", Questionnaire.NOT_RECEIVED).pt()).isEqualTo("Não recebi");
+        assertThat(current.labelOf("causa", "cancer").pt()).isEqualTo("Câncer");
+        // SPEC 0.28, secao 1.5: o mesmo rotulo em ingles, e a resposta continua sendo a chave.
+        assertThat(current.labelOf("causa", Questionnaire.UNKNOWN).en()).isEqualTo("I don't know");
+        assertThat(current.labelOf("causa", Questionnaire.NOT_RECEIVED).en()).isEqualTo("Nothing came");
+        assertThat(current.labelOf("causa", "cancer").en()).isEqualTo("Cancer");
     }
 
     // --- Fase C: as respostas do medium ---------------------------------------------------------

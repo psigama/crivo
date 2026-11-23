@@ -51,7 +51,7 @@
         existe para demonstrar o método de verificação, não para prometer um efeito.
       </p>
 
-      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/comecar'">
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/comecar'">
         <p>
           <label for="tentativas">Quantas tentativas nesta sessão</label>
           <select id="tentativas" name="tentativas">
@@ -62,7 +62,7 @@
         </p>
         <p class="acoes">
           <button class="botao botao-cheio" type="submit">Começar a sessão</button>
-          <a class="botao botao-vazio" href="/protocolo/P3">Como funciona</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/P3'">Como funciona</a>
         </p>
       </form>
     </div>

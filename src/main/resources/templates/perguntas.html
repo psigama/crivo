@@ -125,7 +125,7 @@
       <details>
         <summary>As inscrições já estão abertas?</summary>
         <p th:if="${inscricaoAberta}">
-          Sim. Você pode <a href="/conta/criar">criar a sua conta</a> agora.
+          Sim. Você pode <a th:href="${aplicacao} + '/conta/criar'">criar a sua conta</a> agora.
         </p>
         <p th:if="${!inscricaoAberta and aguardaCep}">
           Ainda não. Elas abrem depois que o estudo for aprovado pelo Comitê de Ética em Pesquisa (CEP), que
@@ -148,7 +148,7 @@
           As regras do estudo são escritas e lacradas antes de começar. Cada resposta é lacrada assim que
           enviada. O sorteio pode ser refeito por qualquer pessoa, e cada etapa entra num registro público
           que ninguém consegue alterar, carimbado com a data por um serviço independente. Os detalhes estão em
-          <a th:href="${site} + '/garantias'">Garantias</a> e na <a href="/pesquisa">página para
+          <a th:href="${site} + '/garantias'">Garantias</a> e na <a th:href="${aplicacao} + '/pesquisa'">página para
           pesquisadores</a>.
         </p>
       </details>
@@ -166,7 +166,7 @@
         <p>
           São dois testes de percepção extrassensorial, sem cadastro e com o resultado na hora, que qualquer
           pessoa pode fazer. Eles não dizem nada sobre mediunidade nem sobre pessoas falecidas.
-          <a href="/protocolos#pes">Ver os testes</a>.
+          <a th:href="${aplicacao} + '/protocolos#pes'">Ver os testes</a>.
         </p>
       </details>
 
@@ -180,8 +180,8 @@
       </details>
 
       <p class="nota nota-espacada">
-        Sua dúvida não está aqui? Veja a página <a href="/consulente">para consulentes</a> ou
-        <a href="/medium">para médiuns</a><th:block th:if="${contato}">, ou escreva para
+        Sua dúvida não está aqui? Veja a página <a th:href="${aplicacao} + '/consulente'">para consulentes</a> ou
+        <a th:href="${aplicacao} + '/medium'">para médiuns</a><th:block th:if="${contato}">, ou escreva para
         <a th:href="'mailto:' + ${contato}" th:text="${contato}">contato</a>. Quem responde é uma
         pessoa</th:block>.
       </p>

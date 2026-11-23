@@ -34,13 +34,13 @@
       <th:block th:if="${situacao}">
         <dl class="contagens">
           <div><dt>Pedido</dt><dd><code th:text="${situacao.code}">PED-0000</code></dd></div>
-          <div><dt>Situação</dt><dd th:text="${situacao.state.label()}">Travado</dd></div>
+          <div><dt>Situação</dt><dd th:text="${situacao.state.label().in(idioma)}">Travado</dd></div>
         </dl>
         <p class="acoes">
           <a class="botao botao-cheio" th:if="${situacao.state.name() == 'UNBLINDED'}"
-             href="/painel/consulente/devolutiva">Ver a devolutiva</a>
+             th:href="${aplicacao} + '/painel/consulente/devolutiva'">Ver a devolutiva</a>
           <a class="botao" th:classappend="${situacao.state.name() == 'UNBLINDED'} ? 'botao-vazio' : 'botao-cheio'"
-             href="/painel/consulente/pedido">Ver meu pedido</a>
+             th:href="${aplicacao} + '/painel/consulente/pedido'">Ver meu pedido</a>
         </p>
         <div class="ressalva" th:switch="${situacao.state.name()}">
           <th:block th:case="'LOCKED'">
@@ -76,7 +76,7 @@
       <th:block th:unless="${situacao}">
         <p>Você ainda não fez um pedido.</p>
         <p class="acoes" th:if="${pedidosAbertos}">
-          <a class="botao botao-cheio" href="/painel/consulente/pedido/novo">Fazer o pedido</a>
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/painel/consulente/pedido/novo'">Fazer o pedido</a>
         </p>
         <div class="ressalva" th:unless="${pedidosAbertos}">
           <p>
@@ -102,7 +102,7 @@
   <section>
     <div class="faixa">
       <p class="acoes">
-        <a class="botao botao-vazio" href="/conta">Minha conta</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/conta'">Minha conta</a>
       </p>
       <form method="post" th:action="@{/logout}">
         <button class="botao botao-vazio" type="submit">Sair</button>

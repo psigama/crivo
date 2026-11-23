@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Studies — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Studies — Crivo', 'The P1 studies registered in this installation, each with its frozen preregistration, its commitment to the seed, and the report of every one that has ended.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Automated structured reading · P1</p>
+      <h1>Studies and reports</h1>
+      <p class="chamada">
+        Every study is declared and frozen before any pairing. Here is what was declared,
+        with the hash that lets anyone check that nothing changed afterwards, and, once the study ends, the
+        whole report — whatever the result turns out to be.
+      </p>
+      <p class="nota">
+        While a study is collecting, only counts appear. Scores do not exist before the unblinding,
+        for anyone.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Under way</h2>
+      <p th:unless="${aberto}">No study collecting right now.</p>
+      <p th:if="${aberto}">
+        <a th:href="@{/estudos/{c}(c=${aberto.studyCode})}"><code th:text="${aberto.studyCode}">STD-0000</code></a> ·
+        <span th:text="${aberto.title}">Title</span> ·
+        <span th:text="${aberto.targetPairs} + ' pairs declared'">30 pairs declared</span>
+      </p>
+
+      <h2>Completed</h2>
+      <p th:if="${#lists.isEmpty(concluidos)}">No study completed yet.</p>
+      <ul th:unless="${#lists.isEmpty(concluidos)}">
+        <li th:each="concluido : ${concluidos}">
+          <a th:href="@{/estudos/{c}(c=${concluido.studyCode})}"><code th:text="${concluido.studyCode}">STD-0000</code></a> ·
+          <span th:text="${concluido.title}">Title</span> · report published
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -64,8 +64,8 @@
         </div>
 
         <p class="acoes">
-          <a class="botao botao-vazio" href="/carimbos">Carimbos de tempo</a>
-          <a class="botao botao-vazio" href="/estudos">Estudos e relatórios</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a>
           <a class="botao botao-vazio" th:href="${site} + '/auditar'">Como auditar</a>
         </p>
       </div>

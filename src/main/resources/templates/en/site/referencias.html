@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Bibliographic references — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Bibliographic references — Crivo', 'The literature the Crivo protocol rests on: supportive studies, skeptical criticism, meta-analyses and open science — and the design decision each one informs.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">Bibliographic references</p>
+      <h1 class="aparece">What this rests on</h1>
+      <p class="chamada aparece">
+        Every rule of the protocol comes from somewhere. Here are the works that support it —
+        including those that concluded the opposite.
+      </p>
+      <p class="tese aparece">
+        The list <strong>deliberately includes the critics and the null results</strong>. A
+        protocol built only on the favorable literature would not survive the first careful
+        reading, and a good part of the locks in this system came precisely from the objections below.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">1 · Blinding protocols</p>
+      <h2>The basis of the paired protocol</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            Beischel, J., &amp; Schwartz, G. E. (2007). Anomalous information reception by research
+            mediums demonstrated using a novel triple-blind protocol. <em>Explore</em>, 3(1), 23–27.
+            <a href="https://doi.org/10.1016/j.explore.2006.10.004">doi:10.1016/j.explore.2006.10.004</a>
+          </p>
+          <p class="informa">
+            Origin of the v1 structure: blind <em>proxy</em> experimenter, same-gender pairs,
+            decoy reading, transcription into items, global score and forced choice. It is also the
+            source of the observation that forced choice is the <em>least</em> sensitive measure — which led
+            Crivo to adopt the paired difference as its primary measure.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Beischel, J., Boccuzzi, M., Biuso, M., &amp; Rock, A. J. (2015). Anomalous information
+            reception by research mediums under blinded conditions II: Replication and extension.
+            <em>Explore</em>, 11(2), 136–142.
+            <a href="https://doi.org/10.1016/j.explore.2015.01.001">doi:10.1016/j.explore.2015.01.001</a>
+          </p>
+          <p class="informa">
+            Grounds the “first name only” rule, the remote sessions and the three measures of the
+            analysis. The effect sizes by reading section (d from 0.49 to 0.75) are the basis of the
+            power calculation. The authors themselves record the limitation: all the data come from a
+            single laboratory — which is, to a large extent, the reason this platform exists.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">2 · Criticism and null results</p>
+      <h2>The works that changed the design most</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            O'Keeffe, C., &amp; Wiseman, R. (2005). Testing alleged mediumship: Methods and results.
+            <em>British Journal of Psychology</em>, 96(2), 165–179.
+            <a href="https://doi.org/10.1348/000712605X36361">doi:10.1348/000712605X36361</a>
+          </p>
+          <p class="informa">
+            A null result, and the most complete inventory of artifacts: sensory leakage,
+            the generality of the statements and the need for blind evaluation. Four of the locks
+            in Crivo come from here — one item equal to one statement, the randomized order of the items, the
+            counterbalancing of session times against temporal cues and the balance of length
+            between the two readings of a pair.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Kelly, E. W., &amp; Arcangel, D. (2011). An investigation of mediums who claim to give
+            information about deceased persons. <em>The Journal of Nervous and Mental Disease</em>,
+            199(1), 11–17.
+            <a href="https://doi.org/10.1097/NMD.0b013e31820439da">doi:10.1097/NMD.0b013e31820439da</a>
+          </p>
+          <p class="informa">
+            The blinding was considered incomplete because the mediums received photographs of the
+            deceased. In Crivo, the blinding matrix treats any information beyond the first name
+            as leakage.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Hyman, R. (2003). How not to test mediums: Critiquing the afterlife experiments.
+            <em>Skeptical Inquirer</em>, 27(1), 20–30.
+          </p>
+          <p class="informa">
+            The criticism that weighs most on the current design: the absence of a prior stopping
+            rule, scoring open to bias and the manner of scoring itself as a source of spurious results.
+            It is answered by the binding stopping rule, the scale frozen before collection and the automatic
+            refusal of the “confirmatory” label outside the declared sample.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Simmons, J. P., Nelson, L. D., &amp; Simonsohn, U. (2011). False-positive psychology.
+            <em>Psychological Science</em>, 22(11), 1359–1366.
+            <a href="https://doi.org/10.1177/0956797611417632">doi:10.1177/0956797611417632</a>
+          </p>
+          <p class="informa">
+            Shows how researcher degrees of freedom produce positive results out of
+            noise. It is the general argument behind freezing the analysis, the sample and the criteria before
+            the first datum.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">3 · Reviews and meta-analyses</p>
+      <h2>The effect size one can expect</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            Sarraf, M., Woodley of Menie, M. A., &amp; Tressoldi, P. (2021). Anomalous information
+            reception by mediums: A meta-analysis of the scientific evidence. <em>Explore</em>,
+            17(5), 396–402.
+            <a href="https://doi.org/10.1016/j.explore.2020.04.002">doi:10.1016/j.explore.2020.04.002</a>
+          </p>
+          <p class="informa">
+            Estimates the aggregate effect at 6 to 14 percentage points above chance level. It is the
+            number that sizes the study: with it, forced choice would require hundreds of pairs, and the
+            paired measure requires dozens. It is built into the power calculation that the platform writes
+            into the preregistration.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Silva, J., &amp; Moreira-Almeida, A. (2022). Controlled experiments involving anomalous
+            information reception with mediums: An analysis of recent studies.
+            <em>Journal of Scientific Exploration</em>, 36(4), 749–759.
+            <a href="https://doi.org/10.31275/20222575">doi:10.31275/20222575</a>
+          </p>
+          <p class="informa">
+            Compares studies with conflicting results and isolates what separates them: screening of
+            mediums, the motivation of the person who evaluates, free speech combined with objective
+            questions, and not overloading the person who evaluates with too many items. Each of these
+            points became a preregistrable field or a limit in the system.
+          </p>
+        </li>
+        <li>
+          <p class="citacao">
+            Milton, J., &amp; Wiseman, R. (1999). Does psi exist? Lack of replication of an anomalous
+            process of information transfer. <em>Psychological Bulletin</em>, 125(4), 387–391.
+            <a href="https://doi.org/10.1037/0033-2909.125.4.387">doi:10.1037/0033-2909.125.4.387</a>
+          </p>
+          <p class="informa">
+            A reminder that meta-analysis does not replace independent replication. Hence the
+            verification package, designed so that another group can rerun the analysis without depending
+            on this one.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">4 · Brazilian context</p>
+      <h2>Research done here</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            Rocha, A. C., Paraná, D., Freire, E. S., Lotufo Neto, F., &amp; Moreira-Almeida, A.
+            (2014). Investigating the fit and accuracy of alleged mediumistic writing: A case study
+            of Chico Xavier's letters. <em>Explore</em>, 10(5), 300–308.
+            <a href="https://doi.org/10.1016/j.explore.2014.06.002">doi:10.1016/j.explore.2014.06.002</a>
+          </p>
+          <p class="informa">
+            Brazilian case study on mediumistic writing, with separate scales for <em>fit</em> and
+            for <em>leakage</em> per item. The idea of assessing, item by item, how plausible it
+            would be to obtain that by ordinary means is an extension planned for Crivo. Mediumistic
+            writing itself is outside the scope of v1, because it depends on documentary judgment that
+            cannot be automated in a blind protocol.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">5 · Open science</p>
+      <h2>Preregistration and reproducibility</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            Nosek, B. A., Ebersole, C. R., DeHaven, A. C., &amp; Mellor, D. T. (2018).
+            The preregistration revolution. <em>PNAS</em>, 115(11), 2600–2606.
+            <a href="https://doi.org/10.1073/pnas.1708274114">doi:10.1073/pnas.1708274114</a>
+          </p>
+          <p class="informa">
+            Theoretical basis for the distinction between confirmatory and exploratory, and for the
+            idea that deviations reported transparently are worth more than the absence of
+            preregistration. From here comes the record of protocol deviations as an entity of its own, which
+            is never erased.
+          </p>
+        </li>
+      </ol>
+
+      <div class="ressalva">
+        <p>
+          <strong>One analysis barred in this project.</strong> Multiplying the individual
+          probabilities of the items as if they were independent, the method of Hyslop (1919), inflates
+          accuracy and was refuted in the literature of the field itself. The alternative adopted is the
+          permutation test of Pratt and Birge, which does not assume independence between items of the same reading.
+        </p>
+      </div>
+
+      <p class="nota nota-espacada">
+        The complete bibliography, with a summary of each work and the map of “criticism → control in
+        the system”, is versioned in the repository, in
+        <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/REFERENCES.md"><code>docs/REFERENCES.md</code></a>.
+        Is a relevant reference missing, for or against? Open an <em>issue</em>.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">6 · By the author</p>
+      <h2>A book by the person who maintains Crivo</h2>
+
+      <ol class="bibliografia">
+        <li>
+          <p class="citacao">
+            Cisi, R. R. L. (2026). <em lang="pt-BR">O sistema psíquico: uma abordagem baseada na psicologia
+            analítica e em conceitos de espiritualidade</em> (rev. ed.; 1st ed. 2021). São Paulo:
+            RRLC.
+            <a href="https://doi.org/10.5281/zenodo.24370051">doi:10.5281/zenodo.24370051</a>
+            · <a href="https://www.amazon.com.br/dp/B08RWSF2BQ">Amazon</a>
+          </p>
+          <p class="informa sobre">
+            An essay that puts Jung's analytical psychology in dialogue with spiritualist traditions.
+            It grounds no rule of the protocol, which rests only on the works above; it is
+            here so that the origin of the author's interest in the subject is known.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

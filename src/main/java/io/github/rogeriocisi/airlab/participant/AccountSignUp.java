@@ -1,5 +1,7 @@
 package io.github.rogeriocisi.airlab.participant;
 
+import io.github.rogeriocisi.airlab.support.Language;
+
 /**
  * What a person fills in to create a P1 account (SPEC E13).
  *
@@ -14,6 +16,9 @@ package io.github.rogeriocisi.airlab.participant;
  * @param sensitiveDataAccepted explicit acceptance of the sensitive data clause (LGPD)
  * @param adultDeclared         the person declares being 18 or older (SPEC 0.26). A declaration,
  *                              not a birth date: the exact age is not collected (P6)
+ * @param language              language the account is being created in, {@code pt} or {@code en}
+ *                              (SPEC 0.28, section 1.5, rule 8): what the e-mails sent outside a
+ *                              request come out in. A presentation preference, nothing more
  */
 public record AccountSignUp(String fullName,
                             String email,
@@ -21,11 +26,23 @@ public record AccountSignUp(String fullName,
                             AccountProfile profile,
                             String termVersion,
                             boolean sensitiveDataAccepted,
-                            boolean adultDeclared) {
+                            boolean adultDeclared,
+                            String language) {
+
+    /**
+     * The same sign-up in the language of origin, for a caller with no language at hand — a test or
+     * a fixture. A screen always passes the language of the page it was filled in on.
+     */
+    public AccountSignUp(String fullName, String email, String password, AccountProfile profile,
+                         String termVersion, boolean sensitiveDataAccepted, boolean adultDeclared) {
+        this(fullName, email, password, profile, termVersion, sensitiveDataAccepted, adultDeclared,
+                Language.DEFAULT.code());
+    }
 
     @Override
     public String toString() {
         // Never print the personal data or the password, not even by accident in a log (P6).
-        return "AccountSignUp[profile=" + profile + ", termVersion=" + termVersion + "]";
+        return "AccountSignUp[profile=" + profile + ", termVersion=" + termVersion
+                + ", language=" + language + "]";
     }
 }

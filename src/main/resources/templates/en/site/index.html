@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Crivo — research on mediumship, with an open method</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Crivo — research on mediumship, with an open method', 'A fair way to research mediumship: the medium does not know who the answers are for, nobody changes the answers afterwards, and every result is published, for or against.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <!--/*
+      SPEC 0.24, section 1.4, rule 8: one simple sentence and three doors by role, which fit the
+      first screen of a phone. The earlier technical paragraph stays here, in the technical detail.
+    */-->
+    <section class="abertura abertura-portas">
+      <div class="faixa">
+        <p class="rotulo aparece">Research on mediumship, with an open method</p>
+        <h1 class="aparece">Crivo</h1>
+        <p class="chamada aparece">
+          A fair way to research mediumship: the medium does not know who the answers are for, nobody
+          changes the answers afterwards, and every result is published, for or against.
+        </p>
+
+        <nav class="entradas aparece" aria-label="Where to start">
+          <a class="entrada" th:href="${aplicacao} + '/consulente'">
+            <strong>I lost someone</strong>
+            <span>Take part as a sitter</span>
+          </a>
+          <a class="entrada" th:href="${aplicacao} + '/medium'">
+            <strong>I am a medium</strong>
+            <span>How it works for you</span>
+          </a>
+          <a class="entrada entrada-metodo" th:href="${aplicacao} + '/pesquisa'">
+            <strong>I do research, or I want to check</strong>
+            <span>Design, data and auditing</span>
+          </a>
+        </nav>
+
+        <p class="nota aparece">
+          Just want to try it? <a th:href="${aplicacao} + '/protocolos#pes'">Take a quick test</a>,
+          with no sign-up and the result right away.
+        </p>
+
+        <ul class="confianca aparece" aria-label="Why trust this">
+          <li>Open source code, which anyone can check</li>
+          <li>Results published, even when they are null</li>
+          <li>Personal data protected, under the Brazilian data protection law (LGPD)</li>
+          <li>Approval by a Brazilian research ethics committee before any sign-up</li>
+        </ul>
+
+        <details class="detalhe-tecnico aparece">
+          <summary>Technical detail</summary>
+          <p>
+            Crivo is a platform for research on the phenomena of anomalous cognition. Mediumship,
+            taken to be a branch of anomalous cognition, is known in the literature by the technical
+            name <strong>anomalous information reception</strong>, or AIR (<em lang="pt-BR">recepção
+            anômala de informação</em>). The platform has four protocols: two mediumship
+            <strong>experiments</strong> and two extrasensory perception <strong>tests</strong>, all
+            of them under <a th:href="${aplicacao} + '/protocolos'">Protocols</a>.
+          </p>
+          <p>
+            The experiments do not exist to prove that mediumship is real, nor that it is not. They
+            exist so that the answer, whatever it is, can be defended before a skeptic, a research
+            ethics committee or a reviewer who reads the study years later.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section id="air-automatizado">
+      <div class="faixa">
+        <p class="rotulo">Protocol P1-automático · mediumship experiment</p>
+        <h2>An experiment that runs entirely through the website</h2>
+        <p>
+          Someone who has lost a person gives that person's first name and answers multiple-choice
+          questions about them. A medium, drawn at random, receives only the first name and answers the
+          same questions. The system compares the medium's answers with the answers about the right
+          person and with those about another, similar person, to measure how much chance
+          explains. <strong>Nobody judges whether a sentence "fits"</strong>,
+          and nobody on the team stands in between: from sign-up to result, everything is automatic.
+        </p>
+        <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
+        <div class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">How it works</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/perguntas'">Frequently asked questions</a>
+          <a class="botao botao-vazio" th:href="${site} + '/artigo/'">Read the technical paper</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="seguir">
+      <div class="faixa">
+        <p class="rotulo">Where to go next</p>
+        <h2>See the options</h2>
+
+        <div class="caminhos">
+          <article class="caminho">
+            <h3><a th:href="${site} + '/participar'">Take part</a></h3>
+            <p>
+              As a sitter or a medium, in a quick test, by running a study, by auditing or by
+              contributing code.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3><a th:href="${site} + '/por-que'">Why</a></h3>
+            <p>
+              What research on mediumship is, exactly, and why what is missing is not accounts, but a
+              method that holds up under doubt.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3><a th:href="${site} + '/garantias'">Guarantees</a></h3>
+            <p>
+              What the system guarantees, what it attests and what it does not attest, and what is
+              asked of the people who take part.
+            </p>
+          </article>
+          <article class="caminho">
+            <h3><a th:href="${site} + '/auditar'">Audit it</a></h3>
+            <p>
+              How to check the records, the timestamps and the draw without asking anyone for
+              permission, and how to challenge the code.
+            </p>
+          </article>
+        </div>
+        <blockquote class="epigrafe">Put it through the sieve of reason.</blockquote>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <title th:text="${protocolo.label()} + ' · ' + ${protocolo.name} + ' — Crivo'">Protocolo — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social(${protocolo.name} + ' — Crivo', ${protocolo.summary})}"></th:block>
+  <title th:text="${protocolo.label()} + ' · ' + ${protocolo.name.in(idioma)} + ' — Crivo'">Protocolo — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social(${protocolo.name.in(idioma)} + ' — Crivo', ${protocolo.summary.in(idioma)})}"></th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
 <body>
@@ -21,11 +21,11 @@
     <div class="faixa">
       <p class="rotulo aparece">
         <span th:text="${protocolo.label()}">P1-automático</span> ·
-        <span th:text="${protocolo.branch.kindLabel()}">Experimento de mediunidade (AIR)</span> ·
+        <span th:text="${protocolo.branch.kindLabel().in(idioma)}">Experimento de mediunidade (AIR)</span> ·
         plataforma Crivo
       </p>
-      <h1 class="aparece" th:text="${protocolo.name}">Nome</h1>
-      <p class="chamada aparece" th:text="${protocolo.summary}">Resumo</p>
+      <h1 class="aparece" th:text="${protocolo.name.in(idioma)}">Nome</h1>
+      <p class="chamada aparece" th:text="${protocolo.summary.in(idioma)}">Resumo</p>
       <!--/* SPEC 0.24, seção 1.4, regra 13: "em poucas palavras" antes do desenho completo do P1. */-->
       <div class="definicao" id="em-poucas-palavras" th:if="${protocolo.code() == 'P1'}">
         <p><strong>Em poucas palavras.</strong></p>
@@ -40,8 +40,8 @@
           <li>O resultado é do estudo inteiro, e é publicado, a favor ou contra.</li>
         </ul>
         <p class="nota">
-          Mais simples ainda: a página <a href="/consulente">para consulentes</a>, a página
-          <a href="/medium">para médiuns</a> e as <a href="/perguntas">perguntas frequentes</a>.
+          Mais simples ainda: a página <a th:href="${aplicacao} + '/consulente'">para consulentes</a>, a página
+          <a th:href="${aplicacao} + '/medium'">para médiuns</a> e as <a th:href="${aplicacao} + '/perguntas'">perguntas frequentes</a>.
         </p>
       </div>
     </div>
@@ -52,8 +52,8 @@
       <dl class="leituras">
         <div><dt>Acaso declarado</dt><dd th:text="${protocolo.chanceNumerator} + '/' + ${protocolo.chanceDenominator}
                      + ' (' + ${protocolo.chancePercent()} + '%)'">1/2</dd></div>
-        <div><dt>Automação</dt><dd th:text="${protocolo.automation.label()}">Parcial</dd></div>
-        <div><dt>Situação</dt><dd th:text="${protocolo.status.label()}">Disponível</dd></div>
+        <div><dt>Automação</dt><dd th:text="${protocolo.automation.label().in(idioma)}">Parcial</dd></div>
+        <div><dt>Situação</dt><dd th:text="${protocolo.status.label().in(idioma)}">Disponível</dd></div>
         <div><dt>Especificação</dt><dd>
           Épicos <span th:text="${protocolo.epics}">E1</span> da
           <a href="https://github.com/rogeriocisi/crivo/blob/main/docs/SPEC.md">SPEC</a>
@@ -73,7 +73,7 @@
         <div class="nao">
           <h3>O que um resultado deste protocolo não sustenta</h3>
           <ul>
-            <li th:each="limite : ${protocolo.limits}" th:text="${limite}">Limite</li>
+            <li th:each="limite : ${protocolo.limits}" th:text="${limite.in(idioma)}">Limite</li>
           </ul>
         </div>
       </div>
@@ -81,12 +81,12 @@
       <p class="acoes">
         <a class="botao botao-cheio"
            th:if="${protocolo.quickTest()}"
-           th:href="'/protocolo/' + ${protocolo.code} + '/rodar'">Fazer o teste agora</a>
+           th:href="${aplicacao} + '/protocolo/' + ${protocolo.code} + '/rodar'">Fazer o teste agora</a>
         <a class="botao botao-cheio"
-           th:if="${protocolo.code == 'P1'}" href="/conta/criar">Criar uma conta</a>
+           th:if="${protocolo.code == 'P1'}" th:href="${aplicacao} + '/conta/criar'">Criar uma conta</a>
         <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" href="#questionario">Ver o questionário</a>
-        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" href="/estudos">Estudos e relatórios</a>
-        <a class="botao botao-vazio" href="/protocolos">Todos os protocolos</a>
+        <a class="botao botao-vazio" th:if="${protocolo.code == 'P1'}" th:href="${aplicacao} + '/estudos'">Estudos e relatórios</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolos'">Todos os protocolos</a>
       </p>
 
       <p class="nota" th:if="${protocolo.quickTest()}">
@@ -196,7 +196,7 @@
         pareada depende de uma equipe — experimentador e redator — e não recebe participantes. Ela
         fica aqui como referência, porque é o protocolo mais próximo da literatura e é contra ele
         que se mede o que a versão automatizada ganha e perde. Para participar, veja o
-        <a href="/protocolo/P1">P1-automático, a leitura estruturada automatizada</a>.
+        <a th:href="${aplicacao} + '/protocolo/P1'">P1-automático, a leitura estruturada automatizada</a>.
       </p>
     </div>
   </section>

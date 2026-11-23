@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>P1 study — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator · P1 study · <code th:text="${estudo.studyCode}">STD-0000</code></p>
+      <h1 th:text="${estudo.title}">Title</h1>
+      <p class="aviso" th:if="${param.congelado}" role="status">
+        Preregistration frozen. The requests that were already waiting have been paired and, where a medium was available, assigned.
+      </p>
+      <p class="chamada">
+        <th:block th:unless="${relatorio}">Counts, never scores — and nothing that says which medium has which
+        pair: that link stays blind until the unblinding (SPEC, E13).</th:block>
+        <th:block th:if="${relatorio}">Study completed and unblinded. The scores, the medium of each pair and the
+        seed are now public.</th:block>
+      </p>
+    </div>
+  </section>
+
+  <section th:unless="${relatorio}">
+    <div class="faixa">
+      <h2>Progress</h2>
+      <dl class="contagens">
+        <div><dt>Pairs with both readings</dt>
+          <dd th:text="${progresso.completedPairs} + ' / ' + ${progresso.targetPairs}">0 / 30</dd></div>
+        <div><dt>Active pairs</dt><dd th:text="${progresso.activePairs}">0</dd></div>
+        <div><dt>Requests awaiting a pair</dt><dd th:text="${progresso.waitingRequests}">0</dd></div>
+        <div><dt>Pairs awaiting a medium</dt><dd th:text="${progresso.pairsWaitingMedium}">0</dd></div>
+        <div><dt>Open assignments to mediums</dt><dd th:text="${progresso.openAssignments}">0</dd></div>
+        <div><dt>Locked readings</dt><dd th:text="${progresso.lockedReadings}">0</dd></div>
+        <div><dt>Deadlines expired</dt><dd th:text="${progresso.expiredAssignments}">0</dd></div>
+        <div><dt>Assignments cancelled</dt><dd th:text="${progresso.cancelledAssignments}">0</dd></div>
+        <div><dt>Pairs dissolved</dt><dd th:text="${progresso.dissolvedPairs}">0</dd></div>
+      </dl>
+      <p class="nota">
+        The server's automatic cycle pairs, draws, assigns and watches the deadlines every minute. Once
+        the N pairs have both readings, the cycle itself unblinds, scores and writes the report —
+        with nobody choosing the moment.
+      </p>
+    </div>
+  </section>
+
+  <section th:if="${relatorio}">
+    <div class="faixa">
+      <h2>Report</h2>
+      <p class="nota">
+        Written by the system itself at the unblinding, when the N pairs had both readings.
+        The hash of the document is in the audit trail.
+      </p>
+      <dl class="contagens">
+        <div><dt>Pairs analyzed</dt><dd th:text="${relatorio.pairs}">2</dd></div>
+        <div><dt>Wilcoxon (primary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.primaryPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+        <div><dt>Sign (secondary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.signPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+        <div><dt>Permutation (secondary)</dt><dd th:text="'p = ' + ${#numbers.formatDecimal(relatorio.permutationPValue, 1, 4, 'POINT')}">p = 0.25</dd></div>
+        <div><dt>Commitments checked</dt>
+          <dd th:text="(${relatorio.sitterCommitmentsVerified} + ${relatorio.readingCommitmentsVerified}) + ' / ' + (${relatorio.sitterCommitments} + ${relatorio.readingCommitments})">8 / 8</dd></div>
+      </dl>
+      <p th:text="${relatorio.primaryBelowAlpha()} ? 'The p of the primary analysis is below 0.05. It is a statement about the test, not about the origin of the information.' : 'The p of the primary analysis is not below 0.05. This study did not detect the effect; that does not prove it does not exist.'">Reading</p>
+      <div class="ressalva" th:unless="${relatorio.integrityHolds()}">
+        <p><strong>Attention:</strong> some commitment did not check out. The report says how many; the study needs review before any conclusion.</p>
+      </div>
+
+      <h3>By pair</h3>
+      <div class="tabela">
+        <table class="tentativas">
+          <thead>
+            <tr><th scope="col">Pair</th><th scope="col">Medium</th><th scope="col">Fields</th>
+              <th scope="col">s(R<sub>A</sub>,A)</th><th scope="col">s(R<sub>A</sub>,B)</th>
+              <th scope="col">s(R<sub>B</sub>,B)</th><th scope="col">s(R<sub>B</sub>,A)</th><th scope="col">d</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="par : ${relatorio.pairResults}">
+              <td><code th:text="${par.pairCode}">PAR</code></td>
+              <td><code th:text="${par.mediumCode}">MED</code></td>
+              <td th:text="${par.comparableFields}">13</td>
+              <td th:text="${par.targetMatchesA}">0</td>
+              <td th:text="${par.decoyMatchesA}">0</td>
+              <td th:text="${par.targetMatchesB}">0</td>
+              <td th:text="${par.decoyMatchesB}">0</td>
+              <td th:text="${par.d}">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>By medium</h3>
+      <div class="tabela">
+        <table class="tentativas">
+          <thead><tr><th scope="col">Medium</th><th scope="col">Pairs</th><th scope="col">Sum of d</th></tr></thead>
+          <tbody>
+            <tr th:each="medium : ${relatorio.mediumResults()}">
+              <td><code th:text="${medium.mediumCode}">MED</code></td>
+              <td th:text="${medium.pairs}">1</td>
+              <td th:text="${medium.sumOfD}">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <dl class="leituras">
+        <div class="largo"><dt>Seed revealed</dt><dd><code class="hash" th:text="${relatorio.seedHex}">seed</code></dd></div>
+        <div class="largo"><dt>Hash of the report (SHA-256)</dt><dd><code class="hash" th:text="${relatorio.documentSha256}">hash</code></dd></div>
+      </dl>
+      <h3>Report document</h3>
+      <pre class="documento" th:text="${relatorio.document}">report</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>What was frozen</h2>
+      <dl class="leituras">
+        <div><dt>Status</dt><dd th:text="${estudo.status}">PREREGISTERED</dd></div>
+        <div><dt>Frozen on</dt><dd><time th:if="${estudo.frozenAt}" th:text="${@datas.utc(estudo.frozenAt)}">2026-11-13</time> (UTC)</dd></div>
+        <div><dt>Questionnaire</dt><dd><code th:text="${estudo.questionnaireVersion}">v1-rascunho</code></dd></div>
+        <div><dt>Number of pairs (N)</dt><dd th:text="${estudo.targetPairs}">30</dd></div>
+        <div><dt>Cap on pairs per medium</dt><dd th:text="${estudo.maxPairsPerMedium} ?: 'no cap'">10</dd></div>
+        <div><dt>Deadline for the medium</dt><dd th:text="${estudo.deadlineDays} + ' days'">14 days</dd></div>
+        <div class="largo"><dt>Hash of the document (SHA-256)</dt><dd><code class="hash" th:text="${estudo.documentSha256}">hash</code></dd></div>
+        <div class="largo"><dt>Commitment to the seed</dt><dd><code class="hash" th:text="${estudo.seedCommitment}">hash</code></dd></div>
+      </dl>
+      <h3>Preregistration document</h3>
+      <pre class="documento" th:text="${estudo.document}">document</pre>
+      <p class="nota nota-espacada">
+        <a th:href="@{/estudos/{c}(c=${estudo.studyCode})}">Public page of this study</a> ·
+        <a th:href="${aplicacao} + '/painel/adm'">Back to the dashboard</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

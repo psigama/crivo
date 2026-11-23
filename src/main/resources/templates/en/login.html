@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Sign in — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Sign in — Crivo', 'Sitters and mediums sign in here to follow the request or to answer the readings.')}"></th:block>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Sign in</p>
+      <h1>Sign in</h1>
+      <p class="chamada">
+        <strong>Sitters and mediums</strong> sign in with the account e-mail and password and go to
+        their dashboard. <strong>The administrator</strong> signs in with the user defined in the
+        server configuration.
+      </p>
+      <p class="nota">
+        Do not have an account yet? <a th:href="${aplicacao} + '/conta/criar'">Create one</a>.
+      </p>
+
+      <form class="formulario" method="post" th:action="@{/login}">
+        <p class="erro" th:if="${param.error}" role="alert">
+          Incorrect e-mail, user or password.
+        </p>
+        <p class="erro" th:if="${param.naoConfirmada}" role="alert">
+          The account has not been confirmed yet. Open the link we sent by e-mail; if it has expired,
+          <a th:href="${aplicacao} + '/conta/criar'">create the account again</a> to receive another one.
+        </p>
+        <p class="aviso" th:if="${param.logout}" role="status">
+          Session ended.
+        </p>
+        <p class="aviso" th:if="${param.contaEncerrada}" role="status">
+          Your account has been deleted. Name, e-mail and password were erased. In the research only a
+          code remains, without your name, marked as closed.
+        </p>
+
+        <label for="username">E-mail or user</label>
+        <input id="username" name="username" type="text" autocomplete="username" required
+               autocapitalize="none" spellcheck="false">
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+        <button class="botao botao-cheio" type="submit">Sign in</button>
+      </form>
+
+      <p class="nota nota-espacada"><a th:href="${site} + '/'">Back to the home page</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

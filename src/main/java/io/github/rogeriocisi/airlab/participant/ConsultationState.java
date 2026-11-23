@@ -1,5 +1,6 @@
 package io.github.rogeriocisi.airlab.participant;
 
+import io.github.rogeriocisi.airlab.support.Text;
 /**
  * Where a P1 consultation request stands (SPEC E13, sitter panel). Phase B creates requests as
  * {@link #LOCKED}; phase C pairs them, sends them to a medium and records the readings; phase D
@@ -10,20 +11,22 @@ package io.github.rogeriocisi.airlab.participant;
  */
 public enum ConsultationState {
 
-    LOCKED("Travado — aguardando par"),
-    PAIRED("Par formado — aguardando médium"),
-    SENT_TO_MEDIUM("Enviado ao médium"),
-    READING_RECEIVED("Leitura recebida — aguardando o fim do estudo"),
-    UNBLINDED("Estudo concluído — devolutiva disponível"),
-    WITHDRAWN("Retirado");
+    LOCKED(Text.of("Travado — aguardando par", "Locked — waiting for a pair")),
+    PAIRED(Text.of("Par formado — aguardando médium", "Paired — waiting for a medium")),
+    SENT_TO_MEDIUM(Text.of("Enviado ao médium", "Sent to the medium")),
+    READING_RECEIVED(Text.of("Leitura recebida — aguardando o fim do estudo",
+            "Reading received — waiting for the study to end")),
+    UNBLINDED(Text.of("Estudo concluído — devolutiva disponível",
+            "Study concluded — feedback available")),
+    WITHDRAWN(Text.of("Retirado", "Withdrawn"));
 
-    private final String label;
+    private final Text label;
 
-    ConsultationState(String label) {
+    ConsultationState(Text label) {
         this.label = label;
     }
 
-    public String label() {
+    public Text label() {
         return label;
     }
 }

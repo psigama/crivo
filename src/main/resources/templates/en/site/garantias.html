@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Guarantees — Crivo</title>
+  <th:block
+    th:replace="~{fragments/site :: social('Guarantees — Crivo', 'Guarantees enforced by the code, not by good will: what Crivo attests, what it does not attest, what it asks of the people who take part and what it guarantees in return.')}">
+  </th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <main id="conteudo">
+
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Guarantees</p>
+        <h1 class="aparece">Guarantees</h1>
+        <p class="chamada aparece">
+          What the system guarantees, what it attests and what it does not attest, and what is asked
+          in return of the people who take part.
+        </p>
+      </div>
+    </section>
+
+    <section id="garantias">
+      <div class="faixa">
+        <p class="rotulo">What the system guarantees</p>
+        <h2>Guarantees enforced by the code, not by good will</h2>
+        <p>
+          In a few words: nobody knows what they should not, the rules are sealed before anything
+          begins, nothing changes afterwards, and every result is published, for or against. Each
+          guarantee below says this in one sentence, and the technical detail is one tap away.
+        </p>
+
+        <div class="garantias">
+          <div class="garantia">
+            <h3>Blinding</h3>
+            <p>Nobody sees what they should not: the medium does not know who made the request, and nobody sees a
+              score before the end.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              Each role has its own projections: the forbidden field does not exist in the query,
+              instead of being hidden on the screen. Every rule has a test that tries to break it.
+              </p>
+            </details>
+          </div>
+          <div class="garantia">
+            <h3>Verifiable draw</h3>
+            <p>The draw can be redone by anyone, and always gives the same result.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              A 32-byte seed from the cryptographic generator, expanded with SHA-256 in counter mode, so
+              that the draw can be redone on any machine and operating system.
+              </p>
+            </details>
+          </div>
+          <div class="garantia">
+            <h3>Immutable preregistration</h3>
+            <p>The rules are written down and sealed before anything begins. Nobody changes the rules midway.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              Once frozen, the document does not change — the database refuses. Amendments create a new
+              version, and deviations in execution are recorded separately, also with no deletion.
+              </p>
+            </details>
+          </div>
+          <div class="garantia">
+            <h3>Append-only trail</h3>
+            <p>Every step goes into a public record that takes no eraser, not even the administrator's.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              Each event carries the hash of the previous one. <em>Update</em> and <em>delete</em> are
+              blocked by a trigger in the database, including for the administrator.
+              </p>
+            </details>
+          </div>
+          <div class="garantia">
+            <h3>Analysis with no way out</h3>
+            <p>The calculation done at the end is the one agreed on at the start. If it is not, that is stated in
+              writing.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              The analysis only gets the confirmatory label if the preregistration was frozen and the
+              sample is the declared one. Otherwise it comes out marked exploratory, with the reason beside it.
+              </p>
+            </details>
+          </div>
+          <div class="garantia">
+            <h3>No AI in the judging</h3>
+            <p>No machine judges the readings: the answers are compared by a simple, public rule.</p>
+            <details class="detalhe-tecnico">
+              <summary>Technical detail</summary>
+              <p>
+              No model evaluates a reading or assigns a score. The scoring is an equality comparison
+              between options, under a deterministic, published rule.
+              </p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="atesta">
+      <div class="faixa">
+        <p class="rotulo">Declared limits</p>
+        <h2>What Crivo attests, and what it does not attest</h2>
+        <p>
+          It is worth saying this precisely, because it is the difference between a research tool and
+          a seal of authenticity — and because serious institutions in the field have already been
+          criticized for leaving that boundary vague.
+        </p>
+
+        <div class="atestado">
+          <div class="sim">
+            <h3>The system attests</h3>
+            <ul>
+              <li>that the preregistration was frozen before the first datum, and what it contained;</li>
+              <li>that the draw was made in that way and can be redone by anyone;</li>
+              <li>that the recorded sequence of events was not altered afterwards;</li>
+              <li>that the analysis that ran is, or is not, the one that had been declared.</li>
+            </ul>
+          </div>
+          <div class="nao">
+            <h3>The system does not attest</h3>
+            <ul>
+              <li>that anyone has mediumistic ability, nor the opposite;</li>
+              <li>that a positive result means survival of consciousness;</li>
+              <li>that a participant is honest — no software guarantees that;</li>
+              <li>that the protocol was followed <em>outside</em> what it records.</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="nota">
+          The platform also does not certify mediums, does not keep a public register of participants
+          and does not broker consultations. It is nobody's showcase. What each protocol's result
+          does not support is declared on that protocol's page, under
+          <a th:href="${aplicacao} + '/protocolos'">Protocols</a>.
+        </p>
+      </div>
+    </section>
+
+    <section id="compromissos">
+      <div class="faixa">
+        <p class="rotulo">With the people who take part</p>
+        <h2>What is asked, and what is guaranteed</h2>
+        <p>
+          A blind protocol places real demands on the people who take part — waiting for the end of
+          the study with no feedback at all, answering a closed questionnaire about someone they have
+          lost, or about someone whose first name is all they know. In return, these guarantees are
+          not a promise of good will: they are in the design of the database and in the tests.
+        </p>
+
+        <div class="publicos">
+          <article class="publico espiritual">
+            <h3>What is asked</h3>
+            <ul>
+              <li>Specific, clearly separated consent for sensitive data, before any collection.</li>
+              <li>Of the medium: accepting conditions that can be uncomfortable — the first name only, a closed
+                questionnaire and no feedback before the end of the study.</li>
+              <li>Of the sitter: answering the questionnaire honestly, about what they knew of the person, and
+                waiting for the end of the study to see the reading.</li>
+              <li>Of whoever runs the study: declaring screening criteria beforehand, not after seeing the
+                results.</li>
+            </ul>
+          </article>
+          <article class="publico">
+            <h3>What is guaranteed</h3>
+            <ul>
+              <li>Withdrawal at any time, with no reason given, with removal or anonymization as set out in the
+                participation agreement.</li>
+              <li>Identifiable data encrypted, in a separate schema, reachable by a single module of the system.</li>
+              <li>No personal data in a log, an error message, a file name or an exported package.</li>
+              <li>Feedback planned for the end, with careful language for bereaved people.</li>
+              <li>No evaluation by artificial intelligence, at any stage.</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="nota nota-espacada">
+          Going to take part? There is a page <a th:href="${aplicacao} + '/consulente'">for sitters</a> and another
+          <a th:href="${aplicacao} + '/medium'">for mediums</a>, with the steps, what is asked of you and your
+          rights. Both can be printed and handed out on paper.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+
+</html>

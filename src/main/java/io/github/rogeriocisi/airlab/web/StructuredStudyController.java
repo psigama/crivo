@@ -77,7 +77,7 @@ class StructuredStudyController {
         try {
             studies.check(terms);
         } catch (IllegalArgumentException e) {
-            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("erro", LanguagePages.reason(e));
             return formPage(model, terms);
         }
         model.addAttribute("termos", terms);
@@ -96,7 +96,7 @@ class StructuredStudyController {
         try {
             studies.open(terms, principal.getName());
         } catch (IllegalArgumentException | IllegalStateException e) {
-            redirect.addFlashAttribute("erro", e.getMessage());
+            redirect.addFlashAttribute("erro", LanguagePages.reason(e));
             return "redirect:" + PAGE;
         }
         session.removeAttribute(DRAFT);

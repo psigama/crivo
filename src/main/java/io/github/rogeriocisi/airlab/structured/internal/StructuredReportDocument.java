@@ -6,6 +6,7 @@ import io.github.rogeriocisi.airlab.catalog.ProtocolCatalog;
 import io.github.rogeriocisi.airlab.structured.StructuredReport;
 import io.github.rogeriocisi.airlab.structured.StructuredStudyService;
 import io.github.rogeriocisi.airlab.study.StudySummary;
+import io.github.rogeriocisi.airlab.support.Text;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +122,10 @@ final class StructuredReportDocument {
 
         line(out, "## O que este resultado nao sustenta");
         line(out, "");
-        List<String> limits = ProtocolCatalog.structuredReading().limits();
+        // In Portuguese, always. This document is the one the trail hashes: its bytes may not
+        // depend on who is reading, and the language of origin is the document of record
+        // (SPEC 0.28, section 1.5, rule 12 — the language is presentation, and this is not a page).
+        List<String> limits = ProtocolCatalog.structuredReading().limits().stream().map(Text::pt).toList();
         for (int i = 0; i < limits.size(); i++) {
             line(out, (i + 1) + ". " + limits.get(i));
         }

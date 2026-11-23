@@ -96,7 +96,7 @@
         <div class="acoes">
           <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/P1'">Como funciona</a>
           <a class="botao botao-vazio" th:href="${aplicacao} + '/perguntas'">Perguntas frequentes</a>
-          <a class="botao botao-vazio" href="/artigo/">Ler o artigo técnico</a>
+          <a class="botao botao-vazio" th:href="${site} + '/artigo/'">Ler o artigo técnico</a>
         </div>
       </div>
     </section>
@@ -108,28 +108,28 @@
 
         <div class="caminhos">
           <article class="caminho">
-            <h3><a href="/participar">Participar</a></h3>
+            <h3><a th:href="${site} + '/participar'">Participar</a></h3>
             <p>
               Como consulente ou médium, num teste rápido, conduzindo um estudo, auditando ou
               contribuindo com o código.
             </p>
           </article>
           <article class="caminho">
-            <h3><a href="/por-que">Por quê</a></h3>
+            <h3><a th:href="${site} + '/por-que'">Por quê</a></h3>
             <p>
               O que é, exatamente, uma pesquisa sobre mediunidade, e por que não falta relato, e sim
               método que resista à dúvida.
             </p>
           </article>
           <article class="caminho">
-            <h3><a href="/garantias">Garantias</a></h3>
+            <h3><a th:href="${site} + '/garantias'">Garantias</a></h3>
             <p>
               O que o sistema garante, o que ele atesta e o que não atesta, e o que se pede a quem
               participa.
             </p>
           </article>
           <article class="caminho">
-            <h3><a href="/auditar">Auditar</a></h3>
+            <h3><a th:href="${site} + '/auditar'">Auditar</a></h3>
             <p>
               Como conferir os registros, os carimbos de data e o sorteio sem pedir permissão a ninguém,
               e como contestar o código.

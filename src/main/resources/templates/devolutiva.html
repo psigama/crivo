@@ -97,7 +97,7 @@
   <section>
     <div class="faixa">
       <div th:replace="~{fragments/p1 :: apoio}"></div>
-      <p class="acoes"><a class="botao botao-vazio" href="/painel/consulente">Voltar ao painel</a></p>
+      <p class="acoes"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Voltar ao painel</a></p>
     </div>
   </section>
 </main>

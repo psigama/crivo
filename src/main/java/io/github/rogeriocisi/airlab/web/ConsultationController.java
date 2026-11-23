@@ -2,6 +2,7 @@ package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.catalog.Questionnaire;
 import io.github.rogeriocisi.airlab.catalog.Questionnaires;
+import io.github.rogeriocisi.airlab.support.Language;
 import io.github.rogeriocisi.airlab.participant.ConsultationDraft;
 import io.github.rogeriocisi.airlab.participant.ConsultationService;
 import io.github.rogeriocisi.airlab.participant.OwnConsultation;
@@ -73,7 +74,7 @@ class ConsultationController {
         try {
             consultations.check(draft);
         } catch (IllegalArgumentException e) {
-            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("erro", LanguagePages.reason(e));
             return formPage(model, draft);
         }
         model.addAttribute("questionario", Questionnaires.current());
@@ -131,13 +132,15 @@ class ConsultationController {
         }
         Questionnaire questionnaire = Questionnaires.byVersion(result.get().questionnaireVersion())
                 .orElse(Questionnaires.current());
+        Language language = LanguagePages.current();
         List<FeedbackRow> rows = new ArrayList<>();
         for (Questionnaire.Field field : questionnaire.scoredFields()) {
             String mine = own.get().answers().get(field.key());
             String read = result.get().readingAnswers().get(field.key());
             boolean comparable = result.get().comparableFields().contains(field.key());
-            rows.add(new FeedbackRow(field.label(), questionnaire.labelOf(field.key(), mine),
-                    read == null ? "—" : questionnaire.labelOf(field.key(), read), comparable,
+            rows.add(new FeedbackRow(field.label().in(language),
+                    questionnaire.labelOf(field.key(), mine, language),
+                    read == null ? "—" : questionnaire.labelOf(field.key(), read, language), comparable,
                     comparable && read != null && read.equals(mine)));
         }
         model.addAttribute("pedido", own.get());
@@ -171,11 +174,12 @@ class ConsultationController {
 
     /** Question label to answer label, in questionnaire order, for showing a request back. */
     private static Map<String, String> labelled(Questionnaire questionnaire, Map<String, String> answers) {
+        Language language = LanguagePages.current();
         Map<String, String> out = new LinkedHashMap<>();
         for (Questionnaire.Field field : questionnaire.fields()) {
             String answer = answers.get(field.key());
             if (answer != null) {
-                out.put(field.label(), questionnaire.labelOf(field.key(), answer));
+                out.put(field.label().in(language), questionnaire.labelOf(field.key(), answer, language));
             }
         }
         return out;

@@ -1,10 +1,12 @@
 package io.github.rogeriocisi.airlab.web;
 
+import io.github.rogeriocisi.airlab.support.Language;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * The editorial pages of the site (SPEC 0.21, section 1.3): hand-written text, with nothing that
@@ -21,8 +23,29 @@ import java.util.Set;
  */
 final class SitePages {
 
-    /** One editorial page: its address, its template and the file the generator writes. */
+    /**
+     * One editorial page: its address and its template, in Portuguese. The English version of both
+     * is the same with the language prefix (SPEC 0.28, section 1.5, rules 1 and 5).
+     */
     record Page(String path, String template, String file) {
+
+        /** The address of this page in a language: {@code /garantias} and {@code /en/garantias}. */
+        String path(Language language) {
+            return language.prefix() + path;
+        }
+
+        /** The file the generator writes for a language: {@code garantias.html}, {@code en/garantias.html}. */
+        String file(Language language) {
+            return language.isDefault() ? file : language.code() + "/" + file;
+        }
+
+        /**
+         * The template of this page in a language, which for English exists only if it has been
+         * translated; when it has not, the Portuguese one answers with a notice (rule 5).
+         */
+        String template(Language language) {
+            return language.isDefault() ? template : language.code() + "/" + template;
+        }
     }
 
     /**
@@ -31,8 +54,11 @@ final class SitePages {
      * (SPEC 1.3, rule 3); {@code StaticSiteTest} fails if a template reaches for anything more.
      * {@code paginasDoSite}, the paths of {@link #ALL} separated by spaces, is for the 404 page
      * only: its script never forwards one of them to the application, which would send it back.
+     * Since SPEC 0.28 (section 1.5) the language is in there too: {@code idioma}, the two addresses
+     * of this page ({@code linkPt} and {@code linkEn}) and whether it is answering untranslated.
      */
-    static final Set<String> MODEL = Set.of("site", "aplicacao", "secaoAtual", "logado", "paginasDoSite");
+    static final Set<String> MODEL = Set.of("site", "aplicacao", "secaoAtual", "logado", "paginasDoSite",
+            "idioma", "urlPt", "urlEn", "linkPt", "linkEn", "traducaoPendente");
 
     /** The page the static site answers with for every address it does not have (rule 5). */
     static final String NOT_FOUND_TEMPLATE = "site/404";
@@ -53,6 +79,13 @@ final class SitePages {
 
     static Optional<Page> byPath(String path) {
         return ALL.stream().filter(page -> page.path().equals(path)).findFirst();
+    }
+
+    /** Every address of the site, in both languages: what the 404 page must never forward (rule 5). */
+    static List<String> everyPath() {
+        return Stream.of(Language.values())
+                .flatMap(language -> ALL.stream().map(page -> page.path(language)))
+                .toList();
     }
 
     /**

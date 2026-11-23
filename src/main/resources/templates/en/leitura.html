@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Reading — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Medium · reading <span th:text="${posicao}">1</span> of 2 · request <code th:text="${pedido.code}">ENV-0000</code></p>
+      <h1 th:text="${nome}">Name</h1>
+      <p class="chamada">
+        Answer with whatever comes for this person. On each question, choose an option — or
+        "Nothing came", if nothing came. "Nothing came" carries no penalty: it simply does not count as a hit.
+      </p>
+      <p class="nota">
+        Nothing is saved while you fill this in. Before locking, you review everything. Deadline: answer by
+        <time th:datetime="${pedido.dueAt}" th:text="${@datas.prazo(pedido.dueAt)}">Friday, 27 November, at 7 a.m.</time>
+        (Brasília time).
+      </p>
+      <p class="nota" th:text="'Questionnaire, version ' + ${versao}">Questionnaire, version v1</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <form class="formulario formulario-largo" method="post"
+            th:action="@{/painel/medium/pedido/{c}/leitura/{p}/revisar(c=${pedido.code},p=${posicao})}">
+        <p class="erro" th:if="${erro}" th:text="${erro}" role="alert">Error</p>
+
+        <fieldset th:each="campo : ${campos}">
+          <legend th:text="${campo.label.in(idioma)}">Question</legend>
+          <label class="opcao" th:each="opcao : ${campo.options}">
+            <input type="radio" th:name="'r.' + ${campo.key}" th:value="${opcao.key}" required
+                   th:checked="${rascunho.answers.get(campo.key) == opcao.key}">
+            <span th:text="${opcao.label.in(idioma)}">Option</span>
+          </label>
+          <label class="opcao">
+            <input type="radio" th:name="'r.' + ${campo.key}" th:value="${naoRecebi}"
+                   th:checked="${rascunho.answers.get(campo.key) == naoRecebi}">
+            <span>Nothing came</span>
+          </label>
+        </fieldset>
+
+        <button class="botao botao-cheio" type="submit">Review before locking</button>
+      </form>
+
+      <p class="nota nota-espacada"><a th:href="${aplicacao} + '/painel/medium'">Back to the dashboard without sending</a></p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

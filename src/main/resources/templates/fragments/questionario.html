@@ -38,18 +38,18 @@
       <tbody>
         <tr th:each="campo : ${q.fields()}">
           <td>
-            <span th:text="${campo.label()}">Gênero</span><br>
+            <span th:text="${campo.label().in(idioma)}">Gênero</span><br>
             <code th:text="${campo.key()}">genero</code>
           </td>
           <td>
             <ul>
-              <li th:each="opcao : ${campo.options()}" th:text="${opcao.label()}">Feminino</li>
+              <li th:each="opcao : ${campo.options()}" th:text="${opcao.label().in(idioma)}">Feminino</li>
             </ul>
           </td>
           <td>
             <th:block th:if="${campo.scored()}">Sim</th:block>
             <th:block th:unless="${campo.scored()}">
-              Não, é de pareamento. <span th:text="${campo.outOfScoreReason()}">Por quê.</span>
+              Não, é de pareamento. <span th:text="${campo.outOfScoreReason()?.in(idioma)}">Por quê.</span>
             </th:block>
           </td>
         </tr>

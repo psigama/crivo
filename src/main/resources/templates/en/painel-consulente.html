@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Sitter's dashboard — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Sitter · <code th:text="${conta.code}">CON-0000</code></p>
+      <h1 th:text="'Hello, ' + ${conta.firstName}">Hello</h1>
+      <p class="chamada">
+        Here you follow your consultation request, step by step. No score appears before the end of
+        the study — not for you, not for the medium, not for whoever administers the platform.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Your request</h2>
+
+      <th:block th:if="${situacao}">
+        <dl class="contagens">
+          <div><dt>Request</dt><dd><code th:text="${situacao.code}">PED-0000</code></dd></div>
+          <div><dt>State</dt><dd th:text="${situacao.state.label().in(idioma)}">Locked</dd></div>
+        </dl>
+        <p class="acoes">
+          <a class="botao botao-cheio" th:if="${situacao.state.name() == 'UNBLINDED'}"
+             th:href="${aplicacao} + '/painel/consulente/devolutiva'">See the feedback</a>
+          <a class="botao" th:classappend="${situacao.state.name() == 'UNBLINDED'} ? 'botao-vazio' : 'botao-cheio'"
+             th:href="${aplicacao} + '/painel/consulente/pedido'">See my request</a>
+        </p>
+        <div class="ressalva" th:switch="${situacao.state.name()}">
+          <th:block th:case="'LOCKED'">
+            <p th:unless="${estudoAberto}">
+              <strong>Waiting for the study to open.</strong> Pairing begins when the administration
+              freezes the preregistration. Your request is locked and kept safe until then.
+            </p>
+            <p th:if="${estudoAberto}">
+              <strong>Waiting for a pair.</strong> The system waits for another request with a similar
+              profile — same gender, age range and period of the death. This may take some time.
+            </p>
+          </th:block>
+          <p th:case="'PAIRED'">
+            <strong>Pair formed.</strong> As soon as a medium is available, the system draws who
+            receives the first name.
+          </p>
+          <p th:case="'SENT_TO_MEDIUM'">
+            <strong>With the medium.</strong> A medium drawn by lot has received only the first name and
+            has a deadline to answer. If the deadline passes, the request goes to another medium.
+          </p>
+          <p th:case="'READING_RECEIVED'">
+            <strong>Reading received and locked.</strong> Nobody sees the result yet: the checking only
+            happens when the study reaches the declared number of pairs.
+          </p>
+          <p th:case="'UNBLINDED'">
+            <strong>The study has ended.</strong> The feedback shows the medium's answers alongside yours
+            and the result of the whole study.
+          </p>
+          <p th:case="*">Your request is locked.</p>
+        </div>
+      </th:block>
+
+      <th:block th:unless="${situacao}">
+        <p>You have not made a request yet.</p>
+        <p class="acoes" th:if="${pedidosAbertos}">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/painel/consulente/pedido/novo'">Make the request</a>
+        </p>
+        <div class="ressalva" th:unless="${pedidosAbertos}">
+          <p>
+            <strong>Requests are not open yet on this installation.</strong> They collect sensitive data
+            about the person who died and only open after the approval of the research ethics
+            committee. You will be told by e-mail.
+          </p>
+        </div>
+      </th:block>
+
+      <h3>What will happen to your request</h3>
+      <ol class="etapas">
+        <li><div><h3>Draft</h3><p>You give the first name and answer the questionnaire, taking your time, and you can review it.</p></div></li>
+        <li><div><h3>Locked</h3><p>On confirming, the answers are sealed and change no more. The study's public record receives only a digital seal of them, never the answers.</p></div></li>
+        <li><div><h3>Waiting for a pair</h3><p>The system joins your request to another with a similar profile; each one serves as a comparison for the other.</p></div></li>
+        <li><div><h3>Sent to the medium</h3><p>A medium drawn by lot receives only the first name and answers the same questionnaire.</p></div></li>
+        <li><div><h3>Waiting for the end of the study</h3><p>The checking only happens at the opening of the results, when the study reaches the declared number of pairs.</p></div></li>
+        <li><div><h3>Feedback</h3><p>You see the medium's answers alongside yours, and the score.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="acoes">
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/conta'">My account</a>
+      </p>
+      <form method="post" th:action="@{/logout}">
+        <button class="botao botao-vazio" type="submit">Log out</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

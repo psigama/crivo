@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.rogeriocisi.airlab.catalog.Protocol;
 import io.github.rogeriocisi.airlab.catalog.ProtocolCatalog;
 import io.github.rogeriocisi.airlab.participant.AccountService;
+import io.github.rogeriocisi.airlab.support.Text;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -70,7 +71,7 @@ class AudiencePagesTest {
                 .andExpect(content().string(containsString("Preciso ser espírita")))
                 .andExpect(content().string(containsString("<details>")));
         page("/pesquisa").andExpect(content().string(containsString("Um protocolo que se defende sozinho")));
-        page("/pesquisa/en")
+        page("/en/pesquisa")
                 .andExpect(content().string(containsString("lang=\"en\"")))
                 .andExpect(content().string(containsString("A protocol that defends itself")));
     }
@@ -82,13 +83,17 @@ class AudiencePagesTest {
         ResultActions pt = page("/pesquisa")
                 .andExpect(content().string(containsString(
                         p1.chanceNumerator() + " em " + p1.chanceDenominator())));
-        ResultActions en = page("/pesquisa/en")
+        ResultActions en = page("/en/pesquisa")
                 .andExpect(content().string(containsString(
                         p1.chanceNumerator() + " in " + p1.chanceDenominator())));
-        for (String limit : p1.limits()) {
-            String escaped = HtmlUtils.htmlEscape(limit, StandardCharsets.UTF_8.name());
-            pt.andExpect(content().string(containsString(escaped)));
-            en.andExpect(content().string(containsString(escaped)));
+        // SPEC 0.28, secao 1.5, regra 6: cada pagina mostra os limites no idioma dela, vindos do
+        // catalogo. Ate a 0.27 a pagina em ingles citava os limites em portugues, por nao haver
+        // onde guardar a traducao.
+        for (Text limit : p1.limits()) {
+            pt.andExpect(content().string(containsString(
+                    HtmlUtils.htmlEscape(limit.pt(), StandardCharsets.UTF_8.name()))));
+            en.andExpect(content().string(containsString(
+                    HtmlUtils.htmlEscape(limit.en(), StandardCharsets.UTF_8.name()))));
         }
     }
 
@@ -130,11 +135,11 @@ class AudiencePagesTest {
     }
 
     @Test
-    @DisplayName("o termo da criacao de conta e a conta-v3, com o resumo antes do texto completo")
+    @DisplayName("o termo da criacao de conta e a conta-v4, com o resumo antes do texto completo")
     void the_consent_term_has_its_summary() throws Exception {
-        assertThat(AccountService.CURRENT_TERM_VERSION).isEqualTo("conta-v3");
+        assertThat(AccountService.CURRENT_TERM_VERSION).isEqualTo("conta-v4");
         String html = page("/conta/criar").andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        assertThat(html).contains("conta-v3").contains("Em seis pontos").contains("Texto completo");
+        assertThat(html).contains("conta-v4").contains("Em seis pontos").contains("Texto completo");
         assertThat(html.indexOf("Em seis pontos")).isLessThan(html.indexOf("Texto completo"));
     }
 

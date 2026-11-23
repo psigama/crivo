@@ -25,7 +25,7 @@
       </p>
 
       <dl class="leituras">
-        <div><dt>Situação</dt><dd th:text="${situacao.state.label()}">Travado</dd></div>
+        <div><dt>Situação</dt><dd th:text="${situacao.state.label().in(idioma)}">Travado</dd></div>
         <div><dt>Travado em</dt><dd><time th:datetime="${pedido.lockedAt}"
           th:text="${@datas.momento(pedido.lockedAt)}">13 de novembro de 2026, às 7h</time> (horário de Brasília)</dd></div>
         <div><dt>Questionário</dt><dd th:text="${pedido.questionnaireVersion}">v1</dd></div>
@@ -57,7 +57,7 @@
         <div><dt>Primeiro nome</dt><dd th:text="${pedido.firstName}">Nome</dd></div>
         <div th:each="item : ${respostas}"><dt th:text="${item.key}">Pergunta</dt><dd th:text="${item.value}">Resposta</dd></div>
       </dl>
-      <p class="acoes nota-espacada"><a class="botao botao-vazio" href="/painel/consulente">Voltar ao painel</a></p>
+      <p class="acoes nota-espacada"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Voltar ao painel</a></p>
     </div>
   </section>
 </main>

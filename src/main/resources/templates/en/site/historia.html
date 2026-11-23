@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Timeline — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Timeline — Crivo', 'One hundred and forty years of attempts to study mediumship with method: from the Society for Psychical Research in 1882 to blind protocols and preregistration.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">Timeline</p>
+      <h1 class="aparece">One hundred and forty years of attempts</h1>
+      <p class="chamada aparece">
+        Nothing Crivo does is a new idea. What is new is enforcing in software what, until now,
+        depended on the discipline of each team.
+      </p>
+      <p class="tese aparece">
+        This timeline has a common thread: <strong>every advance came out of a criticism</strong>.
+        The controls that look obvious today were, almost all of them, answers to a study that did
+        not survive scrutiny — sometimes from the field itself, sometimes from a skeptic, sometimes
+        from a professional magician.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">1882 — 1930</p>
+      <h2>The societies and the problem of control</h2>
+
+      <ol class="linha-tempo">
+        <li>
+          <p class="ano">1882</p>
+          <h3>Society for Psychical Research, London</h3>
+          <p>
+            Founded by Cambridge academics — among them Henry Sidgwick and Frederic Myers — and by
+            the physicist William Barrett. It is the first organization to investigate the subject
+            systematically, with published reports.
+          </p>
+        </li>
+        <li>
+          <p class="ano">1885</p>
+          <h3>American Society for Psychical Research</h3>
+          <p>
+            Created in the United States with the participation of William James, of Harvard. James
+            and Richard Hodgson studied the medium Leonora Piper <strong>for decades</strong>,
+            trying to rule out fraud and telepathy.
+          </p>
+        </li>
+        <li>
+          <p class="ano">1874 — 1920</p>
+          <h3>The problem that runs through all of it</h3>
+          <p>
+            William Crookes publishes his sessions in 1874; Charles Richet coins the term
+            “metapsychics”. That work is criticized today for insufficient controls, and
+            several celebrated cases of the period were exposed as fraud.
+          </p>
+          <span class="licao">The lesson the field took a century to absorb: good faith is not a control.</span>
+        </li>
+        <li>
+          <p class="ano">1901 — 1932</p>
+          <h3>Cross-correspondences</h3>
+          <p>
+            SPR investigators analyze fragmentary messages obtained through different mediums,
+            which would only make sense put together. Some read a guiding intelligence into them;
+            critics disputed that interpretation.
+          </p>
+        </li>
+        <li>
+          <p class="ano">1930s</p>
+          <h3>J. B. Rhine and the Duke laboratory</h3>
+          <p>
+            The study of psychic phenomena enters the mainstream university, with controlled
+            experiments and <strong>statistical analysis</strong>. The question stops being “did it happen?”
+            and becomes “above chance?”.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">1967 — 2000</p>
+      <h2>Institutionalization, and a blow from outside</h2>
+
+      <ol class="linha-tempo">
+        <li>
+          <p class="ano">1967</p>
+          <h3>Division of Perceptual Studies, University of Virginia</h3>
+          <p>
+            Founded by the psychiatrist Ian Stevenson, it is still active. It studies reports of
+            past-life memories, near-death experiences and mediumship inside a school of
+            medicine.
+          </p>
+        </li>
+        <li>
+          <p class="ano">1979 — 1983</p>
+          <h3>Project Alpha</h3>
+          <p>
+            The illusionist James Randi placed two young magicians as alleged psychics in a
+            university laboratory. They passed the tests. The episode did not prove that the
+            phenomenon does not exist — it proved that <strong>a protocol designed without an
+            adversary does not survive an adversary</strong>.
+          </p>
+          <span class="licao">
+            That is why, here, every blinding rule has an automated test that tries to violate it,
+            and the invitation to skeptics is part of the design, not a courtesy.
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">2001 — 2008</p>
+      <h2>VERITAS: the modern phase and the criticism that reformed it</h2>
+
+      <ol class="linha-tempo">
+        <li>
+          <p class="ano">2001 — 2008</p>
+          <h3>VERITAS program, University of Arizona</h3>
+          <p>
+            Directed by the psychologist Gary Schwartz, it tested mediums of wide visibility on
+            American television, with blind evaluation, video recording and statistical scoring. It
+            reported hits above chance level, and the book <em>The Afterlife Experiments</em> (2002)
+            brought the subject to a broad audience.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2001 — 2003</p>
+          <h3>The methodological criticism</h3>
+          <p>
+            Ray Hyman and Richard Wiseman pointed out insufficient controls against cold reading and
+            sensory leakage, the absence of a prior stopping rule, scoring open to bias and a
+            lack of standardization in the evaluation criteria.
+          </p>
+          <span class="licao">
+            Three of the locks in Crivo come from here: a binding stopping rule, a scale frozen before
+            collection and automatic refusal of the “confirmatory” label outside the declared sample.
+          </span>
+        </li>
+        <li>
+          <p class="ano">2005</p>
+          <h3>O'Keeffe and Wiseman: the most useful null result in the field</h3>
+          <p>
+            Five professional mediums, five sitters, acoustic isolation, blind judging and
+            permutation analysis. A null result — and, with it, the most complete inventory of
+            artifacts ever published, including one nobody had controlled for: the
+            <strong>temporal cues</strong> inside the reading.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">2007 — 2015</p>
+      <h2>The blind protocols that Crivo inherits</h2>
+
+      <ol class="linha-tempo">
+        <li>
+          <p class="ano">2007</p>
+          <h3>Triple-blind protocol</h3>
+          <p>
+            Beischel and Schwartz publish the design that becomes the reference: absent sitter,
+            blind <em>proxy</em> experimenter, deceased persons paired by gender, decoy reading,
+            transcription into items, global score and forced choice.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2008</p>
+          <h3>Windbridge, and quintuple blinding</h3>
+          <p>
+            Julie Beischel, former research director of VERITAS, founds Windbridge to answer the
+            criticisms with tighter controls. The protocol isolates five parties:
+          </p>
+          <ol class="niveis">
+            <li>the <strong>medium</strong>, who receives only the first name of the deceased;</li>
+            <li>the <strong>sitter</strong>, who receives two coded transcripts and does not know which one is theirs;</li>
+            <li>the <strong>experimenter who recruits</strong> and forms the pairs, with no contact with mediums;</li>
+            <li>the <strong>experimenter who runs</strong> the session as a <em>proxy</em>, knowing only the first name;</li>
+            <li>the <strong>experimenter who formats</strong> and distributes the transcripts, without knowing which is whose.</li>
+          </ol>
+          <p>
+            The center also created an eight-step certification for research mediums, which includes
+            psychological testing, two blind readings with significant performance, training in
+            research ethics and training on grief. Screening is now closed: their own page says
+            that “funding for the WCRM program has ended” and that they are no longer screening mediums.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2015</p>
+          <h3>Replication and extension</h3>
+          <p>
+            Twenty certified mediums, 86 readings, five levels of blinding. The target readings
+            were rated as more accurate than the decoys on several measures — in the section of
+            objective questions, 52.8% against 36.6% item accuracy. The authors record the
+            limitation: all the data come from a single laboratory.
+          </p>
+          <span class="licao">
+            This is, literally, the reason Crivo exists: to make independent replication
+            feasible and auditable.
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">2008 — 2022</p>
+      <h2>Brazil, open science and taking stock</h2>
+
+      <ol class="linha-tempo">
+        <li>
+          <p class="ano">2008 and 2012</p>
+          <h3>Brazilian research on who the medium is</h3>
+          <p>
+            Moreira-Almeida, Lotufo Neto and Cardeña compare Spiritist mediums with dissociative
+            conditions and find them, in general, well adjusted and socially functional. Peres,
+            Moreira-Almeida, Newberg and colleagues examine brain activity during mediumistic writing
+            with SPECT. NUPES, at UFJF, establishes itself as a reference.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2014</p>
+          <h3>Chico Xavier's letters under a scale</h3>
+          <p>
+            Rocha and colleagues assess 99 verifiable items in thirteen mediumistic letters, with
+            separate scales for <em>fit</em> and for <em>leakage</em> — the latter measuring how
+            plausible it would be to obtain that information by ordinary means.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2018</p>
+          <h3>The preregistration revolution</h3>
+          <p>
+            Nosek and colleagues formalize, for science in general, the distinction between
+            confirmatory and exploratory and the idea that deviations reported transparently are
+            worth more than the absence of preregistration. It is the basis of the central lock of Crivo.
+          </p>
+        </li>
+        <li>
+          <p class="ano">2021 — 2022</p>
+          <h3>Taking stock</h3>
+          <p>
+            The meta-analysis by Sarraf, Woodley of Menie and Tressoldi estimates the aggregate
+            effect at 6 to 14 points above chance level, with caveats about heterogeneity and
+            publication bias. Silva and Moreira-Almeida compare studies with conflicting results and
+            isolate what separates them. The prevailing scientific consensus remains that there is
+            no reliable evidence.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Now</p>
+      <h2>Where Crivo places itself</h2>
+      <p>
+        In 140 years, the field has learned what needs to be controlled. What never existed was a way to
+        <strong>prove, afterwards, that it was controlled</strong> — and that is all this platform
+        adds. Here the researcher is blinded as well, and the scores do not even exist before the
+        unblinding; the preregistration is frozen with a hash before the
+        first datum; the draw can be replayed by anyone from the revealed seed;
+        and the event trail is refused by the database if anyone tries to alter it.
+      </p>
+
+      <div class="definicao definicao-papel">
+        <p class="rotulo">What this timeline does not cover</p>
+        <p>
+          Other neighboring lines of research — near-death experiences, electronic communication
+          devices, initiatives funding trials on the survival of consciousness —
+          were left out on purpose. They are not studies of information accuracy under blinding, which
+          is the scope of this platform, and we could not describe them here on the same documentary
+          basis.
+        </p>
+      </div>
+
+      <p class="nota nota-espacada">
+        The entries from 2005 onward have a paper with a DOI in <a th:href="${site} + '/referencias'">References</a>.
+        The earlier overview follows the Wikipedia article
+        <a href="https://pt.wikipedia.org/wiki/Estudos_sobre_mediunidade"><em lang="pt-BR">Estudos sobre
+        mediunidade</em></a> and the pages of the
+        <a href="https://www.windbridge.org/mediums/">Windbridge Research Center</a>, checked
+        against the original papers where they overlap. Found an error of date or of
+        attribution? <a href="https://github.com/rogeriocisi/crivo/issues">Open an issue</a>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

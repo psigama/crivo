@@ -40,13 +40,13 @@ class ProtocolQuestionnaireTest {
                 .andExpect(content().string(containsString("id=\"questionario\"")))
                 .andExpect(content().string(containsString(html(questionnaire.version()))));
         for (Questionnaire.Field field : questionnaire.fields()) {
-            page.andExpect(content().string(containsString(html(field.label()))))
+            page.andExpect(content().string(containsString(html(field.label().pt()))))
                     .andExpect(content().string(containsString(html(field.key()))));
             for (Questionnaire.Option option : field.options()) {
-                page.andExpect(content().string(containsString(html(option.label()))));
+                page.andExpect(content().string(containsString(html(option.label().pt()))));
             }
             if (!field.scored()) {
-                page.andExpect(content().string(containsString(html(field.outOfScoreReason()))));
+                page.andExpect(content().string(containsString(html(field.outOfScoreReason().pt()))));
             }
         }
         if (questionnaire.draft()) {

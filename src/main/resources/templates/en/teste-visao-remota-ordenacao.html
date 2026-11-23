@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Ranking — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Ranking — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">
+        Trial <span th:text="${progresso.nextTrialIndex}">1</span>
+        of <span th:text="${progresso.declaredTrials}">6</span>
+      </p>
+      <progress class="progresso-sessao" th:value="${progresso.lockedTrials}"
+                th:max="${progresso.declaredTrials}" value="0" max="24"
+                th:attr="aria-label='Trials completed: ' + ${progresso.lockedTrials} + ' of ' + ${progresso.declaredTrials}"></progress>
+      <h1>Rank the four figures</h1>
+      <p class="chamada">
+        One of them is the target of this trial. Put them in order from the one that looks most
+        like your impression to the one that looks least like it. Each figure is used only once.
+      </p>
+
+      <ul class="figuras">
+        <li th:each="c : ${candidatas.candidates()}">
+          <p class="selo">Figure <span th:text="${c.position()}">1</span></p>
+          <img th:src="${c.imagePath()}" th:alt="'Figure ' + ${c.position()}"
+               width="400" height="300">
+        </li>
+      </ul>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/ordenacao'"
+            data-envio-unico>
+        <ul class="ordenacao" data-ordenacao>
+          <li th:each="lugar : ${#numbers.sequence(1, candidatas.candidates().size())}">
+            <label th:for="'lugar-' + ${lugar}">
+              <span th:text="'Rank ' + ${lugar}">Rank 1</span>
+            </label>
+            <select th:id="'lugar-' + ${lugar}" name="ordem" required>
+              <option value="">pick the figure</option>
+              <option th:each="c : ${candidatas.candidates()}"
+                      th:value="${c.position()}"
+                      th:text="'Figure ' + ${c.position()}">Figure</option>
+            </select>
+          </li>
+        </ul>
+        <p class="acoes">
+          <button class="botao botao-cheio" type="submit">Submit the ranking</button>
+        </p>
+        <p class="enviando-aviso" data-enviando hidden role="status">Recording the ranking…</p>
+      </form>
+
+      <p class="nota">
+        Each figure you pick leaves the options of the other ranks, and the last one fills in by
+        itself. Without JavaScript, if a figure is repeated or missing, the submission is refused:
+        the ranking has to be a permutation of the four. Your impression for this trial is already
+        locked, and no result appears until the end of the session.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+<script src="/js/sessao-teste.js" defer></script>
+</body>
+</html>

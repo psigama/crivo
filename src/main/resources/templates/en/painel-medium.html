@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Medium's dashboard — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Medium · <code th:text="${conta.code}">MED-0000</code></p>
+      <h1 th:text="'Hello, ' + ${conta.firstName}">Hello</h1>
+      <p class="chamada">
+        This is where the requests drawn for you arrive. Each request brings only the first names of two
+        people who died and the blank questionnaire. You do not see who made the request, nor that
+        person's answers, and nobody sees any score before the end of the study.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Requests received</h2>
+      <p class="aviso" th:if="${param.travada}" role="status">
+        Reading locked and kept safe. Nobody can change it — not you, not the team. The result appears
+        here when the study ends.
+      </p>
+      <dl class="contagens">
+        <div><dt>Waiting for a reading</dt><dd th:text="${#lists.size(abertos)}">0</dd></div>
+        <div><dt>Readings submitted</dt><dd th:text="${leiturasEnviadas}">0</dd></div>
+        <div><dt>Expired or canceled</dt><dd th:text="${encerrados}">0</dd></div>
+      </dl>
+
+      <p th:if="${#lists.isEmpty(abertos)}" class="nota-espacada">
+        No request is waiting for you right now. When the draw picks you, the request appears here and
+        you receive an e-mail — with no names, only the notice and the deadline.
+      </p>
+
+      <ul class="pedidos" th:unless="${#lists.isEmpty(abertos)}">
+        <li th:each="pedido : ${abertos}">
+          <p class="prazo-claro">
+            Answer by
+            <time th:datetime="${pedido.dueAt}" th:text="${@datas.prazo(pedido.dueAt)}">Friday, 27 November, at 7 a.m.</time>
+            (Brasília time).
+          </p>
+          <p class="prazo">Request <code th:text="${pedido.code}">ENV-0000</code></p>
+          <ol>
+            <li th:each="vaga : ${pedido.slots}">
+              <span><span class="nota" th:text="${vaga.position} + '.'">1.</span>
+                <span class="nome" th:text="${vaga.firstName}">Name</span></span>
+              <span th:if="${vaga.locked}" class="nota">Reading locked</span>
+              <a th:unless="${vaga.locked}" class="botao botao-cheio"
+                 th:href="@{/painel/medium/pedido/{c}/leitura/{p}(c=${pedido.code},p=${vaga.position})}">Answer</a>
+            </li>
+          </ol>
+        </li>
+      </ul>
+
+      <th:block th:unless="${#lists.isEmpty(enviados)}">
+        <h3>Readings submitted</h3>
+        <p class="nota">
+          Still without a score: the checking only happens at the opening of the results, when the study ends.
+        </p>
+        <ul class="pedidos">
+          <li th:each="pedido : ${enviados}">
+            <p class="prazo">Request <code th:text="${pedido.code}">ENV-0000</code> · <span th:text="${pedido.state.label().in(idioma)}">Readings submitted</span></p>
+            <ol>
+              <li th:each="vaga : ${pedido.slots}">
+                <span class="nome" th:text="${vaga.firstName}">Name</span>
+                <span class="nota" th:if="${vaga.lockedAt}">locked on
+                  <time th:datetime="${vaga.lockedAt}" th:text="${@datas.momento(vaga.lockedAt)}">13 November 2026, at 7 a.m.</time>
+                  (Brasília time)</span>
+              </li>
+            </ol>
+          </li>
+        </ul>
+      </th:block>
+
+      <th:block th:unless="${#lists.isEmpty(notas)}">
+        <h3>The scores of your readings</h3>
+        <p class="nota">
+          These studies have ended. Each reading of yours was compared with the answers of the person who
+          knew the person of that name and, for comparison, with the answers about the other person in the
+          same request. What counts is the difference between the two counts. A single reading says
+          little: chance explains many coincidences, and the study looks at the whole. The sitters'
+          answers stay with them.
+        </p>
+        <ul class="notas">
+          <li th:each="nota : ${notas}">
+            <h4 th:text="'Reading for ' + ${nota.firstName}">Reading for Name</h4>
+            <p class="nota">Study <code th:text="${nota.studyCode}">STD-0000</code></p>
+            <p th:text="'With the right person, ' + ${nota.targetMatches} + ' of ' + ${nota.comparableFields} + ' answers matched.'">
+              With the right person, 7 of 13 answers matched.</p>
+            <p th:text="'With the person for comparison, ' + ${nota.decoyMatches} + ' of ' + ${nota.comparableFields} + '.'">
+              With the person for comparison, 5 of 13.</p>
+            <p th:text="'Difference for the request, adding up your two readings: ' + ${nota.pairDifference} + '.'">
+              Difference for the request, adding up your two readings: 2.</p>
+          </li>
+        </ul>
+        <details class="detalhe-tecnico">
+          <summary>Technical detail</summary>
+          <p>
+            The person for comparison is the decoy of the pair: the other request, with a similar profile.
+            The difference for the request is the <code>d</code> of the pair: across the two readings, the
+            matches with the target minus the matches with the decoy. The fields where one of the sitters
+            marked "I don't know" stay out of the comparison. The study's primary analysis is the paired
+            Wilcoxon test over the <code>d</code> of all the pairs, as in the preregistration.
+          </p>
+        </details>
+      </th:block>
+
+      <h3>How a reading works</h3>
+      <ol class="etapas">
+        <li><div><h3>The request arrives</h3><p>Two first names, in a drawn order, and the deadline declared in the study. You do not know who made the request, and the two names have similar profiles.</p></div></li>
+        <li><div><h3>You answer for each name</h3><p>The multiple-choice questions that count in the comparison. For each one, an option or "Nothing came".</p></div></li>
+        <li><div><h3>The reading locks</h3><p>Before locking, you review it. On locking, the answers are sealed and change no more.</p></div></li>
+        <li><div><h3>Scores at the end</h3><p>When the study is completed, you see the score of each reading of yours.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="acoes">
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/conta'">My account</a>
+      </p>
+      <form method="post" th:action="@{/logout}">
+        <button class="botao botao-vazio" type="submit">Log out</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

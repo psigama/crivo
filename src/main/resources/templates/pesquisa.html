@@ -21,7 +21,7 @@
 <main id="conteudo">
   <section class="abertura">
     <div class="faixa">
-      <p class="rotulo aparece">Para pesquisadores · <a href="/pesquisa/en" hreflang="en" lang="en">English</a></p>
+      <p class="rotulo aparece">Para pesquisadores</p>
       <h1 class="aparece">Um protocolo que se defende sozinho</h1>
       <p class="chamada aparece">
         O desenho do experimento de mediunidade do Crivo, o P1-automático, numa página: o que é cego, o que
@@ -57,7 +57,7 @@
           <span th:text="${#lists.size(questionario.fields())}">16</span> campos, dos quais
           <span th:text="${#lists.size(questionario.scoredFields())}">13</span> entram na nota; os demais
           servem só ao pareamento. "Não sei" e "não recebi" nunca coincidem com nada.
-          <a href="/protocolo/P1#questionario">O questionário, campo a campo</a>.
+          <a th:href="${aplicacao} + '/protocolo/P1#questionario'">O questionário, campo a campo</a>.
         </li>
         <li>A conferência é igualdade entre opções fechadas, por regra publicada. Para cada par,
           <code>d</code> é, nas duas leituras, o número de coincidências com o alvo menos o número de
@@ -125,12 +125,12 @@
           de médium entra na trilha antes do desmascaramento.</li>
         <li>A trilha é <em>append-only</em>, encadeada por SHA-256, com <em>update</em> e
           <em>delete</em> bloqueados no banco. A cabeça é carimbada pelo FreeTSA (RFC 3161) depois de cada
-          marco e a cada 24 horas se mudou; os tokens estão em <a href="/carimbos">Carimbos de tempo</a>, e
+          marco e a cada 24 horas se mudou; os tokens estão em <a th:href="${aplicacao} + '/carimbos'">Carimbos de tempo</a>, e
           <code>airlab verify</code> os reconfere.</li>
         <li>No desmascaramento, o pacote de verificação de cada estudo, público e sem nomes, permite refazer
           a trilha, o sorteio, a conferência e a análise; <code>airlab verificar-pacote</code> confere o
-          arquivo sem servidor e sem banco. Estudos e relatórios estão em <a href="/estudos">Estudos</a>, e o
-          estado da trilha, em <a href="/verificar">Verificar</a>.</li>
+          arquivo sem servidor e sem banco. Estudos e relatórios estão em <a th:href="${aplicacao} + '/estudos'">Estudos</a>, e o
+          estado da trilha, em <a th:href="${aplicacao} + '/verificar'">Verificar</a>.</li>
       </ul>
     </div>
   </section>
@@ -140,7 +140,7 @@
       <p class="rotulo">Limites declarados</p>
       <h2>O que um resultado do P1 não sustenta</h2>
       <ul>
-        <li th:each="limite : ${protocolo.limits()}" th:text="${limite}">Limite</li>
+        <li th:each="limite : ${protocolo.limits()}" th:text="${limite.in(idioma)}">Limite</li>
       </ul>
       <p class="nota">
         Saídos do catálogo de protocolos, que exige de cada protocolo uma lista de limites não vazia. O

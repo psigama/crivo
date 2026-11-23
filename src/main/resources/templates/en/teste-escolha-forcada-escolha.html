@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Trial — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('Trial — Crivo', 'Blind protocols for anomalous cognition research, with a verifiable draw and a hash-chained audit trail.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">
+        Trial <span th:text="${progresso.nextTrialIndex}">1</span>
+        of <span th:text="${progresso.declaredTrials}">24</span>
+      </p>
+      <progress class="progresso-sessao" th:value="${progresso.lockedTrials}"
+                th:max="${progresso.declaredTrials}" value="0" max="24"
+                th:attr="aria-label='Trials completed: ' + ${progresso.lockedTrials} + ' of ' + ${progresso.declaredTrials}"></progress>
+      <h1>Which of the four?</h1>
+      <p class="chamada">
+        Pick one. The target of this trial will be computed after you answer.
+      </p>
+      <p class="nota">By keyboard: the keys <kbd>1</kbd> to <kbd>4</kbd> pick the door.</p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/escolha'"
+            data-envio-unico>
+        <ul class="portas" data-portas>
+          <li th:each="n : ${#numbers.sequence(1, alternativas)}">
+            <button class="porta" type="submit" name="posicao" th:value="${n}"
+                    th:text="${n}">1</button>
+          </li>
+        </ul>
+        <p class="enviando-aviso" data-enviando hidden role="status">Recording the choice…</p>
+      </form>
+
+      <p class="progresso-barra" role="status">
+        <strong th:text="${progresso.remainingTrials()}">24</strong> trial(s) left.
+        No result appears until the end of the session — it is that rule which keeps you from
+        stopping at a convenient moment.
+      </p>
+
+      <dl class="cadeia">
+        <dt>Seed commitment</dt>
+        <dd><code th:text="${progresso.seedCommitment}">hash</code></dd>
+        <dt>Session</dt>
+        <dd><code th:text="${progresso.sessionCode}">codigo</code></dd>
+      </dl>
+      <p class="nota">
+        Write down or copy this commitment now, if you want to check it later: at the end of the
+        session the seed is revealed, and its hash has to match what is shown there.
+      </p>
+
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/desistir'" data-envio-unico>
+        <p class="acoes">
+          <button class="botao botao-vazio" type="submit">Give up on this session</button>
+        </p>
+      </form>
+      <p class="nota">
+        Giving up is recorded as an abandoned session and enters the denominator of the analysis of
+        the data set. That is on purpose: abandoning a bad session does not improve the aggregate
+        number.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+<script src="/js/sessao-teste.js" defer></script>
+</body>
+</html>

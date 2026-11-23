@@ -18,6 +18,8 @@ import io.github.rogeriocisi.airlab.participant.AccountView;
 import io.github.rogeriocisi.airlab.participant.EmailConfirmationResult;
 import io.github.rogeriocisi.airlab.support.BlindIndex;
 import io.github.rogeriocisi.airlab.support.Codes;
+import io.github.rogeriocisi.airlab.support.Language;
+import io.github.rogeriocisi.airlab.support.Refusal;
 import io.github.rogeriocisi.airlab.support.FieldCipher;
 import io.github.rogeriocisi.airlab.support.Hashes;
 import java.nio.charset.StandardCharsets;
@@ -125,6 +127,9 @@ class DefaultAccountService implements AccountService {
                 passwordEncoder.encode(signUp.password()),
                 signUp.termVersion(),
                 signUp.sensitiveDataAccepted(),
+                // The language of the page the form was filled in on. It is not in the audit
+                // payload below: the language is presentation, never a study variable (rule 10).
+                Language.byCode(signUp.language()).orElse(Language.DEFAULT).code(),
                 clock.instant()));
         String token = issueConfirmation(account.code());
 
@@ -138,39 +143,51 @@ class DefaultAccountService implements AccountService {
 
     /** Field checks, with messages written for the person filling in the form. */
     private static void validate(AccountSignUp signUp) {
+        // Written for the person filling in the form, in both languages of the interface
+        // (SPEC 0.28, section 1.5, rule 6): the page shows the side it is in, and getMessage()
+        // keeps the Portuguese, which is what a log and a test read.
         if (signUp.profile() == null) {
-            throw new IllegalArgumentException("Escolha um perfil: consulente ou médium.");
+            throw new Refusal("Escolha um perfil: consulente ou médium.",
+                    "Choose a profile: sitter or medium.");
         }
         if (signUp.fullName() == null || signUp.fullName().isBlank()) {
-            throw new IllegalArgumentException("Informe o seu nome.");
+            throw new Refusal("Informe o seu nome.", "Enter your name.");
         }
         if (signUp.fullName().strip().length() > 200) {
-            throw new IllegalArgumentException("O nome pode ter no máximo 200 caracteres.");
+            throw new Refusal("O nome pode ter no máximo 200 caracteres.",
+                    "The name may have at most 200 characters.");
         }
         if (signUp.email() == null || signUp.email().strip().length() > 254
                 || !EMAIL.matcher(signUp.email().strip()).matches()) {
-            throw new IllegalArgumentException("Informe um e-mail válido.");
+            throw new Refusal("Informe um e-mail válido.", "Enter a valid e-mail address.");
         }
         String password = signUp.password() == null ? "" : signUp.password();
         if (password.codePointCount(0, password.length()) < MINIMUM_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException(
-                    "A senha precisa ter pelo menos " + MINIMUM_PASSWORD_LENGTH + " caracteres.");
+            throw new Refusal(
+                    "A senha precisa ter pelo menos " + MINIMUM_PASSWORD_LENGTH + " caracteres.",
+                    "The password needs at least " + MINIMUM_PASSWORD_LENGTH + " characters.");
         }
         if (password.getBytes(StandardCharsets.UTF_8).length > MAXIMUM_PASSWORD_BYTES) {
-            throw new IllegalArgumentException("A senha é longa demais: use até 72 caracteres simples.");
+            throw new Refusal("A senha é longa demais: use até 72 caracteres simples.",
+                    "The password is too long: use up to 72 plain characters.");
         }
         if (!CURRENT_TERM_VERSION.equals(signUp.termVersion())) {
             // E10, lock 6: consent is always on the current version of the term.
-            throw new IllegalArgumentException(
-                    "O termo mudou desde que você abriu a página. Leia a versão atual e aceite de novo.");
+            throw new Refusal(
+                    "O termo mudou desde que você abriu a página. Leia a versão atual e aceite de novo.",
+                    "The agreement changed after you opened the page. Read the current version and "
+                            + "accept it again.");
         }
         if (!signUp.adultDeclared()) {
             // SPEC 0.26: adults only, by declaration; the birth date is never asked (P6).
-            throw new IllegalArgumentException("Para participar é preciso ter 18 anos ou mais.");
+            throw new Refusal("Para participar é preciso ter 18 anos ou mais.",
+                    "To take part you must be 18 or older.");
         }
         if (!signUp.sensitiveDataAccepted()) {
-            throw new IllegalArgumentException(
-                    "Para criar a conta é preciso aceitar o termo, inclusive o tratamento de dados sensíveis.");
+            throw new Refusal(
+                    "Para criar a conta é preciso aceitar o termo, inclusive o tratamento de dados sensíveis.",
+                    "To create the account you must accept the agreement, including the processing of "
+                            + "sensitive data.");
         }
     }
 
@@ -366,6 +383,13 @@ class DefaultAccountService implements AccountService {
         return accounts.findByCode(code)
                 .filter(account -> !account.closed() && account.confirmed())
                 .map(account -> cipher.decrypt(account.emailEnc()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Language> mailLanguage(String code) {
+        return accounts.findByCode(code)
+                .map(account -> Language.byCode(account.language()).orElse(Language.DEFAULT));
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.rogeriocisi.airlab.web;
 
 import io.github.rogeriocisi.airlab.catalog.Protocol;
 import io.github.rogeriocisi.airlab.catalog.ProtocolCatalog;
+import io.github.rogeriocisi.airlab.support.Language;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,21 @@ import org.springframework.web.servlet.view.RedirectView;
  * the new ones (SPEC 0.17, catalog rule 7). The PsiGama ESP page and links already shared
  * pointed at them, and a protocol page that moved must not become a dead link.
  *
+ * <p>Since SPEC 0.28 (section 1.5, rule 1) the English page of the researchers' overview moved
+ * from {@code /pesquisa/en} to {@code /en/pesquisa}, where every English address is, and the old
+ * one — published in the footer and quoted outside the project — redirects here too.
+ *
  * <p>Only GET requests are redirected. The forms of a test post to the new addresses, and a stale
  * form from an old page would have nothing safe to resume.
  */
 @Controller
 class LegacyRoutesController {
+
+    /** The one English page there was until SPEC 0.27, now one address among the others. */
+    @GetMapping("/pesquisa/en")
+    RedirectView research() {
+        return permanent(Language.EN.prefix() + "/pesquisa");
+    }
 
     @GetMapping("/testes")
     RedirectView catalog() {

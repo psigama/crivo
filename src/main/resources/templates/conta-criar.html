@@ -27,7 +27,7 @@
         <p class="chamada">
           A conta serve para participar do estudo sobre mediunidade que roda inteiro pelo site. Você
           escolhe agora o seu perfil — <strong>consulente</strong> ou <strong>médium</strong> — e ele não
-          muda depois. <a href="/protocolo/P1">Veja antes como o estudo funciona</a>.
+          muda depois. <a th:href="${aplicacao} + '/protocolo/P1'">Veja antes como o estudo funciona</a>.
         </p>
 
         <div class="ressalva" th:unless="${inscricaoAberta}">
@@ -147,7 +147,7 @@
           </p>
         </div>
 
-        <p class="nota nota-espacada">Já tem conta? <a href="/login">Entrar</a>.</p>
+        <p class="nota nota-espacada">Já tem conta? <a th:href="${aplicacao} + '/login'">Entrar</a>.</p>
       </div>
     </section>
   </main>

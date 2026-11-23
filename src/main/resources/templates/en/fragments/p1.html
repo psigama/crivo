@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title>P1 fragments</title>
+</head>
+
+<body>
+
+  <!--
+    What P1 is not (SPEC, E13): not a message from the deceased, and not an answer to the sitter's
+    questions. Used on the home page of the site and on the protocol page, so that both say the same.
+  -->
+  <div th:fragment="o-que-nao-e" class="ressalva esclarecimento" id="o-que-nao-e">
+    <p>
+      <strong>What this experiment is not.</strong> It is not a letter, nor a message sent by the
+      person who died. It is also not a space for the sitter to ask questions and receive answers:
+      the sitter asks the medium nothing, and the medium answers nobody's questions.
+    </p>
+    <p>
+      It is only an <strong>experiment to confirm — or not — the phenomenon of anomalous information
+      reception</strong>. The medium, knowing only the first name, answers a closed questionnaire
+      about the person, and the system checks whether those answers match the sitter's more than they
+      match those of another person with a similar profile. The result concerns the study as a whole,
+      not any one person.
+    </p>
+  </div>
+
+  <!--
+    Support for someone who is grieving (SPEC 0.23, section 1.4, rule 5): a concrete path, not just
+    "seek help". Used on /consulente and on the feedback page, so that both say the same.
+  -->
+  <div th:fragment="apoio" class="ressalva apoio" id="apoio">
+    <p>
+      <strong>If it weighs on you, talk to someone.</strong> This is not care, nor therapy, nor
+      consolation, and taking part may stir up something hard. CVV, Brazil's emotional support
+      helpline, talks with anyone, free of charge, at any hour and in Portuguese: by phone at
+      <a href="tel:188">188</a> or by chat at <a href="https://cvv.org.br/">cvv.org.br</a>. And you
+      can delete your account at any moment, without saying why.
+    </p>
+  </div>
+
+  <!--
+    How to take part in P1 (SPEC, E13). Used on the protocol page; the links carry ${aplicacao}, so that
+    they also work on a page of the site (SPEC 0.21, section 1.3).
+  -->
+  <section th:fragment="como-participar" id="como-participar">
+    <div class="faixa">
+      <p class="rotulo">Automated structured reading · P1</p>
+      <h2>How to take part, step by step</h2>
+      <p>
+        Everything happens through the site. Nobody on the team reads what you write, and nobody
+        judges whether an answer "fits": the system compares closed answers.
+      </p>
+
+      <ol class="etapas">
+        <li>
+          <div>
+            <h3>Create an account</h3>
+            <p>
+              At <a th:href="${aplicacao} + '/conta/criar'">Create account</a>, give your name, e-mail and a password, and accept the agreement.
+              Your data is kept encrypted, separate from the research data, which uses only a code.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Choose your role: sitter or medium</h3>
+            <p>
+              A <strong>sitter</strong> is someone who lost a person and makes the request for a
+              reading. A <strong>medium</strong> is someone who receives the requests and answers.
+              The choice is made once and does not change: nobody can be on both sides.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Confirm your e-mail</h3>
+            <p>
+              You receive a confirmation link, valid for 48 hours. The account only becomes valid
+              after it.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Sitter: make the request</h3>
+            <p>
+              Give the first name of the person who died and answer a multiple-choice questionnaire
+              about them. On confirmation, the answers lock, and the public trail receives a
+              cryptographic commitment to them before any medium sees the request.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Medium: answer the request</h3>
+            <p>
+              The system draws the medium and sends only the first name. The medium answers the same
+              questionnaire — or marks "Nothing came" — and, on submission, the reading locks
+              as well.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Automatic checking and feedback</h3>
+            <p>
+              When the study reaches the declared number of pairs, the system compares each reading
+              with the true target and with a decoy of a similar profile. Only then do the scores
+              appear: the sitter sees the medium's answers alongside their own, and the administrator
+              receives the notice that the study has been completed.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <p class="acoes">
+        <a class="botao botao-cheio" th:href="${aplicacao} + '/conta/criar'">Create an account</a>
+        <a class="botao botao-vazio" th:href="${aplicacao} + '/login'">I already have an account</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- The screens for each role, with what already works and what is still being built. -->
+  <section th:fragment="telas" id="telas">
+    <div class="faixa">
+      <p class="rotulo">The screens for each role</p>
+      <h2>What each role sees</h2>
+      <p>
+        Each role sees only what their part allows: blinding is applied in the server and in the
+        database, not by hiding fields on the screen. No score exists before the end of the study,
+        for anyone.
+      </p>
+
+      <div class="perfis">
+        <article class="perfil">
+          <h3>Sitter</h3>
+          <ul>
+            <li><strong>Dashboard</strong> — the state of your request, step by step.</li>
+            <li><strong>New request</strong> — first name and questionnaire, with a review before locking.</li>
+            <li><strong>Feedback</strong> — after the end of the study, the medium's answers alongside your own.</li>
+            <li><strong>My account</strong> — your data, the agreement you accepted and deleting the account.</li>
+          </ul>
+        </article>
+        <article class="perfil">
+          <h3>Medium</h3>
+          <ul>
+            <li><strong>Dashboard</strong> — requests received and deadlines; readings submitted, with no score.</li>
+            <li><strong>Reading</strong> — the first names of the pair and the blank questionnaire.</li>
+            <li><strong>My account</strong> — your data, the agreement you accepted and deleting the account.</li>
+          </ul>
+        </article>
+        <article class="perfil">
+          <h3>Administrator</h3>
+          <ul>
+            <li><strong>Dashboard</strong> — accounts by role, requests and readings by step, progress towards the declared number: counts, never scores.</li>
+            <li><strong>Notices</strong> — the completion of each step, from sign-up to the report.</li>
+            <li><strong>Flags</strong> — accounts that look linked, for human review.</li>
+            <li><strong>Study</strong> — preregistration, questionnaire, freezing and report.</li>
+          </ul>
+          <p class="nota">
+            Administrator is not a role anyone chooses: that account comes from the server
+            configuration.
+          </p>
+        </article>
+      </div>
+
+      <div class="ressalva">
+        <p>
+          <strong>An honest state.</strong> Already working are account creation with a role, e-mail
+          confirmation, the dashboard for each role, the <strong>request for a reading</strong>
+          locked with a published commitment, the <strong>P1 study</strong> frozen by the
+          administrator and the <strong>path up to the reading</strong> — pairing, the draw of the
+          medium, sending with a deadline and resending, the locked reading — and the <strong>end of
+          the study</strong>: at the declared number of pairs, the system itself unblinds, checks,
+          analyzes, writes the report and releases the feedback, which becomes public at
+          <a th:href="${aplicacao} + '/estudos'">Studies and reports</a>. Accounts that look like the
+          same person are flagged for review, and a declared cap limits the pairs of each medium.
+          The platform has not yet been used with real participants.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>

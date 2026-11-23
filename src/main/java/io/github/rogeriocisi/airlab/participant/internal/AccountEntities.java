@@ -52,6 +52,13 @@ class AccountEntity {
     @Column(name = "sensitive_data_accepted", nullable = false)
     private boolean sensitiveDataAccepted;
 
+    /**
+      * Language the account was created in (SPEC 0.28, section 1.5, rule 8): what the e-mails sent
+      * outside a request come out in. A presentation preference, never a study variable.
+      */
+    @Column(name = "language", nullable = false, length = 2)
+    private String language;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -66,7 +73,7 @@ class AccountEntity {
 
     AccountEntity(String code, AccountProfile profile, String fullNameEnc, String emailEnc,
                   String emailFingerprint, String passwordHash, String termVersion,
-                  boolean sensitiveDataAccepted, Instant createdAt) {
+                  boolean sensitiveDataAccepted, String language, Instant createdAt) {
         this.code = code;
         this.profile = profile;
         this.fullNameEnc = fullNameEnc;
@@ -75,6 +82,7 @@ class AccountEntity {
         this.passwordHash = passwordHash;
         this.termVersion = termVersion;
         this.sensitiveDataAccepted = sensitiveDataAccepted;
+        this.language = language;
         this.createdAt = createdAt;
     }
 
@@ -95,6 +103,11 @@ class AccountEntity {
 
     String code() {
         return code;
+    }
+
+    /** The language of the account, {@code pt} or {@code en}. */
+    String language() {
+        return language;
     }
 
     AccountProfile profile() {

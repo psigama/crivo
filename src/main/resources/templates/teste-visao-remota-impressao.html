@@ -33,7 +33,7 @@
         coisa.
       </p>
 
-      <form method="post" th:action="'/protocolo/' + ${protocolo.catalogCode()} + '/impressao'" data-envio-unico>
+      <form method="post" th:action="${aplicacao} + '/protocolo/' + ${protocolo.catalogCode()} + '/impressao'" data-envio-unico>
         <p>
           <label for="impressao">Impressão desta tentativa</label>
           <textarea id="impressao" name="impressao" rows="7" required

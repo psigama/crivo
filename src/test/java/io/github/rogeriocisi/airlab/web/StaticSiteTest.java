@@ -3,6 +3,7 @@ package io.github.rogeriocisi.airlab.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.rogeriocisi.airlab.support.Language;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -48,12 +49,15 @@ class StaticSiteTest {
     }
 
     @Test
-    @DisplayName("gera as paginas do site, a 404, o CSS, o favicon e o script, e nada mais")
+    @DisplayName("gera as paginas do site nos dois idiomas, a 404, o CSS, o favicon e os scripts, e nada mais")
     void writes_the_editorial_pages_and_nothing_else() throws IOException {
         List<Path> written = StaticSite.write(dir.resolve("site"), APP);
 
         List<String> expected = new ArrayList<>();
-        SitePages.ALL.forEach(page -> expected.add(page.file()));
+        // SPEC 0.28, secao 1.5, regra 1: cada pagina duas vezes, a inglesa sob en/.
+        for (Language language : Language.values()) {
+            SitePages.ALL.forEach(page -> expected.add(page.file(language)));
+        }
         expected.add("404.html");
         expected.addAll(StaticSite.ASSETS);
         assertThat(written).extracting(path -> path.toString().replace('\\', '/'))
@@ -65,13 +69,15 @@ class StaticSiteTest {
     @DisplayName("os links para a aplicacao levam o endereco dela; os do site ficam relativos")
     void links_to_the_application_carry_its_address() throws IOException {
         Path site = site();
-        Set<String> sitePaths = SitePages.ALL.stream().map(SitePages.Page::path).collect(Collectors.toSet());
+        // Nos dois idiomas: numa pagina em ingles, o link para outra pagina do site leva /en.
+        Set<String> sitePaths = SitePages.everyPath().stream().collect(Collectors.toSet());
 
         for (Path page : htmlFiles(site)) {
             String html = read(page);
             Matcher link = ROOT_RELATIVE_LINK.matcher(html);
             while (link.find()) {
-                String target = link.group(1).replaceAll("#.*$", "");
+                // O seletor de idioma leva ?idioma=pt|en para a mesma pagina (SPEC 1.5, regra 3).
+                String target = link.group(1).replaceAll("[?#].*$", "");
                 boolean asset = StaticSite.ASSETS.stream().anyMatch(name -> target.equals("/" + name));
                 assertThat(sitePaths.contains(target) || asset)
                         .as("%s aponta para %s, que não é página do site: link para a aplicação sem o endereço dela",
@@ -134,8 +140,11 @@ class StaticSiteTest {
     @Test
     @DisplayName("uma pagina do site so le do modelo o que o gerador entrega (SPEC 1.3, regra 3)")
     void editorial_templates_read_only_what_the_generator_gives() throws IOException {
-        Resource[] templates = new PathMatchingResourcePatternResolver()
-                .getResources("classpath*:templates/site/*.html");
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        List<Resource> templates = new ArrayList<>(List.of(resolver.getResources("classpath*:templates/site/*.html")));
+        // A traducao de uma pagina do site nao pode ler mais do que o original (SPEC 1.5, regra 5).
+        templates.addAll(List.of(resolver.getResources(
+                "classpath*:templates/" + Language.EN.code() + "/site/*.html")));
         assertThat(templates).isNotEmpty();
 
         Set<String> roots = new TreeSet<>();
@@ -167,6 +176,15 @@ class StaticSiteTest {
         Set<String> listed = SitePages.ALL.stream().map(SitePages.Page::template).collect(Collectors.toSet());
         listed.add(SitePages.NOT_FOUND_TEMPLATE);
         assertThat(templates).isEqualTo(listed);
+
+        // Toda traducao de pagina do site corresponde a uma pagina listada; o contrario nao e
+        // exigido, porque uma pagina sem traducao responde em portugues com aviso (regra 5).
+        Set<String> english = new HashSet<>();
+        for (Resource template : new PathMatchingResourcePatternResolver()
+                .getResources("classpath*:templates/" + Language.EN.code() + "/site/*.html")) {
+            english.add("site/" + template.getFilename().replaceAll("\\.html$", ""));
+        }
+        assertThat(listed).containsAll(english);
     }
 
     @Test

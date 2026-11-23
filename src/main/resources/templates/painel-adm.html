@@ -48,7 +48,7 @@
         <li>E-mail:
           <strong th:text="${caixaLocal} ? 'caixa de saída local (nada sai da máquina)'
                            : (${emailAtivo} ? 'SMTP configurado' : 'desativado')">local</strong>
-          <a th:if="${caixaLocal}" href="/caixa-de-saida">abrir a caixa de saída</a></li>
+          <a th:if="${caixaLocal}" th:href="${aplicacao} + '/caixa-de-saida'">abrir a caixa de saída</a></li>
         <li>Avisos por e-mail:
           <strong th:text="${avisoPorEmail} ? 'ligados' : 'só no painel'">só no painel</strong>
           <span class="nota" th:unless="${avisoPorEmail}">(defina <code>AIRLAB_ADMIN_EMAIL</code>)</span></li>
@@ -57,7 +57,7 @@
           <span th:unless="${carimbo.enabled}"> · <strong>desligado</strong> (<code>AIRLAB_TIMESTAMP_ENABLED</code>)</span>
           <span class="erro" th:if="${carimbo.failuresSinceLastGrant > 0}"
                 th:text="' · ' + ${carimbo.failuresSinceLastGrant} + ' falha(s) desde o último'">falhas</span>
-          <a href="/carimbos">ver os carimbos</a></li>
+          <a th:href="${aplicacao} + '/carimbos'">ver os carimbos</a></li>
       </ul>
     </div>
   </section>
@@ -84,27 +84,27 @@
         <code th:text="${estudo.studyCode}">STD-0000</code> ·
         <span th:text="${estudo.title}">Título</span> · congelado, questionário
         <code th:text="${estudo.questionnaireVersion}">v1</code>.
-        <a href="/painel/adm/estudo-p1">Abrir o estudo</a>
+        <a th:href="${aplicacao} + '/painel/adm/estudo-p1'">Abrir o estudo</a>
       </p>
       <th:block th:unless="${estudo}">
         <p>
           Nenhum estudo P1 aberto. Os pedidos travados esperam: o pareamento e o envio aos médiuns só
           começam depois do pré-registro congelado.
         </p>
-        <p class="acoes"><a class="botao botao-cheio" href="/painel/adm/estudo-p1">Criar o estudo P1</a></p>
+        <p class="acoes"><a class="botao botao-cheio" th:href="${aplicacao} + '/painel/adm/estudo-p1'">Criar o estudo P1</a></p>
       </th:block>
       <p>
         Questionário em vigor:
         <code th:text="${questionarioVigente.version()}">v1-rascunho</code><span
           th:if="${questionarioVigente.draft()}"> (rascunho, aguardando a sua revisão)</span>.
-        <a href="/protocolo/P1#questionario">Ver o questionário</a>
+        <a th:href="${aplicacao} + '/protocolo/P1#questionario'">Ver o questionário</a>
       </p>
 
       <h3>Sinalizações</h3>
       <p>
         <strong th:text="${sinalizacoesPendentes}">0</strong> sinalização(ões) de contas ligadas aguardando revisão.
-        <a href="/painel/adm/sinalizacoes">Revisar</a> ·
-        <a href="/estudos">Página pública dos estudos</a>
+        <a th:href="${aplicacao} + '/painel/adm/sinalizacoes'">Revisar</a> ·
+        <a th:href="${aplicacao} + '/estudos'">Página pública dos estudos</a>
       </p>
     </div>
   </section>
@@ -117,7 +117,7 @@
       <ul class="avisos" th:unless="${#lists.isEmpty(avisos)}">
         <li th:each="aviso : ${avisos}">
           <time th:datetime="${aviso.at}" th:text="${@datas.utc(aviso.at)}">2026-11-13 10:00</time>
-          <span><span th:text="${aviso.kind.label()}">Conta confirmada</span> ·
+          <span><span th:text="${aviso.kind.label().in(idioma)}">Conta confirmada</span> ·
             <code th:text="${aviso.subjectCode}">CON-0000</code></span>
         </li>
       </ul>

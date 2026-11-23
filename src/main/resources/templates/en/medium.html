@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>For mediums — Crivo</title>
+  <th:block th:replace="~{fragments/site :: social('For mediums — Crivo', 'For someone who is a medium and wants to contribute to the study: what happens, step by step, what is asked of you and what your rights are.')}"></th:block>
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<!--/*
+  The medium's page (SPEC 0.24, section 1.4, rule 9): the mirror of /consulente. It lives in the
+  application for the same reason (section 1.3, rule 2): it describes the P1 procedure and the
+  rights of the people who take part.
+*/-->
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo aparece">For mediums</p>
+      <h1 class="aparece">You are a medium and want to contribute. What happens.</h1>
+      <p class="chamada aparece">
+        This page is for you, who are thinking of taking part as a <strong>medium</strong>. It
+        explains what will be asked of you, why each condition exists and what you receive at the
+        end.
+      </p>
+      <p class="tese aparece">
+        The conditions of the study exist to <strong>protect your honesty</strong>. You do not know
+        who made the request, you see nobody and you receive only a first name. Because of that, if
+        there is a hit, nobody will be able to say it was a trick, a search on the internet or
+        reading someone's reactions.
+      </p>
+      <div th:replace="~{fragments/p1 :: o-que-nao-e}"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Step by step</p>
+      <h2>What will happen, in order</h2>
+      <ol class="corrente">
+        <li>
+          <h3>Account and consent</h3>
+          <p>
+            You create an account with the medium role and confirm your e-mail. The agreement says
+            which data are kept and for how long.
+          </p>
+          <span class="selo">the role is fixed: a medium cannot be a sitter, in any study</span>
+        </li>
+        <li>
+          <h3>A request comes to you</h3>
+          <p>
+            When the draw picks you, an e-mail arrives with the notice and the deadline, with no name
+            at all. The names appear only on your dashboard, after you sign in.
+          </p>
+        </li>
+        <li>
+          <h3>Two first names</h3>
+          <p>
+            Each request carries the first names of two people who have died, in an order drawn by
+            lot. The two come from two different sitters, with people of a similar profile, and each
+            name serves as the comparison for the other. You do not know who made either request.
+          </p>
+        </li>
+        <li>
+          <h3>You answer for each name</h3>
+          <p>
+            For each name, you answer the same multiple-choice questionnaire the sitter answered: how
+            the death happened, where the person lived, their temperament, some habits. In each
+            question, choose an option or "Nothing came".
+          </p>
+        </li>
+        <li>
+          <h3>Once locked, the reading is sealed</h3>
+          <p>
+            Before you send it, you review everything. Once locked, the reading does not change any
+            more, neither by you nor by the team.
+          </p>
+          <span class="selo">this protects the study from an adjustment after the fact, and protects you from the suspicion of having adjusted anything</span>
+        </li>
+        <li>
+          <h3>Nobody sees a score before the end</h3>
+          <p>
+            While the study is collecting, no score exists at all: not for you, not for the sitter,
+            not for whoever administers the platform. When the number of pairs agreed at the start is
+            complete, the system itself opens the results.
+          </p>
+        </li>
+        <li>
+          <h3>Your scores</h3>
+          <p>
+            At the end, you receive an e-mail and see on your dashboard how many answers in each
+            reading agreed with those of the right person and how many with those of the person for
+            comparison, as well as the result of the whole study.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">How to answer</p>
+      <h2>What is asked of you</h2>
+      <div class="definicao">
+        <p>
+          <strong>"Nothing came" is a legitimate answer, and there is no penalty.</strong> It simply
+          does not count as a hit. A guess given only to fill in the blank counts as if it were
+          information.
+        </p>
+      </div>
+      <h3>Answer with whatever comes for each name</h3>
+      <p>
+        Answer in the way you work, but within the options of the questionnaire. If nothing comes for
+        a question, mark "Nothing came".
+      </p>
+      <h3>Respect the deadline</h3>
+      <p>
+        Each request has a deadline, agreed at the start of the study; the usual one is 14 days. If
+        the deadline passes, the request goes to another medium drawn by lot, and the readings you
+        had already locked in it stay out of the analysis.
+      </p>
+      <h3>Do not try to find out whose request it is</h3>
+      <p>
+        Do not ask anyone who made the request and do not talk about the names you received. The
+        study is only worth something if you have no way of knowing whose each name is by another
+        route.
+      </p>
+      <h3>A limit on requests</h3>
+      <p>
+        Each medium receives at most the number of pairs agreed at the start of the study; the usual
+        one is 10. That way, the result does not depend on one person alone.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Your rights</p>
+      <h2>What is guaranteed to you</h2>
+      <div class="garantias">
+        <div class="garantia">
+          <h3>Leave whenever you want</h3>
+          <p>
+            At any time, with no justification. If you delete your account with a request open, it
+            goes to another medium, and your identifiable data are erased.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Your name stays out</h3>
+          <p>
+            In the research data you are a code. Your name and your e-mail are kept encrypted, in a
+            separate part of the database. Before the end of the study, not even your code appears in
+            the public record.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Nobody is exposed</h3>
+          <p>
+            The report and the verification package, published at the end, use only codes. The
+            platform does not publish names, does not keep a public list of mediums and is nobody's
+            showcase.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>No machine judges</h3>
+          <p>
+            The scoring compares the options that were marked, by a published rule that anyone can
+            redo. No artificial intelligence program reads or scores anything.
+          </p>
+        </div>
+        <div class="garantia">
+          <h3>Respect for your practice</h3>
+          <p>
+            In your spiritist center or in your <em lang="pt-BR">terreiro</em>, this may have another
+            name. Here, so as not to take sides, we call it a reading. The platform does not interpret
+            anything from the point of view of any doctrine.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <p class="rotulo">Honesty about the result</p>
+      <h2>What this will not give you</h2>
+      <p>
+        <strong>It is not a certificate of mediumship, nor the opposite.</strong> The result belongs
+        to the <strong>study</strong>, computed over dozens of pairs. One reading on its own says
+        little: common answers, such as "died of a heart condition", agree with a great many people,
+        and chance explains a good part of the agreements in any reading.
+      </p>
+      <p>
+        A positive result overall also does not decide where the information came from. And the most
+        likely result, by what the literature shows to this day, is modest or null. Even so, one
+        well-made study, whatever the result, is worth more than a thousand accounts nobody can
+        check.
+      </p>
+      <p class="nota nota-espacada">
+        To understand the protocol in full, see the <a th:href="${aplicacao} + '/protocolo/P1'">protocol page</a>,
+        the <a th:href="${aplicacao} + '/perguntas'">frequently asked questions</a> and the
+        <a th:href="${site} + '/sobre'">vocabulary</a>. This page can be printed and handed out on paper.
+      </p>
+    </div>
+  </section>
+
+  <section id="o-que-fazer">
+    <div class="faixa">
+      <p class="rotulo">And now</p>
+      <h2>What to do now</h2>
+      <th:block th:if="${inscricaoAberta}">
+        <p>
+          If you want to take part, create your account with the medium role. You can stop whenever
+          you want.
+        </p>
+        <p class="acoes">
+          <a class="botao botao-cheio" th:href="${aplicacao} + '/conta/criar'">Create my account</a>
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/login'">I already have an account</a>
+        </p>
+      </th:block>
+      <th:block th:unless="${inscricaoAberta}">
+        <p th:if="${aguardaCep}">
+          <strong>Sign-up is not open yet.</strong> It opens after the study is approved by a
+          Brazilian research ethics committee (CEP), which checks whether it respects the people who
+          take part.
+        </p>
+        <p th:unless="${aguardaCep}">
+          <strong>Sign-up is closed on this installation.</strong>
+        </p>
+        <p class="acoes">
+          <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/P1'">See how the study works</a>
+        </p>
+      </th:block>
+      <p th:if="${contato}">
+        Any question left? Write to
+        <a th:href="'mailto:' + ${contato}" th:text="${contato}">contact</a>. A person answers.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

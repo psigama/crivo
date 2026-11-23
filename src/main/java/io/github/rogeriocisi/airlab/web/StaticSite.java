@@ -1,5 +1,6 @@
 package io.github.rogeriocisi.airlab.web;
 
+import io.github.rogeriocisi.airlab.support.Language;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -8,8 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Stream;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -36,8 +37,8 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 public final class StaticSite {
 
     /** Files under {@code static/} that the site needs, at the same path. */
-    static final List<String> ASSETS =
-            List.of("css/crivo.css", "favicon.svg", "js/encaminhar.js", "img/compartilhar.png");
+    static final List<String> ASSETS = List.of("css/crivo.css", "favicon.svg", "js/encaminhar.js",
+            "js/idioma.js", "img/compartilhar.png");
 
     private static final String USAGE =
             "Uso: airlab site <pasta> --aplicacao=<endereço da aplicação, como https://app.crivo.psigama.com>";
@@ -96,13 +97,19 @@ public final class StaticSite {
                 }
             }
         }
-        SpringTemplateEngine engine = engine();
         List<Path> written = new ArrayList<>();
-        for (SitePages.Page page : SitePages.ALL) {
-            String html = render(engine, page.template(), NavigationAdvice.sectionOf(page.path()), application);
-            written.add(save(target, page.file(), html.getBytes(StandardCharsets.UTF_8)));
+        for (Language language : Language.values()) {
+            SpringTemplateEngine engine = engine(language);
+            for (SitePages.Page page : SitePages.ALL) {
+                String html = render(engine, language, page.template(), page.path(),
+                        NavigationAdvice.sectionOf(page.path()), application);
+                written.add(save(target, page.file(language), html.getBytes(StandardCharsets.UTF_8)));
+            }
         }
-        String notFound = render(engine, SitePages.NOT_FOUND_TEMPLATE, "erro", application);
+        // One 404 for the whole site: the GitHub Pages serves this very file for any address it
+        // does not have, in either language, and its script forwards to the application.
+        String notFound = render(engine(Language.PT), Language.PT, SitePages.NOT_FOUND_TEMPLATE, "/", "erro",
+                application);
         written.add(save(target, "404.html", notFound.getBytes(StandardCharsets.UTF_8)));
         for (String asset : ASSETS) {
             written.add(save(target, asset, resource("static/" + asset)));
@@ -110,26 +117,70 @@ public final class StaticSite {
         return written;
     }
 
-    private static SpringTemplateEngine engine() {
-        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver(StaticSite.class.getClassLoader());
-        resolver.setPrefix("templates/");
-        resolver.setSuffix(".html");
-        resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+    /**
+     * One engine per language. The English one looks under {@code templates/en/} first and falls
+     * back to the Portuguese template when the page has not been translated yet (SPEC 0.28, section
+     * 1.5, rule 5) — the same overlay the application uses, built here by hand because this command
+     * never starts Spring.
+     */
+    private static SpringTemplateEngine engine(Language language) {
         SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.setTemplateResolver(resolver);
+        if (language == Language.EN) {
+            ClassLoaderTemplateResolver english = resolver("templates/" + Language.EN.code() + "/");
+            english.setCheckExistence(true);
+            english.setOrder(1);
+            engine.addTemplateResolver(english);
+        }
+        ClassLoaderTemplateResolver portuguese = resolver("templates/");
+        portuguese.setOrder(2);
+        engine.addTemplateResolver(portuguese);
+        engine.setTemplateEngineMessageSource(messages());
         return engine;
     }
 
-    /** One page, with nothing in the model but {@link SitePages#MODEL}. */
-    private static String render(SpringTemplateEngine engine, String template, String section, String application) {
-        Context context = new Context(Locale.forLanguageTag("pt-BR"));
-        context.setVariable("site", "");
-        context.setVariable("aplicacao", application);
+    private static ClassLoaderTemplateResolver resolver(String prefix) {
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver(StaticSite.class.getClassLoader());
+        resolver.setPrefix(prefix);
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        return resolver;
+    }
+
+    /** The same message bundle the application uses for the shared header, footer and buttons. */
+    private static ResourceBundleMessageSource messages() {
+        ResourceBundleMessageSource messages = new ResourceBundleMessageSource();
+        messages.setBasename("messages");
+        messages.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        messages.setFallbackToSystemLocale(false);
+        return messages;
+    }
+
+    /** Whether a page has its own English template, or will answer in Portuguese with a notice. */
+    private static boolean translated(String template) {
+        String name = "templates/" + Language.EN.code() + "/" + template + ".html";
+        return StaticSite.class.getClassLoader().getResource(name) != null;
+    }
+
+    /**
+     * One page, with nothing in the model but {@link SitePages#MODEL}. The two addresses of the
+     * page are relative, like every other link of the site: the generator knows where the
+     * application is, never where the site itself is published.
+     */
+    private static String render(SpringTemplateEngine engine, Language language, String template, String path,
+                                 String section, String application) {
+        Context context = new Context(language.locale());
+        context.setVariable("site", language.prefix());
+        context.setVariable("aplicacao", application + language.prefix());
         context.setVariable("secaoAtual", section);
         context.setVariable("logado", false);
-        context.setVariable("paginasDoSite", String.join(" ",
-                SitePages.ALL.stream().map(SitePages.Page::path).toList()));
+        context.setVariable("idioma", language.code());
+        context.setVariable("urlPt", Language.PT.prefix() + path);
+        context.setVariable("urlEn", Language.EN.prefix() + path);
+        context.setVariable("linkPt", Language.PT.prefix() + path + "?" + Language.CHOICE + "=" + Language.PT.code());
+        context.setVariable("linkEn", Language.EN.prefix() + path + "?" + Language.CHOICE + "=" + Language.EN.code());
+        context.setVariable("traducaoPendente", language == Language.EN && !translated(template));
+        context.setVariable("paginasDoSite", String.join(" ", SitePages.everyPath()));
         return engine.process(template, context);
     }
 

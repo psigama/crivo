@@ -1,5 +1,8 @@
 package io.github.rogeriocisi.airlab.catalog;
 
+import io.github.rogeriocisi.airlab.support.Language;
+import io.github.rogeriocisi.airlab.support.Refusal;
+import io.github.rogeriocisi.airlab.support.Text;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,13 @@ import java.util.Set;
  * <p>Closed fields only. Comparing free text would take a judgement, and P10 forbids handing
  * that judgement to a model; equality between options needs none.
  *
+ * <p>Since SPEC 0.28 (section 1.5) the labels exist in both languages of the interface, while the
+ * <strong>keys do not change</strong>: an answer is a key, so a request answered in English and one
+ * answered in Portuguese are the same data and compare directly. That is why the language is not a
+ * variable of the study and there is no stratum for it (rule 10). Because the frozen annex of the
+ * preregistration includes the labels, adding a language makes a new version of the questionnaire,
+ * never an edit of an old one (rule 9).
+ *
  * @param version version tag, recorded with every request and frozen in the preregistration
  * @param fields  fields, in the order they are shown
  */
@@ -26,6 +36,9 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
 
     /** The medium's "nothing came". Never matches anything. */
     public static final String NOT_RECEIVED = "nao-recebi";
+
+    private static final Text UNKNOWN_LABEL = Text.of("Não sei", "I don't know");
+    private static final Text NOT_RECEIVED_LABEL = Text.of("Não recebi", "Nothing came");
 
     public Questionnaire {
         if (version == null || version.isBlank()) {
@@ -63,31 +76,39 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
      * Checks a sitter's answers: every field answered, every option known, "não sei" only where
      * it is allowed, and nothing extra.
      *
-     * @throws IllegalArgumentException with a message in Portuguese, for the person filling in
+     * @throws Refusal with the reason in both languages, for the person filling in
      */
     public void checkSitterAnswers(Map<String, String> answers) {
         if (answers == null) {
-            throw new IllegalArgumentException("Responda ao questionário.");
+            throw new Refusal("Responda ao questionário.", "Answer the questionnaire.");
         }
         for (String key : answers.keySet()) {
             if (field(key).isEmpty()) {
-                throw new IllegalArgumentException("Campo desconhecido no questionário.");
+                throw new Refusal("Campo desconhecido no questionário.",
+                        "Unknown field in the questionnaire.");
             }
         }
         for (Field field : fields) {
             String answer = answers.get(field.key());
             if (answer == null || answer.isBlank()) {
-                throw new IllegalArgumentException("Responda ao campo \"" + field.label() + "\".");
+                throw new Refusal(
+                        "Responda ao campo \"" + field.label().pt() + "\".",
+                        "Answer the field \"" + field.label().en() + "\".");
             }
             if (UNKNOWN.equals(answer)) {
                 if (!field.unknownAllowed()) {
-                    throw new IllegalArgumentException("O campo \"" + field.label()
-                            + "\" é usado para formar os pares e precisa de uma resposta.");
+                    throw new Refusal(
+                            "O campo \"" + field.label().pt()
+                                    + "\" é usado para formar os pares e precisa de uma resposta.",
+                            "The field \"" + field.label().en()
+                                    + "\" is used to form the pairs and needs an answer.");
                 }
                 continue;
             }
             if (field.option(answer).isEmpty()) {
-                throw new IllegalArgumentException("Opção desconhecida no campo \"" + field.label() + "\".");
+                throw new Refusal(
+                        "Opção desconhecida no campo \"" + field.label().pt() + "\".",
+                        "Unknown option in the field \"" + field.label().en() + "\".");
             }
         }
     }
@@ -98,38 +119,53 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
      * not count, and within a pair they are equal or given away by the first name — and "não sei"
      * is the sitter's answer, not the medium's.
      *
-     * @throws IllegalArgumentException with a message in Portuguese, for the person filling in
+     * @throws Refusal with the reason in both languages, for the person filling in
      */
     public void checkMediumAnswers(Map<String, String> answers) {
         if (answers == null) {
-            throw new IllegalArgumentException("Responda ao questionário.");
+            throw new Refusal("Responda ao questionário.", "Answer the questionnaire.");
         }
         for (String key : answers.keySet()) {
             if (field(key).filter(Field::scored).isEmpty()) {
-                throw new IllegalArgumentException("Campo desconhecido no questionário.");
+                throw new Refusal("Campo desconhecido no questionário.",
+                        "Unknown field in the questionnaire.");
             }
         }
         for (Field field : scoredFields()) {
             String answer = answers.get(field.key());
             if (answer == null || answer.isBlank()) {
-                throw new IllegalArgumentException("Responda ao campo \"" + field.label()
-                        + "\": escolha uma opção ou \"Não recebi\".");
+                throw new Refusal(
+                        "Responda ao campo \"" + field.label().pt()
+                                + "\": escolha uma opção ou \"" + NOT_RECEIVED_LABEL.pt() + "\".",
+                        "Answer the field \"" + field.label().en()
+                                + "\": pick an option or \"" + NOT_RECEIVED_LABEL.en() + "\".");
             }
             if (!NOT_RECEIVED.equals(answer) && field.option(answer).isEmpty()) {
-                throw new IllegalArgumentException("Opção desconhecida no campo \"" + field.label() + "\".");
+                throw new Refusal(
+                        "Opção desconhecida no campo \"" + field.label().pt() + "\".",
+                        "Unknown option in the field \"" + field.label().en() + "\".");
             }
         }
     }
 
-    /** Label of an answer, for showing it back; "Não sei" and "Não recebi" included. */
-    public String labelOf(String fieldKey, String answer) {
+    /**
+     * Label of an answer, for showing it back, in both languages; "Não sei" and "Não recebi"
+     * included. The answer itself is a key and does not depend on the language (rule 10).
+     */
+    public Text labelOf(String fieldKey, String answer) {
         if (UNKNOWN.equals(answer)) {
-            return "Não sei";
+            return UNKNOWN_LABEL;
         }
         if (NOT_RECEIVED.equals(answer)) {
-            return "Não recebi";
+            return NOT_RECEIVED_LABEL;
         }
-        return field(fieldKey).flatMap(field -> field.option(answer)).map(Option::label).orElse(answer);
+        return field(fieldKey).flatMap(field -> field.option(answer)).map(Option::label)
+                .orElseGet(() -> Text.of(answer, answer));
+    }
+
+    /** The same label in one language, where the caller already knows which one it is in. */
+    public String labelOf(String fieldKey, String answer, Language language) {
+        return labelOf(fieldKey, answer).in(language);
     }
 
     /** What a field is for. */
@@ -146,13 +182,13 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
     /**
      * One field.
      *
-     * @param key             stable key, part of the canonical answers
-     * @param label           question, in Portuguese
+     * @param key             stable key, part of the canonical answers, the same in both languages
+     * @param label           question, in both languages
      * @param use             scored or pairing
      * @param outOfScoreReason why a pairing field does not count, shown on the page; null for scored
      * @param options         closed options
      */
-    public record Field(String key, String label, Use use, String outOfScoreReason, List<Option> options) {
+    public record Field(String key, Text label, Use use, Text outOfScoreReason, List<Option> options) {
 
         public Field {
             options = List.copyOf(options);
@@ -166,7 +202,7 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
                     throw new IllegalArgumentException("bad option " + option.key() + " in " + key);
                 }
             }
-            if ((use == Use.PAIRING) == (outOfScoreReason == null || outOfScoreReason.isBlank())) {
+            if ((use == Use.PAIRING) == (outOfScoreReason == null)) {
                 throw new IllegalArgumentException(
                         "field " + key + ": a pairing field states why it is out of the score, a scored one does not");
             }
@@ -186,7 +222,7 @@ public record Questionnaire(String version, List<Questionnaire.Field> fields) {
         }
     }
 
-    /** One closed option. */
-    public record Option(String key, String label) {
+    /** One closed option: a key that never changes and a label in both languages. */
+    public record Option(String key, Text label) {
     }
 }

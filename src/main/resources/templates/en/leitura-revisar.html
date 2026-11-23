@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Review the reading — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Medium · review before locking · reading <span th:text="${posicao}">1</span> of 2</p>
+      <h1 th:text="'Your reading for ' + ${nome}">Your reading</h1>
+      <p class="chamada">
+        If everything is right, lock it. <strong>Once locked, the reading changes no more</strong> —
+        not by you, not by the team, not by the platform.
+      </p>
+
+      <dl class="leituras lista">
+        <div th:each="item : ${respostas}"><dt th:text="${item.key}">Question</dt><dd th:text="${item.value}">Answer</dd></div>
+      </dl>
+
+      <div class="ressalva">
+        <p>
+          On locking, your reading is <strong>sealed</strong>. A digital seal of it goes to the
+          study's public record, without the answers and without your code. At the end of the study, that
+          seal proves that the reading checked is this one.
+        </p>
+      </div>
+
+      <form class="formulario" method="post"
+            th:action="@{/painel/medium/pedido/{c}/leitura/{p}/travar(c=${pedido.code},p=${posicao})}">
+        <button class="botao botao-cheio" type="submit">Lock the reading</button>
+      </form>
+      <p class="nota nota-espacada">
+        <a th:href="@{/painel/medium/pedido/{c}/leitura/{p}(c=${pedido.code},p=${posicao})}">Go back and correct</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Administrator dashboard — Crivo</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/crivo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Skip to content</a>
+
+<div class="faixa">
+  <header th:replace="~{fragments/site :: topo}"></header>
+</div>
+
+<main id="conteudo">
+  <section class="abertura">
+    <div class="faixa">
+      <p class="rotulo">Administrator</p>
+      <h1>Dashboard</h1>
+      <p class="chamada">
+        Counts and notices, never scores. You do not see answers, names of deceased people or readings before
+        the unblinding — and the scores do not even exist before it (SPEC, E13).
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Accounts</h2>
+      <dl class="contagens">
+        <div><dt>Sitters confirmed</dt><dd th:text="${contas.sittersConfirmed}">0</dd></div>
+        <div><dt>Sitters awaiting e-mail</dt><dd th:text="${contas.sittersPending}">0</dd></div>
+        <div><dt>Mediums confirmed</dt><dd th:text="${contas.mediumsConfirmed}">0</dd></div>
+        <div><dt>Mediums awaiting e-mail</dt><dd th:text="${contas.mediumsPending}">0</dd></div>
+      </dl>
+
+      <h3>State of the installation</h3>
+      <ul>
+        <li>Sign-up:
+          <strong th:text="${inscricaoAberta} ? 'open' : 'closed'">open</strong>
+          <span class="nota" th:unless="${inscricaoAberta}">(in production, it requires e-mail sending, <code>AIRLAB_CONTACT_EMAIL</code> and <code>AIRLAB_CEP_REFERENCE</code>)</span></li>
+        <li>Consultation requests:
+          <strong th:text="${pedidosAbertos} ? 'open' : 'closed'">open</strong>
+          <span class="nota" th:unless="${pedidosAbertos}">(in production, they require <code>AIRLAB_CEP_REFERENCE</code>)</span></li>
+        <li>E-mail:
+          <strong th:text="${caixaLocal} ? 'local outbox (nothing leaves the machine)'
+                           : (${emailAtivo} ? 'SMTP configured' : 'disabled')">local</strong>
+          <a th:if="${caixaLocal}" th:href="${aplicacao} + '/caixa-de-saida'">open the outbox</a></li>
+        <li>Notices by e-mail:
+          <strong th:text="${avisoPorEmail} ? 'on' : 'dashboard only'">dashboard only</strong>
+          <span class="nota" th:unless="${avisoPorEmail}">(set <code>AIRLAB_ADMIN_EMAIL</code>)</span></li>
+        <li>External timestamp (<span th:text="${carimbo.authority}">FreeTSA</span>):
+          <strong th:text="${carimbo.lastAttestedAt} ? 'last one at ' + ${@datas.utc(carimbo.lastAttestedAt)} + ' (UTC)' : 'none yet'">none yet</strong>
+          <span th:unless="${carimbo.enabled}"> · <strong>off</strong> (<code>AIRLAB_TIMESTAMP_ENABLED</code>)</span>
+          <span class="erro" th:if="${carimbo.failuresSinceLastGrant > 0}"
+                th:text="' · ' + ${carimbo.failuresSinceLastGrant} + ' failure(s) since the last one'">failures</span>
+          <a th:href="${aplicacao} + '/carimbos'">see the timestamps</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Requests, readings and progress</h2>
+      <dl class="contagens">
+        <div><dt>Requests locked</dt><dd th:text="${pedidos.locked}">0</dd></div>
+        <div><dt>Requests withdrawn</dt><dd th:text="${pedidos.withdrawn}">0</dd></div>
+        <div><dt>Active pairs</dt><dd th:text="${progresso.activePairs}">0</dd></div>
+        <div><dt>Open assignments to mediums</dt><dd th:text="${progresso.openAssignments}">0</dd></div>
+        <div><dt>Locked readings</dt><dd th:text="${progresso.lockedReadings}">0</dd></div>
+        <div><dt>Progress towards N</dt>
+          <dd th:text="${estudo} ? (${progresso.completedPairs} + ' / ' + ${progresso.targetPairs}) : '—'">—</dd></div>
+      </dl>
+      <p class="nota">
+        Always a count of units, never performance. You do not see the content of any request or of
+        any reading, and nothing here says which medium has which pair.
+      </p>
+
+      <h3>P1 study</h3>
+      <p th:if="${estudo}">
+        <code th:text="${estudo.studyCode}">STD-0000</code> ·
+        <span th:text="${estudo.title}">Title</span> · frozen, questionnaire
+        <code th:text="${estudo.questionnaireVersion}">v1</code>.
+        <a th:href="${aplicacao} + '/painel/adm/estudo-p1'">Open the study</a>
+      </p>
+      <th:block th:unless="${estudo}">
+        <p>
+          No P1 study open. The locked requests are waiting: the pairing and the assignments to mediums only
+          begin once the preregistration is frozen.
+        </p>
+        <p class="acoes"><a class="botao botao-cheio" th:href="${aplicacao} + '/painel/adm/estudo-p1'">Create the P1 study</a></p>
+      </th:block>
+      <p>
+        Questionnaire in force:
+        <code th:text="${questionarioVigente.version()}">v1-rascunho</code><span
+          th:if="${questionarioVigente.draft()}"> (draft, awaiting your review)</span>.
+        <a th:href="${aplicacao} + '/protocolo/P1#questionario'">See the questionnaire</a>
+      </p>
+
+      <h3>Flags</h3>
+      <p>
+        <strong th:text="${sinalizacoesPendentes}">0</strong> flag(s) of linked accounts awaiting review.
+        <a th:href="${aplicacao} + '/painel/adm/sinalizacoes'">Review</a> ·
+        <a th:href="${aplicacao} + '/estudos'">Public page of the studies</a>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <h2>Notices</h2>
+      <p class="nota">One notice per completed step: kind, pseudonymous code and time (UTC). Nothing beyond that.</p>
+      <p th:if="${#lists.isEmpty(avisos)}">No notice yet.</p>
+      <ul class="avisos" th:unless="${#lists.isEmpty(avisos)}">
+        <li th:each="aviso : ${avisos}">
+          <time th:datetime="${aviso.at}" th:text="${@datas.utc(aviso.at)}">2026-11-13 10:00</time>
+          <span><span th:text="${aviso.kind.label().in(idioma)}">Account confirmed</span> ·
+            <code th:text="${aviso.subjectCode}">CON-0000</code></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="faixa">
+      <form method="post" th:action="@{/logout}">
+        <button class="botao botao-vazio" type="submit">Log out</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/site :: rodape}"></footer>
+</body>
+</html>

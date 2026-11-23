@@ -52,16 +52,16 @@
           <li th:each="p, it : ${air}" th:classappend="${it.first} ? 'destaque'">
             <p class="selo">
               <span th:text="${p.label()}">P1-automático</span> ·
-              <span th:text="${#strings.toLowerCase(p.kind())}">experimento</span> ·
-              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind().in(idioma))}">experimento</span> ·
+              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label().in(idioma))}">Automação</span> ·
               <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span> ·
-              <span th:text="${#strings.toLowerCase(p.status.label())}">situação</span>
+              <span th:text="${#strings.toLowerCase(p.status.label().in(idioma))}">situação</span>
             </p>
-            <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
-            <p th:text="${p.summary}">Resumo</p>
+            <h3><a th:href="${aplicacao} + '/protocolo/' + ${p.code}" th:text="${p.name.in(idioma)}">Nome</a></h3>
+            <p th:text="${p.summary.in(idioma)}">Resumo</p>
             <p class="acoes">
-              <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
-              <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}" href="/conta/criar">Criar uma
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/' + ${p.code}">Como funciona</a>
+              <a class="botao botao-cheio" th:if="${p.automation.name() == 'FULL'}" th:href="${aplicacao} + '/conta/criar'">Criar uma
                 conta</a>
               <span class="nota" th:if="${p.discontinued()}">
                 Só como referência: este protocolo precisa de uma equipe — experimentador e redator —
@@ -92,15 +92,15 @@
           <li th:each="p : ${esp}">
             <p class="selo">
               <span th:text="${p.label()}">P3-precognição</span> ·
-              <span th:text="${#strings.toLowerCase(p.kind())}">teste</span> ·
-              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label())}">Automação</span> ·
+              <span th:text="${#strings.toLowerCase(p.kind().in(idioma))}">teste</span> ·
+              <span th:text="'automação ' + ${#strings.toLowerCase(p.automation.label().in(idioma))}">Automação</span> ·
               <span th:text="'acaso ' + ${p.chancePercent()} + '%'">acaso</span>
             </p>
-            <h3><a th:href="'/protocolo/' + ${p.code}" th:text="${p.name}">Nome</a></h3>
-            <p th:text="${p.summary}">Resumo</p>
+            <h3><a th:href="${aplicacao} + '/protocolo/' + ${p.code}" th:text="${p.name.in(idioma)}">Nome</a></h3>
+            <p th:text="${p.summary.in(idioma)}">Resumo</p>
             <p class="acoes">
-              <a class="botao botao-vazio" th:href="'/protocolo/' + ${p.code}">Como funciona</a>
-              <a class="botao botao-cheio" th:href="'/protocolo/' + ${p.code} + '/rodar'">Fazer o teste</a>
+              <a class="botao botao-vazio" th:href="${aplicacao} + '/protocolo/' + ${p.code}">Como funciona</a>
+              <a class="botao botao-cheio" th:href="${aplicacao} + '/protocolo/' + ${p.code} + '/rodar'">Fazer o teste</a>
             </p>
           </li>
         </ul>

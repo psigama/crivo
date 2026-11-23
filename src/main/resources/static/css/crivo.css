@@ -2336,3 +2336,66 @@ form.enviando button {
 .navegacao .submenu-itens a {
     white-space: nowrap;
 }
+
+/* ---------- seletor de idioma e aviso de tradução (SPEC 0.28, seção 1.5, regras 3 e 5) ----------
+ * Duas letras no cabeçalho, sempre à vista, no computador e no celular: o idioma é a primeira
+ * coisa que alguém procura quando a página não está na língua dele. O idioma atual fica marcado e
+ * não é link para si mesmo em aparência, mas continua clicável, porque clicar nele fixa a escolha
+ * (o ?idioma= do endereço) e evita o encaminhamento da primeira visita. */
+
+.idiomas {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+}
+
+.idiomas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+    color: var(--tinta-suave);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+.idiomas a:hover,
+.idiomas a:focus-visible {
+    color: var(--tinta);
+    border-bottom-color: var(--fio-forte);
+}
+
+.idiomas a.atual {
+    color: var(--tinta);
+    border-bottom-color: var(--verdete);
+}
+
+@media (max-width: 48rem) {
+    .idiomas {
+        margin-left: auto;
+        gap: 0.25rem;
+    }
+
+    /* No celular, Entrar fica logo depois do seletor, e não empurrado para a outra ponta. */
+    .idiomas ~ .entrar-movel {
+        margin-left: 0;
+    }
+}
+
+.aviso-traducao {
+    /* Dentro do cabeçalho, que é flex com wrap: 100% o joga para uma linha própria, embaixo. */
+    flex: 0 0 100%;
+    order: 99;
+    margin: 0;
+    padding: 0.75rem 0 0;
+    border-top: 1px solid var(--fio);
+    font-size: 0.875rem;
+    color: var(--tinta-suave);
+}
+
+.aviso-traducao a {
+    color: var(--verdete);
+}
