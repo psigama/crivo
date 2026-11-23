@@ -6,10 +6,10 @@ Como o Crivo é testado no GitHub e publicado em dois lugares (SPEC, seção 1.3
 
 | Peça | Onde | O que faz |
 |---|---|---|
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | GitHub Actions | A cada push na `main` e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado |
+| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | GitHub Actions | A cada push na `main` e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado, nos JDKs 21 e 25 |
 | [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) | GitHub Actions, acionado à mão | Constrói e testa o JAR, entra na VM por SSH com chave, envia o JAR, troca a versão e confere a saúde; se a aplicação não subir, volta para a versão anterior |
 | [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) | GitHub Actions, a cada push na `main` | Gera o site estático com `airlab site` e o publica no GitHub Pages. Não tem segredo de SSH nem usa o ambiente `production`: não tem como chegar à VM (seção 5) |
-| VM de produção | VPS KVM da Hostinger no data center de São Paulo (Brasil): Ubuntu 26.04 LTS x86_64, 1 vCPU, 4 GB de RAM | Linux, Java 21, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
+| VM de produção | VPS KVM da Hostinger no data center de São Paulo (Brasil): Ubuntu 26.04 LTS x86_64, 1 vCPU, 4 GB de RAM | Linux, Java 25, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`) e o Caddy na borda |
 | GitHub Pages | Repositório `crivo` → *Settings* → *Pages* | O site em `crivo.psigama.com`: as páginas editoriais, o CSS e a página 404 que encaminha para a aplicação |
 
 A implantação da aplicação **nunca é automática**. A regra de implantação 8 só permite atualizá-la entre sessões de coleta, e o formulário do workflow exige que quem o aciona confirme isso. O site é outra coisa: é publicado a cada push na `main` (regra de implantação 9), porque nada nele vem do código dos protocolos ou do banco.
@@ -29,15 +29,23 @@ Uma vez, na VM. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinger
 2. **Firewall** (`ufw`): `default deny incoming`, `limit 22/tcp`, `allow 80/tcp`, `allow 443/tcp` e `enable`. O `limit` recusa um endereço que abra mais de seis conexões em 30 segundos, o que freia as tentativas em massa sem atrapalhar o workflow, que abre duas.
 
    A regra de implantação 3 prefere o SSH acessível só por uma rede privada (Tailscale). A instalação atual deixa a porta 22 aberta para a internet, só com chave e com atualizações de segurança automáticas: para um servidor administrado por uma pessoa, a rede privada traria mais peças (conta, política, cliente OAuth, segredos) do que proteção. Se um dia isso mudar, a VM entra na rede Tailscale, o workflow ganha o passo [`tailscale/github-action`](https://github.com/tailscale/github-action) e a porta 22 sai da internet.
-3. **Pacotes**: `openjdk-21-jre-headless` e `postgresql` do Ubuntu; o Caddy do repositório oficial ([Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)). Versões instaladas (regra de implantação 8):
+3. **Pacotes**: `openjdk-25-jre-headless` e `postgresql` do Ubuntu; o Caddy do repositório oficial ([Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)). Versões instaladas (regra de implantação 8):
 
    | Pacote | Versão |
    |---|---|
-   | OpenJDK | 21.0.13 (`openjdk-21-jre-headless` 21.0.13.0.3+1-1~26.04.1) |
+   | OpenJDK | 25.0.5.1 (`openjdk-25-jre-headless` 25.0.5.1+2-1~26.04.1) |
    | PostgreSQL | 18.6 (`postgresql-18` 18.6-0ubuntu0.26.04.1) |
    | Caddy | 2.11.9 |
 
    O PostgreSQL embarcado dos testes tem a mesma versão principal (`embedded-postgres-binaries.version` no `pom.xml`, regra de implantação 4). Ao atualizar um, atualize o outro.
+
+   O Java dos workflows acompanha o da VM: o `deploy.yml` e o `pages.yml` constroem o JAR com o Temurin da mesma versão principal, e o `ci.yml` roda a suíte nela e no Java 21, o mais antigo que o projeto aceita (`java.version` no `pom.xml`). A VM tem um JDK só; em 23/11/2026, o 25 substituiu o 21. A troca de versão principal reinicia a aplicação, e por isso só se faz entre sessões de coleta:
+
+   1. instale o pacote novo e confira que `/usr/bin/java` aponta para ele, com `update-alternatives --display java`. Se a alternativa estiver em modo manual, presa no antigo, `sudo update-alternatives --auto java` a solta;
+   2. reinicie o serviço (`sudo systemctl restart airlab`) e espere `/actuator/health` responder `UP`;
+   3. só então remova o pacote antigo, registre a versão na tabela acima e troque a versão nos três workflows.
+
+   Antes do passo 3, `sudo update-alternatives --set java` com o caminho do Java antigo, seguido de outro restart, desfaz a troca.
 
 4. **Aplicação**:
    - usuário de serviço: `sudo useradd --system --home /opt/airlab --shell /usr/sbin/nologin airlab`;

@@ -154,7 +154,7 @@ Os testes de cegamento e de integridade da trilha rodam contra um PostgreSQL rea
 
 Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, aplicação como serviço (`systemd` no Linux, serviço do Windows), Caddy na borda com HTTPS automático. Os segredos vêm do ambiente ou de um `.env` não versionado — ver [`.env.example`](.env.example). As regras completas estão na Constitution, em *Implantação por fase*.
 
-**Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta a aplicação em `https://app.crivo.psigama.com` por SSH, só com chave. O workflow [Pages](.github/workflows/pages.yml) publica o site estático em `https://crivo.psigama.com` a cada push na `main`, sem acesso à VM. O preparo da VM, os segredos, o GitHub Pages e a virada de endereço estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
+**Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*, nos JDKs 21 e 25. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta a aplicação em `https://app.crivo.psigama.com` por SSH, só com chave. O workflow [Pages](.github/workflows/pages.yml) publica o site estático em `https://crivo.psigama.com` a cada push na `main`, sem acesso à VM. O preparo da VM, os segredos, o GitHub Pages e a virada de endereço estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 **Inscrição do P1 em produção.** Fica fechada até que existam envio de e-mail e um contato humano (SPEC E10, travas 3 e 5):
 
@@ -197,7 +197,7 @@ Em caso de conflito entre documentos, a **Constitution prevalece**.
 
 ## Stack
 
-Java 21 (LTS) · Spring Boot · Spring Modulith · Spring Boot Mail · PostgreSQL (embarcado em desenvolvimento, do sistema em produção) · Flyway · Thymeleaf + HTMX · JUnit 5 · Maven Wrapper
+Java 21 ou mais novo (em produção, Java 25) · Spring Boot · Spring Modulith · Spring Boot Mail · PostgreSQL (embarcado em desenvolvimento, do sistema em produção) · Flyway · Thymeleaf + HTMX · JUnit 5 · Maven Wrapper
 
 Sem Docker: todo passo do projeto — build, teste, execução, implantação e verificação — roda por linha de comando em Windows e Linux com um JDK instalado.
 

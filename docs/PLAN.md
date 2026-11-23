@@ -13,7 +13,7 @@
 | Artefato | **Um JAR executável** (`target/airlab.jar`), com Tomcat embutido |
 | Execução | Linha de comando, em Windows e Linux: `scripts/start.sh`, `scripts/start.ps1`, `scripts/start.cmd` |
 | Build | Maven Wrapper (`mvnw`), `distributionType=only-script` — **nenhum JAR versionado** no repositório |
-| Pré-requisito | Um JDK 21 (LTS). Nada mais |
+| Pré-requisito | Um JDK 21 ou mais novo (a produção roda o 25). Nada mais |
 | Banco em desenvolvimento e teste | **PostgreSQL embarcado** pela aplicação (`io.zonky.test:embedded-postgres`), binários reais do PostgreSQL, em `~/.airlab/pgdata` (fora do repositório e fora de pasta sincronizada) |
 | Banco em produção | PostgreSQL do sistema operacional, escutando só em `127.0.0.1` |
 | Processo em produção | Unidade `systemd` (Linux) ou serviço do Windows / Agendador de Tarefas |
