@@ -47,11 +47,12 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@v7
 
-      - name: Instalar o JDK 21 (Temurin)
+      # A mesma versão principal do Java da VM (docs/DEPLOY.md): o JAR é testado com o que roda lá.
+      - name: Instalar o JDK 25 (Temurin)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "25"
           cache: maven
 
       - name: Compilar e rodar os testes

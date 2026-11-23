@@ -35,11 +35,11 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@v7
 
-      - name: Instalar o JDK 21 (Temurin)
+      - name: Instalar o JDK 25 (Temurin)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "25"
           cache: maven
 
       - name: Compilar o JAR

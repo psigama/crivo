@@ -4,6 +4,9 @@
 # auditoria; uma mudança que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o
 # embarcado pela própria aplicação (Constitution, regra de implantação 4): nada de Docker nem de
 # serviço externo. O FreeTsaLiveTest só roda com AIRLAB_LIVE_TSA=true, que este workflow não define.
+#
+# A suíte roda em dois JDKs: o 25, que é o da VM de produção (docs/DEPLOY.md), e o 21, o mais antigo
+# que o projeto aceita (java.version no pom.xml e a checagem dos scripts de inicialização).
 
 name: CI
 
@@ -22,18 +25,22 @@ concurrency:
 
 jobs:
   test:
-    name: Compilar e testar
+    name: Compilar e testar (JDK ${{ matrix.java }})
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ["21", "25"]
     steps:
       - name: Baixar o código
         uses: actions/checkout@v7
 
-      - name: Instalar o JDK 21 (Temurin)
+      - name: Instalar o JDK ${{ matrix.java }} (Temurin)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: ${{ matrix.java }}
           cache: maven
 
       - name: Compilar e rodar os testes
@@ -43,6 +50,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: relatorios-de-teste
+          name: relatorios-de-teste-jdk${{ matrix.java }}
           path: target/surefire-reports/
           retention-days: 14
