@@ -8,7 +8,7 @@ A interface é **bilíngue** desde a [SPEC 0.28](docs/SPEC.md#15-dois-idiomas): 
 
 ## Catálogo de protocolos
 
-A aplicação do Crivo lista os quatro protocolos em [`/protocolos`](https://app.crivo.psigama.com/protocolos), cada um com a sua página em `/protocolo/P1` a `/protocolo/P4`. Desde a [SPEC 0.17](docs/SPEC.md#11-catálogo-de-protocolos), a numeração segue a ordem de importância: o protocolo ativo vem primeiro. A renumeração foi feita antes de qualquer dado real; a correspondência com a numeração anterior está na SPEC.
+A aplicação do Crivo lista os quatro protocolos em [`/protocolos`](https://crivo.psigama.com/protocolos), cada um com a sua página em `/protocolo/P1` a `/protocolo/P4`. Desde a [SPEC 0.17](docs/SPEC.md#11-catálogo-de-protocolos), a numeração segue a ordem de importância: o protocolo ativo vem primeiro. A renumeração foi feita antes de qualquer dado real; a correspondência com a numeração anterior está na SPEC.
 
 | Código | Protocolo | Ramo | Acaso | Automação |
 |---|---|---|---|---|
@@ -130,7 +130,9 @@ Confere a cadeia de hashes da trilha, o hash de cada versão do pré-registro e,
 
 ### Site estático (páginas editoriais)
 
-Desde a [SPEC 0.21](docs/SPEC.md#13-site-e-aplicação), as páginas editoriais formam um site estático à parte, publicado pelo GitHub Pages em `https://crivo.psigama.com` a cada push na `main`: início, Participar, Por quê, Garantias, Auditar, História, Referências e Glossário. São texto escrito à mão, e os templates ficam em `src/main/resources/templates/site/`. Todo o resto é a aplicação, em `https://app.crivo.psigama.com`: as páginas dos protocolos, `/consulente`, `/medium`, `/perguntas`, `/pesquisa` (com `/pesquisa/en`), contas, testes, estudos, carimbos e o estado da trilha (`/verificar`).
+Desde a [SPEC 0.21](docs/SPEC.md#13-site-e-aplicação), revista na 0.29, as páginas editoriais formam um site estático: início, Participar, Por quê, Garantias, Auditar, História, Referências e Glossário. São texto escrito à mão, e os templates ficam em `src/main/resources/templates/site/`. Todo o resto é a aplicação: as páginas dos protocolos, `/consulente`, `/medium`, `/perguntas`, `/pesquisa` (com `/en/pesquisa`), contas, testes, estudos, carimbos e o estado da trilha (`/verificar`).
+
+As duas partes são **uma instalação única**, na VPS, com um endereço só, `https://crivo.psigama.com`: o Caddy entrega o arquivo estático quando ele existe — é o site, espelhado em `/var/www/crivo` a cada push na `main` — e manda para a aplicação todo o resto. O endereço antigo da aplicação, `app.crivo.psigama.com`, responde com 301 para o novo.
 
 No perfil local, a aplicação serve as duas partes, e nada muda para quem desenvolve. Para ver o site como ele é publicado, gere-o numa pasta vazia, sem banco e sem servidor:
 
@@ -154,7 +156,7 @@ Os testes de cegamento e de integridade da trilha rodam contra um PostgreSQL rea
 
 Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, aplicação como serviço (`systemd` no Linux, serviço do Windows), Caddy na borda com HTTPS automático. Os segredos vêm do ambiente ou de um `.env` não versionado — ver [`.env.example`](.env.example). As regras completas estão na Constitution, em *Implantação por fase*.
 
-**Integração contínua e implantação.** O workflow [CI](.github/workflows/ci.yml) roda a suíte completa a cada push e *pull request*, nos JDKs 21 e 25. O workflow [Deploy](.github/workflows/deploy.yml) é acionado à mão, só entre sessões de coleta, e implanta a aplicação em `https://app.crivo.psigama.com` por SSH, só com chave. O workflow [Pages](.github/workflows/pages.yml) publica o site estático em `https://crivo.psigama.com` a cada push na `main`, sem acesso à VM. O preparo da VM, os segredos, o GitHub Pages e a virada de endereço estão em [`docs/DEPLOY.md`](docs/DEPLOY.md).
+**Integração contínua e implantação.** Um workflow só, [CI](.github/workflows/ci.yml): a suíte completa a cada push e *pull request*, nos JDKs 21 e 25, e, em todo push na `main` que passa, a implantação na VPS por SSH, só com chave — o JAR primeiro, com volta à versão anterior se a saúde não voltar, e o site estático depois. A implantação é automática (Constitution v1.8.0, regra de implantação 8), então o trabalho fica em branch: o merge na `main` é que implanta, e quem o faz é quem garante que nenhuma sessão de coleta está em andamento. Onde é a VPS — endereço, usuário, porta, caminhos, serviço — vem dos *Secrets* e *Variables* do ambiente `production`, e não do repositório; sem eles, o job não envia nada e não falha. Os arquivos de servidor (unidade `systemd`, `Caddyfile`, modelo do `airlab.env`) estão em [`deploy/`](deploy/), e o preparo da VPS, os segredos e o DNS em [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 **Inscrição do P1 em produção.** Fica fechada até que existam envio de e-mail e um contato humano (SPEC E10, travas 3 e 5):
 
@@ -165,8 +167,8 @@ Perfil `prod`: PostgreSQL do sistema operacional escutando só em `127.0.0.1`, a
 | `AIRLAB_CONTACT_EMAIL` | Contato humano mostrado na página de inscrição |
 | `AIRLAB_ADMIN_EMAIL` | Opcional: quem recebe por e-mail os avisos de etapa concluída (sempre aparecem no painel) |
 | `AIRLAB_CEP_REFERENCE` | Referência da aprovação do comitê de ética. Sem ela, o formulário de pedido de consulta fica fechado em produção |
-| `AIRLAB_BASE_URL` | Endereço público da aplicação (`https://app.crivo.psigama.com`), para o link do e-mail que avisa o médium de um pedido novo |
-| `AIRLAB_SITE_URL` | Opcional: endereço do site estático (`https://crivo.psigama.com`). Definido, os links da aplicação apontam para ele, e as rotas do site respondem com 301; vazio, a aplicação serve as páginas do site |
+| `AIRLAB_BASE_URL` | Endereço público desta instalação (`https://crivo.psigama.com`), para o link do e-mail que avisa o médium de um pedido novo e para a `og:image`, que o Open Graph exige absoluta |
+| `AIRLAB_SITE_URL` | Opcional, e **vazia na instalação única**: endereço de um site editorial que more noutro lugar. Definida, os links da aplicação apontam para ele e as rotas do site respondem com 301; vazia, a aplicação serve as páginas do site — e, na VPS, o arquivo estático responde antes dela |
 | `AIRLAB_TIMESTAMP_ENABLED` | Carimbo de tempo externo da trilha (RFC 3161, FreeTSA). Ligado por padrão; exige saída HTTPS do servidor para `freetsa.org`. Só o hash da cabeça da trilha sai do servidor. Os tokens ficam em `/carimbos` e o `airlab verify` os reconfere |
 
 Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação do comitê de ética (CEP/Plataforma Brasil). O pedido de consulta, que coleta os dados sensíveis, só abre em produção com `AIRLAB_CEP_REFERENCE` definida. E o estudo P1 só congela, em produção, um questionário revisado: as versões terminadas em `-rascunho`, como a `v2-rascunho` vigente, valem só no perfil local.

@@ -382,7 +382,7 @@ Em resumo, o Crivo propõe transferir os detalhes operacionais de um estudo de m
 
 # Disponibilidade
 
-Código-fonte e documentação, sob licença MIT: [github.com/rogeriocisi/crivo](https://github.com/rogeriocisi/crivo). Plataforma: [crivo.psigama.com](https://crivo.psigama.com). Pré-registros, relatórios e pacotes de verificação: [página dos estudos](https://app.crivo.psigama.com/estudos).
+Código-fonte e documentação, sob licença MIT: [github.com/psigama/crivo](https://github.com/psigama/crivo). Plataforma: [crivo.psigama.com](https://crivo.psigama.com). Pré-registros, relatórios e pacotes de verificação: [página dos estudos](https://crivo.psigama.com/estudos).
 
 # Referências
 
