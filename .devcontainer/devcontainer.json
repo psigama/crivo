@@ -1,9 +1,18 @@
 {
   // Crivo (AIR Lab) — ambiente para GitHub Codespaces e Dev Containers.
-  // Traz o JDK 21; o Maven vem pelo wrapper e o PostgreSQL é embarcado pela aplicação.
+  // Traz o JDK 25, o mesmo da produção; o Maven vem pelo wrapper e o PostgreSQL é embarcado pela
+  // aplicação. A imagem pronta de Java (devcontainers/java) para na variante 1-21, então o JDK vem
+  // pela feature oficial sobre a imagem base — é o caminho que acompanha a versão do projeto.
   // Depois de abrir, rode no terminal:  ./scripts/start.sh
   "name": "Crivo",
-  "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "25",
+      "installMaven": false,
+      "installGradle": false
+    }
+  },
 
   "customizations": {
     "vscode": {

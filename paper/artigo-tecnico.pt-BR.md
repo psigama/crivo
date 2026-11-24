@@ -267,7 +267,7 @@ Um **carimbo do tempo** é o equivalente digital de um cartório: uma autoridade
 
 ## 5.1 Visão geral
 
-O Crivo é um monólito modular, isto é, um único programa dividido em módulos cujas fronteiras são verificadas por testes. É escrito em Java 21, com Spring Boot e Spring Modulith, guarda os dados no PostgreSQL, com as migrações de esquema feitas pelo Flyway, e renderiza a interface no servidor com Thymeleaf. A escolha atende a uma restrição de projeto: o sistema precisa ser operável por um único mantenedor, e a complexidade operacional é, ela própria, fonte de erro. Pela mesma razão, um auditor roda tudo na própria máquina só com o kit de desenvolvimento Java (JDK), sem contêiner: em desenvolvimento, a aplicação sobe sozinha uma instância embutida do PostgreSQL.
+O Crivo é um monólito modular, isto é, um único programa dividido em módulos cujas fronteiras são verificadas por testes. É escrito em Java 25, com Spring Boot e Spring Modulith, guarda os dados no PostgreSQL, com as migrações de esquema feitas pelo Flyway, e renderiza a interface no servidor com Thymeleaf. A escolha atende a uma restrição de projeto: o sistema precisa ser operável por um único mantenedor, e a complexidade operacional é, ela própria, fonte de erro. Pela mesma razão, um auditor roda tudo na própria máquina só com o kit de desenvolvimento Java (JDK), sem contêiner: em desenvolvimento, a aplicação sobe sozinha uma instância embutida do PostgreSQL.
 
 ## 5.2 Cegamento como invariante de dados
 

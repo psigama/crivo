@@ -18,7 +18,8 @@
   <description>Protocolos cegos para pesquisa de recepcao anomala de informacao</description>
 
   <properties>
-    <java.version>21</java.version>
+    <!-- Uma versão só, a da VPS: o Crivo é 100% Java 25 (docs/DEPLOY.md). -->
+    <java.version>25</java.version>
     <spring-modulith.version>1.4.1</spring-modulith.version>
     <embedded-postgres.version>2.1.0</embedded-postgres.version>
     <!-- Mesma versão do PostgreSQL de produção (docs/DEPLOY.md) e de LocalDatabaseConfiguration.POSTGRES_MAJOR. -->

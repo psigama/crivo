@@ -4,10 +4,11 @@
 # `main` que passa nos testes vai para a VPS. O site estático e a aplicação são uma instalação única,
 # no mesmo endereço (SPEC 0.29, seção 1.3; Constitution v1.8.0, regras de implantação 8 e 9).
 #
-# A suíte roda em dois JDKs: o 25, que é o da VPS (docs/DEPLOY.md), e o 21, o mais antigo que o
-# projeto aceita (`java.version` no pom.xml e a checagem dos scripts de inicialização). Ela inclui a
-# matriz de cegamento (SPEC, seção 4) e os testes de integridade da trilha de auditoria; uma mudança
-# que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o embarcado pela própria
+# A suíte roda num JDK só, o 25: é o da VPS (docs/DEPLOY.md), o do `java.version` no pom.xml e o que
+# os scripts de inicialização exigem — o Crivo é 100% Java 25, e não há versão mais antiga a cobrir.
+# Ela inclui a matriz de cegamento (SPEC, seção 4) e os testes de integridade da trilha de
+# auditoria; uma mudança que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o
+# embarcado pela própria
 # aplicação (Constitution, regra de implantação 4): nada de Docker nem de serviço externo. O
 # FreeTsaLiveTest só roda com AIRLAB_LIVE_TSA=true, que este workflow não define.
 #
@@ -39,22 +40,18 @@ concurrency:
 
 jobs:
   test:
-    name: Compilar e testar (JDK ${{ matrix.java }})
+    name: Compilar e testar (JDK 25)
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        java: ["21", "25"]
     steps:
       - name: Baixar o código
         uses: actions/checkout@v7
 
-      - name: Instalar o JDK ${{ matrix.java }} (Temurin)
+      - name: Instalar o JDK 25 (Temurin)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: "25"
           cache: maven
 
       - name: Compilar e rodar os testes
@@ -64,7 +61,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: relatorios-de-teste-jdk${{ matrix.java }}
+          name: relatorios-de-teste
           path: target/surefire-reports/
           retention-days: 14
 
@@ -137,7 +134,7 @@ jobs:
           java-version: "25"
           cache: maven
 
-      # Sem a suíte: o job `test` acabou de rodá-la neste mesmo commit, nos dois JDKs.
+      # Sem a suíte: o job `test` acabou de rodá-la neste mesmo commit, no mesmo JDK.
       - name: Compilar o JAR
         if: steps.config.outputs.pronto == 'true'
         run: ./mvnw -B -ntp package -DskipTests

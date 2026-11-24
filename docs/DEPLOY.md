@@ -6,7 +6,7 @@ Como o Crivo é testado no GitHub e publicado numa **instalação única**: uma 
 
 | Peça | Onde | O que faz |
 |---|---|---|
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), job `test` | GitHub Actions | A cada push e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado, nos JDKs 21 e 25 |
+| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), job `test` | GitHub Actions | A cada push e a cada *pull request*, compila e roda a suíte completa, inclusive a matriz de cegamento e a integridade da trilha, com o PostgreSQL embarcado, no JDK 25 |
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), job `deploy` | GitHub Actions, em todo push na `main` que passa na suíte | Compila o JAR, gera o site, entra na VPS por SSH com chave, troca a versão da aplicação ([`deploy/trocar-versao.sh`](../deploy/trocar-versao.sh)) e confere a saúde — se ela não voltar, recoloca a versão anterior — e, depois, espelha o site estático |
 | VPS de produção | VPS KVM da Hostinger no data center de São Paulo (Brasil): Ubuntu 26.04 LTS x86_64, 1 vCPU, 4 GB de RAM | Linux, Java 25, PostgreSQL do sistema, a aplicação como serviço `systemd` (`airlab`), o site estático em `/var/www/crivo` e o Caddy na borda |
 
@@ -39,11 +39,11 @@ Uma vez, na VPS. A instalação atual, de 15/11/2026, é uma VPS KVM da Hostinge
 
    O PostgreSQL embarcado dos testes tem a mesma versão principal (`embedded-postgres-binaries.version` no `pom.xml`, regra de implantação 4). Ao atualizar um, atualize o outro.
 
-   O Java do workflow acompanha o da VPS: o job `deploy` constrói o JAR com o Temurin da mesma versão principal, e o job `test` roda a suíte nela e no Java 21, o mais antigo que o projeto aceita (`java.version` no `pom.xml`). A VPS tem um JDK só; em 23/11/2026, o 25 substituiu o 21. A troca de versão principal reinicia a aplicação, e por isso só se faz entre sessões de coleta:
+   **Uma versão de Java só, em todo lugar**: o `java.version` do `pom.xml`, os dois jobs do workflow, a checagem dos scripts de inicialização e a VPS são o **25**. Não há versão mais antiga a cobrir — o projeto não aceita uma —, e por isso a suíte roda num JDK só. A VPS também tem um JDK só; em 23/11/2026 o 25 substituiu o 21, e em 24/11/2026 o 21 saiu também do repositório. A troca de versão principal reinicia a aplicação, e por isso só se faz entre sessões de coleta:
 
    1. instale o pacote novo e confira que `/usr/bin/java` aponta para ele, com `update-alternatives --display java`. Se a alternativa estiver em modo manual, presa no antigo, `sudo update-alternatives --auto java` a solta;
    2. reinicie o serviço (`sudo systemctl restart airlab`) e espere `/actuator/health` responder `UP`;
-   3. só então remova o pacote antigo, registre a versão na tabela acima e troque a versão no `ci.yml` (dois lugares: a matriz do `test` e o JDK do `deploy`).
+   3. só então remova o pacote antigo, registre a versão na tabela acima e troque-a no repositório, nos quatro lugares que a declaram: `java.version` no `pom.xml`, os dois jobs do `ci.yml`, a checagem do `scripts/start.sh` e a do `scripts/start.ps1`.
 
    Antes do passo 3, `sudo update-alternatives --set java` com o caminho do Java antigo, seguido de outro restart, desfaz a troca.
 

@@ -53,7 +53,7 @@ O Crivo não existe para provar que a mediunidade é real, nem que não é. Ele 
 
 ## Como rodar
 
-**Pré-requisito único: um JDK 21 ou mais novo.** Não é preciso Docker, nem instalar PostgreSQL, nem Maven: o banco de desenvolvimento é embarcado pela própria aplicação e o Maven vem pelo wrapper do repositório.
+**Pré-requisito único: o JDK 25**, o mesmo da produção. Não é preciso Docker, nem instalar PostgreSQL, nem Maven: o banco de desenvolvimento é embarcado pela própria aplicação e o Maven vem pelo wrapper do repositório.
 
 Linux ou macOS:
 
@@ -87,7 +87,7 @@ O script valida o JDK, constrói o JAR, sobe o PostgreSQL embarcado em `~/.airla
 
 ### No navegador, pelo GitHub Codespaces
 
-Caminho opcional, para quem não quer instalar nada. O script único continua sendo a forma de rodar, e nenhuma etapa depende de container. No GitHub, abra **Code → Codespaces → Create codespace on main**. A configuração em `.devcontainer/` já traz o JDK 21 e baixa as dependências. Quando o terminal estiver pronto:
+Caminho opcional, para quem não quer instalar nada. O script único continua sendo a forma de rodar, e nenhuma etapa depende de container. No GitHub, abra **Code → Codespaces → Create codespace on main**. A configuração em `.devcontainer/` já traz o JDK 25 e baixa as dependências. Quando o terminal estiver pronto:
 
 ```bash
 ./scripts/start.sh
@@ -199,7 +199,7 @@ Em caso de conflito entre documentos, a **Constitution prevalece**.
 
 ## Stack
 
-Java 21 ou mais novo (em produção, Java 25) · Spring Boot · Spring Modulith · Spring Boot Mail · PostgreSQL (embarcado em desenvolvimento, do sistema em produção) · Flyway · Thymeleaf + HTMX · JUnit 5 · Maven Wrapper
+Java 25, em desenvolvimento e em produção · Spring Boot · Spring Modulith · Spring Boot Mail · PostgreSQL (embarcado em desenvolvimento, do sistema em produção) · Flyway · Thymeleaf + HTMX · JUnit 5 · Maven Wrapper
 
 Sem Docker: todo passo do projeto — build, teste, execução, implantação e verificação — roda por linha de comando em Windows e Linux com um JDK instalado.
 

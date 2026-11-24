@@ -9,7 +9,7 @@
       - migracoes Flyway dos esquemas research, identity e audit;
       - a aplicacao Spring Boot, com servidor web embutido.
 
-    Pre-requisito unico: um JDK 21 ou mais novo. O Maven vem pelo wrapper do repositorio.
+    Pre-requisito unico: o JDK 25, o mesmo da producao. O Maven vem pelo wrapper do repositorio.
 
     Ctrl+C encerra a aplicacao e, com ela, o PostgreSQL embarcado.
 
@@ -55,7 +55,7 @@ else {
     if ($command) { $java = $command.Source }
 }
 if (-not $java) {
-    Stop-WithError 'nenhum JDK encontrado. Instale um JDK 21 (ou mais novo) ou defina JAVA_HOME.'
+    Stop-WithError 'nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME.'
 }
 
 # "java --version" escreve na saida padrao; o antigo "java -version" escreve na saida de erro,
@@ -65,9 +65,9 @@ if (-not $java) {
 $versionLine = (& $java --version | Select-Object -First 1)
 $major = 0
 if ($versionLine -match '(\d+)') { $major = [int]$Matches[1] }
-if ($major -lt 21) {
+if ($major -lt 25) {
     $encontrado = if ($versionLine) { $versionLine } else { 'versao nao reconhecida' }
-    Stop-WithError "e necessario um JDK 21 ou mais novo (encontrado: $encontrado)."
+    Stop-WithError "e necessario o JDK 25 ou mais novo (encontrado: $encontrado); a producao roda o 25."
 }
 Write-Step "JDK $major em $java"
 

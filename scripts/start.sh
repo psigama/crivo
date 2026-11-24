@@ -8,7 +8,7 @@
 #   - migracoes Flyway dos esquemas research, identity e audit;
 #   - a aplicacao Spring Boot, com servidor web embutido.
 #
-# Pre-requisito unico: um JDK 21 ou mais novo. O Maven vem pelo wrapper do repositorio.
+# Pre-requisito unico: o JDK 25, o mesmo da producao. O Maven vem pelo wrapper do repositorio.
 #
 # Uso:
 #   ./scripts/start.sh                    # perfil local (padrao), http://127.0.0.1:8080
@@ -57,12 +57,12 @@ if [[ -n "${JAVA_HOME:-}" && -x "${JAVA_HOME}/bin/java" ]]; then
 elif command -v java >/dev/null 2>&1; then
   JAVA="$(command -v java)"
 else
-  fail "nenhum JDK encontrado. Instale um JDK 21 (ou mais novo) ou defina JAVA_HOME."
+  fail "nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME."
 fi
 
 JAVA_MAJOR="$("$JAVA" -version 2>&1 | head -n 1 | sed -E 's/.*version "([0-9]+).*/\1/')"
-if [[ ! "$JAVA_MAJOR" =~ ^[0-9]+$ ]] || (( JAVA_MAJOR < 21 )); then
-  fail "e necessario um JDK 21 ou mais novo (encontrado: ${JAVA_MAJOR:-desconhecido})."
+if [[ ! "$JAVA_MAJOR" =~ ^[0-9]+$ ]] || (( JAVA_MAJOR < 25 )); then
+  fail "e necessario o JDK 25 ou mais novo (encontrado: ${JAVA_MAJOR:-desconhecido}); a producao roda o 25."
 fi
 info "JDK $JAVA_MAJOR em $JAVA"
 
