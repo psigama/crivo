@@ -1,4 +1,14 @@
-# /etc/caddy/Caddyfile — a borda da instalação única do Crivo (Constitution, regra de implantação 3).
+# /etc/caddy/conf.d/crivo.caddyfile — a borda da instalação única do Crivo (Constitution, regra de
+# implantação 3).
+#
+# É a configuração DO CRIVO, num arquivo só dela, porque a VPS pode servir outros projetos no mesmo
+# Caddy (hoje serve também o ReMoto). O Caddyfile principal a importa, com uma linha:
+#
+#   import conf.d/*.caddyfile
+#
+# Quem põe o arquivo no lugar e acrescenta o import é o deploy/preparar-vps.sh. Um bloco antigo do
+# Crivo dentro do Caddyfile principal é o mesmo endereço duas vezes, e o Caddy recusa a configuração
+# inteira: ele tem de sair quando este arquivo entrar.
 #
 # Um endereço, duas coisas na mesma VPS (SPEC 0.29, seção 1.3):
 #

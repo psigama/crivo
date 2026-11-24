@@ -11,12 +11,20 @@
 #
 #   scp -r deploy <seu-usuário>@<vps>:~/
 #   sudo bash deploy/preparar-vps.sh              confere e prepara, sem mexer no que está no ar
-#   sudo bash deploy/preparar-vps.sh --aplicar     troca o Caddyfile e reinicia a aplicação
+#   sudo bash deploy/preparar-vps.sh --aplicar     recarrega o Caddy e reinicia a aplicação
 #
-# Sem --aplicar, nada do que está servindo muda: o script cria o que falta, escreve o Caddyfile
-# novo ao lado do atual, valida-o e diz o que fazer. Com --aplicar, ele troca a borda (com cópia do
-# anterior e volta atrás se o Caddy recusar) e reinicia a aplicação — e por isso é opt-in: reiniciar
-# a aplicação só se faz entre sessões de coleta (Constitution, regra de implantação 8).
+# Sem --aplicar, nada do que está servindo muda: o script cria o que falta, deixa a configuração do
+# Caddy escrita e validada e diz o que fazer. Com --aplicar, ele recarrega o Caddy e reinicia a
+# aplicação; é opt-in porque reiniciar só se faz entre sessões de coleta (Constitution, regra de
+# implantação 8), e porque a hora certa de recarregar a borda é depois da troca do DNS — antes
+# dela, o 301 do endereço antigo mandaria quem acessa para um nome que não responde. O script
+# confere isso e se recusa a recarregar enquanto o DNS não apontar para esta máquina.
+#
+# A VPS pode servir outros projetos no mesmo Caddy (hoje serve também o ReMoto), então a
+# configuração do Crivo fica num arquivo só dela, /etc/caddy/conf.d/crivo.caddyfile, importado pelo
+# Caddyfile principal. Nada aqui reescreve o Caddyfile inteiro, que é de todos os sites. Se ele
+# ainda tiver um bloco próprio para o Crivo, o script avisa: apagar esse bloco é o único passo à
+# mão, e é o mesmo momento da troca do DNS.
 #
 # Os nomes e caminhos vêm de variável de ambiente, e os padrões são os da instalação atual. Eles
 # têm de bater com as Variables do ambiente production no GitHub (docs/DEPLOY.md, seção 3):
@@ -25,6 +33,7 @@
 #   SITE_DIR=/var/www/crivo           DEPLOY_USER=deploy        APP_USER=airlab
 #   JAR_PATH=/opt/airlab/airlab.jar   SERVICE=airlab            ENV_FILE=/etc/airlab/airlab.env
 #   HEALTH_URL=http://127.0.0.1:8080/actuator/health
+#   CADDYFILE=/etc/caddy/Caddyfile    CONF_D=/etc/caddy/conf.d
 
 set -euo pipefail
 
@@ -38,6 +47,7 @@ SERVICE=${SERVICE:-airlab}
 ENV_FILE=${ENV_FILE:-/etc/airlab/airlab.env}
 HEALTH_URL=${HEALTH_URL:-http://127.0.0.1:8080/actuator/health}
 CADDYFILE=${CADDYFILE:-/etc/caddy/Caddyfile}
+CONF_D=${CONF_D:-/etc/caddy/conf.d}
 
 APLICAR=nao
 case "${1:-}" in
@@ -63,7 +73,7 @@ id "$APP_USER" >/dev/null 2>&1 || erro "o usuário de serviço '$APP_USER' não 
 
 passo "rsync, que a implantação precisa nas duas pontas"
 if command -v rsync >/dev/null; then
-  ok "já instalado ($(rsync --version | head -1 | cut -d' ' -f1-3))"
+  ok "já instalado ($(rsync --version | head -1 | awk '{print $1, $3}'))"
 else
   apt-get update -qq && apt-get install -y -qq rsync
   feito "instalado"
@@ -95,8 +105,10 @@ fi
 
 passo "sudoers do $DEPLOY_USER: os comandos exatos da troca de versão"
 arquivo_sudoers=/etc/sudoers.d/${SERVICE}-deploy
+casa_deploy=$(getent passwd "$DEPLOY_USER" | cut -d: -f6)
 if [ -f "$arquivo_sudoers" ]; then
-  for comando in "$JAR_PATH $JAR_PATH.previous" "$JAR_PATH.previous $JAR_PATH" "systemctl restart $SERVICE"; do
+  for comando in "$JAR_PATH $JAR_PATH.previous" "${casa_deploy:-/home/$DEPLOY_USER}/airlab.jar.new $JAR_PATH" \
+                 "$JAR_PATH.previous $JAR_PATH" "systemctl restart $SERVICE"; do
     if grep -qF -- "$comando" "$arquivo_sudoers"; then
       ok "autoriza: $comando"
     else
@@ -138,43 +150,71 @@ else
   aviso "não existe $ENV_FILE (docs/DEPLOY.md, seção 1, passo 4)"
 fi
 
+# Esta VPS pode servir mais de um projeto no mesmo Caddy (hoje serve também o ReMoto), então a
+# configuração do Crivo fica num arquivo só dela, em conf.d/, e o Caddyfile principal a importa.
+# Trocar o Caddyfile inteiro tiraria os outros sites do ar.
 passo "Caddy na borda: $DOMINIO servindo o site e a aplicação"
+alvo="$CONF_D/crivo.caddyfile"
 if [ ! -f "$EXEMPLO_CADDY" ]; then
   aviso "não achei o $EXEMPLO_CADDY ao lado deste script: copie a pasta deploy/ inteira para a VPS"
 elif ! command -v caddy >/dev/null; then
   aviso "o Caddy não está instalado (docs/DEPLOY.md, seção 1, passo 3)"
 else
-  novo="$CADDYFILE.novo"
+  install -d -m 0755 "$CONF_D"
   sed -e "s|crivo\.psigama\.com|$DOMINIO|g" -e "s|app\.$DOMINIO|$DOMINIO_ANTIGO|g" \
-      -e "s|/var/www/crivo|$SITE_DIR|g" "$EXEMPLO_CADDY" > "$novo"
-  if caddy validate --config "$novo" >/dev/null 2>&1; then
-    ok "configuração nova válida ($novo)"
+      -e "s|/var/www/crivo|$SITE_DIR|g" "$EXEMPLO_CADDY" > "$alvo.novo"
+  if [ -f "$alvo" ] && cmp -s "$alvo.novo" "$alvo"; then
+    ok "$alvo já é este"
+    rm -f "$alvo.novo"
   else
-    caddy validate --config "$novo" 2>&1 | sed 's/^/         /' || true
-    erro "o Caddy recusou a configuração nova; nada foi trocado"
+    if [ -f "$alvo" ]; then
+      cp -p "$alvo" "$alvo.bak-$(date +%Y%m%d%H%M%S)"
+    fi
+    mv "$alvo.novo" "$alvo"
+    feito "escrito $alvo"
   fi
-  if [ -f "$CADDYFILE" ] && cmp -s "$novo" "$CADDYFILE"; then
-    ok "o Caddyfile no ar já é este"
-    rm -f "$novo"
-  elif [ "$APLICAR" = sim ]; then
-    copia=""
-    if [ -f "$CADDYFILE" ]; then
-      copia="$CADDYFILE.bak-$(date +%Y%m%d%H%M%S)"
-      cp -p "$CADDYFILE" "$copia"
-      feito "cópia do anterior em $copia"
-    fi
-    mv "$novo" "$CADDYFILE"
-    if systemctl reload caddy; then
-      feito "borda trocada e recarregada"
-    else
-      if [ -n "$copia" ]; then
-        cp -p "$copia" "$CADDYFILE"
-        systemctl reload caddy || true
-      fi
-      erro "o reload falhou; o Caddyfile anterior foi recolocado"
-    fi
+
+  # O bloco antigo do Crivo no arquivo principal e o de conf.d/ seriam o mesmo endereço duas vezes,
+  # e o Caddy recusa a configuração inteira. Tirar esse bloco é o passo à mão da virada, e é o
+  # mesmo momento do DNS: enquanto $DOMINIO não apontar para cá, o 301 de $DOMINIO_ANTIGO levaria
+  # quem acessa a um endereço que não responde.
+  if grep -qE "^[[:space:]]*($DOMINIO_ANTIGO|$DOMINIO)[[:space:],{]" "$CADDYFILE"; then
+    aviso "o $CADDYFILE ainda tem bloco próprio para $DOMINIO_ANTIGO ou $DOMINIO: apague esse bloco (a configuração do Crivo agora é $alvo), e só então o import entra"
+  elif grep -qE "^[[:space:]]*import[[:space:]]+(conf\.d/|$CONF_D/)" "$CADDYFILE"; then
+    ok "o $CADDYFILE já importa $CONF_D"
   else
-    aviso "o Caddyfile novo está em $novo, validado, mas NÃO foi aplicado: rode com --aplicar (ou mova à mão e recarregue)"
+    copia="$CADDYFILE.bak-$(date +%Y%m%d%H%M%S)"
+    cp -p "$CADDYFILE" "$copia"
+    printf '\n# Um arquivo por projeto. O do Crivo é conf.d/crivo.caddyfile (deploy/Caddyfile.example).\nimport conf.d/*.caddyfile\n' >> "$CADDYFILE"
+    if caddy validate --config "$CADDYFILE" >/dev/null 2>&1; then
+      feito "import acrescentado ao $CADDYFILE (cópia do anterior em $copia)"
+    else
+      cp -p "$copia" "$CADDYFILE"
+      aviso "com o import, a configuração inteira não valida; o $CADDYFILE anterior foi recolocado"
+    fi
+  fi
+
+  # A configuração no disco é sempre válida, para o Caddy subir sozinho depois de um reboot.
+  if caddy validate --config "$CADDYFILE" >/dev/null 2>&1; then
+    ok "a configuração inteira valida"
+  else
+    caddy validate --config "$CADDYFILE" 2>&1 | tail -4 | sed 's/^/         /'
+    aviso "a configuração inteira NÃO valida; o Caddy que está no ar segue com a que já tinha carregado"
+  fi
+
+  # O reload só com --aplicar, e só quando o DNS já apontar para cá.
+  if [ "$APLICAR" = sim ]; then
+    meu_ip=$(ip -4 route get 1.1.1.1 2>/dev/null | sed -nE 's/.*src ([0-9.]+).*/\1/p')
+    aponta=$(getent ahostsv4 "$DOMINIO" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ')
+    if [ -n "$meu_ip" ] && [ -n "$aponta" ] && ! printf '%s' "$aponta" | grep -qF "$meu_ip"; then
+      aviso "$DOMINIO ainda aponta para $aponta, e não para esta VPS ($meu_ip): não recarreguei o Caddy, porque o 301 de $DOMINIO_ANTIGO mandaria quem acessa para um endereço que não responde. Troque o DNS primeiro"
+    elif caddy validate --config "$CADDYFILE" >/dev/null 2>&1; then
+      if systemctl reload caddy; then
+        feito "Caddy recarregado"
+      else
+        aviso "o reload falhou (journalctl -u caddy -n 50); a configuração no disco está em $CADDYFILE"
+      fi
+    fi
   fi
 fi
 
