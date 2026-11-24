@@ -1,0 +1,116 @@
+package com.psigama.airlab.allocation;
+
+import com.psigama.airlab.support.CanonicalJson;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * The outcome of a draw: which medium reads which target, with which experimenter, in which
+ * order, and in which order the two readings of a pair are shown to each sitter.
+ *
+ * <p>The plan is the object the commitment is computed over, so its canonical form is part
+ * of the protocol and must not change shape without a new preregistration version (P2, P5).
+ */
+public record AllocationPlan(String studyCode,
+                             List<SessionAllocation> sessions,
+                             List<PresentationOrder> presentations,
+                             List<ConfirmatoryUnit> confirmatoryUnits,
+                             List<SessionSlot> sessionSlots) {
+
+    public AllocationPlan {
+        sessions = List.copyOf(sessions);
+        presentations = List.copyOf(presentations);
+        confirmatoryUnits = List.copyOf(confirmatoryUnits);
+        sessionSlots = List.copyOf(sessionSlots);
+    }
+
+    /**
+     * One reading session.
+     *
+     * @param readingOrder 1 or 2: the order in which the medium reads the two targets of
+     *                     the pair, drawn so that being read first is not a clue
+     */
+    public record SessionAllocation(String pairCode,
+                                    String targetCode,
+                                    String mediumCode,
+                                    String experimenterCode,
+                                    int readingOrder) {
+    }
+
+    /**
+     * For the sitter of {@code targetCode}, which target's redacted reading is shown first.
+     * The sitter never learns that this mapping exists (P1).
+     */
+    public record PresentationOrder(String targetCode, String firstShownTargetCode) {
+    }
+
+    /**
+     * Which sitter of a pair contributes the one independent observation of the confirmatory
+     * analysis (see {@code study.AnalysisUnit#PAIR}).
+     *
+     * <p>Drawn with everything else, before the first session, so the choice of unit cannot
+     * be made after seeing which sitter got it right. The other sitter's forced choice is
+     * still collected and still reported, as a declared secondary analysis.
+     */
+    public record ConfirmatoryUnit(String pairCode, String targetCode) {
+    }
+
+    /**
+     * When a session happens, as counterbalanced indices rather than dates: the researcher
+     * maps day 0, 1, 2 and slot 0, 1, 2 onto the calendar when scheduling.
+     *
+     * <p>O'Keeffe and Wiseman found a leak nobody had controlled before: a sitter can work
+     * out which reading is theirs from a temporal reference in it, such as a remark about the
+     * weather or about the news of that day. Their answer was to counterbalance the sitters'
+     * slots across days, which is what these indices are for. Drawn with everything else, so
+     * the schedule is part of the commitment and cannot be arranged after the fact.
+     */
+    public record SessionSlot(String pairCode, String targetCode, int dayIndex, int slotIndex) {
+    }
+
+    /** Canonical JSON of the plan: the exact bytes the commitment is computed over. */
+    public String canonicalForm() {
+        List<Object> sessionList = new ArrayList<>();
+        for (SessionAllocation s : sessions) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("pair", s.pairCode());
+            row.put("target", s.targetCode());
+            row.put("medium", s.mediumCode());
+            row.put("experimenter", s.experimenterCode());
+            row.put("readingOrder", s.readingOrder());
+            sessionList.add(row);
+        }
+        List<Object> presentationList = new ArrayList<>();
+        for (PresentationOrder p : presentations) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("target", p.targetCode());
+            row.put("firstShown", p.firstShownTargetCode());
+            presentationList.add(row);
+        }
+        List<Object> confirmatoryList = new ArrayList<>();
+        for (ConfirmatoryUnit unit : confirmatoryUnits) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("pair", unit.pairCode());
+            row.put("target", unit.targetCode());
+            confirmatoryList.add(row);
+        }
+        List<Object> slotList = new ArrayList<>();
+        for (SessionSlot slot : sessionSlots) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("pair", slot.pairCode());
+            row.put("target", slot.targetCode());
+            row.put("day", slot.dayIndex());
+            row.put("slot", slot.slotIndex());
+            slotList.add(row);
+        }
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("study", studyCode);
+        root.put("sessions", sessionList);
+        root.put("presentations", presentationList);
+        root.put("confirmatoryUnits", confirmatoryList);
+        root.put("sessionSlots", slotList);
+        return CanonicalJson.write(root);
+    }
+}

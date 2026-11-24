@@ -208,10 +208,10 @@ target(n) = SHA-256(seed || "trial:" || n || counter) mod 4</pre>
         <p class="nota">
           The reference implementation is in
           <a
-            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/support/SeedStream.java"><code>support/SeedStream.java</code></a>
+            href="https://github.com/psigama/crivo/blob/main/src/main/java/com/psigama/airlab/support/SeedStream.java"><code>support/SeedStream.java</code></a>
           and in
           <a
-            href="https://github.com/rogeriocisi/crivo/blob/main/src/main/java/io/github/rogeriocisi/airlab/trials/TargetDerivation.java"><code>trials/TargetDerivation.java</code></a>.
+            href="https://github.com/psigama/crivo/blob/main/src/main/java/com/psigama/airlab/trials/TargetDerivation.java"><code>trials/TargetDerivation.java</code></a>.
           The commitment ties the seed to the session parameters: protocol, number of trials,
           number of alternatives and version of the figure pool.
         </p>

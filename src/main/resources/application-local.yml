@@ -27,4 +27,4 @@ spring:
 
 logging:
   level:
-    io.github.rogeriocisi.airlab: DEBUG
+    com.psigama.airlab: DEBUG

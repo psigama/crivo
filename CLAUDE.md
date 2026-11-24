@@ -56,7 +56,7 @@ Instruções para o Claude Code neste repositório.
 
 ## Convenções
 
-- Pacote base: `io.github.rogeriocisi.airlab`; módulos `study`, `allocation`, `session`, `redaction`, `scoring`, `unblinding`, `analysis`, `participant`, `audit`, `anchor`, `catalog`, `trials`, `notification`, `structured`.
+- Pacote base: `com.psigama.airlab`; módulos `study`, `allocation`, `session`, `redaction`, `scoring`, `unblinding`, `analysis`, `participant`, `audit`, `anchor`, `catalog`, `trials`, `notification`, `structured`.
 - **Carimbo de tempo (E8)**: nenhum teste fala com o FreeTSA de verdade, salvo o `FreeTsaLiveTest`, que só roda com `AIRLAB_LIVE_TSA=true`; os outros usam a `anchor.internal.TestAuthority`, que assina de verdade. Os certificados em `src/main/resources/timestamp/` são binários para o Git (`.gitattributes`): uma conversão de fim de linha mudaria o SHA-256 fixado. Ao trocar de autoridade, atualize os arquivos e os SHA-256 juntos, conferindo-os contra o que a autoridade publica.
 - Código, identificadores e commits em **inglês**; documentação e interface em **português**.
 - Commits pequenos, no padrão Conventional Commits.

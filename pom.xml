@@ -11,7 +11,7 @@
     <relativePath/>
   </parent>
 
-  <groupId>io.github.rogeriocisi</groupId>
+  <groupId>com.psigama</groupId>
   <artifactId>airlab</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>Crivo (AIR Lab)</name>

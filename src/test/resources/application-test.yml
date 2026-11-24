@@ -23,5 +23,5 @@ airlab:
 
 logging:
   level:
-    io.github.rogeriocisi.airlab: INFO
+    com.psigama.airlab: INFO
     org.flywaydb: WARN

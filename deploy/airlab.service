@@ -15,7 +15,7 @@
 
 [Unit]
 Description=Crivo (AIR Lab)
-Documentation=https://github.com/rogeriocisi/crivo
+Documentation=https://github.com/psigama/crivo
 After=network-online.target postgresql.service
 Wants=network-online.target
 Requires=postgresql.service

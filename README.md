@@ -176,10 +176,10 @@ Antes de abrir a inscrição a pessoas reais, vale a trava 4 do E10: aprovação
 ## Contribuir
 
 ```bash
-git clone https://github.com/rogeriocisi/crivo.git
+git clone https://github.com/psigama/crivo.git
 ```
 
-Faça o *fork* pelo GitHub, trabalhe num ramo, rode `./mvnw test` e abra o *pull request*. Commits pequenos, no padrão Conventional Commits, e nenhuma funcionalidade sem a especificação correspondente — as regras estão no [`CLAUDE.md`](CLAUDE.md). Objeções metodológicas valem tanto quanto código: abra uma [issue](https://github.com/rogeriocisi/crivo/issues).
+Faça o *fork* pelo GitHub, trabalhe num ramo, rode `./mvnw test` e abra o *pull request*. Commits pequenos, no padrão Conventional Commits, e nenhuma funcionalidade sem a especificação correspondente — as regras estão no [`CLAUDE.md`](CLAUDE.md). Objeções metodológicas valem tanto quanto código: abra uma [issue](https://github.com/psigama/crivo/issues).
 
 ## Documentação
 

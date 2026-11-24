@@ -1,0 +1,105 @@
+package com.psigama.airlab.participant;
+
+import java.util.List;
+import com.psigama.airlab.support.Language;
+import java.util.Optional;
+
+/**
+ * Accounts of the automated AIR protocol, P1 (SPEC E13, phase A).
+ *
+ * <p>Lives in {@code participant} because an account is identifiable data, and this is the only
+ * module allowed to read the {@code identity} schema (architectural rule 2). Everything that
+ * leaves this interface is pseudonymous, except {@link #account}, which is built for the owner
+ * of the account alone.
+ */
+public interface AccountService {
+
+    /**
+     * Version of the account consent term currently in force (E10, lock 6).
+     *
+     * <p>{@code conta-v4} since SPEC 0.28 (section 1.5, rule 9): the Portuguese text did not change
+     * one word from the {@code conta-v3}, and the English translation came in beside it. A new
+     * version because what the person accepted is the text they read, and from now on that text
+     * exists in two languages; the translation goes to the ethics committee with the protocol
+     * (rule 11).
+     */
+    String CURRENT_TERM_VERSION = "conta-v4";
+
+    int MINIMUM_PASSWORD_LENGTH = 10;
+
+    /** Hours a confirmation link stays valid. */
+    int CONFIRMATION_HOURS = 48;
+
+    /**
+     * Creates an account with a fixed profile, pending e-mail confirmation.
+     *
+     * <p>When the e-mail already has an active account, nothing is created and the result says
+     * so, carrying a fresh confirmation token if that account was never confirmed. The caller
+     * shows the same page either way, so the form does not reveal who has an account.
+     *
+     * @throws IllegalArgumentException when a field is invalid, with a message in Portuguese
+     *                                  meant for the person filling in the form
+     */
+    AccountRegistration register(AccountSignUp signUp);
+
+    /** Confirms the e-mail behind a one-time token, and publishes {@link AccountConfirmed}. */
+    EmailConfirmationResult confirmEmail(String token);
+
+    /** Credentials for the sign-in, looked up by e-mail through its blind index. */
+    Optional<AccountCredentials> credentials(String email);
+
+    /** The account as its owner sees it. */
+    Optional<AccountView> account(String code);
+
+    /** Accounts by profile and situation, for the administrator. */
+    AccountCounts counts();
+
+    /**
+     * Codes of the confirmed, active medium accounts, in code order: the pool the P1 draw picks
+     * from (SPEC E13, phase C). Codes only.
+     */
+    List<String> activeMediumCodes();
+
+    /**
+     * The e-mail address of an active, confirmed account, for the mailer and nothing else: the
+     * medium is told by e-mail that a request arrived (SPEC E13). Never logged, never shown.
+     */
+    Optional<String> mailAddress(String code);
+
+    /**
+     * The language of an account (SPEC 0.28, section 1.5, rule 8), for the e-mails that leave
+     * outside a request and so have no page to take it from. Empty when there is no such account;
+     * the language of origin when the account predates the two languages.
+     */
+    Optional<Language> mailLanguage(String code);
+
+    // --- Phase E: linked accounts ---------------------------------------------------------------
+
+    /** Every linked-accounts flag, pending first, then newest first, for the administrator. */
+    List<AccountFlag> flags();
+
+    /** Pending flags, for the administrator's panel. */
+    long pendingFlags();
+
+    /**
+     * Records the administrator's decision on a flag. Made once; the trail gets the flag code and
+     * the decision, not the accounts.
+     *
+     * @throws IllegalArgumentException when the flag does not exist
+     * @throws IllegalStateException    when it was already decided
+     */
+    void reviewFlag(String flagCode, FlagDecision decision, String reviewerCode);
+
+    /**
+     * For each given account, the accounts it must be kept apart from in the draw: those it shares
+     * a pending or confirmed flag with (SPEC E13, phase E). An account without flags maps to an
+     * empty set.
+     */
+    java.util.Map<String, java.util.Set<String>> keptApart(java.util.Collection<String> accountCodes);
+
+    /**
+     * Closes the account at the owner's request, without justification (P6): name, e-mail and
+     * password hash are erased, and the pseudonymous code stays, marked as closed.
+     */
+    void close(String code);
+}

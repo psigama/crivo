@@ -50,4 +50,4 @@ exec "$JAVA" -jar "$JAR" \
   --spring.main.web-application-type=none \
   --spring.main.banner-mode=off \
   --logging.level.root=WARN \
-  --logging.level.io.github.rogeriocisi.airlab=WARN
+  --logging.level.com.psigama.airlab=WARN

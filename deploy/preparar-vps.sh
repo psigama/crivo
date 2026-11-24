@@ -102,7 +102,7 @@ diretorio_jar=$(dirname "$JAR_PATH")
 if sudo -u "$DEPLOY_USER" test -x "$diretorio_jar"; then
   ok "$diretorio_jar é atravessável"
 else
-  aviso "o $DEPLOY_USER não entra em $diretorio_jar: a cópia .previous nunca é feita e não há versão para onde voltar (docs/DEPLOY.md, seção 1, passo 4)"
+  aviso "o $DEPLOY_USER não entra em $diretorio_jar: a cópia .previous nunca é feita e não há versão para onde voltar (docs/DEPLOY.md, seção 1, passo 5)"
 fi
 
 passo "sudoers do $DEPLOY_USER: os comandos exatos da troca de versão"
@@ -149,7 +149,7 @@ if [ -f "$ENV_FILE" ]; then
     [ "$APLICAR" = sim ] || aviso "a aplicação só lê isso ao reiniciar: rode de novo com --aplicar, ou systemctl restart $SERVICE"
   fi
 else
-  aviso "não existe $ENV_FILE (docs/DEPLOY.md, seção 1, passo 4)"
+  aviso "não existe $ENV_FILE (docs/DEPLOY.md, seção 1, passo 6)"
 fi
 
 # Esta VPS pode servir mais de um projeto no mesmo Caddy (hoje serve também o ReMoto), então a
@@ -160,7 +160,7 @@ alvo="$CONF_D/crivo.caddyfile"
 if [ ! -f "$EXEMPLO_CADDY" ]; then
   aviso "não achei o $EXEMPLO_CADDY ao lado deste script: copie a pasta deploy/ inteira para a VPS"
 elif ! command -v caddy >/dev/null; then
-  aviso "o Caddy não está instalado (docs/DEPLOY.md, seção 1, passo 3)"
+  aviso "o Caddy não está instalado (docs/DEPLOY.md, seção 1, passo 8)"
 else
   install -d -m 0755 "$CONF_D"
   sed -e "s|crivo\.psigama\.com|$DOMINIO|g" -e "s|app\.$DOMINIO|$DOMINIO_ANTIGO|g" \

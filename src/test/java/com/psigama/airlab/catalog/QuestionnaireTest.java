@@ -1,0 +1,194 @@
+package com.psigama.airlab.catalog;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+/**
+ * The P1 questionnaire (SPEC E13, annex): the shape the comparison depends on.
+ */
+class QuestionnaireTest {
+
+    private final Questionnaire current = Questionnaires.current();
+
+    private Map<String, String> fullAnswers() {
+        Map<String, String> answers = new HashMap<>();
+        for (Questionnaire.Field field : current.fields()) {
+            answers.put(field.key(), field.options().get(0).key());
+        }
+        return answers;
+    }
+
+    @Test
+    @DisplayName("os campos de pareamento sao os tres do P2 e ficam fora da nota")
+    void pairing_fields_are_the_p1_ones_and_out_of_the_score() {
+        List<String> pairing = current.fields().stream()
+                .filter(field -> !field.scored()).map(Questionnaire.Field::key).toList();
+        assertThat(pairing).containsExactlyInAnyOrder(
+                Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD);
+        current.fields().stream().filter(field -> !field.scored())
+                .forEach(field -> assertThat(field.outOfScoreReason().pt()).contains("fora da nota"));
+    }
+
+    @Test
+    @DisplayName("as faixas de pareamento tem o mesmo numero de opcoes das do P2")
+    void pairing_bands_match_p1() {
+        assertThat(current.field(Questionnaires.AGE_BAND).orElseThrow().options()).hasSize(5);
+        assertThat(current.field(Questionnaires.DEATH_PERIOD).orElseThrow().options()).hasSize(4);
+    }
+
+    @Test
+    @DisplayName("ha campos pontuaveis, e nenhum deles e texto livre")
+    void there_are_scored_closed_fields() {
+        assertThat(current.scoredFields()).hasSizeGreaterThanOrEqualTo(10);
+        current.scoredFields().forEach(field -> assertThat(field.options()).hasSizeGreaterThanOrEqualTo(2));
+    }
+
+    @Test
+    @DisplayName("resposta completa passa; falta, opcao desconhecida e campo a mais nao")
+    void sitter_answers_are_checked() {
+        assertThatCode(() -> current.checkSitterAnswers(fullAnswers())).doesNotThrowAnyException();
+
+        Map<String, String> missing = fullAnswers();
+        missing.remove("causa");
+        assertThatThrownBy(() -> current.checkSitterAnswers(missing)).hasMessageContaining("Causa principal");
+
+        Map<String, String> unknownOption = fullAnswers();
+        unknownOption.put("causa", "abducao");
+        assertThatThrownBy(() -> current.checkSitterAnswers(unknownOption)).hasMessageContaining("desconhecida");
+
+        Map<String, String> extra = fullAnswers();
+        extra.put("signo", "leao");
+        assertThatThrownBy(() -> current.checkSitterAnswers(extra)).hasMessageContaining("desconhecido");
+    }
+
+    @Test
+    @DisplayName("nao sei vale nos campos pontuaveis e nunca nos de pareamento")
+    void unknown_is_allowed_only_where_pairing_does_not_need_it() {
+        Map<String, String> unknownScored = fullAnswers();
+        unknownScored.put("causa", Questionnaire.UNKNOWN);
+        assertThatCode(() -> current.checkSitterAnswers(unknownScored)).doesNotThrowAnyException();
+
+        Map<String, String> unknownPairing = fullAnswers();
+        unknownPairing.put(Questionnaires.AGE_BAND, Questionnaire.UNKNOWN);
+        assertThatThrownBy(() -> current.checkSitterAnswers(unknownPairing)).hasMessageContaining("pares");
+    }
+
+    @Test
+    @DisplayName("as versoes sao localizaveis e as chaves de campo sao unicas")
+    void versions_and_keys() {
+        assertThat(Questionnaires.byVersion(current.version())).contains(current);
+        assertThat(Questionnaires.byVersion("v0")).isEmpty();
+        assertThatThrownBy(() -> new Questionnaire("x", List.of(
+                current.scoredFields().get(0), current.scoredFields().get(0))))
+                .hasMessageContaining("duplicate");
+    }
+
+    @Test
+    @DisplayName("a v3 e a vigente, e as versoes anteriores continuam legiveis para os pedidos feitos nelas")
+    void v3_is_current_and_the_older_ones_stay_readable() {
+        assertThat(current.version()).isEqualTo("v3-rascunho");
+        assertThat(current.scoredFields()).hasSize(20);
+        Questionnaire v1 = Questionnaires.byVersion("v1-rascunho").orElseThrow();
+        Questionnaire v2 = Questionnaires.byVersion("v2-rascunho").orElseThrow();
+        assertThat(v1.scoredFields()).hasSize(13);
+        assertThat(v2.scoredFields()).hasSize(20);
+        assertThat(Questionnaires.all()).first().isEqualTo(current);
+        assertThat(Questionnaires.all()).contains(v1, v2);
+        // O pareamento nao muda entre as versoes: mesmos campos, mesmas faixas, mesmas chaves.
+        for (String key : List.of(Questionnaires.GENDER, Questionnaires.AGE_BAND, Questionnaires.DEATH_PERIOD)) {
+            assertThat(keysOf(current.field(key).orElseThrow()))
+                    .isEqualTo(keysOf(v1.field(key).orElseThrow()));
+        }
+    }
+
+    @Test
+    @DisplayName("SPEC 0.28: a v3 e a v2 com os rotulos nos dois idiomas, e as chaves nao mudam")
+    void v3_is_v2_in_two_languages() {
+        Questionnaire v2 = Questionnaires.byVersion("v2-rascunho").orElseThrow();
+        assertThat(current.fields()).hasSameSizeAs(v2.fields());
+        for (int i = 0; i < current.fields().size(); i++) {
+            Questionnaire.Field now = current.fields().get(i);
+            Questionnaire.Field before = v2.fields().get(i);
+            // A chave e a mesma, e por isso uma resposta dada numa versao compara com a da outra.
+            assertThat(now.key()).isEqualTo(before.key());
+            assertThat(now.use()).isEqualTo(before.use());
+            assertThat(keysOf(now)).isEqualTo(keysOf(before));
+            // O portugues nao mudou uma palavra; o ingles existe e nao e o portugues repetido.
+            assertThat(now.label().pt()).isEqualTo(before.label().pt());
+            assertThat(now.label().en()).isNotBlank().isNotEqualTo(now.label().pt());
+            for (Questionnaire.Option option : now.options()) {
+                Questionnaire.Option same = before.option(option.key()).orElseThrow();
+                assertThat(option.label().pt()).isEqualTo(same.label().pt());
+                assertThat(option.label().en()).isNotBlank();
+            }
+            if (!now.scored()) {
+                assertThat(now.outOfScoreReason().pt()).isEqualTo(before.outOfScoreReason().pt());
+                assertThat(now.outOfScoreReason().en()).isNotBlank()
+                        .isNotEqualTo(now.outOfScoreReason().pt());
+            }
+        }
+    }
+
+    /** As chaves das opcoes de um campo, que sao o que nao muda de uma versao para a outra. */
+    private static List<String> keysOf(Questionnaire.Field field) {
+        return field.options().stream().map(Questionnaire.Option::key).toList();
+    }
+
+    @Test
+    @DisplayName("os rotulos de nao sei e nao recebi sao fixos")
+    void labels() {
+        assertThat(current.labelOf("causa", Questionnaire.UNKNOWN).pt()).isEqualTo("Não sei");
+        assertThat(current.labelOf("causa", Questionnaire.NOT_RECEIVED).pt()).isEqualTo("Não recebi");
+        assertThat(current.labelOf("causa", "cancer").pt()).isEqualTo("Câncer");
+        // SPEC 0.28, secao 1.5: o mesmo rotulo em ingles, e a resposta continua sendo a chave.
+        assertThat(current.labelOf("causa", Questionnaire.UNKNOWN).en()).isEqualTo("I don't know");
+        assertThat(current.labelOf("causa", Questionnaire.NOT_RECEIVED).en()).isEqualTo("Nothing came");
+        assertThat(current.labelOf("causa", "cancer").en()).isEqualTo("Cancer");
+    }
+
+    // --- Fase C: as respostas do medium ---------------------------------------------------------
+
+    private Map<String, String> mediumAnswers() {
+        Map<String, String> answers = new HashMap<>();
+        for (Questionnaire.Field field : current.scoredFields()) {
+            answers.put(field.key(), field.options().get(0).key());
+        }
+        return answers;
+    }
+
+    @Test
+    @DisplayName("o medium responde so aos campos da nota, cada um com uma opcao ou nao recebi")
+    void medium_answers_only_the_scored_fields() {
+        assertThatCode(() -> current.checkMediumAnswers(mediumAnswers())).doesNotThrowAnyException();
+
+        Map<String, String> notReceived = mediumAnswers();
+        notReceived.replaceAll((key, value) -> Questionnaire.NOT_RECEIVED);
+        assertThatCode(() -> current.checkMediumAnswers(notReceived)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("o medium nao deixa campo em branco, nao responde ao pareamento e nao usa nao sei")
+    void medium_answers_are_complete_and_closed() {
+        Map<String, String> missing = mediumAnswers();
+        missing.remove(current.scoredFields().get(0).key());
+        assertThatThrownBy(() -> current.checkMediumAnswers(missing))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Não recebi");
+
+        Map<String, String> pairing = mediumAnswers();
+        pairing.put(Questionnaires.GENDER, "feminino");
+        assertThatThrownBy(() -> current.checkMediumAnswers(pairing))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Campo desconhecido");
+
+        Map<String, String> unknown = mediumAnswers();
+        unknown.put(current.scoredFields().get(0).key(), Questionnaire.UNKNOWN);
+        assertThatThrownBy(() -> current.checkMediumAnswers(unknown))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Opção desconhecida");
+    }
+}
