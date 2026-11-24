@@ -12,7 +12,7 @@ Como o Crivo é testado no GitHub e publicado numa **instalação única**: uma 
 
 A implantação é **automática** (Constitution v1.8.0, regra de implantação 8). A regra continua só permitindo atualizar a aplicação entre sessões de coleta, e a trava deixou de ser uma confirmação no formulário do workflow: passou a ser o **ramo**. O trabalho fica em branch, o merge na `main` é que implanta, e quem faz o merge é quem garante que nenhum estudo está em andamento. O site editorial não reinicia a aplicação — é arquivo em disco —, e a regra 8 não se aplica a ele (regra 9).
 
-Onde é a VPS **não está no repositório** (regra 7): endereço, usuário, porta, caminhos, nome do serviço e endereço de saúde vêm dos *Secrets* e *Variables* do ambiente `production` (seção 3). Os arquivos que moram na VPS têm o seu modelo em [`deploy/`](../deploy/): a unidade `systemd`, o `Caddyfile` e o `airlab.env`.
+Onde é a VPS **não está no repositório** (regra 7): endereço, usuário, porta, caminhos, nome do serviço e endereço de saúde vêm dos *Secrets* e *Variables* do ambiente `production` (seção 3). Os arquivos que moram na VPS têm o seu modelo em [`deploy/`](../deploy/): a unidade `systemd`, o `Caddyfile`, o `airlab.env`, o script da troca de versão e o [`preparar-vps.sh`](../deploy/preparar-vps.sh), que prepara a máquina para esta arquitetura (seção 6, passo 1).
 
 ## 1. Preparar a VPS
 
@@ -163,7 +163,14 @@ Como o site e a aplicação compartilham origem, os arquivos estáticos da pasta
 Uma vez, **entre sessões de coleta**, para sair do GitHub Pages (SPEC 0.28) e chegar à instalação única (SPEC 0.29). Até a v0.28, `crivo.psigama.com` era um `CNAME` para `rogeriocisi.github.io` e a aplicação morava em `app.crivo.psigama.com`.
 
 0. Na véspera, baixe o TTL do registro de `crivo.psigama.com` para 300 segundos, para que a troca do passo 4 se espalhe em minutos.
-1. Na VPS: a pasta do site e o `rsync` (seção 1, passos 3 e 5) e o `Caddyfile` novo (passo 6). O Caddy vai tentar o certificado de `crivo.psigama.com` e falhar enquanto o DNS não apontar para cá; ele repete sozinho. Nada do que está no ar muda neste passo.
+1. Na VPS: a pasta do site e o `rsync` (seção 1, passos 3 e 5) e o `Caddyfile` novo (passo 6). O [`deploy/preparar-vps.sh`](../deploy/preparar-vps.sh) faz essa parte mecânica, e pode rodar de novo quantas vezes quiser:
+
+   ```bash
+   scp -r deploy <seu-usuário>@<vps>:~/
+   sudo bash deploy/preparar-vps.sh
+   ```
+
+   Assim ele confere tudo e não mexe no que está no ar: cria a pasta e instala o `rsync`, escreve no `airlab.env` o endereço público com `AIRLAB_SITE_URL` vazia (guardando cópia do anterior, e a aplicação só lê isso ao reiniciar), deixa o `Caddyfile` novo validado ao lado do atual e lista o que falta. Com `--aplicar` ele troca a borda — com cópia do anterior e volta atrás se o Caddy recusar — e reinicia a aplicação; é opt-in porque reiniciar só se faz entre sessões de coleta (regra de implantação 8). O Caddy vai tentar o certificado de `crivo.psigama.com` e falhar enquanto o DNS não apontar para cá; ele repete sozinho. Nada do que está no ar muda sem o `--aplicar`.
 2. No GitHub: os segredos e as variáveis da seção 3, com `APP_URL=https://crivo.psigama.com`.
 3. Em `/etc/airlab/airlab.env`: `AIRLAB_BASE_URL=https://crivo.psigama.com` e **`AIRLAB_SITE_URL` vazia ou comentada**. Depois, `sudo systemctl restart airlab`. **A ordem importa**: com `AIRLAB_SITE_URL` apontando para `crivo.psigama.com`, assim que o nome chegar à VPS a aplicação responderia com 301 para si mesma, num laço.
 4. DNS: apague o `CNAME` de `crivo.psigama.com` e crie um `A` para o IP público da VPS. Um nome com `CNAME` não pode ter outro registro, então a ordem é apagar e depois criar. Enquanto o site ainda não foi espelhado, quem responde as páginas editoriais é a própria aplicação (passo 3): não há janela sem site.
