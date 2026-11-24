@@ -5,7 +5,9 @@
 #
 # Só roda quando acionado à mão, porque a Constitution (regra de implantação 8) permite atualizar a
 # aplicação apenas entre sessões de coleta, nunca durante um estudo em andamento. Quem aciona confirma
-# isso no formulário do workflow; o ambiente "production" do GitHub pode, além disso, exigir aprovação.
+# isso no formulário do workflow, e essa confirmação é a trava da regra 8. O ambiente "production" do
+# GitHub não pede aprovação: o revisor obrigatório era o próprio pesquisador, que também é quem aciona,
+# então o clique não acrescentava revisão nenhuma. O ambiente continua restrito à branch main.
 #
 # O workflow entra na VM por SSH, só com chave, como um usuário que só pode trocar o JAR e reiniciar o
 # serviço, e confere a identidade da VM contra a chave fixada em DEPLOY_KNOWN_HOSTS. O JAR é o mesmo
