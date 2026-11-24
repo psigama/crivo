@@ -33,21 +33,16 @@
     <link rel="alternate" hreflang="x-default" th:href="${urlPt}">
     <!--/*
       Imagem de compartilhamento (SPEC 0.23, seção 1.4, regra 6): o link colado no WhatsApp mostra
-      a imagem. O Open Graph pede endereço absoluto: a aplicação aponta para o site, e o site, para
-      a aplicação. As duas servem a imagem. No perfil local, os dois endereços são vazios, e o
-      caminho fica relativo. O prefixo de idioma sai do endereço: a imagem é a mesma nos dois.
+      a imagem. O Open Graph pede endereço absoluto, e quem o monta é quem sabe o endereço desta
+      instalação: a aplicação, pelo `NavigationAdvice`, e o gerador do site, pelo `--aplicacao`.
+      Aqui vem pronto, sem prefixo de idioma, porque a imagem é a mesma nos dois.
     */-->
-    <th:block
-      th:with="siteRaiz=${#strings.endsWith(site, '/en') ? site.substring(0, site.length() - 3) : site},
-               appRaiz=${#strings.endsWith(aplicacao, '/en') ? aplicacao.substring(0, aplicacao.length() - 3) : (aplicacao ?: '')},
-               imagem=${(#strings.isEmpty(siteRaiz) ? appRaiz : siteRaiz) + '/img/compartilhar.png'}">
-      <meta property="og:image" th:content="${imagem}">
-      <meta property="og:image:type" content="image/png">
-      <meta property="og:image:width" content="1200">
-      <meta property="og:image:height" content="630">
-      <meta property="og:image:alt" th:content="#{social.imagem.alt}" content="Crivo">
-      <meta name="twitter:image" th:content="${imagem}">
-    </th:block>
+    <meta property="og:image" th:content="${imagemSocial}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" th:content="#{social.imagem.alt}" content="Crivo">
+    <meta name="twitter:image" th:content="${imagemSocial}">
     <!--/*
       Primeira visita no idioma do navegador (SPEC 0.28, regra 2). Na aplicacao o servidor ja
       decidiu antes desta pagina existir, e o script encontra o cookie e nao faz nada; no site

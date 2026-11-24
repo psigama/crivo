@@ -56,9 +56,11 @@ final class SitePages {
      * only: its script never forwards one of them to the application, which would send it back.
      * Since SPEC 0.28 (section 1.5) the language is in there too: {@code idioma}, the two addresses
      * of this page ({@code linkPt} and {@code linkEn}) and whether it is answering untranslated.
+     * {@code imagemSocial} is the absolute address of the share image, which Open Graph requires
+     * and only the side that knows where this installation is can build (SPEC 0.29, section 1.3).
      */
     static final Set<String> MODEL = Set.of("site", "aplicacao", "secaoAtual", "logado", "paginasDoSite",
-            "idioma", "urlPt", "urlEn", "linkPt", "linkEn", "traducaoPendente");
+            "idioma", "urlPt", "urlEn", "linkPt", "linkEn", "traducaoPendente", "imagemSocial");
 
     /** The page the static site answers with for every address it does not have (rule 5). */
     static final String NOT_FOUND_TEMPLATE = "site/404";

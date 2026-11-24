@@ -1,0 +1,57 @@
+# /etc/caddy/Caddyfile — a borda da instalação única do Crivo (Constitution, regra de implantação 3).
+#
+# Um endereço, duas coisas na mesma VPS (SPEC 0.29, seção 1.3):
+#
+#   do disco        as páginas editoriais, que a implantação espelha em /var/www/crivo
+#                   (DEPLOY_SITE_DIR): /, /participar, /por-que, /garantias, /auditar, /historia,
+#                   /referencias, /sobre, /artigo/ e as mesmas sob /en, mais o CSS, o favicon e a
+#                   imagem de compartilhamento
+#   da aplicação    todo o resto: /protocolos e /protocolo/P1 a /protocolo/P4, /consulente,
+#                   /medium, /perguntas, /pesquisa, contas e painéis, os testes de ESP, /estudos,
+#                   /carimbos e /verificar
+#
+# A regra é "o arquivo, se existir; senão, a aplicação": o `try_files` encontra a página estática
+# (também sem a extensão, como `/garantias`), e o que o site não tem cai no `handle_errors`, que
+# repassa à aplicação. Com isso nenhuma lista de rotas da aplicação precisa ser repetida aqui — uma
+# rota nova entra no deploy e passa a responder sozinha.
+#
+# Depois de editar:  caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
+#
+# Instalação, segredos e variáveis da implantação automática: docs/DEPLOY.md.
+
+crivo.psigama.com {
+	# compressão das páginas, do CSS e do JavaScript
+	encode zstd gzip
+
+	root * /var/www/crivo
+
+	# O actuator é interno: fica acessível em 127.0.0.1, que é onde a implantação o consulta, e
+	# nunca de fora. Vem antes de tudo, inclusive do site.
+	@interno path /actuator /actuator/*
+	handle @interno {
+		respond 404
+	}
+
+	handle {
+		try_files {path} {path}.html {path}/index.html
+		file_server
+	}
+
+	# O que o site não tem é da aplicação, no mesmo caminho e com a mesma consulta. A aplicação
+	# escuta só em loopback (AIRLAB_BIND no airlab.env).
+	handle_errors 404 {
+		reverse_proxy 127.0.0.1:8080
+	}
+}
+
+# O endereço antigo da aplicação, que está em e-mails já enviados e em links publicados fora do
+# projeto: 301 para o endereço único, com o caminho e a consulta inteiros.
+app.crivo.psigama.com {
+	redir https://crivo.psigama.com{uri} 301
+}
+
+# O Caddy já manda X-Forwarded-For e X-Forwarded-Proto, e a aplicação os lê
+# (`server.forward-headers-strategy` no application.yml), então ela enxerga o endereço público e o de
+# quem acessa, e não o do proxy. O HTTPS é automático:
+# o Caddy pede o certificado na primeira visita a cada nome, e repete sozinho enquanto o DNS do nome
+# não apontar para esta VPS.

@@ -18,8 +18,10 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 /**
  * {@code airlab site <pasta> --aplicacao=<endereço>}: writes the static site with the editorial
- * pages (SPEC 0.21, section 1.3), which the workflow {@code pages.yml} publishes on the GitHub Pages
- * at every push to {@code main}.
+ * pages (SPEC 0.21, section 1.3), which the deploy job of {@code ci.yml} mirrors onto the VPS at
+ * every push to {@code main}, next to the application and behind the same reverse proxy (SPEC 0.29,
+ * section 1.3). Since the installation is a single one, the address given here is the address of
+ * the whole thing.
  *
  * <p>It runs before, and instead of, the Spring context ({@code AirLabApplication#main}): no
  * database, no web server, no configuration. The templates are the very ones the application serves
@@ -30,9 +32,12 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  *
  * <p>Besides the pages it writes the stylesheet, the favicon, the share image, and the
  * {@code 404.html} with its script, which takes any address the site does not have to the
- * application (rule 5). The share image is there because the application's pages point their
- * {@code og:image} at the site (SPEC 0.23, section 1.4, rule 6). The output depends only on the
- * templates and the address, so two runs over the same commit are identical.
+ * application (rule 5). In the single installation the reverse proxy is what does that, and this
+ * page is never reached; it stays for a copy of the site served on its own, with no application
+ * behind it — what Constitution deployment rule 9 keeps for after the VPS is archived. The share
+ * image is served by the site itself, and both sides declare it with an absolute address
+ * (SPEC 0.23, section 1.4, rule 6). The output depends only on the templates and the address, so
+ * two runs over the same commit are identical.
  */
 public final class StaticSite {
 
@@ -41,7 +46,7 @@ public final class StaticSite {
             "js/idioma.js", "img/compartilhar.png");
 
     private static final String USAGE =
-            "Uso: airlab site <pasta> --aplicacao=<endereço da aplicação, como https://app.crivo.psigama.com>";
+            "Uso: airlab site <pasta> --aplicacao=<endereço da aplicação, como https://crivo.psigama.com>";
 
     private StaticSite() {
     }
@@ -181,6 +186,10 @@ public final class StaticSite {
         context.setVariable("linkEn", Language.EN.prefix() + path + "?" + Language.CHOICE + "=" + Language.EN.code());
         context.setVariable("traducaoPendente", language == Language.EN && !translated(template));
         context.setVariable("paginasDoSite", String.join(" ", SitePages.everyPath()));
+        // A imagem de compartilhamento, absoluta, como o Open Graph pede (SPEC 0.23, seção 1.4,
+        // regra 6). O site a serve, e o endereço que o gerador conhece é o da aplicação — na
+        // instalação única, o mesmo endereço (SPEC 0.29, seção 1.3). Sem prefixo de idioma.
+        context.setVariable("imagemSocial", application + "/img/compartilhar.png");
         return engine.process(template, context);
     }
 

@@ -1,12 +1,24 @@
-# Integração contínua: compila e roda a suíte completa a cada push e pull request.
+# Integração contínua e implantação do Crivo.
 #
-# A suíte inclui a matriz de cegamento (SPEC, seção 4) e os testes de integridade da trilha de
-# auditoria; uma mudança que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o
-# embarcado pela própria aplicação (Constitution, regra de implantação 4): nada de Docker nem de
-# serviço externo. O FreeTsaLiveTest só roda com AIRLAB_LIVE_TSA=true, que este workflow não define.
+# Um workflow só, como no ReMoto: a suíte completa a cada push e a cada pull request, e todo push na
+# `main` que passa nos testes vai para a VPS. O site estático e a aplicação são uma instalação única,
+# no mesmo endereço (SPEC 0.29, seção 1.3; Constitution v1.8.0, regras de implantação 8 e 9).
 #
-# A suíte roda em dois JDKs: o 25, que é o da VM de produção (docs/DEPLOY.md), e o 21, o mais antigo
-# que o projeto aceita (java.version no pom.xml e a checagem dos scripts de inicialização).
+# A suíte roda em dois JDKs: o 25, que é o da VPS (docs/DEPLOY.md), e o 21, o mais antigo que o
+# projeto aceita (`java.version` no pom.xml e a checagem dos scripts de inicialização). Ela inclui a
+# matriz de cegamento (SPEC, seção 4) e os testes de integridade da trilha de auditoria; uma mudança
+# que quebre uma dessas garantias é barrada aqui. O PostgreSQL dos testes é o embarcado pela própria
+# aplicação (Constitution, regra de implantação 4): nada de Docker nem de serviço externo. O
+# FreeTsaLiveTest só roda com AIRLAB_LIVE_TSA=true, que este workflow não define.
+#
+# Onde é a VPS não está no repositório: endereço, usuário, porta, caminhos, nome do serviço e
+# endereço de saúde vêm dos Secrets e Variables do ambiente `production` (docs/DEPLOY.md, seção 3).
+# Sem nenhum deles, o job de implantação não envia nada e não falha, para que clone e fork continuem
+# compilando; com alguns e não todos, ele falha dizendo o que falta.
+#
+# A implantação é automática desde a SPEC 0.29 (Constitution v1.8.0, regra de implantação 8): quem
+# faz o merge na `main` é quem garante que nenhuma sessão de coleta está em andamento. O trabalho
+# fica em branch, o merge é que implanta, e a troca de versão reinicia a aplicação.
 
 name: CI
 
@@ -20,8 +32,10 @@ permissions:
   contents: read
 
 concurrency:
+  # Fora da `main`, um push novo cancela o anterior. Na `main`, não: cancelar no meio da troca de
+  # versão deixaria a VPS pela metade. O job de implantação ainda tem a sua própria fila, abaixo.
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   test:
@@ -53,3 +67,153 @@ jobs:
           name: relatorios-de-teste-jdk${{ matrix.java }}
           path: target/surefire-reports/
           retention-days: 14
+
+  # A instalação única: o mesmo JAR e o site que ele gera, na mesma VPS, no mesmo endereço. A
+  # aplicação troca primeiro e o site depois (SPEC 1.3, regra 4): uma página do site pode apontar
+  # para uma rota que esta versão cria, e o contrário — site novo com aplicação velha — quebraria o
+  # link. Se a aplicação não ficar saudável, ela volta para a versão anterior e o site não muda.
+  deploy:
+    name: Implantar na VPS
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.APP_URL }}
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    env:
+      APP_URL: ${{ vars.APP_URL }}
+      REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
+      # O usuário, a porta e os caminhos são Variables, e não Secrets: mascarar "deploy" ou "22"
+      # esconderia a palavra de todo o log, inclusive de nomes de passo e de mensagens de erro.
+      REMOTE_USER: ${{ vars.DEPLOY_USER }}
+      REMOTE_PORT: ${{ vars.DEPLOY_PORT }}
+      SITE_DIR: ${{ vars.DEPLOY_SITE_DIR }}
+      JAR_PATH: ${{ vars.DEPLOY_JAR_PATH }}
+      SERVICE: ${{ vars.DEPLOY_SERVICE }}
+      HEALTH_URL: ${{ vars.DEPLOY_HEALTH_URL }}
+    steps:
+      - name: Conferir se a implantação está configurada
+        id: config
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          nomes="REMOTE_HOST SSH_KEY KNOWN_HOSTS REMOTE_USER REMOTE_PORT SITE_DIR JAR_PATH SERVICE HEALTH_URL APP_URL"
+          presentes=0
+          faltando=""
+          for nome in $nomes; do
+            if [ -n "${!nome}" ]; then
+              presentes=$((presentes + 1))
+            else
+              faltando="$faltando $nome"
+            fi
+          done
+          if [ "$presentes" -eq 0 ]; then
+            echo "pronto=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Implantação não configurada: nada foi enviado (docs/DEPLOY.md, seção 3)."
+            echo "Implantação não configurada: nada foi enviado (docs/DEPLOY.md, seção 3)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ -n "$faltando" ]; then
+            echo "::error::Implantação incompleta; falta configurar:$faltando (docs/DEPLOY.md, seção 3)."
+            exit 1
+          fi
+          echo "pronto=true" >> "$GITHUB_OUTPUT"
+
+      - name: Baixar o código
+        if: steps.config.outputs.pronto == 'true'
+        uses: actions/checkout@v7
+
+      # A mesma versão principal do Java da VPS (docs/DEPLOY.md): o JAR é testado com o que roda lá.
+      - name: Instalar o JDK 25 (Temurin)
+        if: steps.config.outputs.pronto == 'true'
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+
+      # Sem a suíte: o job `test` acabou de rodá-la neste mesmo commit, nos dois JDKs.
+      - name: Compilar o JAR
+        if: steps.config.outputs.pronto == 'true'
+        run: ./mvnw -B -ntp package -DskipTests
+
+      # O gerador não sobe o Spring nem o banco: escreve as páginas editoriais nos dois idiomas, o
+      # CSS, o favicon e a imagem de compartilhamento (`web.StaticSite`).
+      - name: Gerar o site estático
+        if: steps.config.outputs.pronto == 'true'
+        run: java -jar target/airlab.jar site target/site --aplicacao="$APP_URL"
+
+      - name: Calcular o SHA-256 do JAR
+        if: steps.config.outputs.pronto == 'true'
+        working-directory: target
+        run: sha256sum airlab.jar | tee airlab.jar.sha256
+
+      # Guardado para que uma volta à versão anterior não precise de nova compilação.
+      - name: Guardar o JAR desta versão
+        if: steps.config.outputs.pronto == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: airlab-${{ github.sha }}
+          path: |
+            target/airlab.jar
+            target/airlab.jar.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Preparar o acesso à VPS
+        if: steps.config.outputs.pronto == 'true'
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          {
+            echo "Host crivo-vps"
+            echo "  HostName $REMOTE_HOST"
+            echo "  User $REMOTE_USER"
+            echo "  Port $REMOTE_PORT"
+            echo "  IdentityFile ~/.ssh/deploy_key"
+            echo "  IdentitiesOnly yes"
+            echo "  BatchMode yes"
+            echo "  StrictHostKeyChecking yes"
+          } > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Enviar o JAR
+        if: steps.config.outputs.pronto == 'true'
+        run: scp target/airlab.jar crivo-vps:airlab.jar.new
+
+      # O que roda na VPS está em deploy/trocar-versao.sh, para ser lido e revisado como script, e
+      # não como texto dentro do workflow. Os comandos com sudo são exatamente os do
+      # /etc/sudoers.d/airlab-deploy (docs/DEPLOY.md, seção 2): mudar um caminho nas Variables pede
+      # mudar a mesma linha lá.
+      - name: Trocar a versão, reiniciar e conferir a saúde
+        if: steps.config.outputs.pronto == 'true'
+        run: ssh crivo-vps "JAR_PATH='$JAR_PATH' SERVICE='$SERVICE' HEALTH_URL='$HEALTH_URL' bash -s" < deploy/trocar-versao.sh
+
+      # O site passa a ser exatamente o que este commit gera: o --delete apaga na VPS o que saiu do
+      # repositório. É uma pasta só da implantação, com nada escrito à mão.
+      - name: Enviar o site estático
+        if: steps.config.outputs.pronto == 'true'
+        run: rsync -az --delete -e ssh target/site/ "crivo-vps:$SITE_DIR/"
+
+      - name: Conferir se o site responde no endereço público
+        if: steps.config.outputs.pronto == 'true'
+        run: |
+          for _ in $(seq 1 10); do
+            if curl -fsS --max-time 10 "$APP_URL/" | grep -q "Crivo"; then
+              echo "Site no ar em $APP_URL/."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "::error::O site não respondeu em $APP_URL/ (ver o Caddy na VPS: docs/DEPLOY.md, seção 5)."
+          exit 1

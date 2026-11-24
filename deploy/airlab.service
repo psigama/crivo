@@ -1,11 +1,17 @@
-# Crivo (AIR Lab) — unidade systemd de exemplo (perfil prod, Linux).
+# Crivo (AIR Lab) — a aplicação como serviço do sistema na VPS (perfil prod, Linux).
 #
 # Instalação:
-#   sudo cp scripts/airlab.service.example /etc/systemd/system/airlab.service
-#   sudo systemctl daemon-reload && sudo systemctl enable --now airlab
+#   sudo cp deploy/airlab.service /etc/systemd/system/airlab.service
+#   sudo systemctl daemon-reload && sudo systemctl enable airlab
 #
-# Os segredos ficam em /etc/airlab/airlab.env, com permissão 600 e dono root
-# (Constitution, regra de implantação 7). Nunca no repositório.
+# O serviço só sobe quando houver um JAR em /opt/airlab/airlab.jar, o que a primeira implantação
+# resolve (docs/DEPLOY.md, seção 4); daí em diante, cada push na main troca esse arquivo e reinicia
+# o serviço. As páginas editoriais não passam por aqui: são arquivos estáticos que o Caddy serve de
+# /var/www/crivo (deploy/Caddyfile.example).
+#
+# A configuração e os segredos ficam em /etc/airlab/airlab.env, com permissão 600 e dono root
+# (Constitution, regra de implantação 7), a partir de deploy/airlab.env.example. Nunca no
+# repositório.
 
 [Unit]
 Description=Crivo (AIR Lab)

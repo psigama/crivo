@@ -31,9 +31,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 class NavigationAdvice {
 
     private final String siteUrl;
+    private final String shareImage;
 
-    NavigationAdvice(@Value("${airlab.site-url:}") String siteUrl) {
+    NavigationAdvice(@Value("${airlab.site-url:}") String siteUrl,
+                     @Value("${airlab.base-url:}") String baseUrl) {
         this.siteUrl = SitePages.base(siteUrl, "airlab.site-url (AIRLAB_SITE_URL)");
+        // A imagem de compartilhamento precisa de endereço absoluto (SPEC 0.23, seção 1.4, regra 6),
+        // e ela está onde estão as páginas editoriais: no site, quando ele mora noutro endereço, e
+        // nesta própria instalação, quando não — e aí o endereço absoluto é o `airlab.base-url`,
+        // o endereço público desta instalação (SPEC 0.29, seção 1.3). Vazio, nos testes, o caminho
+        // fica relativo, como antes.
+        String raiz = siteUrl == null || siteUrl.isBlank()
+                ? SitePages.base(baseUrl, "airlab.base-url (AIRLAB_BASE_URL)")
+                : this.siteUrl;
+        this.shareImage = raiz + "/img/compartilhar.png";
     }
 
     @ModelAttribute("secaoAtual")
@@ -70,6 +81,16 @@ class NavigationAdvice {
     String application(HttpServletRequest request) {
         String context = request.getContextPath();
         return context == null ? "" : context;
+    }
+
+    /**
+     * The absolute address of the share image, which every page declares as its {@code og:image}
+     * (SPEC 0.23, section 1.4, rule 6). Absolute because Open Graph requires it, and the same in
+     * both languages.
+     */
+    @ModelAttribute("imagemSocial")
+    String shareImage() {
+        return shareImage;
     }
 
     /** This same page in Portuguese, clean, for {@code hreflang} and for the language script. */

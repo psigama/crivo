@@ -66,10 +66,11 @@ airlab:
   # Endereco publico da aplicacao, para os links dos e-mails enviados fora de uma requisicao (o
   # aviso de pedido novo ao medium sai do ciclo do servidor).
   base-url: ${AIRLAB_BASE_URL:http://localhost:8080}
-  # Endereco do site estatico com as paginas editoriais (SPEC 0.21, secao 1.3), por exemplo
-  # https://crivo.psigama.com. Vazio: a aplicacao serve ela mesma as paginas do site, como no perfil
-  # local. Definido: os links da aplicacao para o site usam este endereco, e as rotas do site
-  # respondem com 301 para ele.
+  # Endereco de um site editorial que more noutro lugar (SPEC 0.21, secao 1.3). Vazio: a aplicacao
+  # serve ela mesma as paginas do site, como no perfil local - e, desde a SPEC 0.29, tambem em
+  # producao, onde o arquivo estatico da instalacao unica responde antes dela. Definido: os links da
+  # aplicacao para o site usam este endereco, e as rotas do site respondem com 301 para ele, o que
+  # com o endereco da propria instalacao seria um 301 para si mesma.
   site-url: ${AIRLAB_SITE_URL:}
   p4:
     # Referencia da aprovacao do comite de etica (CEP/Plataforma Brasil). Sem ela, em producao,
