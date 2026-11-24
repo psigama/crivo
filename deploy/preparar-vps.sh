@@ -18,7 +18,9 @@
 # aplicação; é opt-in porque reiniciar só se faz entre sessões de coleta (Constitution, regra de
 # implantação 8), e porque a hora certa de recarregar a borda é depois da troca do DNS — antes
 # dela, o 301 do endereço antigo mandaria quem acessa para um nome que não responde. O script
-# confere isso e se recusa a recarregar enquanto o DNS não apontar para esta máquina.
+# confere isso num resolvedor de fora (1.1.1.1, pelo dig) e se recusa a recarregar enquanto o DNS
+# não apontar para esta máquina; `FORCAR=1 sudo bash deploy/preparar-vps.sh --aplicar` passa por
+# cima dessa conferência, para quando você já conferiu o DNS por fora.
 #
 # A VPS pode servir outros projetos no mesmo Caddy (hoje serve também o ReMoto), então a
 # configuração do Crivo fica num arquivo só dela, /etc/caddy/conf.d/crivo.caddyfile, importado pelo
@@ -202,12 +204,19 @@ else
     aviso "a configuração inteira NÃO valida; o Caddy que está no ar segue com a que já tinha carregado"
   fi
 
-  # O reload só com --aplicar, e só quando o DNS já apontar para cá.
+  # O reload só com --aplicar, e só quando o DNS já apontar para cá. Quem responde isso é um
+  # resolvedor de fora, e não o da própria VPS: depois da troca do registro, o de dentro ainda
+  # devolve a resposta antiga por horas, e a conferência reprovaria um DNS que já está certo para
+  # todo mundo. Sem o dig, fica o resolvedor da máquina; FORCAR=1 passa por cima da conferência.
   if [ "$APLICAR" = sim ]; then
     meu_ip=$(ip -4 route get 1.1.1.1 2>/dev/null | sed -nE 's/.*src ([0-9.]+).*/\1/p')
-    aponta=$(getent ahostsv4 "$DOMINIO" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ')
-    if [ -n "$meu_ip" ] && [ -n "$aponta" ] && ! printf '%s' "$aponta" | grep -qF "$meu_ip"; then
-      aviso "$DOMINIO ainda aponta para $aponta, e não para esta VPS ($meu_ip): não recarreguei o Caddy, porque o 301 de $DOMINIO_ANTIGO mandaria quem acessa para um endereço que não responde. Troque o DNS primeiro"
+    if command -v dig >/dev/null; then
+      aponta=$(dig +short +time=3 +tries=1 "$DOMINIO" A @1.1.1.1 2>/dev/null | grep -E '^[0-9.]+$' | sort -u | tr '\n' ' ')
+    else
+      aponta=$(getent ahostsv4 "$DOMINIO" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ')
+    fi
+    if [ "${FORCAR:-0}" != "1" ] && [ -n "$meu_ip" ] && [ -n "$aponta" ] && ! printf '%s' "$aponta" | grep -qF "$meu_ip"; then
+      aviso "$DOMINIO aponta para $aponta, e não para esta VPS ($meu_ip): não recarreguei o Caddy, porque o 301 de $DOMINIO_ANTIGO mandaria quem acessa para um endereço que não responde. Troque o DNS primeiro — ou, se já conferiu de fora que ele está certo, rode com FORCAR=1"
     elif caddy validate --config "$CADDYFILE" >/dev/null 2>&1; then
       if systemctl reload caddy; then
         feito "Caddy recarregado"
