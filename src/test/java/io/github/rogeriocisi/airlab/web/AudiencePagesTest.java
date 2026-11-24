@@ -119,7 +119,7 @@ class AudiencePagesTest {
                     .andExpect(content().string(containsString("<a class=\"contato\" href=\"#contato\">Contato</a>")))
                     .andExpect(content().string(containsString("id=\"contato\"")))
                     .andExpect(content().string(containsString(
-                            "href=\"mailto:crivo.psigama@gmail.com\">crivo.psigama@gmail.com</a>")));
+                            "href=\"mailto:contato@psigama.com\">contato@psigama.com</a>")));
         }
     }
 

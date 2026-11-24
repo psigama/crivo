@@ -4,7 +4,7 @@ subtitle: "Artigo de desenho, que descreve um método antes de qualquer dado"
 author:
   - name: Rogerio Rodrigues Lima Cisi
     orcid: 0009-0003-8326-6962
-    email: crivo.psigama@gmail.com
+    email: contato@psigama.com
     correspondence: true
     affiliation: "Pesquisador independente, sem vínculo com instituição de pesquisa."
 lang: pt-BR
