@@ -202,9 +202,9 @@
           <ul>
             <li><a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}">Para consulentes</a></li>
             <li><a th:href="${aplicacao} + '/medium'" th:text="#{menu.participar.mediuns}">Para médiuns</a></li>
-            <li><a th:href="${aplicacao} + '/perguntas'" th:text="#{rodape.participar.perguntas}">Perguntas frequentes</a></li>
+            <li><a th:href="${aplicacao} + '/perguntas'" th:text="#{menu.perguntas}">Perguntas</a></li>
             <li><a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos, sem cadastro</a></li>
-            <li><a th:href="${site} + '/participar'" th:text="#{rodape.participar.formas}">Todas as formas de participar</a></li>
+            <li><a th:href="${site} + '/participar'" th:text="#{menu.participar.formas}">Todas as formas</a></li>
             <li><a th:href="${aplicacao} + '/conta/criar'" th:text="#{rodape.participar.criar-conta}">Criar conta</a></li>
             <!--/*
               O rodapé é o mapa do site, e por isso acompanha o cabeçalho também aqui: para quem
@@ -219,12 +219,12 @@
           <ul>
             <li><a th:href="${aplicacao} + '/pesquisa'" th:text="#{menu.pesquisa.pesquisadores}">Para pesquisadores</a></li>
             <li><a th:href="${aplicacao} + '/protocolos'" th:text="#{menu.pesquisa.protocolos}">Protocolos</a></li>
-            <li><a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{rodape.pesquisa.p1}">P1-automático</a></li>
-            <li><a th:href="${aplicacao} + '/estudos'" th:text="#{rodape.pesquisa.estudos}">Estudos e relatórios</a></li>
-            <li><a th:href="${aplicacao} + '/carimbos'" th:text="#{rodape.pesquisa.carimbos}">Carimbos de tempo</a></li>
+            <li><a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{menu.como-funciona}">Como funciona</a></li>
+            <li><a th:href="${aplicacao} + '/estudos'" th:text="#{menu.pesquisa.estudos}">Estudos</a></li>
+            <li><a th:href="${aplicacao} + '/carimbos'" th:text="#{menu.pesquisa.carimbos}">Carimbos</a></li>
             <li><a th:href="${aplicacao} + '/verificar'" th:text="#{rodape.pesquisa.trilha}">Estado da trilha</a></li>
             <li><a th:href="${site} + '/garantias'" th:text="#{menu.pesquisa.garantias}">Garantias</a></li>
-            <li><a th:href="${site} + '/auditar'" th:text="#{rodape.pesquisa.auditar}">Como auditar</a></li>
+            <li><a th:href="${site} + '/auditar'" th:text="#{menu.pesquisa.auditar}">Auditar</a></li>
             <li><a href="https://github.com/psigama/crivo" th:text="#{rodape.pesquisa.repositorio}">Repositório no GitHub</a></li>
           </ul>
         </nav>
@@ -232,10 +232,10 @@
           <p class="rotulo" th:text="#{rodape.sobre}">Sobre o projeto</p>
           <ul>
             <li><a th:href="${site} + '/por-que'" th:text="#{menu.biblioteca.por-que}">Por quê</a></li>
-            <li><a th:href="${site} + '/historia'" th:text="#{rodape.sobre.historia}">Linha do tempo</a></li>
+            <li><a th:href="${site} + '/historia'" th:text="#{menu.biblioteca.historia}">História</a></li>
             <li><a th:href="${site} + '/referencias'" th:text="#{menu.biblioteca.referencias}">Referências</a></li>
             <li><a th:href="${site} + '/sobre'" th:text="#{menu.biblioteca.glossario}">Glossário</a></li>
-            <li><a th:href="${site} + '/artigo/'" th:text="#{rodape.sobre.artigo}">Artigo (esboço)</a></li>
+            <li><a th:href="${site} + '/artigo/'" th:text="#{menu.biblioteca.artigo}">Artigo</a></li>
           </ul>
         </nav>
         <!--/*
