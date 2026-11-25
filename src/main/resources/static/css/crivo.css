@@ -185,38 +185,45 @@ small {
 
 /* ---------- cabeçalho ---------- */
 
-/* O cabeçalho acompanha a rolagem: fica no alto da tela, sobre o conteúdo, para que o menu esteja
-   sempre a um toque em página longa. Quem gruda é a faixa que o envolve, e não ele: `sticky` só
-   percorre a caixa do próprio pai, e a faixa do cabeçalho não contém mais nada — grudar nela, que
-   é filha do <body>, dá a página inteira de curso. O cabeçalho continua `relative`, que é o que
-   ancora o painel do menu no celular. */
+/* A barra do cabeçalho acompanha a rolagem e atravessa a tela de ponta a ponta. Quem gruda e quem
+   se estende é a faixa que envolve o cabeçalho, e não ele: `sticky` só percorre a caixa do próprio
+   pai, e a faixa do cabeçalho não contém mais nada — grudar nela, que é filha do <body>, dá a
+   página inteira de curso. Por isso o fundo e o filete são dela: assim a barra vai de borda a
+   borda enquanto o conteúdo dela continua na coluna do texto. O fundo é opaco por padrão, senão o
+   texto passa por baixo e o menu fica ilegível; onde o navegador souber desfocar, fica translúcido
+   e a malha do papel continua aparecendo. */
 body > .faixa:has(> .topo) {
     position: sticky;
     top: 0;
     z-index: 20;
-}
-
-/* O fundo é opaco por padrão, porque sem isso o texto passaria por baixo e o menu ficaria
-   ilegível; onde o navegador souber desfocar, ele fica translúcido e a malha do papel continua
-   aparecendo por trás. */
-.topo {
-    position: relative;
+    max-width: none;
+    padding: 0;
     background-color: var(--papel);
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 0;
     border-bottom: 1px solid var(--fio);
-    flex-wrap: wrap;
 }
 
 @supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) and (background: color-mix(in srgb, red 50%, transparent)) {
-    .topo {
+    body > .faixa:has(> .topo) {
         background-color: color-mix(in srgb, var(--papel) 88%, transparent);
         -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
     }
+}
+
+/* Barra fina: a altura é a do alvo de toque dos links (2,75rem), sem folga vertical por cima.
+   `relative` é o que ancora o painel do menu no celular. */
+.topo {
+    position: relative;
+    /* O conteúdo da barra usa a largura da tela, e não a coluna do texto: é o que mantém marca,
+       menu e seletor de idioma numa linha só — a barra fina de uma linha. */
+    max-width: none;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1rem;
+    padding: 0 clamp(1rem, 4vw, 2.5rem);
+    flex-wrap: wrap;
 }
 
 .marca {
@@ -289,9 +296,11 @@ body > .faixa:has(> .topo) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 1.25rem;
+    gap: 0 1rem;
     font-family: var(--mono);
-    font-size: 0.875rem;
+    /* 0,8125rem é o piso de tamanho de letra do projeto (SPEC 0.23, seção 1.4, regra 4): a barra
+       afina até ele, e não além. */
+    font-size: 0.8125rem;
     letter-spacing: 0.04em;
 }
 
@@ -302,6 +311,36 @@ body > .faixa:has(> .topo) {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+}
+
+/* Versalete com entreletra larga e sublinhado no passar do mouse, só nos itens de primeiro nível:
+   dentro dos submenus o texto é frase, e caixa alta ali pesaria. */
+.topo > .navegacao > a,
+.topo > .navegacao > .submenu > summary {
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border-bottom: 2px solid transparent;
+}
+
+.topo > .navegacao > a:hover,
+.topo > .navegacao > .submenu > summary:hover {
+    border-bottom-color: var(--verdete);
+}
+
+/* Entrar é a ação da barra, e fica sólida, como o botão do simulador no ReMoto. */
+.topo > .navegacao > a.entrar {
+    margin-left: 0.25rem;
+    padding: 0 0.75rem;
+    background-color: var(--tinta);
+    color: var(--papel);
+    border-bottom-color: transparent;
+}
+
+.topo > .navegacao > a.entrar:hover,
+.topo > .navegacao > a.entrar:focus-visible {
+    background-color: var(--verdete);
+    color: var(--papel);
+    border-bottom-color: transparent;
 }
 
 .navegacao .submenu > summary {
