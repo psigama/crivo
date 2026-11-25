@@ -53,6 +53,9 @@
 
 html {
     scroll-behavior: smooth;
+    /* O cabeçalho fica preso no alto, então um link para âncora na mesma página (o Contato do
+       rodapé, por exemplo) pararia com o alvo escondido atrás dele. Esta folga o impede. */
+    scroll-padding-top: 6rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,8 +185,23 @@ small {
 
 /* ---------- cabeçalho ---------- */
 
+/* O cabeçalho acompanha a rolagem: fica no alto da tela, sobre o conteúdo, para que o menu esteja
+   sempre a um toque em página longa. Quem gruda é a faixa que o envolve, e não ele: `sticky` só
+   percorre a caixa do próprio pai, e a faixa do cabeçalho não contém mais nada — grudar nela, que
+   é filha do <body>, dá a página inteira de curso. O cabeçalho continua `relative`, que é o que
+   ancora o painel do menu no celular. */
+body > .faixa:has(> .topo) {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+/* O fundo é opaco por padrão, porque sem isso o texto passaria por baixo e o menu ficaria
+   ilegível; onde o navegador souber desfocar, ele fica translúcido e a malha do papel continua
+   aparecendo por trás. */
 .topo {
     position: relative;
+    background-color: var(--papel);
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -191,6 +209,14 @@ small {
     padding: 1.25rem 0;
     border-bottom: 1px solid var(--fio);
     flex-wrap: wrap;
+}
+
+@supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) and (background: color-mix(in srgb, red 50%, transparent)) {
+    .topo {
+        background-color: color-mix(in srgb, var(--papel) 88%, transparent);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
 }
 
 .marca {
@@ -2056,6 +2082,11 @@ form.enviando button {
         background: var(--papel);
         border-bottom: 1px solid var(--fio-forte);
         font-size: 1rem;
+        /* Com o cabeçalho preso no alto, o painel não rola junto com a página: se ele for mais
+           alto que a tela, o fim some. Daí a altura máxima e a rolagem própria. */
+        max-height: calc(100dvh - 5rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
 
     .navegacao-movel a,

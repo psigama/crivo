@@ -203,9 +203,15 @@
             <li><a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}">Para consulentes</a></li>
             <li><a th:href="${aplicacao} + '/medium'" th:text="#{menu.participar.mediuns}">Para médiuns</a></li>
             <li><a th:href="${aplicacao} + '/perguntas'" th:text="#{rodape.participar.perguntas}">Perguntas frequentes</a></li>
+            <li><a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos, sem cadastro</a></li>
             <li><a th:href="${site} + '/participar'" th:text="#{rodape.participar.formas}">Todas as formas de participar</a></li>
             <li><a th:href="${aplicacao} + '/conta/criar'" th:text="#{rodape.participar.criar-conta}">Criar conta</a></li>
-            <li><a th:href="${aplicacao} + '/login'" th:text="#{navegacao.entrar}">Entrar</a></li>
+            <!--/*
+              O rodapé é o mapa do site, e por isso acompanha o cabeçalho também aqui: para quem
+              entrou, o caminho é o painel, não a entrada.
+            */-->
+            <li th:unless="${logado}"><a th:href="${aplicacao} + '/login'" th:text="#{navegacao.entrar}">Entrar</a></li>
+            <li th:if="${logado}"><a th:href="${aplicacao} + '/painel'" th:text="#{navegacao.painel}">Painel</a></li>
           </ul>
         </nav>
         <nav th:aria-label="#{rodape.pesquisa}" aria-label="Pesquisa e auditoria">
