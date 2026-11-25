@@ -115,7 +115,8 @@
   */-->
   <nav th:fragment="idiomas" class="idiomas" th:aria-label="#{idioma.seletor}" aria-label="Idioma">
     <a th:href="${linkPt}" hreflang="pt-BR" lang="pt-BR" th:text="#{idioma.pt}"
-      th:attr="aria-current=${idioma == 'pt'} ? 'true' : null" th:classappend="${idioma == 'pt'} ? 'atual'">Português</a>
+      th:attr="aria-current=${idioma == 'pt'} ? 'true' : null"
+      th:classappend="${idioma == 'pt'} ? 'atual'">Português</a>
     <a th:href="${linkEn}" hreflang="en" lang="en" th:text="#{idioma.en}"
       th:attr="aria-current=${idioma == 'en'} ? 'true' : null" th:classappend="${idioma == 'en'} ? 'atual'">English</a>
   </nav>
@@ -142,62 +143,62 @@
     com o mesmo `name`, abrir um submenu dentro dele o fecharia inteiro.
   */-->
   <th:block th:fragment="links">
-      <details name="menu" class="submenu participar"
-        th:classappend="${secaoAtual == 'participar' or secaoAtual == 'consulente' or secaoAtual == 'medium'} ? 'atual'">
-        <summary th:text="#{menu.participar}">Participar</summary>
-        <div class="submenu-itens">
-          <a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}"
-            th:attr="aria-current=${secaoAtual == 'consulente'} ? 'page' : null">Para consulentes</a>
-          <a th:href="${aplicacao} + '/medium'" th:text="#{menu.participar.mediuns}"
-            th:attr="aria-current=${secaoAtual == 'medium'} ? 'page' : null">Para médiuns</a>
-          <a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos</a>
-          <a th:href="${site} + '/participar'" th:text="#{menu.participar.formas}"
-            th:attr="aria-current=${secaoAtual == 'participar'} ? 'page' : null">Todas as formas</a>
-        </div>
-      </details>
-      <a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{menu.como-funciona}">Como funciona</a>
-      <a th:href="${aplicacao} + '/perguntas'" th:text="#{menu.perguntas}"
-        th:attr="aria-current=${secaoAtual == 'perguntas'} ? 'page' : null">Perguntas</a>
-      <details name="menu" class="submenu pesquisa"
-        th:classappend="${secaoAtual == 'pesquisa' or secaoAtual == 'protocolos' or secaoAtual == 'garantias' or secaoAtual == 'auditar' or secaoAtual == 'estudos' or secaoAtual == 'carimbos' or secaoAtual == 'verificar'} ? 'atual'">
-        <summary th:text="#{menu.pesquisa}">Pesquisa</summary>
-        <div class="submenu-itens">
-          <a th:href="${aplicacao} + '/pesquisa'" th:text="#{menu.pesquisa.pesquisadores}"
-            th:attr="aria-current=${secaoAtual == 'pesquisa'} ? 'page' : null">Para pesquisadores</a>
-          <a th:href="${aplicacao} + '/protocolos'" th:text="#{menu.pesquisa.protocolos}"
-            th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
-          <a th:href="${site} + '/garantias'" th:text="#{menu.pesquisa.garantias}"
-            th:attr="aria-current=${secaoAtual == 'garantias'} ? 'page' : null">Garantias</a>
-          <a th:href="${site} + '/auditar'" th:text="#{menu.pesquisa.auditar}"
-            th:attr="aria-current=${secaoAtual == 'auditar'} ? 'page' : null">Auditar</a>
-          <a th:href="${aplicacao} + '/estudos'" th:text="#{menu.pesquisa.estudos}"
-            th:attr="aria-current=${secaoAtual == 'estudos'} ? 'page' : null">Estudos</a>
-          <a th:href="${aplicacao} + '/carimbos'" th:text="#{menu.pesquisa.carimbos}"
-            th:attr="aria-current=${secaoAtual == 'carimbos'} ? 'page' : null">Carimbos</a>
-        </div>
-      </details>
-      <details name="menu" class="submenu biblioteca"
-        th:classappend="${secaoAtual == 'por-que' or secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre' or secaoAtual == 'artigo'} ? 'atual'">
-        <summary th:text="#{menu.biblioteca}">Biblioteca</summary>
-        <div class="submenu-itens">
-          <a th:href="${site} + '/por-que'" th:text="#{menu.biblioteca.por-que}"
-            th:attr="aria-current=${secaoAtual == 'por-que'} ? 'page' : null">Por quê</a>
-          <a th:href="${site} + '/historia'" th:text="#{menu.biblioteca.historia}"
-            th:attr="aria-current=${secaoAtual == 'historia'} ? 'page' : null">História</a>
-          <a th:href="${site} + '/referencias'" th:text="#{menu.biblioteca.referencias}"
-            th:attr="aria-current=${secaoAtual == 'referencias'} ? 'page' : null">Referências</a>
-          <a th:href="${site} + '/sobre'" th:text="#{menu.biblioteca.glossario}"
-            th:attr="aria-current=${secaoAtual == 'sobre'} ? 'page' : null">Glossário</a>
-          <a th:href="${site} + '/artigo/'" th:text="#{menu.biblioteca.artigo}"
-            th:attr="aria-current=${secaoAtual == 'artigo'} ? 'page' : null">Artigo</a>
-        </div>
-      </details>
-      <!--/* SPEC 0.27: leva ao grupo Contato do rodapé, que toda página tem. */-->
-      <a class="contato" href="#contato" th:text="#{navegacao.contato}">Contato</a>
-      <a class="entrar" th:href="${aplicacao} + '/login'" th:unless="${logado}" th:text="#{navegacao.entrar}"
-        th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
-      <a class="entrar" th:href="${aplicacao} + '/painel'" th:if="${logado}" th:text="#{navegacao.painel}"
-        th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
+    <details name="menu" class="submenu participar"
+      th:classappend="${secaoAtual == 'participar' or secaoAtual == 'consulente' or secaoAtual == 'medium'} ? 'atual'">
+      <summary th:text="#{menu.participar}">Participar</summary>
+      <div class="submenu-itens">
+        <a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}"
+          th:attr="aria-current=${secaoAtual == 'consulente'} ? 'page' : null">Para consulentes</a>
+        <a th:href="${aplicacao} + '/medium'" th:text="#{menu.participar.mediuns}"
+          th:attr="aria-current=${secaoAtual == 'medium'} ? 'page' : null">Para médiuns</a>
+        <a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos</a>
+        <a th:href="${site} + '/participar'" th:text="#{menu.participar.formas}"
+          th:attr="aria-current=${secaoAtual == 'participar'} ? 'page' : null">Todas as formas</a>
+      </div>
+    </details>
+    <a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{menu.como-funciona}">Como funciona</a>
+    <a th:href="${aplicacao} + '/perguntas'" th:text="#{menu.perguntas}"
+      th:attr="aria-current=${secaoAtual == 'perguntas'} ? 'page' : null">Perguntas</a>
+    <details name="menu" class="submenu pesquisa"
+      th:classappend="${secaoAtual == 'pesquisa' or secaoAtual == 'protocolos' or secaoAtual == 'garantias' or secaoAtual == 'auditar' or secaoAtual == 'estudos' or secaoAtual == 'carimbos' or secaoAtual == 'verificar'} ? 'atual'">
+      <summary th:text="#{menu.pesquisa}">Pesquisa</summary>
+      <div class="submenu-itens">
+        <a th:href="${aplicacao} + '/pesquisa'" th:text="#{menu.pesquisa.pesquisadores}"
+          th:attr="aria-current=${secaoAtual == 'pesquisa'} ? 'page' : null">Para pesquisadores</a>
+        <a th:href="${aplicacao} + '/protocolos'" th:text="#{menu.pesquisa.protocolos}"
+          th:attr="aria-current=${secaoAtual == 'protocolos'} ? 'page' : null">Protocolos</a>
+        <a th:href="${site} + '/garantias'" th:text="#{menu.pesquisa.garantias}"
+          th:attr="aria-current=${secaoAtual == 'garantias'} ? 'page' : null">Garantias</a>
+        <a th:href="${site} + '/auditar'" th:text="#{menu.pesquisa.auditar}"
+          th:attr="aria-current=${secaoAtual == 'auditar'} ? 'page' : null">Auditar</a>
+        <a th:href="${aplicacao} + '/estudos'" th:text="#{menu.pesquisa.estudos}"
+          th:attr="aria-current=${secaoAtual == 'estudos'} ? 'page' : null">Estudos</a>
+        <a th:href="${aplicacao} + '/carimbos'" th:text="#{menu.pesquisa.carimbos}"
+          th:attr="aria-current=${secaoAtual == 'carimbos'} ? 'page' : null">Carimbos</a>
+      </div>
+    </details>
+    <details name="menu" class="submenu biblioteca"
+      th:classappend="${secaoAtual == 'por-que' or secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre' or secaoAtual == 'artigo'} ? 'atual'">
+      <summary th:text="#{menu.biblioteca}">Biblioteca</summary>
+      <div class="submenu-itens">
+        <a th:href="${site} + '/por-que'" th:text="#{menu.biblioteca.por-que}"
+          th:attr="aria-current=${secaoAtual == 'por-que'} ? 'page' : null">Por quê</a>
+        <a th:href="${site} + '/historia'" th:text="#{menu.biblioteca.historia}"
+          th:attr="aria-current=${secaoAtual == 'historia'} ? 'page' : null">História</a>
+        <a th:href="${site} + '/referencias'" th:text="#{menu.biblioteca.referencias}"
+          th:attr="aria-current=${secaoAtual == 'referencias'} ? 'page' : null">Referências</a>
+        <a th:href="${site} + '/sobre'" th:text="#{menu.biblioteca.glossario}"
+          th:attr="aria-current=${secaoAtual == 'sobre'} ? 'page' : null">Glossário</a>
+        <a th:href="${site} + '/artigo/'" th:text="#{menu.biblioteca.artigo}"
+          th:attr="aria-current=${secaoAtual == 'artigo'} ? 'page' : null">Artigo</a>
+      </div>
+    </details>
+    <!--/* SPEC 0.27: leva ao grupo Contato do rodapé, que toda página tem. */-->
+    <a class="contato" href="#contato" th:text="#{navegacao.contato}">Contato</a>
+    <a class="entrar" th:href="${aplicacao} + '/login'" th:unless="${logado}" th:text="#{navegacao.entrar}"
+      th:attr="aria-current=${secaoAtual == 'login'} ? 'page' : null">Entrar</a>
+    <a class="entrar" th:href="${aplicacao} + '/painel'" th:if="${logado}" th:text="#{navegacao.painel}"
+      th:attr="aria-current=${secaoAtual == 'painel'} ? 'page' : null">Painel</a>
   </th:block>
 
   <!--/* O rodapé, nos mesmos três assuntos do menu (SPEC 0.24, seção 1.4, regra 12). */-->
@@ -207,12 +208,15 @@
         <nav th:aria-label="#{rodape.participar}" aria-label="Participar">
           <p class="rotulo" th:text="#{rodape.participar}">Participar</p>
           <ul>
-            <li><a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}">Para consulentes</a></li>
+            <li><a th:href="${aplicacao} + '/consulente'" th:text="#{menu.participar.consulentes}">Para consulentes</a>
+            </li>
             <li><a th:href="${aplicacao} + '/medium'" th:text="#{menu.participar.mediuns}">Para médiuns</a></li>
             <li><a th:href="${aplicacao} + '/perguntas'" th:text="#{menu.perguntas}">Perguntas</a></li>
-            <li><a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos, sem cadastro</a></li>
+            <li><a th:href="${aplicacao} + '/protocolos#pes'" th:text="#{menu.participar.testes}">Testes rápidos, sem
+                cadastro</a></li>
             <li><a th:href="${site} + '/participar'" th:text="#{menu.participar.formas}">Todas as formas</a></li>
-            <li><a th:href="${aplicacao} + '/conta/criar'" th:text="#{rodape.participar.criar-conta}">Criar conta</a></li>
+            <li><a th:href="${aplicacao} + '/conta/criar'" th:text="#{rodape.participar.criar-conta}">Criar conta</a>
+            </li>
             <!--/*
               O rodapé é o mapa do site, e por isso acompanha o cabeçalho também aqui: para quem
               entrou, o caminho é o painel, não a entrada.
@@ -224,7 +228,8 @@
         <nav th:aria-label="#{rodape.pesquisa}" aria-label="Pesquisa e auditoria">
           <p class="rotulo" th:text="#{rodape.pesquisa}">Pesquisa e auditoria</p>
           <ul>
-            <li><a th:href="${aplicacao} + '/pesquisa'" th:text="#{menu.pesquisa.pesquisadores}">Para pesquisadores</a></li>
+            <li><a th:href="${aplicacao} + '/pesquisa'" th:text="#{menu.pesquisa.pesquisadores}">Para pesquisadores</a>
+            </li>
             <li><a th:href="${aplicacao} + '/protocolos'" th:text="#{menu.pesquisa.protocolos}">Protocolos</a></li>
             <li><a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{menu.como-funciona}">Como funciona</a></li>
             <li><a th:href="${aplicacao} + '/estudos'" th:text="#{menu.pesquisa.estudos}">Estudos</a></li>
@@ -232,7 +237,8 @@
             <li><a th:href="${aplicacao} + '/verificar'" th:text="#{rodape.pesquisa.trilha}">Estado da trilha</a></li>
             <li><a th:href="${site} + '/garantias'" th:text="#{menu.pesquisa.garantias}">Garantias</a></li>
             <li><a th:href="${site} + '/auditar'" th:text="#{menu.pesquisa.auditar}">Auditar</a></li>
-            <li><a href="https://github.com/psigama/crivo" th:text="#{rodape.pesquisa.repositorio}">Repositório no GitHub</a></li>
+            <li><a href="https://github.com/psigama/crivo" th:text="#{rodape.pesquisa.repositorio}">Repositório no
+                GitHub</a></li>
           </ul>
         </nav>
         <nav th:aria-label="#{rodape.sobre}" aria-label="Sobre o projeto">
@@ -257,7 +263,7 @@
         </div>
       </div>
       <p>
-        <span th:text="#{rodape.licenca}">O Crivo é software livre (licença MIT), desenvolvido por Rogerio Cisi e
+        <span th:text="#{rodape.licenca}">O Crivo é software livre (licença MIT)
           mantido pela</span>
         <a href="https://psigama.com/" th:text="#{rodape.licenca.psigama}">PsiGama</a><span
           th:utext="#{rodape.licenca.fim}">, Tecnologia da Informação. Nome público <strong>Crivo</strong>;

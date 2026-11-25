@@ -1,196 +1,204 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Frequently asked questions — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Frequently asked questions — Crivo', 'Do I have to be a spiritist? Will the medium know who I am? Will I receive a message? Can I withdraw? The answers, in a few words.')}"></th:block>
+  <th:block
+    th:replace="~{fragments/site :: social('Frequently asked questions — Crivo', 'Do I have to be a spiritist? Will the medium know who I am? Will I receive a message? Can I withdraw? The answers, in a few words.')}">
+  </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
-<body>
-<a class="pular" href="#conteudo">Skip to content</a>
-<div class="faixa">
-  <header th:replace="~{fragments/site :: topo}"></header>
-</div>
 
-<!--/*
+<body>
+  <a class="pular" href="#conteudo">Skip to content</a>
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <!--/*
   Frequently asked questions (SPEC 0.24, section 1.4, rule 10). In the application, because the
   answers describe the P1 procedure. Each question is a <details>, with no script, and each answer
   points to the page that has the detail.
 */-->
-<main id="conteudo">
-  <section class="abertura">
-    <div class="faixa">
-      <p class="rotulo aparece">Frequently asked questions</p>
-      <h1 class="aparece">Frequently asked questions</h1>
-      <p class="chamada aparece">
-        The most common questions of people thinking of taking part, in a few words. Tap a question to
-        see the answer.
-      </p>
-    </div>
-  </section>
-
-  <section class="perguntas">
-    <div class="faixa">
-      <h2>For anyone thinking of taking part</h2>
-
-      <details>
-        <summary>Do I have to be a spiritist, or have any religion?</summary>
-        <p>
-          No. Crivo does not take the side of any doctrine and does not interpret anything from a
-          religious point of view. For mediums, each study may have criteria for taking part, declared
-          before the collection begins.
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Frequently asked questions</p>
+        <h1 class="aparece">Frequently asked questions</h1>
+        <p class="chamada aparece">
+          The most common questions of people thinking of taking part, in a few words. Tap a question to
+          see the answer.
         </p>
-      </details>
+      </div>
+    </section>
 
-      <details>
-        <summary>Will I receive a message from the person who died?</summary>
-        <p>
-          No. The study is not a letter and not a message, and you do not ask the medium questions. The
-          medium answers a multiple-choice questionnaire, and the system compares the answers. At the
-          end, you see that comparison and the result of the whole study.
+    <section class="perguntas">
+      <div class="faixa">
+        <h2>For anyone thinking of taking part</h2>
+
+        <details>
+          <summary>Do I have to be a spiritist, or have any religion?</summary>
+          <p>
+            No. Crivo does not take the side of any doctrine and does not interpret anything from a
+            religious point of view. For mediums, each study may have criteria for taking part, declared
+            before the collection begins.
+          </p>
+        </details>
+
+        <details>
+          <summary>Will I receive a message from the person who died?</summary>
+          <p>
+            No. The study is not a letter and not a message, and you do not ask the medium questions. The
+            medium answers a multiple-choice questionnaire, and the system compares the answers. At the
+            end, you see that comparison and the result of the whole study.
+          </p>
+        </details>
+
+        <details>
+          <summary>Will the medium know who I am?</summary>
+          <p>
+            No. The medium receives only the first name of the person who died, together with that of
+            another person, and does not see who made the request or your answers. The two of you do not
+            talk: everything happens through the website.
+          </p>
+        </details>
+
+        <details>
+          <summary>Why does the medium receive only the first name?</summary>
+          <p>
+            So that they have no way of looking the person up or of getting hints from anyone. The first
+            name is the minimum for the reading to happen. It still gives away a few things, such as
+            gender, and that is why requests are compared with others of a similar profile.
+          </p>
+        </details>
+
+        <details>
+          <summary>And if I do not know how to answer a question?</summary>
+          <p>
+            Mark "I don't know". It is a legitimate answer and better than a guess: the question leaves
+            the comparison, and nobody is left with an advantage. The medium has the option "Nothing
+            came", which also carries no penalty.
+          </p>
+        </details>
+
+        <details>
+          <summary>Do I need a computer?</summary>
+          <p>
+            No. A mobile phone with internet and an e-mail address are enough, to create the account and
+            receive the notices.
+          </p>
+        </details>
+
+        <details>
+          <summary>When does the result come out?</summary>
+          <p>
+            Only when the study completes the number of pairs agreed at the start. That may take quite a
+            long time, because it depends on how many people take part. Before that, no score exists at
+            all, for anyone. When it comes out, you receive an e-mail.
+          </p>
+        </details>
+
+        <details>
+          <summary>Does the result say whether the medium is good?</summary>
+          <p>
+            No. The result belongs to the study, computed over dozens of pairs. One reading on its own
+            says little, because chance explains many agreements. Crivo gives nobody a certificate of
+            mediumship.
+          </p>
+        </details>
+
+        <details>
+          <summary>Who sees my answers?</summary>
+          <p>
+            Nobody on the team, before the end. The scoring is automatic. At the end, the answers are
+            published so that anyone can redo the count, but only with codes: without your name, without
+            your e-mail and without the first name of the person who died.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I withdraw?</summary>
+          <p>
+            Yes, at any time, without explaining why: you only have to delete your account. Your
+            identifiable data are erased right away.
+          </p>
+        </details>
+
+        <details>
+          <summary>Is sign-up open yet?</summary>
+          <p th:if="${inscricaoAberta}">
+            Yes. You can <a th:href="${aplicacao} + '/conta/criar'">create your account</a> now.
+          </p>
+          <p th:if="${!inscricaoAberta and aguardaCep}">
+            Not yet. It opens after the study is approved by a Brazilian research ethics committee (CEP),
+            which checks whether it respects the people who take part.
+          </p>
+          <p th:if="${!inscricaoAberta and !aguardaCep}">
+            No. Sign-up is closed on this installation.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="perguntas">
+      <div class="faixa">
+        <h2>About Crivo</h2>
+
+        <details>
+          <summary>How do I know that nobody cheats, not even the team itself?</summary>
+          <p>
+            The rules of the study are written down and sealed before it begins. Each answer is sealed as
+            soon as it is sent. The draw can be redone by anyone, and every step goes into a public record
+            that nobody can alter, stamped with the date by an independent service. The details are in
+            <a th:href="${site} + '/garantias'">Guarantees</a> and on the <a th:href="${aplicacao} + '/pesquisa'">page
+              for
+              researchers</a>.
+          </p>
+        </details>
+
+        <details>
+          <summary>Does Crivo want to prove that mediumship exists?</summary>
+          <p>
+            No, nor that it does not exist. Crivo neither asserts nor denies the phenomenon. It exists so
+            that the answer, whatever it is, can be checked and defended. Every result is published, for
+            or against.
+          </p>
+        </details>
+
+        <details>
+          <summary>What is the quick test?</summary>
+          <p>
+            They are two extrasensory perception tests, with no sign-up and with the result right away,
+            which anyone can take. They say nothing about mediumship or about people who have died.
+            <a th:href="${aplicacao} + '/protocolos#pes'">See the tests</a>.
+          </p>
+        </details>
+
+        <details>
+          <summary>Who is behind Crivo?</summary>
+          <p>
+            Crivo is maintained by <a href="https://psigama.com/">PsiGama</a>.
+            The code is open, under the MIT license, on
+            <a href="https://github.com/psigama/crivo">GitHub</a>, and anyone can check it.
+          </p>
+        </details>
+
+        <p class="nota nota-espacada">
+          Your question is not here? See the page <a th:href="${aplicacao} + '/consulente'">for sitters</a> or
+          <a th:href="${aplicacao} + '/medium'">for mediums</a>
+          <th:block th:if="${contato}">, or write to
+            <a th:href="'mailto:' + ${contato}" th:text="${contato}">contact</a>. A person
+            answers
+          </th:block>.
         </p>
-      </details>
+      </div>
+    </section>
+  </main>
 
-      <details>
-        <summary>Will the medium know who I am?</summary>
-        <p>
-          No. The medium receives only the first name of the person who died, together with that of
-          another person, and does not see who made the request or your answers. The two of you do not
-          talk: everything happens through the website.
-        </p>
-      </details>
-
-      <details>
-        <summary>Why does the medium receive only the first name?</summary>
-        <p>
-          So that they have no way of looking the person up or of getting hints from anyone. The first
-          name is the minimum for the reading to happen. It still gives away a few things, such as
-          gender, and that is why requests are compared with others of a similar profile.
-        </p>
-      </details>
-
-      <details>
-        <summary>And if I do not know how to answer a question?</summary>
-        <p>
-          Mark "I don't know". It is a legitimate answer and better than a guess: the question leaves
-          the comparison, and nobody is left with an advantage. The medium has the option "Nothing
-          came", which also carries no penalty.
-        </p>
-      </details>
-
-      <details>
-        <summary>Do I need a computer?</summary>
-        <p>
-          No. A mobile phone with internet and an e-mail address are enough, to create the account and
-          receive the notices.
-        </p>
-      </details>
-
-      <details>
-        <summary>When does the result come out?</summary>
-        <p>
-          Only when the study completes the number of pairs agreed at the start. That may take quite a
-          long time, because it depends on how many people take part. Before that, no score exists at
-          all, for anyone. When it comes out, you receive an e-mail.
-        </p>
-      </details>
-
-      <details>
-        <summary>Does the result say whether the medium is good?</summary>
-        <p>
-          No. The result belongs to the study, computed over dozens of pairs. One reading on its own
-          says little, because chance explains many agreements. Crivo gives nobody a certificate of
-          mediumship.
-        </p>
-      </details>
-
-      <details>
-        <summary>Who sees my answers?</summary>
-        <p>
-          Nobody on the team, before the end. The scoring is automatic. At the end, the answers are
-          published so that anyone can redo the count, but only with codes: without your name, without
-          your e-mail and without the first name of the person who died.
-        </p>
-      </details>
-
-      <details>
-        <summary>Can I withdraw?</summary>
-        <p>
-          Yes, at any time, without explaining why: you only have to delete your account. Your
-          identifiable data are erased right away.
-        </p>
-      </details>
-
-      <details>
-        <summary>Is sign-up open yet?</summary>
-        <p th:if="${inscricaoAberta}">
-          Yes. You can <a th:href="${aplicacao} + '/conta/criar'">create your account</a> now.
-        </p>
-        <p th:if="${!inscricaoAberta and aguardaCep}">
-          Not yet. It opens after the study is approved by a Brazilian research ethics committee (CEP),
-          which checks whether it respects the people who take part.
-        </p>
-        <p th:if="${!inscricaoAberta and !aguardaCep}">
-          No. Sign-up is closed on this installation.
-        </p>
-      </details>
-    </div>
-  </section>
-
-  <section class="perguntas">
-    <div class="faixa">
-      <h2>About Crivo</h2>
-
-      <details>
-        <summary>How do I know that nobody cheats, not even the team itself?</summary>
-        <p>
-          The rules of the study are written down and sealed before it begins. Each answer is sealed as
-          soon as it is sent. The draw can be redone by anyone, and every step goes into a public record
-          that nobody can alter, stamped with the date by an independent service. The details are in
-          <a th:href="${site} + '/garantias'">Guarantees</a> and on the <a th:href="${aplicacao} + '/pesquisa'">page for
-          researchers</a>.
-        </p>
-      </details>
-
-      <details>
-        <summary>Does Crivo want to prove that mediumship exists?</summary>
-        <p>
-          No, nor that it does not exist. Crivo neither asserts nor denies the phenomenon. It exists so
-          that the answer, whatever it is, can be checked and defended. Every result is published, for
-          or against.
-        </p>
-      </details>
-
-      <details>
-        <summary>What is the quick test?</summary>
-        <p>
-          They are two extrasensory perception tests, with no sign-up and with the result right away,
-          which anyone can take. They say nothing about mediumship or about people who have died.
-          <a th:href="${aplicacao} + '/protocolos#pes'">See the tests</a>.
-        </p>
-      </details>
-
-      <details>
-        <summary>Who is behind Crivo?</summary>
-        <p>
-          Crivo is developed by Rogerio Cisi and maintained by <a href="https://psigama.com/">PsiGama</a>.
-          The code is open, under the MIT license, on
-          <a href="https://github.com/psigama/crivo">GitHub</a>, and anyone can check it.
-        </p>
-      </details>
-
-      <p class="nota nota-espacada">
-        Your question is not here? See the page <a th:href="${aplicacao} + '/consulente'">for sitters</a> or
-        <a th:href="${aplicacao} + '/medium'">for mediums</a><th:block th:if="${contato}">, or write to
-        <a th:href="'mailto:' + ${contato}" th:text="${contato}">contact</a>. A person
-        answers</th:block>.
-      </p>
-    </div>
-  </section>
-</main>
-
-<footer th:replace="~{fragments/site :: rodape}"></footer>
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
 </body>
+
 </html>

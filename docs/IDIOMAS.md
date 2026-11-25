@@ -37,7 +37,7 @@ tradução automática em produção.
 
 ## 3. O que não se traduz
 
-- **Nomes**: Crivo, PsiGama, AIR Lab, Rogerio Cisi.
+- **Nomes**: Crivo, PsiGama, AIR Lab.
 - **Identificadores públicos**: o código de um protocolo (`P1`) e o rótulo dele (`P1-automático`),
   que entram em compromissos, relatórios e na trilha; a versão de um questionário (`v3-rascunho`);
   o código de um termo (`conta-v4`); chaves de campo e de opção do questionário.

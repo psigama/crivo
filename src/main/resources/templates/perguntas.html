@@ -1,194 +1,201 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>Perguntas frequentes — Crivo</title>
-  <th:block th:replace="~{fragments/site :: social('Perguntas frequentes — Crivo', 'Preciso ser espírita? O médium vai saber quem eu sou? Vou receber uma mensagem? Posso desistir? As respostas, em poucas palavras.')}"></th:block>
+  <th:block
+    th:replace="~{fragments/site :: social('Perguntas frequentes — Crivo', 'Preciso ser espírita? O médium vai saber quem eu sou? Vou receber uma mensagem? Posso desistir? As respostas, em poucas palavras.')}">
+  </th:block>
   <link rel="stylesheet" href="/css/crivo.css">
 </head>
-<body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
-<div class="faixa">
-  <header th:replace="~{fragments/site :: topo}"></header>
-</div>
 
-<!--/*
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <div class="faixa">
+    <header th:replace="~{fragments/site :: topo}"></header>
+  </div>
+
+  <!--/*
   Perguntas frequentes (SPEC 0.24, seção 1.4, regra 10). Na aplicação, porque as respostas descrevem o
   procedimento do P1. Cada pergunta é um <details>, sem script, e cada resposta aponta para a página
   que tem o detalhe.
 */-->
-<main id="conteudo">
-  <section class="abertura">
-    <div class="faixa">
-      <p class="rotulo aparece">Perguntas frequentes</p>
-      <h1 class="aparece">Perguntas frequentes</h1>
-      <p class="chamada aparece">
-        As dúvidas mais comuns de quem pensa em participar, em poucas palavras. Toque numa pergunta para
-        ver a resposta.
-      </p>
-    </div>
-  </section>
-
-  <section class="perguntas">
-    <div class="faixa">
-      <h2>Para quem pensa em participar</h2>
-
-      <details>
-        <summary>Preciso ser espírita, ou ter alguma religião?</summary>
-        <p>
-          Não. O Crivo não toma partido de nenhuma doutrina e não interpreta nada do ponto de vista
-          religioso. Para médiuns, cada estudo pode ter critérios de participação, declarados antes de a
-          coleta começar.
+  <main id="conteudo">
+    <section class="abertura">
+      <div class="faixa">
+        <p class="rotulo aparece">Perguntas frequentes</p>
+        <h1 class="aparece">Perguntas frequentes</h1>
+        <p class="chamada aparece">
+          As dúvidas mais comuns de quem pensa em participar, em poucas palavras. Toque numa pergunta para
+          ver a resposta.
         </p>
-      </details>
+      </div>
+    </section>
 
-      <details>
-        <summary>Vou receber uma mensagem da pessoa que faleceu?</summary>
-        <p>
-          Não. O estudo não é uma carta nem uma mensagem, e você não faz perguntas ao médium. O médium
-          responde a um questionário de múltipla escolha, e o sistema compara as respostas. No fim, você
-          vê essa comparação e o resultado do estudo inteiro.
+    <section class="perguntas">
+      <div class="faixa">
+        <h2>Para quem pensa em participar</h2>
+
+        <details>
+          <summary>Preciso ser espírita, ou ter alguma religião?</summary>
+          <p>
+            Não. O Crivo não toma partido de nenhuma doutrina e não interpreta nada do ponto de vista
+            religioso. Para médiuns, cada estudo pode ter critérios de participação, declarados antes de a
+            coleta começar.
+          </p>
+        </details>
+
+        <details>
+          <summary>Vou receber uma mensagem da pessoa que faleceu?</summary>
+          <p>
+            Não. O estudo não é uma carta nem uma mensagem, e você não faz perguntas ao médium. O médium
+            responde a um questionário de múltipla escolha, e o sistema compara as respostas. No fim, você
+            vê essa comparação e o resultado do estudo inteiro.
+          </p>
+        </details>
+
+        <details>
+          <summary>O médium vai saber quem eu sou?</summary>
+          <p>
+            Não. O médium recebe só o primeiro nome da pessoa que faleceu, junto com o de outra pessoa, e não
+            vê quem pediu nem as suas respostas. Vocês não conversam: tudo acontece pelo site.
+          </p>
+        </details>
+
+        <details>
+          <summary>Por que o médium recebe só o primeiro nome?</summary>
+          <p>
+            Para que ele não tenha como pesquisar a pessoa nem receber pistas de ninguém. O primeiro nome é o
+            mínimo para a leitura acontecer. Ele ainda entrega algumas coisas, como o gênero, e por isso os
+            pedidos são comparados com outros de perfil parecido.
+          </p>
+        </details>
+
+        <details>
+          <summary>E se eu não souber responder a uma pergunta?</summary>
+          <p>
+            Marque "Não sei". É uma resposta legítima e melhor do que um palpite: a pergunta sai da
+            comparação, e ninguém fica em vantagem. O médium tem a opção "Não recebi", que também não tem
+            penalidade.
+          </p>
+        </details>
+
+        <details>
+          <summary>Preciso de computador?</summary>
+          <p>
+            Não. Basta um celular com internet e um endereço de e-mail, para criar a conta e receber os
+            avisos.
+          </p>
+        </details>
+
+        <details>
+          <summary>Quando sai o resultado?</summary>
+          <p>
+            Só quando o estudo completar o número de pares combinado no início. Isso pode levar bastante
+            tempo, porque depende de quantas pessoas participam. Antes disso, não existe nota nenhuma, para
+            ninguém. Quando sair, você recebe um e-mail.
+          </p>
+        </details>
+
+        <details>
+          <summary>O resultado diz se o médium é bom?</summary>
+          <p>
+            Não. O resultado é do estudo, calculado sobre dezenas de pares. Uma leitura sozinha diz pouco,
+            porque o acaso explica muitas coincidências. O Crivo não dá certificado de mediunidade a
+            ninguém.
+          </p>
+        </details>
+
+        <details>
+          <summary>Quem vê as minhas respostas?</summary>
+          <p>
+            Ninguém da equipe, antes do fim. A conferência é automática. No fim, as respostas são publicadas
+            para que qualquer pessoa possa refazer a conta, mas só com códigos: sem o seu nome, sem o seu
+            e-mail e sem o primeiro nome da pessoa que faleceu.
+          </p>
+        </details>
+
+        <details>
+          <summary>Posso desistir?</summary>
+          <p>
+            Sim, a qualquer momento, sem explicar por quê: basta excluir a conta. Os seus dados
+            identificáveis são apagados na hora.
+          </p>
+        </details>
+
+        <details>
+          <summary>As inscrições já estão abertas?</summary>
+          <p th:if="${inscricaoAberta}">
+            Sim. Você pode <a th:href="${aplicacao} + '/conta/criar'">criar a sua conta</a> agora.
+          </p>
+          <p th:if="${!inscricaoAberta and aguardaCep}">
+            Ainda não. Elas abrem depois que o estudo for aprovado pelo Comitê de Ética em Pesquisa (CEP), que
+            confere se ele respeita quem participa.
+          </p>
+          <p th:if="${!inscricaoAberta and !aguardaCep}">
+            Não. As inscrições estão fechadas nesta instalação.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="perguntas">
+      <div class="faixa">
+        <h2>Sobre o Crivo</h2>
+
+        <details>
+          <summary>Como sei que ninguém trapaceia, nem a própria equipe?</summary>
+          <p>
+            As regras do estudo são escritas e lacradas antes de começar. Cada resposta é lacrada assim que
+            enviada. O sorteio pode ser refeito por qualquer pessoa, e cada etapa entra num registro público
+            que ninguém consegue alterar, carimbado com a data por um serviço independente. Os detalhes estão em
+            <a th:href="${site} + '/garantias'">Garantias</a> e na <a th:href="${aplicacao} + '/pesquisa'">página para
+              pesquisadores</a>.
+          </p>
+        </details>
+
+        <details>
+          <summary>O Crivo quer provar que a mediunidade existe?</summary>
+          <p>
+            Não, nem que não existe. O Crivo não afirma nem nega o fenômeno. Ele existe para que a resposta,
+            qualquer que seja, possa ser conferida e defendida. Todo resultado é publicado, a favor ou contra.
+          </p>
+        </details>
+
+        <details>
+          <summary>O que é o teste rápido?</summary>
+          <p>
+            São dois testes de percepção extrassensorial, sem cadastro e com o resultado na hora, que qualquer
+            pessoa pode fazer. Eles não dizem nada sobre mediunidade nem sobre pessoas falecidas.
+            <a th:href="${aplicacao} + '/protocolos#pes'">Ver os testes</a>.
+          </p>
+        </details>
+
+        <details>
+          <summary>Quem está por trás do Crivo?</summary>
+          <p>
+            O Crivo é mantido pela <a href="https://psigama.com/">PsiGama</a>.
+            O código é aberto, com licença MIT, no
+            <a href="https://github.com/psigama/crivo">GitHub</a>, e qualquer pessoa pode conferi-lo.
+          </p>
+        </details>
+
+        <p class="nota nota-espacada">
+          Sua dúvida não está aqui? Veja a página <a th:href="${aplicacao} + '/consulente'">para consulentes</a> ou
+          <a th:href="${aplicacao} + '/medium'">para médiuns</a>
+          <th:block th:if="${contato}">, ou escreva para
+            <a th:href="'mailto:' + ${contato}" th:text="${contato}">contato</a>. Quem responde é uma
+            pessoa
+          </th:block>.
         </p>
-      </details>
+      </div>
+    </section>
+  </main>
 
-      <details>
-        <summary>O médium vai saber quem eu sou?</summary>
-        <p>
-          Não. O médium recebe só o primeiro nome da pessoa que faleceu, junto com o de outra pessoa, e não
-          vê quem pediu nem as suas respostas. Vocês não conversam: tudo acontece pelo site.
-        </p>
-      </details>
-
-      <details>
-        <summary>Por que o médium recebe só o primeiro nome?</summary>
-        <p>
-          Para que ele não tenha como pesquisar a pessoa nem receber pistas de ninguém. O primeiro nome é o
-          mínimo para a leitura acontecer. Ele ainda entrega algumas coisas, como o gênero, e por isso os
-          pedidos são comparados com outros de perfil parecido.
-        </p>
-      </details>
-
-      <details>
-        <summary>E se eu não souber responder a uma pergunta?</summary>
-        <p>
-          Marque "Não sei". É uma resposta legítima e melhor do que um palpite: a pergunta sai da
-          comparação, e ninguém fica em vantagem. O médium tem a opção "Não recebi", que também não tem
-          penalidade.
-        </p>
-      </details>
-
-      <details>
-        <summary>Preciso de computador?</summary>
-        <p>
-          Não. Basta um celular com internet e um endereço de e-mail, para criar a conta e receber os
-          avisos.
-        </p>
-      </details>
-
-      <details>
-        <summary>Quando sai o resultado?</summary>
-        <p>
-          Só quando o estudo completar o número de pares combinado no início. Isso pode levar bastante
-          tempo, porque depende de quantas pessoas participam. Antes disso, não existe nota nenhuma, para
-          ninguém. Quando sair, você recebe um e-mail.
-        </p>
-      </details>
-
-      <details>
-        <summary>O resultado diz se o médium é bom?</summary>
-        <p>
-          Não. O resultado é do estudo, calculado sobre dezenas de pares. Uma leitura sozinha diz pouco,
-          porque o acaso explica muitas coincidências. O Crivo não dá certificado de mediunidade a
-          ninguém.
-        </p>
-      </details>
-
-      <details>
-        <summary>Quem vê as minhas respostas?</summary>
-        <p>
-          Ninguém da equipe, antes do fim. A conferência é automática. No fim, as respostas são publicadas
-          para que qualquer pessoa possa refazer a conta, mas só com códigos: sem o seu nome, sem o seu
-          e-mail e sem o primeiro nome da pessoa que faleceu.
-        </p>
-      </details>
-
-      <details>
-        <summary>Posso desistir?</summary>
-        <p>
-          Sim, a qualquer momento, sem explicar por quê: basta excluir a conta. Os seus dados
-          identificáveis são apagados na hora.
-        </p>
-      </details>
-
-      <details>
-        <summary>As inscrições já estão abertas?</summary>
-        <p th:if="${inscricaoAberta}">
-          Sim. Você pode <a th:href="${aplicacao} + '/conta/criar'">criar a sua conta</a> agora.
-        </p>
-        <p th:if="${!inscricaoAberta and aguardaCep}">
-          Ainda não. Elas abrem depois que o estudo for aprovado pelo Comitê de Ética em Pesquisa (CEP), que
-          confere se ele respeita quem participa.
-        </p>
-        <p th:if="${!inscricaoAberta and !aguardaCep}">
-          Não. As inscrições estão fechadas nesta instalação.
-        </p>
-      </details>
-    </div>
-  </section>
-
-  <section class="perguntas">
-    <div class="faixa">
-      <h2>Sobre o Crivo</h2>
-
-      <details>
-        <summary>Como sei que ninguém trapaceia, nem a própria equipe?</summary>
-        <p>
-          As regras do estudo são escritas e lacradas antes de começar. Cada resposta é lacrada assim que
-          enviada. O sorteio pode ser refeito por qualquer pessoa, e cada etapa entra num registro público
-          que ninguém consegue alterar, carimbado com a data por um serviço independente. Os detalhes estão em
-          <a th:href="${site} + '/garantias'">Garantias</a> e na <a th:href="${aplicacao} + '/pesquisa'">página para
-          pesquisadores</a>.
-        </p>
-      </details>
-
-      <details>
-        <summary>O Crivo quer provar que a mediunidade existe?</summary>
-        <p>
-          Não, nem que não existe. O Crivo não afirma nem nega o fenômeno. Ele existe para que a resposta,
-          qualquer que seja, possa ser conferida e defendida. Todo resultado é publicado, a favor ou contra.
-        </p>
-      </details>
-
-      <details>
-        <summary>O que é o teste rápido?</summary>
-        <p>
-          São dois testes de percepção extrassensorial, sem cadastro e com o resultado na hora, que qualquer
-          pessoa pode fazer. Eles não dizem nada sobre mediunidade nem sobre pessoas falecidas.
-          <a th:href="${aplicacao} + '/protocolos#pes'">Ver os testes</a>.
-        </p>
-      </details>
-
-      <details>
-        <summary>Quem está por trás do Crivo?</summary>
-        <p>
-          O Crivo é desenvolvido por Rogerio Cisi e mantido pela <a href="https://psigama.com/">PsiGama</a>.
-          O código é aberto, com licença MIT, no
-          <a href="https://github.com/psigama/crivo">GitHub</a>, e qualquer pessoa pode conferi-lo.
-        </p>
-      </details>
-
-      <p class="nota nota-espacada">
-        Sua dúvida não está aqui? Veja a página <a th:href="${aplicacao} + '/consulente'">para consulentes</a> ou
-        <a th:href="${aplicacao} + '/medium'">para médiuns</a><th:block th:if="${contato}">, ou escreva para
-        <a th:href="'mailto:' + ${contato}" th:text="${contato}">contato</a>. Quem responde é uma
-        pessoa</th:block>.
-      </p>
-    </div>
-  </section>
-</main>
-
-<footer th:replace="~{fragments/site :: rodape}"></footer>
+  <footer th:replace="~{fragments/site :: rodape}"></footer>
 </body>
+
 </html>
