@@ -37,12 +37,33 @@ if [[ -f .env ]]; then
   set +a
 fi
 
+# JDK, pela mesma regra do scripts/start.sh, secao 1: o JAVA_HOME herdado do ambiente pode
+# apontar para um JDK que nao existe mais, e o wrapper do Maven recusa o build nesse caso.
+# O JAVA_HOME do build sai do proprio java encontrado, nao do que veio do ambiente.
+if [[ -n "${JAVA_HOME:-}" && -x "${JAVA_HOME}/bin/java" ]]; then
+  JAVA="${JAVA_HOME}/bin/java"
+elif command -v java >/dev/null 2>&1; then
+  JAVA="$(command -v java)"
+else
+  echo "erro: nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME." >&2
+  exit 1
+fi
+JDK_HOME="$("$JAVA" -XshowSettings:properties -version 2>&1 |
+  sed -nE 's/^[[:space:]]*java\.home[[:space:]]*=[[:space:]]*(.+)$/\1/p' | head -n 1)"
+if [[ -z "$JDK_HOME" || ! -x "$JDK_HOME/bin/java" ]]; then
+  JDK_HOME="$(cd "$(dirname "$JAVA")/.." 2>/dev/null && pwd)"
+fi
+if [[ -z "$JDK_HOME" || ! -x "$JDK_HOME/bin/java" ]]; then
+  echo "erro: nao foi possivel descobrir o JDK de '$JAVA'. Defina JAVA_HOME apontando para o JDK 25." >&2
+  exit 1
+fi
+export JAVA_HOME="$JDK_HOME"
+JAVA="$JAVA_HOME/bin/java"
+
 if [[ ! -f "$JAR" ]]; then
   echo "==> Construindo o JAR" >&2
   ./mvnw -B -q package -DskipTests
 fi
-
-JAVA="${JAVA_HOME:+$JAVA_HOME/bin/}java"
 
 exec "$JAVA" -jar "$JAR" \
   "${@:-verify}" \

@@ -52,19 +52,55 @@ warn()  { printf '\033[1;33m==>\033[0m %s\n' "$*" >&2; }
 fail()  { printf '\033[1;31merro:\033[0m %s\n' "$*" >&2; exit 1; }
 
 # 1. JDK -----------------------------------------------------------------------
-if [[ -n "${JAVA_HOME:-}" && -x "${JAVA_HOME}/bin/java" ]]; then
-  JAVA="${JAVA_HOME}/bin/java"
-elif command -v java >/dev/null 2>&1; then
+# O wrapper do Maven recusa o build sem um JAVA_HOME valido, e o JAVA_HOME herdado do ambiente
+# pode apontar para um JDK que nao existe mais: sobra de desinstalacao, ou terminal aberto antes
+# de a variavel mudar. Dai o script escolher o java, descobrir o JAVA_HOME real desse java e
+# exportar esse valor para o build, em vez de confiar no que veio do ambiente.
+jdk_home_of() {
+  local java_exe="$1" home
+  # O caminho do JDK sai na propriedade "java.home"; o diretorio acima de bin e o plano B,
+  # que so vale quando o java esta dentro do proprio JDK, e nao quando vem de um atalho.
+  home="$("$java_exe" -XshowSettings:properties -version 2>&1 |
+    sed -nE 's/^[[:space:]]*java\.home[[:space:]]*=[[:space:]]*(.+)$/\1/p' | head -n 1)"
+  if [[ -n "$home" && -x "$home/bin/java" ]]; then printf '%s\n' "$home"; return 0; fi
+  home="$(cd "$(dirname "$java_exe")/.." 2>/dev/null && pwd)"
+  if [[ -n "$home" && -x "$home/bin/java" ]]; then printf '%s\n' "$home"; return 0; fi
+  return 1
+}
+
+JAVA=""
+JAVA_HOME_INVALIDO=""
+if [[ -n "${JAVA_HOME:-}" ]]; then
+  if [[ -x "${JAVA_HOME}/bin/java" ]]; then
+    JAVA="${JAVA_HOME}/bin/java"
+  else
+    JAVA_HOME_INVALIDO="$JAVA_HOME"
+  fi
+fi
+if [[ -z "$JAVA" ]] && command -v java >/dev/null 2>&1; then
   JAVA="$(command -v java)"
-else
+fi
+if [[ -z "$JAVA" ]]; then
+  if [[ -n "$JAVA_HOME_INVALIDO" ]]; then
+    fail "JAVA_HOME aponta para '$JAVA_HOME_INVALIDO', que nao tem bin/java, e nao ha java no PATH. Instale o JDK 25 ou corrija JAVA_HOME."
+  fi
   fail "nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME."
 fi
+if [[ -n "$JAVA_HOME_INVALIDO" ]]; then
+  warn "JAVA_HOME aponta para '$JAVA_HOME_INVALIDO', que nao tem bin/java; ignorando esse valor."
+fi
+
+if ! JAVA_HOME="$(jdk_home_of "$JAVA")"; then
+  fail "nao foi possivel descobrir o JDK de '$JAVA'. Defina JAVA_HOME apontando para o JDK 25."
+fi
+export JAVA_HOME
+JAVA="$JAVA_HOME/bin/java"
 
 JAVA_MAJOR="$("$JAVA" -version 2>&1 | head -n 1 | sed -E 's/.*version "([0-9]+).*/\1/')"
 if [[ ! "$JAVA_MAJOR" =~ ^[0-9]+$ ]] || (( JAVA_MAJOR < 25 )); then
   fail "e necessario o JDK 25 ou mais novo (encontrado: ${JAVA_MAJOR:-desconhecido}); a producao roda o 25."
 fi
-info "JDK $JAVA_MAJOR em $JAVA"
+info "JDK $JAVA_MAJOR em $JAVA_HOME"
 
 # 2. Segredos e pre-condicoes do perfil ----------------------------------------
 if [[ -f .env ]]; then
