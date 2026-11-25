@@ -119,6 +119,28 @@ class ConsultationController {
     }
 
     /**
+     * Cancels the sitter's own request (SPEC 0.30, E13, phase B), keeping the account. Confirmed
+     * in the form, as closing the account is: there is no undoing it, and the answers are erased.
+     *
+     * <p>Whether the state still allows it is decided by the service, inside its transaction, and
+     * not by what this page showed: the P1 cycle runs every minute and may have moved the request
+     * in between. A refusal sends the sitter back to the page, which then says why.
+     */
+    @PostMapping("/painel/consulente/pedido/cancelar")
+    String cancel(Principal principal,
+                  @RequestParam(name = "confirmo", defaultValue = "false") boolean confirmed) {
+        if (!confirmed) {
+            return "redirect:/painel/consulente/pedido?confirmeCancelamento";
+        }
+        try {
+            consultations.withdraw(principal.getName());
+        } catch (IllegalStateException refused) {
+            return "redirect:/painel/consulente/pedido?cancelamentoRecusado";
+        }
+        return "redirect:/painel/consulente?pedidoCancelado";
+    }
+
+    /**
      * The sitter's feedback (SPEC E13, phase D): their answers beside the medium's reading of their
      * own target, after the unblinding. The request is the principal's own; before the unblinding
      * there is no score to build from, and the page sends the sitter back to the panel.

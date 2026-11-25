@@ -243,4 +243,62 @@ class ConsultationIntegrationTest {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM audit.event WHERE subject_ref = ? "
                 + "AND event_type = 'CONSULTATION_WITHDRAWN'", Integer.class, "request:" + status.code())).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("o consulente cancela o proprio pedido, a conta fica, e cabe outro pedido depois")
+    void the_sitter_cancels_the_request_and_keeps_the_account() {
+        String sitter = confirmedAccount(AccountProfile.SITTER);
+        ConsultationStatus status = consultations.submit(sitter, draft());
+
+        consultations.withdraw(sitter);
+
+        assertThat(consultations.status(sitter)).isEmpty();
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT d.first_name_enc, d.erased_at, r.state FROM identity.consultation_detail d "
+                        + "JOIN research.consultation_request r ON r.code = d.request_code WHERE d.request_code = ?",
+                status.code());
+        assertThat(rows).singleElement().satisfies(row -> {
+            assertThat(row.get("first_name_enc")).isEqualTo("");
+            assertThat(row.get("erased_at")).isNotNull();
+            assertThat(row.get("state")).isEqualTo("WITHDRAWN");
+        });
+        // A conta continua de pe: cancelar o pedido nao e encerrar a conta (SPEC 0.30).
+        assertThat(accounts.account(sitter)).isPresent();
+        // O payload da trilha e TEXT com JSON dentro (V2), dai a conversao para ler o campo.
+        assertThat(jdbc.queryForObject("SELECT payload::jsonb->>'reason' FROM audit.event WHERE subject_ref = ? "
+                        + "AND event_type = 'CONSULTATION_WITHDRAWN'", String.class,
+                "request:" + status.code())).isEqualTo("SITTER_CANCELLED");
+
+        // O indice unico parcial so conta os nao retirados, entao o consulente pode pedir de novo.
+        ConsultationStatus outro = consultations.submit(sitter, draft());
+        assertThat(outro.code()).isNotEqualTo(status.code());
+        assertThat(outro.commitment()).isNotEqualTo(status.commitment());
+    }
+
+    @Test
+    @DisplayName("depois de a leitura chegar, o cancelamento pelo consulente e recusado")
+    void the_sitter_cannot_cancel_once_the_reading_is_in() {
+        String sitter = confirmedAccount(AccountProfile.SITTER);
+        ConsultationStatus status = consultations.submit(sitter, draft());
+        consultations.advance(status.code(), ConsultationState.LOCKED, ConsultationState.PAIRED);
+        consultations.advance(status.code(), ConsultationState.PAIRED, ConsultationState.SENT_TO_MEDIUM);
+
+        // Enviado ao medium ainda da para cancelar: a leitura nao chegou.
+        assertThat(ConsultationState.SENT_TO_MEDIUM.withdrawableBySitter()).isTrue();
+
+        consultations.advance(status.code(), ConsultationState.SENT_TO_MEDIUM, ConsultationState.READING_RECEIVED);
+
+        assertThatThrownBy(() -> consultations.withdraw(sitter)).isInstanceOf(IllegalStateException.class);
+        assertThat(consultations.status(sitter)).isPresent();
+        assertThat(jdbc.queryForObject("SELECT state FROM research.consultation_request WHERE code = ?",
+                String.class, status.code())).isEqualTo("READING_RECEIVED");
+    }
+
+    @Test
+    @DisplayName("sem pedido ativo nao ha o que cancelar")
+    void there_is_nothing_to_cancel_without_a_request() {
+        String sitter = confirmedAccount(AccountProfile.SITTER);
+
+        assertThatThrownBy(() -> consultations.withdraw(sitter)).isInstanceOf(IllegalStateException.class);
+    }
 }

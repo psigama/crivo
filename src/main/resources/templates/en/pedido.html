@@ -23,6 +23,11 @@
       <p class="aviso" th:if="${param.travado}" role="status">
         Request locked. Thank you. You will be told when there is news.
       </p>
+      <p class="erro" th:if="${param.cancelamentoRecusado}" role="alert">
+        The reading came in while this page was open, so the request can no longer be cancelled
+        here. You may give up at any time in <a th:href="${aplicacao} + '/conta'">My account</a>,
+        by closing the account.
+      </p>
 
       <dl class="leituras">
         <div><dt>State</dt><dd th:text="${situacao.state.label().in(idioma)}">Locked</dd></div>
@@ -58,6 +63,27 @@
         <div th:each="item : ${respostas}"><dt th:text="${item.key}">Question</dt><dd th:text="${item.value}">Answer</dd></div>
       </dl>
       <p class="acoes nota-espacada"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Back to the dashboard</a></p>
+    </div>
+  </section>
+
+  <section th:if="${situacao.state.withdrawableBySitter()}">
+    <div class="faixa">
+      <h2>Cancel the request</h2>
+      <p>
+        You may cancel while the reading has not come in, without closing your account. The first
+        name and your answers are erased at once, and whoever was to answer stops seeing the name.
+        Your account stays, and you may make another request later. There is no undoing it.
+      </p>
+      <p class="erro" th:if="${param.confirmeCancelamento}" role="alert">
+        Tick the confirmation box to cancel the request.
+      </p>
+      <form class="formulario" method="post" th:action="@{/painel/consulente/pedido/cancelar}">
+        <label class="opcao">
+          <input type="checkbox" name="confirmo" value="true">
+          <span>I understand that cancelling erases my answers and cannot be undone.</span>
+        </label>
+        <button class="botao botao-vazio" type="submit">Cancel my request</button>
+      </form>
     </div>
   </section>
 </main>

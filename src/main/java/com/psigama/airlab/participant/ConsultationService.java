@@ -41,6 +41,21 @@ public interface ConsultationService {
     /** The sitter's active request with its content, for that sitter alone. */
     Optional<OwnConsultation> own(String sitterCode);
 
+    /**
+     * Withdraws the sitter's own active request, at their own asking and <strong>without closing
+     * the account</strong> (SPEC 0.30, E13, phase B). Allowed while the reading has not come in:
+     * the request locked, paired, or sent to a medium. The encrypted detail is erased, any first
+     * name released for it is revoked, the request stays as withdrawn and the trail records it;
+     * the pair, if there is one, is undone by the next P1 cycle, which also cancels the request to
+     * the medium. The account stays active and may submit another request, a new unit with a new
+     * commitment.
+     *
+     * @throws IllegalStateException when there is no active request, or the reading is already in
+     *                               — from there on only closing the account withdraws it, which
+     *                               the right to give up at any time (Constitution P6) keeps open
+     */
+    void withdraw(String sitterCode);
+
     /** Requests by situation, for the administrator. */
     ConsultationCounts counts();
 

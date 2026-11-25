@@ -31,6 +31,11 @@
     <div class="faixa">
       <h2>Seu pedido</h2>
 
+      <p class="aviso" th:if="${param.pedidoCancelado}" role="status">
+        Pedido cancelado. O primeiro nome e as suas respostas foram apagados. A sua conta continua,
+        e você pode fazer outro pedido quando quiser.
+      </p>
+
       <th:block th:if="${situacao}">
         <dl class="contagens">
           <div><dt>Pedido</dt><dd><code th:text="${situacao.code}">PED-0000</code></dd></div>

@@ -139,28 +139,50 @@ class DefaultConsultationService implements ConsultationService {
         return statusOf(request);
     }
 
+    @Override
+    @Transactional
+    public void withdraw(String sitterCode) {
+        // The state is read and checked inside the transaction: the P1 cycle runs every minute,
+        // and the request may have moved since the page the sitter is looking at was drawn.
+        ConsultationRequestEntity request = requests
+                .findBySitterCodeAndStateNot(sitterCode, ConsultationState.WITHDRAWN)
+                .orElseThrow(() -> new IllegalStateException("nao ha pedido ativo para cancelar"));
+        if (!request.state().withdrawableBySitter()) {
+            throw new IllegalStateException("a leitura ja chegou; o pedido nao pode mais ser cancelado aqui");
+        }
+        withdraw(request, sitterCode, "SITTER_CANCELLED");
+    }
+
     /**
-     * Withdraws the sitter's active request, if any: the encrypted detail is erased, the request
-     * stays as withdrawn, and the trail records it. Called when the account is closed.
+     * Withdraws the sitter's active request, if any, whatever its state: the right to give up at
+     * any time (Constitution P6). Called when the account is closed.
      */
     @Transactional
     void withdrawActive(String sitterCode) {
-        requests.findBySitterCodeAndStateNot(sitterCode, ConsultationState.WITHDRAWN).ifPresent(request -> {
-            Instant now = clock.instant();
-            details.findByRequestCode(request.code())
-                    .filter(detail -> !detail.erased())
-                    .ifPresent(detail -> detail.erase(now));
-            // A medium who had the name stops seeing it at once; the pair is undone by the next
-            // P1 cycle (SPEC E13, phase C).
-            releases.findByRequestCodeAndRevokedAtIsNull(request.code()).forEach(release -> release.revoke(now));
-            request.withdraw(now);
+        requests.findBySitterCodeAndStateNot(sitterCode, ConsultationState.WITHDRAWN)
+                .ifPresent(request -> withdraw(request, sitterCode, "ACCOUNT_CLOSED"));
+    }
 
-            Map<String, Object> payload = new LinkedHashMap<>();
-            payload.put("request", request.code());
-            payload.put("sitter", sitterCode);
-            auditTrail.append(AuditEventType.CONSULTATION_WITHDRAWN, ActorRole.SITTER, sitterCode,
-                    "request:" + request.code(), payload);
-        });
+    /**
+     * What withdrawing does, for either way in: the encrypted detail is erased, the request stays
+     * as withdrawn, and the trail records it, saying which of the two ways brought it here.
+     */
+    private void withdraw(ConsultationRequestEntity request, String sitterCode, String reason) {
+        Instant now = clock.instant();
+        details.findByRequestCode(request.code())
+                .filter(detail -> !detail.erased())
+                .ifPresent(detail -> detail.erase(now));
+        // A medium who had the name stops seeing it at once; the pair is undone by the next
+        // P1 cycle (SPEC E13, phase C).
+        releases.findByRequestCodeAndRevokedAtIsNull(request.code()).forEach(release -> release.revoke(now));
+        request.withdraw(now);
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("request", request.code());
+        payload.put("sitter", sitterCode);
+        payload.put("reason", reason);
+        auditTrail.append(AuditEventType.CONSULTATION_WITHDRAWN, ActorRole.SITTER, sitterCode,
+                "request:" + request.code(), payload);
     }
 
     @Override

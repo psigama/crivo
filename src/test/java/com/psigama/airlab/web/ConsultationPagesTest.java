@@ -102,6 +102,36 @@ class ConsultationPagesTest {
     }
 
     @Test
+    @DisplayName("o consulente cancela o pedido na tela, com confirmacao, e sem encerrar a conta")
+    void the_sitter_cancels_the_request_from_the_page() throws Exception {
+        MockHttpSession session = signedIn(AccountProfile.SITTER);
+        mvc.perform(filledForm(session));
+        mvc.perform(post("/painel/consulente/pedido/confirmar").session(session).with(csrf()));
+
+        mvc.perform(get("/painel/consulente/pedido").session(session))
+                .andExpect(content().string(containsString("Cancelar meu pedido")));
+
+        // Sem marcar a caixa, nada acontece: a pagina volta pedindo a confirmacao.
+        mvc.perform(post("/painel/consulente/pedido/cancelar").session(session).with(csrf()))
+                .andExpect(redirectedUrl("/painel/consulente/pedido?confirmeCancelamento"));
+        mvc.perform(get("/painel/consulente/pedido").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(FIRST_NAME)));
+
+        mvc.perform(post("/painel/consulente/pedido/cancelar").session(session).with(csrf())
+                        .param("confirmo", "true"))
+                .andExpect(redirectedUrl("/painel/consulente?pedidoCancelado"));
+
+        // O pedido sumiu, a conta continua de pe, e o painel oferece fazer outro.
+        mvc.perform(get("/painel/consulente/pedido").session(session))
+                .andExpect(redirectedUrl("/painel/consulente"));
+        mvc.perform(get("/painel/consulente").session(session).param("pedidoCancelado", ""))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Pedido cancelado")))
+                .andExpect(content().string(not(containsString(FIRST_NAME))));
+    }
+
+    @Test
     @DisplayName("formulario incompleto volta com a mensagem e nada e travado")
     void an_incomplete_form_returns_with_the_message() throws Exception {
         MockHttpSession session = signedIn(AccountProfile.SITTER);

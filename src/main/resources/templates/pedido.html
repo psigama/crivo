@@ -23,6 +23,15 @@
       <p class="aviso" th:if="${param.travado}" role="status">
         Pedido travado. Obrigado. Você será avisado quando houver novidade.
       </p>
+      <!--/*
+        A recusa fica aqui, e não junto do formulário: quando ela acontece é porque a leitura
+        chegou, e aí a seção de cancelar já não aparece — o aviso ficaria invisível.
+      */-->
+      <p class="erro" th:if="${param.cancelamentoRecusado}" role="alert">
+        A leitura chegou enquanto esta página estava aberta, e por isso o pedido não pode mais ser
+        cancelado aqui. Você pode desistir a qualquer momento em
+        <a th:href="${aplicacao} + '/conta'">Minha conta</a>, encerrando a conta.
+      </p>
 
       <dl class="leituras">
         <div><dt>Situação</dt><dd th:text="${situacao.state.label().in(idioma)}">Travado</dd></div>
@@ -58,6 +67,32 @@
         <div th:each="item : ${respostas}"><dt th:text="${item.key}">Pergunta</dt><dd th:text="${item.value}">Resposta</dd></div>
       </dl>
       <p class="acoes nota-espacada"><a class="botao botao-vazio" th:href="${aplicacao} + '/painel/consulente'">Voltar ao painel</a></p>
+    </div>
+  </section>
+
+  <!--/*
+    Cancelar o pedido (SPEC 0.30, E13, fase B). Aparece enquanto a leitura não chegou; depois
+    disso a saída é encerrar a conta, e o aviso de recusa acima diz isso. Quem decide de verdade
+    é o serviço, dentro da transação: entre esta página e o clique, o ciclo pode ter andado.
+  */-->
+  <section th:if="${situacao.state.withdrawableBySitter()}">
+    <div class="faixa">
+      <h2>Cancelar o pedido</h2>
+      <p>
+        Você pode cancelar enquanto a leitura não tiver chegado, sem precisar encerrar a conta. O
+        primeiro nome e as suas respostas são apagados na hora, e quem fosse responder deixa de ver
+        o nome. A sua conta continua, e você pode fazer outro pedido depois. Não há como desfazer.
+      </p>
+      <p class="erro" th:if="${param.confirmeCancelamento}" role="alert">
+        Marque a caixa de confirmação para cancelar o pedido.
+      </p>
+      <form class="formulario" method="post" th:action="@{/painel/consulente/pedido/cancelar}">
+        <label class="opcao">
+          <input type="checkbox" name="confirmo" value="true">
+          <span>Entendo que o cancelamento apaga as minhas respostas e não pode ser desfeito.</span>
+        </label>
+        <button class="botao botao-vazio" type="submit">Cancelar meu pedido</button>
+      </form>
     </div>
   </section>
 </main>

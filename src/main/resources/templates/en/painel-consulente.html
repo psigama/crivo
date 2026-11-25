@@ -31,6 +31,11 @@
     <div class="faixa">
       <h2>Your request</h2>
 
+      <p class="aviso" th:if="${param.pedidoCancelado}" role="status">
+        Request cancelled. The first name and your answers have been erased. Your account stays,
+        and you may make another request whenever you want.
+      </p>
+
       <th:block th:if="${situacao}">
         <dl class="contagens">
           <div><dt>Request</dt><dd><code th:text="${situacao.code}">PED-0000</code></dd></div>

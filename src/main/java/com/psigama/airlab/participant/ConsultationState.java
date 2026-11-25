@@ -29,4 +29,17 @@ public enum ConsultationState {
     public Text label() {
         return label;
     }
+
+    /**
+     * Whether the sitter may withdraw a request in this state on their own, keeping the account
+     * (SPEC 0.30, E13, phase B): while the reading has not come in. Once it has, the pair has
+     * produced data, and the way out is closing the account, which withdraws from any state —
+     * the right to give up at any time stays open either way (Constitution P6).
+     *
+     * <p>The rule lives here, and not in the service or in a screen, because both the domain and
+     * the sitter's page ask the same question of the same state.
+     */
+    public boolean withdrawableBySitter() {
+        return this == LOCKED || this == PAIRED || this == SENT_TO_MEDIUM;
+    }
 }
