@@ -47,13 +47,43 @@ if (Test-Path '.env') {
     }
 }
 
+# JDK, pela mesma regra do scripts\start.ps1, secao 1: o JAVA_HOME herdado do ambiente pode
+# apontar para um JDK que nao existe mais, e o wrapper do Maven recusa o build nesse caso.
+# O JAVA_HOME do build sai do proprio java encontrado, nao do que veio do ambiente.
+$java = $null
+if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME 'bin\java.exe'))) {
+    $java = Join-Path $env:JAVA_HOME 'bin\java.exe'
+}
+else {
+    $command = Get-Command java -ErrorAction SilentlyContinue
+    if ($command) { $java = $command.Source }
+}
+if (-not $java) {
+    Write-Host 'erro: nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME.' -ForegroundColor Red
+    exit 1
+}
+# "java.home" sai em "-XshowSettings:properties", que escreve na saida de erro; quem redireciona
+# e o cmd.exe, nunca o PowerShell (ver a nota sobre NativeCommandError no scripts\start.ps1).
+$javaHome = $null
+foreach ($linha in (cmd /c "`"$java`" -XshowSettings:properties -version 2>&1")) {
+    if ($linha -match '^\s*java\.home\s*=\s*(\S.*?)\s*$') { $javaHome = $Matches[1]; break }
+}
+if (-not $javaHome -or -not (Test-Path (Join-Path $javaHome 'bin\java.exe'))) {
+    $acima = Split-Path -Parent (Split-Path -Parent $java)
+    $javaHome = if ($acima -and (Test-Path (Join-Path $acima 'bin\java.exe'))) { $acima } else { $null }
+}
+if (-not $javaHome) {
+    Write-Host "erro: nao foi possivel descobrir o JDK de '$java'. Defina JAVA_HOME apontando para o JDK 25." -ForegroundColor Red
+    exit 1
+}
+$env:JAVA_HOME = $javaHome
+$java = Join-Path $javaHome 'bin\java.exe'
+
 if (-not (Test-Path $jar)) {
     Write-Host '==> Construindo o JAR' -ForegroundColor Green
     & (Join-Path $projectDir 'mvnw.cmd') -B -q package -DskipTests
     if ($LASTEXITCODE -ne 0) { exit 1 }
 }
-
-$java = if ($env:JAVA_HOME) { Join-Path $env:JAVA_HOME 'bin\java.exe' } else { 'java' }
 $profileName = if ($env:AIRLAB_PROFILE) { $env:AIRLAB_PROFILE } else { 'local' }
 
 & $java '-jar' $jar @CliArgs `

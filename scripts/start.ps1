@@ -46,17 +46,55 @@ function Write-Note([string] $message) { Write-Host "==> $message" -ForegroundCo
 function Stop-WithError([string] $message) { Write-Host "erro: $message" -ForegroundColor Red; exit 1 }
 
 # 1. JDK ----------------------------------------------------------------------
-$java = $null
-if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME 'bin\java.exe'))) {
-    $java = Join-Path $env:JAVA_HOME 'bin\java.exe'
+# O wrapper do Maven recusa o build sem um JAVA_HOME valido ("The JAVA_HOME environment
+# variable is not defined correctly"), e o JAVA_HOME herdado do ambiente pode apontar para
+# um JDK que nao existe mais: sobra de desinstalacao, ou terminal aberto antes de a variavel
+# mudar. Dai o script escolher o java, descobrir o JAVA_HOME real desse java e exportar esse
+# valor para o build, em vez de confiar no que veio do ambiente.
+function Get-JdkHome([string] $javaExe) {
+    # O caminho do JDK sai na propriedade "java.home", que o "-XshowSettings:properties"
+    # escreve na saida de erro. Quem redireciona e o cmd.exe; o PowerShell nunca redireciona
+    # a saida de erro de executavel nativo (ver a nota sobre NativeCommandError mais abaixo).
+    foreach ($linha in (cmd /c "`"$javaExe`" -XshowSettings:properties -version 2>&1")) {
+        if ($linha -match '^\s*java\.home\s*=\s*(\S.*?)\s*$') { return $Matches[1] }
+    }
+    # Sem a propriedade, o diretorio acima de bin serve -- mas so quando o java esta dentro do
+    # proprio JDK, nunca quando vem de um atalho, como o javapath da Oracle no PATH do Windows.
+    $acima = Split-Path -Parent (Split-Path -Parent $javaExe)
+    if ($acima -and (Test-Path (Join-Path $acima 'bin\java.exe'))) { return $acima }
+    return $null
 }
-else {
+
+$java = $null
+$javaHomeInvalido = $null
+if ($env:JAVA_HOME) {
+    if (Test-Path (Join-Path $env:JAVA_HOME 'bin\java.exe')) {
+        $java = Join-Path $env:JAVA_HOME 'bin\java.exe'
+    }
+    else {
+        $javaHomeInvalido = $env:JAVA_HOME
+    }
+}
+if (-not $java) {
     $command = Get-Command java -ErrorAction SilentlyContinue
     if ($command) { $java = $command.Source }
 }
 if (-not $java) {
+    if ($javaHomeInvalido) {
+        Stop-WithError "JAVA_HOME aponta para '$javaHomeInvalido', que nao tem bin\java.exe, e nao ha java no PATH. Instale o JDK 25 ou corrija JAVA_HOME."
+    }
     Stop-WithError 'nenhum JDK encontrado. Instale o JDK 25 ou defina JAVA_HOME.'
 }
+if ($javaHomeInvalido) {
+    Write-Note "JAVA_HOME aponta para '$javaHomeInvalido', que nao tem bin\java.exe; ignorando esse valor."
+}
+
+$javaHome = Get-JdkHome $java
+if (-not $javaHome) {
+    Stop-WithError "nao foi possivel descobrir o JDK de '$java'. Defina JAVA_HOME apontando para o JDK 25."
+}
+$env:JAVA_HOME = $javaHome
+$java = Join-Path $javaHome 'bin\java.exe'
 
 # "java --version" escreve na saida padrao; o antigo "java -version" escreve na saida de erro,
 # e redirecionar a saida de erro de um executavel nativo faz o PowerShell embrulhar cada linha
@@ -69,7 +107,7 @@ if ($major -lt 25) {
     $encontrado = if ($versionLine) { $versionLine } else { 'versao nao reconhecida' }
     Stop-WithError "e necessario o JDK 25 ou mais novo (encontrado: $encontrado); a producao roda o 25."
 }
-Write-Step "JDK $major em $java"
+Write-Step "JDK $major em $javaHome"
 
 # 2. Segredos e pre-condicoes do perfil ---------------------------------------
 if (Test-Path '.env') {
