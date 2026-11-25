@@ -65,21 +65,22 @@
     termina em /en. Nenhum link escreve /en à mão.
   -->
   <header th:fragment="topo" class="topo">
-    <div class="marcas">
-      <a class="marca" th:href="${site} + '/'">Crivo</a>
-      <a class="por-psigama" href="https://psigama.com/" th:title="#{social.psigama}"
-        title="PsiGama, Tecnologia da Informação para Pesquisa Psíquica">
-        <svg class="logo-psigama" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <circle class="c" cx="20" cy="20" r="18" fill="none" stroke-width="2" />
-          <path d="M8 13 Q8 23 14 23 Q20 23 20 13 M14 9.5 V30.5" fill="none" stroke="currentColor" stroke-width="2.6"
-            stroke-linecap="round" />
-          <path class="g"
-            d="M22.5 14 Q25 13 26.5 17 L28 22 M32 13.5 L28 22 C25.8 26.5 26.2 31 28 31 C29.8 31 30.2 26.5 28 22"
-            fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        PsiGama
-      </a>
-    </div>
+    <!--/*
+      A marca: o logo ψγ e o nome, num link só, para a página inicial. O logo é decorativo
+      (`aria-hidden`), e quem dá nome ao link para quem usa leitor de tela é a palavra Crivo. O
+      crédito à PsiGama, que mantém o projeto, fica no rodapé de toda página.
+    */-->
+    <a class="marca" th:href="${site} + '/'">
+      <svg class="logo-psigama" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        <circle class="c" cx="20" cy="20" r="18" fill="none" stroke-width="2" />
+        <path d="M8 13 Q8 23 14 23 Q20 23 20 13 M14 9.5 V30.5" fill="none" stroke="currentColor" stroke-width="2.6"
+          stroke-linecap="round" />
+        <path class="g"
+          d="M22.5 14 Q25 13 26.5 17 L28 22 M32 13.5 L28 22 C25.8 26.5 26.2 31 28 31 C29.8 31 30.2 26.5 28 22"
+          fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Crivo
+    </a>
     <nav class="navegacao" th:aria-label="#{navegacao.principal}" aria-label="Navegação principal">
       <th:block th:replace="~{fragments/site :: links}"></th:block>
     </nav>
@@ -133,9 +134,15 @@
     Os links da navegação, uma vez só: o cabeçalho os usa no computador e no Menu do celular.
     Desde a SPEC 0.24 (seção 1.4, regra 12) o menu se agrupa por assunto, e o submenu que contém a
     página atual fica marcado. Cada submenu leva uma classe própria, para os testes saberem qual é.
+
+    Abrir um submenu fecha os outros, e isso é do próprio HTML: `<details>` com o mesmo `name`
+    forma um acordeão exclusivo, sem script — o que a regra 4 da seção 1.4 pede. Num navegador
+    antigo demais para conhecer o atributo, o menu volta a abrir vários ao mesmo tempo, que é o
+    comportamento de antes, e nada quebra. O Menu do celular fica de fora do grupo de propósito:
+    com o mesmo `name`, abrir um submenu dentro dele o fecharia inteiro.
   */-->
   <th:block th:fragment="links">
-      <details class="submenu participar"
+      <details name="menu" class="submenu participar"
         th:classappend="${secaoAtual == 'participar' or secaoAtual == 'consulente' or secaoAtual == 'medium'} ? 'atual'">
         <summary th:text="#{menu.participar}">Participar</summary>
         <div class="submenu-itens">
@@ -151,7 +158,7 @@
       <a th:href="${aplicacao} + '/protocolo/P1'" th:text="#{menu.como-funciona}">Como funciona</a>
       <a th:href="${aplicacao} + '/perguntas'" th:text="#{menu.perguntas}"
         th:attr="aria-current=${secaoAtual == 'perguntas'} ? 'page' : null">Perguntas</a>
-      <details class="submenu pesquisa"
+      <details name="menu" class="submenu pesquisa"
         th:classappend="${secaoAtual == 'pesquisa' or secaoAtual == 'protocolos' or secaoAtual == 'garantias' or secaoAtual == 'auditar' or secaoAtual == 'estudos' or secaoAtual == 'carimbos' or secaoAtual == 'verificar'} ? 'atual'">
         <summary th:text="#{menu.pesquisa}">Pesquisa</summary>
         <div class="submenu-itens">
@@ -169,7 +176,7 @@
             th:attr="aria-current=${secaoAtual == 'carimbos'} ? 'page' : null">Carimbos</a>
         </div>
       </details>
-      <details class="submenu biblioteca"
+      <details name="menu" class="submenu biblioteca"
         th:classappend="${secaoAtual == 'por-que' or secaoAtual == 'historia' or secaoAtual == 'referencias' or secaoAtual == 'sobre' or secaoAtual == 'artigo'} ? 'atual'">
         <summary th:text="#{menu.biblioteca}">Biblioteca</summary>
         <div class="submenu-itens">

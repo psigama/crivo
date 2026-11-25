@@ -226,7 +226,12 @@ body > .faixa:has(> .topo) {
     flex-wrap: wrap;
 }
 
+/* A marca: o logo ψγ e o nome, num link só. Centro, e não linha de base: a linha de base do
+   desenho é a borda de baixo dele, o que levantava o logo em relação a "Crivo". */
 .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -240,32 +245,6 @@ body > .faixa:has(> .topo) {
     text-transform: uppercase;
     color: var(--tinta-suave);
     margin-left: 0.6rem;
-}
-
-/* A marca do Crivo e, ao lado, quem o mantém: a PsiGama, com o logo ψγ. */
-.marcas {
-    display: flex;
-    /* Centro, não linha de base: o primeiro item da PsiGama é o logo, e a linha de base dele
-       seria a borda de baixo do desenho, o que levantava o conjunto em relação a "Crivo". */
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.35rem 1rem;
-}
-
-.por-psigama {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: var(--mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.06em;
-    color: var(--tinta-suave);
-    text-decoration: none;
-}
-
-.por-psigama:hover,
-.por-psigama:focus-visible {
-    color: var(--verdete);
 }
 
 .logo-psigama {
@@ -2048,9 +2027,6 @@ form.enviando button {
         gap: 0.5rem;
     }
 
-    .marcas {
-        gap: 0.35rem 0.75rem;
-    }
 
     .topo > .navegacao {
         display: none;
